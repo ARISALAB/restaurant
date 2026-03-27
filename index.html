@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableReserve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37,99,235,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+            --purple: #7c3aed;
+            --purple-light: rgba(124,58,237,0.08);
+            --bg: #f0f2f7;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* ======= TOP NAV ======= */
+        .topnav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+        }
+        .logo span { color: var(--primary); }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-tab.super.active {
+            color: var(--purple);
+        }
+
+        /* Super admin tab hidden by default */
+        #tab-superadmin { display: none; }
+
+        /* ======= PAGES ======= */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .client-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .client-layout { grid-template-columns: 1fr; }
+            .info-panel { display: none; }
+        }
+
+        /* ======= CARDS ======= */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-sm);
+            padding: 32px 28px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon {
+            width: 32px; height: 32px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+        }
+        .card-title .icon.purple { background: var(--purple-light); }
+
+        /* ======= FORM ======= */
+        .input-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: #fafbfc;
+            color: var(--text-main);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        /* ======= TIME GRID ======= */
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: var(--radius-lg);
+            border: 1.5px solid var(--border);
+            scrollbar-width: thin;
+        }
+
+        .time-slot {
+            padding: 10px 6px;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .time-slot:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
+
+        .selected-time-badge {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            border-radius: var(--radius-md);
+            margin-top: 14px;
+            font-weight: 700;
+        }
+        .selected-time-badge.show { display: flex; }
+
+        /* ======= BUTTONS ======= */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-purple {
+            width: 100%;
+            padding: 14px;
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(124,58,237,0.25);
+        }
+        .btn-purple:hover { background: #6d28d9; transform: translateY(-1px); }
+
+        .btn-outline {
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-outline:hover { border-color: var(--danger); color: var(--danger); }
+
+        .btn-link {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .btn-link:hover { color: var(--danger); }
+
+        /* ======= MODAL ======= */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.65);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.open { display: flex; }
+        .modal-content {
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ======= PAGE HEADER ======= */
+        .page-header { margin-bottom: 32px; }
+        .page-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+        .page-header p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+
+        /* ======= ADMIN ======= */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card { border-radius: var(--radius-lg); padding: 20px; text-align: center; }
+        .stat-card.blue { background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; }
+        .stat-card.dark { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; }
+        .stat-label { font-size: 0.75rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-value { font-size: 2rem; font-weight: 800; font-family: 'Sora', sans-serif; margin-top: 4px; }
+
+        .filters-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .filter-group { flex: 1; min-width: 140px; }
+
+        .booking-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .booking-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .booking-card .card-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+        .time-badge {
+            background: var(--primary); color: white;
+            font-size: 0.85rem; font-weight: 800;
+            padding: 4px 12px; border-radius: 20px;
+            font-family: 'Sora', sans-serif;
+        }
+        .date-text { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; flex: 1; }
+        .delete-link {
+            font-size: 0.78rem; color: var(--danger); cursor: pointer;
+            border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;
+            border-radius: 6px; background: rgba(239,68,68,0.06);
+            font-weight: 600; transition: all 0.2s; font-family: inherit;
+        }
+        .delete-link:hover { background: var(--danger); color: white; }
+        .booking-card .card-body { padding: 16px 18px; }
+        .customer-name { font-size: 1.05rem; font-weight: 700; font-family: 'Sora', sans-serif; margin-bottom: 8px; }
+        .info-row { display: flex; gap: 16px; color: var(--text-muted); font-size: 0.875rem; margin-bottom: 8px; flex-wrap: wrap; }
+        .occasion-tag {
+            display: inline-block; background: #fef3c7; color: #92400e;
+            font-size: 0.8rem; font-weight: 600; padding: 3px 10px;
+            border-radius: 20px; margin-bottom: 8px;
+        }
+        .comments-box {
+            background: #f8fafc; border-left: 3px solid var(--primary);
+            padding: 8px 12px; border-radius: 0 8px 8px 0;
+            font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;
+        }
+        .call-button {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; text-decoration: none;
+            border-radius: 8px; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;
+        }
+        .call-button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+        .no-data { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 0.95rem; }
+
+        .admin-header-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+        }
+        .shop-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; background: var(--primary-light);
+            color: var(--primary); border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-top: 6px;
+        }
+
+        /* ======= SUPER ADMIN ======= */
+        .super-header {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            border-radius: var(--radius-xl);
+            padding: 28px 32px;
+            color: white;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .super-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .super-header p { opacity: 0.8; font-size: 0.9rem; margin-top: 4px; }
+
+        .superadmin-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 750px) {
+            .superadmin-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Shop list */
+        .shop-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .shop-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .shop-icon {
+            width: 42px; height: 42px;
+            background: var(--purple-light);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .shop-info { flex: 1; min-width: 0; }
+        .shop-name {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .shop-email { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .shop-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .btn-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-icon.copy { background: #e0f2fe; color: #0369a1; }
+        .btn-icon.copy:hover { background: #0369a1; color: white; }
+        .btn-icon.del { background: rgba(239,68,68,0.08); color: var(--danger); }
+        .btn-icon.del:hover { background: var(--danger); color: white; }
+
+        .url-preview {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-family: monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* New shop form */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 500px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 99999;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ======= MOBILE ======= */
+        @media (max-width: 600px) {
+            .container { padding: 20px 16px; }
+            .card { padding: 22px 18px; }
+            .topnav { padding: 0 16px; }
+            .logo { font-size: 1.2rem; }
+            .nav-tab { padding: 7px 10px; font-size: 0.78rem; }
+            .page-header h2 { font-size: 1.4rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- TOP NAV -->
+    <nav class="topnav">
+        <div class="logo">Table<span>Reserve</span></div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" id="tab-client" onclick="switchPage('client')">📅 Κράτηση</button>
+            <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')">🔧 Admin</button>
+            <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super Admin</button>
+        </div>
+    </nav>
+
+    <!-- ===== CLIENT PAGE ===== -->
+    <div id="page-client" class="page active">
+        <div class="container">
+            <div class="page-header">
+                <h2>Νέα Κράτηση</h2>
+                <p id="shop-display">Φόρτωση καταστήματος...</p>
+            </div>
+            <div class="client-layout">
+                <div class="card">
+                    <div class="card-title"><div class="icon">📅</div> Επιλογή Ημ/νίας &amp; Ώρας</div>
+                    <div class="input-group">
+                        <label>Ημερομηνία</label>
+                        <input type="date" id="cust-date-only">
+                    </div>
+                    <div class="input-group">
+                        <label>Άτομα</label>
+                        <select id="cust-guests">
+                            <option value="1">1 Άτομο</option>
+                            <option value="2" selected>2 Άτομα</option>
+                            <option value="3">3 Άτομα</option>
+                            <option value="4">4 Άτομα</option>
+                            <option value="5">5 Άτομα</option>
+                            <option value="6">6 Άτομα</option>
+                            <option value="8">8 Άτομα</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Γρήγορη Επιλογή Ώρας</label>
+                        <select id="time-select"><option value="">-- Επιλογή --</option></select>
+                    </div>
+                    <label style="margin-bottom:8px;">Ή επιλέξτε από το grid</label>
+                    <div id="time-slots-container" class="time-grid"></div>
+                    <div id="time-badge" class="selected-time-badge">
+                        <span>🕐</span>
+                        <span>Επιλεγμένη ώρα: <strong id="badge-time-text"></strong></span>
+                    </div>
+                    <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;">Συνέχεια →</button>
+                </div>
+                <div class="card info-panel" style="position:sticky; top:84px;">
+                    <div class="card-title"><div class="icon">ℹ️</div> Οδηγίες</div>
+                    <ol style="padding-left:18px; color:var(--text-muted); font-size:0.9rem; line-height:2.2;">
+                        <li>Επιλέξτε <strong>ημερομηνία</strong></li>
+                        <li>Επιλέξτε <strong>αριθμό ατόμων</strong></li>
+                        <li>Επιλέξτε <strong>ώρα</strong></li>
+                        <li>Πατήστε <strong>"Συνέχεια"</strong></li>
+                        <li>Συμπληρώστε τα στοιχεία σας</li>
+                    </ol>
+                    <div style="margin-top:24px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
+                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ Άμεση επιβεβαίωση</div>
+                        <div style="font-size:0.82rem; color:#166534;">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADMIN PAGE ===== -->
+    <div id="page-admin" class="page">
+        <div class="container">
+            <div id="login-section" style="max-width:400px; margin:0 auto;">
+                <div class="page-header">
+                    <h2>Είσοδος Admin</h2>
+                    <p>Διαχείριση κρατήσεων καταστήματος</p>
+                </div>
+                <div class="card">
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="email@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Κωδικός</label>
+                        <input type="password" id="pass" placeholder="••••••••">
+                    </div>
+                    <button class="btn-primary" id="btn-login">Σύνδεση</button>
+                </div>
+            </div>
+            <div id="dashboard" style="display:none;">
+                <div class="admin-header-row">
+                    <div>
+                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;">Κρατήσεις</h2>
+                        <div class="shop-badge">🏪 <span id="shop-title"></span></div>
+                    </div>
+                    <button class="btn-outline" id="btn-logout">Αποσύνδεση</button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card blue"><div class="stat-label">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
+                    <div class="stat-card dark"><div class="stat-label">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+                </div>
+                <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+                    <div class="filters-row">
+                        <div class="filter-group"><label>Από</label><input type="date" id="filter-from"></div>
+                        <div class="filter-group"><label>Έως</label><input type="date" id="filter-to"></div>
+                    </div>
+                </div>
+                <div id="reservation-list"><div class="no-data">Φόρτωση...</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SUPER ADMIN PAGE ===== -->
+    <div id="page-superadmin" class="page">
+        <div class="container">
+
+            <!-- Super Admin Login -->
+            <div id="sa-login" style="max-width:400px; margin:0 auto;">
+                <div class="page-header">
+                    <h2>⚡ Super Admin</h2>
+                    <p>Κεντρική διαχείριση όλων των καταστημάτων</p>
+                </div>
+                <div class="card">
+                    <div class="input-group">
+                        <label>Email Super Admin</label>
+                        <input type="email" id="sa-email" placeholder="aris@admin.com">
+                    </div>
+                    <div class="input-group">
+                        <label>Κωδικός</label>
+                        <input type="password" id="sa-pass" placeholder="••••••••">
+                    </div>
+                    <button class="btn-purple" id="sa-btn-login">Σύνδεση ως Super Admin</button>
+                </div>
+            </div>
+
+            <!-- Super Admin Dashboard -->
+            <div id="sa-dashboard" style="display:none;">
+                <div class="super-header">
+                    <div>
+                        <h2>⚡ Super Admin Panel</h2>
+                        <p>Διαχείριση καταστημάτων & χρηστών</p>
+                    </div>
+                    <button class="btn-outline" id="sa-btn-logout" style="border-color:rgba(255,255,255,0.3); color:white; background:rgba(255,255,255,0.1);">Αποσύνδεση</button>
+                </div>
+
+                <div class="superadmin-layout">
+
+                    <!-- LEFT: Add new shop -->
+                    <div>
+                        <div class="card">
+                            <div class="card-title"><div class="icon purple">➕</div> Νέο Κατάστημα</div>
+
+                            <div class="input-group">
+                                <label>Όνομα Καταστήματος (ID)</label>
+                                <input type="text" id="sa-shop-id" placeholder="π.χ. kafeneio_athens" style="font-family:monospace;">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
+                            </div>
+                            <div class="input-group">
+                                <label>Εμφανιζόμενο Όνομα</label>
+                                <input type="text" id="sa-shop-display" placeholder="π.χ. Καφενείο Αθήνας">
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label>Email Admin Μαγαζιού</label>
+                                    <input type="email" id="sa-new-email" placeholder="magazi@email.com">
+                                </div>
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label>Κωδικός</label>
+                                    <input type="password" id="sa-new-pass" placeholder="Τουλ. 6 χαρακτήρες">
+                                </div>
+                            </div>
+                            <div style="margin-top:18px;">
+                                <button class="btn-purple" id="sa-btn-create">➕ Δημιουργία Καταστήματος</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Shops list -->
+                    <div>
+                        <div class="card">
+                            <div class="card-title"><div class="icon purple">🏪</div> Καταστήματα (<span id="sa-shop-count">0</span>)</div>
+                            <div id="sa-shops-list">
+                                <div class="no-data">Φόρτωση καταστημάτων...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOOKING MODAL ===== -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content card">
+            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> Στοιχεία Κράτησης</div>
+            <div class="input-group"><label>Ονοματεπώνυμο *</label><input type="text" id="cust-name" placeholder="π.χ. Νίκος Παπαδόπουλος"></div>
+            <div class="input-group"><label>Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
+            <div class="input-group"><label>Email (Προαιρετικό)</label><input type="email" id="cust-email" placeholder="name@example.com"></div>
+            <div class="input-group">
+                <label>Προτίμηση Χώρου</label>
+                <select id="cust-location">
+                    <option value="Εσωτερικός">Εσωτερικός Χώρος</option>
+                    <option value="Εξωτερικός">Εξωτερικός Χώρος</option>
+                    <option value="Δεν έχω προτίμηση">Δεν έχω προτίμηση</option>
+                </select>
+            </div>
+            <div class="input-group"><label>Ειδικό Γεγονός</label><input type="text" id="cust-occasion" placeholder="π.χ. Γενέθλια, Επέτειος"></div>
+            <div class="input-group"><label>Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" placeholder="Οποιαδήποτε ειδική παραγγελία..."></textarea></div>
+            <button class="btn-primary" id="btn-save">✅ Επιβεβαίωση Κράτησης</button>
+            <button class="btn-link" id="close-modal">Ακύρωση</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import {
+            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+            createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+            authDomain: "reser-dfb9a.firebaseapp.com",
+            databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "reser-dfb9a",
+            appId: "1:326928829934:web:f4c60a81f66f97ca2112ff"
+        };
+
+        const SUPER_ADMIN_EMAIL = "aris@admin.com";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // ======= TOAST =======
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + type;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ======= PAGE SWITCHING =======
+        const pages = ['client', 'admin', 'superadmin'];
+        window.switchPage = (page) => {
+            pages.forEach(p => {
+                document.getElementById('page-' + p).classList.remove('active');
+                document.getElementById('tab-' + p).classList.remove('active');
+            });
+            document.getElementById('page-' + page).classList.add('active');
+            document.getElementById('tab-' + page).classList.add('active');
+        };
+
+        // ======= CLIENT =======
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopID = urlParams.get('shop') || "default_store";
+        document.getElementById('shop-display').innerText = "Κράτηση στο: " + shopID;
+
+        let selectedTime = null;
+        const timeContainer = document.getElementById('time-slots-container');
+        const timeSelect = document.getElementById('time-select');
+
+        for (let h = 8; h <= 23; h++) {
+            const hs = h < 10 ? '0' + h : '' + h;
+            [`${hs}:00`, `${hs}:30`].forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t; opt.innerText = t;
+                timeSelect.appendChild(opt);
+                const div = document.createElement('div');
+                div.className = 'time-slot';
+                div.innerText = t; div.dataset.time = t;
+                div.onclick = () => updateSelection(t);
+                timeContainer.appendChild(div);
+            });
+        }
+
+        function updateSelection(time) {
+            selectedTime = time;
+            timeSelect.value = time;
+            document.querySelectorAll('.time-slot').forEach(s =>
+                s.classList.toggle('selected', s.dataset.time === time));
+            document.getElementById('open-modal').style.display = 'block';
+            document.getElementById('badge-time-text').innerText = time;
+            document.getElementById('time-badge').classList.add('show');
+        }
+
+        timeSelect.onchange = (e) => { if (e.target.value) updateSelection(e.target.value); };
+
+        const modal = document.getElementById('booking-modal');
+        document.getElementById('open-modal').onclick = () => {
+            if (!document.getElementById('cust-date-only').value) return alert("Επιλέξτε ημερομηνία πρώτα!");
+            modal.classList.add('open');
+        };
+        document.getElementById('close-modal').onclick = () => modal.classList.remove('open');
+        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
+
+        document.getElementById('btn-save').onclick = () => {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const date = document.getElementById('cust-date-only').value;
+            const guests = document.getElementById('cust-guests').value;
+            const locationChoice = document.getElementById('cust-location').value;
+            const occasion = document.getElementById('cust-occasion').value.trim();
+            const comments = document.getElementById('cust-comments').value.trim();
+            if (!name || !phone) return alert("Όνομα και Τηλέφωνο είναι υποχρεωτικά!");
+            if (!selectedTime) return alert("Επιλέξτε ώρα!");
+            if (!date) return alert("Επιλέξτε ημερομηνία!");
+            const bookingData = { name, phone, email, date, time: selectedTime, guests, location: locationChoice, occasion, comments, timestamp: Date.now() };
+            set(push(ref(db, 'reservations/' + shopID)), bookingData).then(() => {
+                showToast("✅ Η κράτηση αποθηκεύτηκε!", 'success');
+                modal.classList.remove('open');
+                ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments'].forEach(id => document.getElementById(id).value = '');
+                selectedTime = null;
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.getElementById('open-modal').style.display = 'none';
+                document.getElementById('time-badge').classList.remove('show');
+                timeSelect.value = '';
+            }).catch(() => alert("Σφάλμα αποθήκευσης. Δοκιμάστε ξανά."));
+        };
+
+        // ======= ADMIN =======
+        let allReservations = [];
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Έλεγχος αν είναι super admin
+                if (user.email === SUPER_ADMIN_EMAIL) {
+                    document.getElementById('tab-superadmin').style.display = 'flex';
+                    document.getElementById('sa-login').style.display = 'none';
+                    document.getElementById('sa-dashboard').style.display = 'block';
+                    loadShops();
+                    return;
+                }
+
+                // Κανονικός admin
+                const urlShop = urlParams.get('shop');
+                if (!urlShop) { alert("ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!"); signOut(auth); return; }
+                const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
+                if (snapshot.exists()) {
+                    const myShop = snapshot.val();
+                    if (urlShop !== myShop) { alert("ΑΠΑΓΟΡΕΥΕΤΑΙ: " + urlShop); signOut(auth); return; }
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    document.getElementById('shop-title').innerText = myShop;
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('filter-from').value = today;
+                    document.getElementById('filter-to').value = today;
+                    listenToReservations(myShop);
+                } else {
+                    alert("Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!");
+                    signOut(auth);
+                }
+            } else {
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('tab-superadmin').style.display = 'none';
+                document.getElementById('sa-login').style.display = 'block';
+                document.getElementById('sa-dashboard').style.display = 'none';
+            }
+        });
+
+        function listenToReservations(shop) {
+            onValue(ref(db, 'reservations/' + shop), (snapshot) => {
+                allReservations = [];
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    allReservations = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                }
+                renderDashboard(shop);
+            });
+        }
+
+        function renderDashboard(shop) {
+            const fromDate = document.getElementById('filter-from').value;
+            const toDate = document.getElementById('filter-to').value;
+            const list = document.getElementById('reservation-list');
+            let filtered = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
+            filtered.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.localeCompare(b.time));
+            let totalGuests = 0;
+            filtered.forEach(r => totalGuests += parseInt(r.guests || 0));
+            document.getElementById('stat-count').innerText = filtered.length;
+            document.getElementById('stat-guests').innerText = totalGuests;
+            list.innerHTML = '';
+            if (filtered.length === 0) {
+                list.innerHTML = "<div class='no-data'>📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.</div>";
+                return;
+            }
+            filtered.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'booking-card';
+                div.innerHTML = `
+                    <div class="card-header">
+                        <div class="time-badge">${res.time}</div>
+                        <div class="date-text">${res.date}</div>
+                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">Διαγραφή</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="customer-name">${res.name}</div>
+                        <div class="info-row">
+                            <span>👥 <strong>${res.guests} άτομα</strong></span>
+                            <span>📍 ${res.location || 'Εσωτερικός'}</span>
+                        </div>
+                        ${res.occasion ? `<div class="occasion-tag">🎉 ${res.occasion}</div>` : ''}
+                        ${res.comments ? `<div class="comments-box">${res.comments}</div>` : ''}
+                        <a href="tel:${res.phone}" class="call-button">📞 ${res.phone}</a>
+                    </div>`;
+                list.appendChild(div);
+            });
+        }
+
+        document.getElementById('filter-from').onchange = () => renderDashboard(document.getElementById('shop-title').innerText);
+        document.getElementById('filter-to').onchange = () => renderDashboard(document.getElementById('shop-title').innerText);
+
+        document.getElementById('btn-login').onclick = () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Λάθος στοιχεία!"));
+        };
+
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+
+        window.deleteBooking = (shop, id) => {
+            if (confirm("Οριστική διαγραφή κράτησης;")) remove(ref(db, `reservations/${shop}/${id}`));
+        };
+
+        // ======= SUPER ADMIN =======
+        document.getElementById('sa-btn-login').onclick = () => {
+            const email = document.getElementById('sa-email').value;
+            const pass = document.getElementById('sa-pass').value;
+            if (email !== SUPER_ADMIN_EMAIL) return showToast("Δεν έχετε πρόσβαση Super Admin", 'error');
+            signInWithEmailAndPassword(auth, email, pass).catch(() => showToast("Λάθος στοιχεία!", 'error'));
+        };
+
+        document.getElementById('sa-btn-logout').onclick = () => signOut(auth);
+
+        // Load all shops from users_to_shops
+        function loadShops() {
+            onValue(ref(db, 'users_to_shops'), (snapshot) => {
+                const list = document.getElementById('sa-shops-list');
+                list.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    document.getElementById('sa-shop-count').innerText = '0';
+                    list.innerHTML = "<div class='no-data'>Δεν υπάρχουν καταστήματα ακόμα.</div>";
+                    return;
+                }
+
+                const data = snapshot.val();
+                const entries = Object.entries(data); // [uid, shopID]
+                document.getElementById('sa-shop-count').innerText = entries.length;
+
+                // Load shop details
+                get(ref(db, 'shop_details')).then(detailsSnap => {
+                    const details = detailsSnap.exists() ? detailsSnap.val() : {};
+
+                    entries.forEach(([uid, shopId]) => {
+                        const info = details[shopId] || {};
+                        const baseUrl = window.location.origin + window.location.pathname;
+                        const adminUrl = `${baseUrl}?shop=${shopId}`;
+
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        div.innerHTML = `
+                            <div class="shop-icon">🏪</div>
+                            <div class="shop-info">
+                                <div class="shop-name">${info.displayName || shopId}</div>
+                                <div class="shop-email">${info.email || uid}</div>
+                                <div class="url-preview">${adminUrl}</div>
+                            </div>
+                            <div class="shop-actions">
+                                <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyShopUrl('${adminUrl}')">🔗</button>
+                                <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
+                            </div>`;
+                        list.appendChild(div);
+                    });
+                });
+            });
+        }
+
+        // Copy URL to clipboard
+        window.copyShopUrl = (url) => {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("🔗 URL αντιγράφηκε!", 'success');
+            }).catch(() => {
+                prompt("Αντιγράψτε το URL:", url);
+            });
+        };
+
+        // Delete shop
+        window.deleteShop = async (uid, shopId) => {
+            if (!confirm(`Διαγραφή καταστήματος "${shopId}"; Αυτό θα διαγράψει και τα δεδομένα στο Firebase.`)) return;
+            try {
+                await remove(ref(db, `users_to_shops/${uid}`));
+                await remove(ref(db, `shop_details/${shopId}`));
+                showToast(`🗑️ Το κατάστημα "${shopId}" διαγράφηκε.`, 'success');
+            } catch(e) {
+                showToast("Σφάλμα κατά τη διαγραφή.", 'error');
+            }
+        };
+
+        // Create new shop
+        document.getElementById('sa-btn-create').onclick = async () => {
+            const shopIdRaw = document.getElementById('sa-shop-id').value.trim();
+            const displayName = document.getElementById('sa-shop-display').value.trim();
+            const newEmail = document.getElementById('sa-new-email').value.trim();
+            const newPass = document.getElementById('sa-new-pass').value;
+
+            if (!shopIdRaw || !newEmail || !newPass || !displayName) {
+                return showToast("Συμπληρώστε όλα τα πεδία!", 'error');
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(shopIdRaw)) {
+                return showToast("Το ID μαγαζιού: μόνο a-z, 0-9, _", 'error');
+            }
+            if (newPass.length < 6) {
+                return showToast("Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!", 'error');
+            }
+
+            const btn = document.getElementById('sa-btn-create');
+            btn.innerHTML = '<span class="spinner"></span> Δημιουργία...';
+            btn.disabled = true;
+
+            try {
+                // Δημιουργία χρήστη στο Firebase Auth
+                const userCred = await createUserWithEmailAndPassword(auth, newEmail, newPass);
+                const newUid = userCred.user.uid;
+
+                // Αποθήκευση στο database
+                await set(ref(db, `users_to_shops/${newUid}`), shopIdRaw);
+                await set(ref(db, `shop_details/${shopIdRaw}`), {
+                    displayName: displayName,
+                    email: newEmail,
+                    createdAt: Date.now()
+                });
+
+                // Επαναφορά στον super admin (η δημιουργία user κάνει auto-login)
+                // Κάνουμε re-login ως super admin
+                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, document.getElementById('sa-pass').value || prompt("Εισάγετε ξανά τον κωδικό Super Admin για επαναφορά:"));
+
+                showToast(`✅ Κατάστημα "${shopIdRaw}" δημιουργήθηκε!`, 'success');
+
+                // Καθαρισμός φόρμας
+                document.getElementById('sa-shop-id').value = '';
+                document.getElementById('sa-shop-display').value = '';
+                document.getElementById('sa-new-email').value = '';
+                document.getElementById('sa-new-pass').value = '';
+
+            } catch(e) {
+                let msg = "Σφάλμα δημιουργίας.";
+                if (e.code === 'auth/email-already-in-use') msg = "Το email χρησιμοποιείται ήδη!";
+                if (e.code === 'auth/invalid-email') msg = "Μη έγκυρο email!";
+                showToast(msg, 'error');
+            } finally {
+                btn.innerHTML = '➕ Δημιουργία Καταστήματος';
+                btn.disabled = false;
+            }
+        };
+
+    </script>
+</body>
+</html>
