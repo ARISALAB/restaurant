@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin — TableReserve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: rgba(37,99,235,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+            --purple: #7c3aed;
+            --purple-light: rgba(124,58,237,0.08);
+            --bg: #f0f2f7;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        .topnav {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(124,58,237,0.3);
+        }
+        .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: white;
+        }
+        .logo span { opacity: 0.7; font-size: 0.9rem; font-weight: 600; margin-left: 8px; }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+
+        .btn-outline-white {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-outline-white:hover { background: rgba(255,255,255,0.25); }
+
+        /* CONTAINER */
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* LOGIN */
+        .login-wrap {
+            max-width: 420px;
+            margin: 60px auto 0;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .login-header .icon-big {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+        .login-header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+        }
+        .login-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-top: 6px;
+        }
+
+        /* CARD */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-sm);
+            padding: 32px 28px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon {
+            width: 32px; height: 32px;
+            background: var(--purple-light);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .input-group { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: #fafbfc;
+            color: var(--text-main);
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--purple);
+            background: var(--white);
+            box-shadow: 0 0 0 3px var(--purple-light);
+        }
+
+        .btn-purple {
+            width: 100%;
+            padding: 14px;
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(124,58,237,0.25);
+        }
+        .btn-purple:hover { background: #6d28d9; transform: translateY(-1px); }
+        .btn-purple:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+        .btn-danger {
+            padding: 8px 16px;
+            background: rgba(239,68,68,0.08);
+            color: var(--danger);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-danger:hover { background: var(--danger); color: white; }
+
+        /* DASHBOARD */
+        .super-header {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            border-radius: var(--radius-xl);
+            padding: 28px 32px;
+            color: white;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .super-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .super-header p { opacity: 0.8; font-size: 0.9rem; margin-top: 4px; }
+
+        .stat-pill {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .superadmin-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 750px) {
+            .superadmin-layout { grid-template-columns: 1fr; }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 500px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Shop list */
+        .shop-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .shop-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .shop-icon {
+            width: 42px; height: 42px;
+            background: var(--purple-light);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .shop-info { flex: 1; min-width: 0; }
+        .shop-name {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .shop-email { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2px; }
+        .shop-url {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .shop-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .btn-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-icon.copy { background: #e0f2fe; color: #0369a1; }
+        .btn-icon.copy:hover { background: #0369a1; color: white; }
+        .btn-icon.del { background: rgba(239,68,68,0.08); color: var(--danger); }
+        .btn-icon.del:hover { background: var(--danger); color: white; }
+
+        .no-data { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 99999;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        .spinner {
+            display: inline-block;
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .hint { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px 16px; }
+            .card { padding: 22px 18px; }
+            .super-header { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast" class="toast"></div>
+
+    <!-- NAV -->
+    <nav class="topnav">
+        <div class="logo">⚡ TableReserve <span>Super Admin</span></div>
+        <div class="nav-right">
+            <button class="btn-outline-white" id="btn-logout" style="display:none;" onclick="doLogout()">Αποσύνδεση</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- ===== LOGIN ===== -->
+        <div id="login-section" class="login-wrap">
+            <div class="login-header">
+                <div class="icon-big">⚡</div>
+                <h1>Super Admin</h1>
+                <p>Κεντρική διαχείριση καταστημάτων</p>
+            </div>
+            <div class="card">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="sa-email" placeholder="aris@admin.com" autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label>Κωδικός</label>
+                    <input type="password" id="sa-pass" placeholder="••••••••" autocomplete="current-password"
+                        onkeydown="if(event.key==='Enter') doLogin()">
+                </div>
+                <button class="btn-purple" id="btn-login" onclick="doLogin()">⚡ Σύνδεση</button>
+            </div>
+        </div>
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="dashboard-section" style="display:none;">
+
+            <div class="super-header">
+                <div>
+                    <h2>⚡ Super Admin Panel</h2>
+                    <p>Διαχείριση καταστημάτων &amp; χρηστών</p>
+                </div>
+                <div class="stat-pill">🏪 <span id="sa-shop-count">0</span> καταστήματα</div>
+            </div>
+
+            <div class="superadmin-layout">
+
+                <!-- LEFT: Νέο Κατάστημα -->
+                <div>
+                    <div class="card">
+                        <div class="card-title"><div class="icon">➕</div> Νέο Κατάστημα</div>
+
+                        <div class="input-group">
+                            <label>ID Καταστήματος</label>
+                            <input type="text" id="sa-shop-id" placeholder="π.χ. ALMPOURO" style="font-family:monospace; text-transform:uppercase;">
+                            <div class="hint">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
+                        </div>
+                        <div class="input-group">
+                            <label>Εμφανιζόμενο Όνομα</label>
+                            <input type="text" id="sa-shop-display" placeholder="π.χ. Αλμπούρο">
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label>Email Admin</label>
+                                <input type="email" id="sa-new-email" placeholder="magazi@email.com">
+                            </div>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label>Κωδικός</label>
+                                <input type="password" id="sa-new-pass" placeholder="Τουλ. 6 χαρ.">
+                            </div>
+                        </div>
+                        <div style="margin-top:18px;">
+                            <button class="btn-purple" id="sa-btn-create" onclick="createShop()">➕ Δημιουργία Καταστήματος</button>
+                        </div>
+
+                        <!-- Αποτέλεσμα δημιουργίας -->
+                        <div id="create-result" style="display:none; margin-top:16px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
+                            <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:6px;">✅ Κατάστημα δημιουργήθηκε!</div>
+                            <div style="font-size:0.82rem; color:#166534; margin-bottom:8px;">URL Admin:</div>
+                            <div id="result-url" style="font-family:monospace; font-size:0.78rem; background:white; padding:8px 12px; border-radius:6px; border:1px solid #bbf7d0; word-break:break-all; color:#166534;"></div>
+                            <button onclick="copyResultUrl()" style="margin-top:10px; width:100%; padding:8px; background:#166534; color:white; border:none; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.85rem;">🔗 Αντιγραφή URL</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Λίστα Καταστημάτων -->
+                <div>
+                    <div class="card">
+                        <div class="card-title"><div class="icon">🏪</div> Καταστήματα</div>
+                        <div id="sa-shops-list">
+                            <div class="no-data">Φόρτωση...</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, get, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import {
+            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+            createUserWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+            authDomain: "reser-dfb9a.firebaseapp.com",
+            databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "reser-dfb9a",
+            appId: "1:326928829934:web:f4c60a81f66f97ca2112ff"
+        };
+
+        const SUPER_ADMIN_EMAIL = "aris@admin.com";
+        const SHOP_BASE_URL = "https://restableres.netlify.app/";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // Toast
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast ' + type;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // Auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === SUPER_ADMIN_EMAIL) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard-section').style.display = 'block';
+                document.getElementById('btn-logout').style.display = 'block';
+                loadShops();
+            } else {
+                if (user) signOut(auth); // αν έχει συνδεθεί κάποιος άλλος
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('dashboard-section').style.display = 'none';
+                document.getElementById('btn-logout').style.display = 'none';
+            }
+        });
+
+        // Login
+        window.doLogin = () => {
+            const email = document.getElementById('sa-email').value.trim();
+            const pass = document.getElementById('sa-pass').value;
+            if (!email || !pass) return showToast('Συμπλήρωσε email και κωδικό!', 'error');
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = '<span class="spinner"></span> Σύνδεση...';
+            btn.disabled = true;
+            signInWithEmailAndPassword(auth, email, pass)
+                .catch(() => {
+                    showToast('Λάθος στοιχεία!', 'error');
+                    btn.innerHTML = '⚡ Σύνδεση';
+                    btn.disabled = false;
+                });
+        };
+
+        // Logout
+        window.doLogout = () => signOut(auth);
+
+        // Load shops
+        function loadShops() {
+            onValue(ref(db, 'users_to_shops'), (snapshot) => {
+                const list = document.getElementById('sa-shops-list');
+                list.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    document.getElementById('sa-shop-count').innerText = '0';
+                    list.innerHTML = "<div class='no-data'>📭 Δεν υπάρχουν καταστήματα ακόμα.</div>";
+                    return;
+                }
+
+                const data = snapshot.val();
+                const entries = Object.entries(data);
+                document.getElementById('sa-shop-count').innerText = entries.length;
+
+                get(ref(db, 'shop_details')).then(detailsSnap => {
+                    const details = detailsSnap.exists() ? detailsSnap.val() : {};
+                    list.innerHTML = '';
+                    entries.forEach(([uid, shopId]) => {
+                        const info = details[shopId] || {};
+                        const shopUrl = `${SHOP_BASE_URL}?shop=${shopId}`;
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        div.innerHTML = `
+                            <div class="shop-icon">🏪</div>
+                            <div class="shop-info">
+                                <div class="shop-name">${info.displayName || shopId}</div>
+                                <div class="shop-email">${info.email || uid}</div>
+                                <div class="shop-url">${shopUrl}</div>
+                            </div>
+                            <div class="shop-actions">
+                                <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyUrl('${shopUrl}')">🔗</button>
+                                <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
+                            </div>`;
+                        list.appendChild(div);
+                    });
+                });
+            });
+        }
+
+        // Create shop
+        window.createShop = async () => {
+            const shopIdRaw = document.getElementById('sa-shop-id').value.trim().toUpperCase();
+            const displayName = document.getElementById('sa-shop-display').value.trim();
+            const newEmail = document.getElementById('sa-new-email').value.trim();
+            const newPass = document.getElementById('sa-new-pass').value;
+
+            if (!shopIdRaw || !displayName || !newEmail || !newPass) {
+                return showToast('Συμπλήρωσε όλα τα πεδία!', 'error');
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(shopIdRaw)) {
+                return showToast('Το ID: μόνο λατινικά, αριθμοί, _', 'error');
+            }
+            if (newPass.length < 6) {
+                return showToast('Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!', 'error');
+            }
+
+            const btn = document.getElementById('sa-btn-create');
+            btn.innerHTML = '<span class="spinner"></span> Δημιουργία...';
+            btn.disabled = true;
+            document.getElementById('create-result').style.display = 'none';
+
+            // Αποθήκευση κωδικού super admin πριν χαθεί το session
+            const saPass = document.getElementById('sa-pass').value;
+
+            try {
+                // Δημιουργία νέου χρήστη
+                const userCred = await createUserWithEmailAndPassword(auth, newEmail, newPass);
+                const newUid = userCred.user.uid;
+
+                // Εγγραφή στη database
+                await set(ref(db, `users_to_shops/${newUid}`), shopIdRaw);
+                await set(ref(db, `shop_details/${shopIdRaw}`), {
+                    displayName,
+                    email: newEmail,
+                    createdAt: Date.now()
+                });
+
+                // Επαναφορά super admin session
+                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, saPass);
+
+                // Εμφάνιση URL
+                const shopUrl = `${SHOP_BASE_URL}?shop=${shopIdRaw}`;
+                document.getElementById('result-url').textContent = shopUrl;
+                document.getElementById('create-result').style.display = 'block';
+                window._lastCreatedUrl = shopUrl;
+
+                showToast(`✅ Κατάστημα "${shopIdRaw}" δημιουργήθηκε!`, 'success');
+
+                // Καθαρισμός
+                document.getElementById('sa-shop-id').value = '';
+                document.getElementById('sa-shop-display').value = '';
+                document.getElementById('sa-new-email').value = '';
+                document.getElementById('sa-new-pass').value = '';
+
+            } catch(e) {
+                let msg = 'Σφάλμα δημιουργίας.';
+                if (e.code === 'auth/email-already-in-use') msg = 'Αυτό το email χρησιμοποιείται ήδη!';
+                if (e.code === 'auth/invalid-email') msg = 'Μη έγκυρο email!';
+                if (e.code === 'auth/weak-password') msg = 'Πολύ αδύναμος κωδικός!';
+                showToast(msg, 'error');
+            } finally {
+                btn.innerHTML = '➕ Δημιουργία Καταστήματος';
+                btn.disabled = false;
+            }
+        };
+
+        // Copy URL
+        window.copyUrl = (url) => {
+            navigator.clipboard.writeText(url)
+                .then(() => showToast('🔗 URL αντιγράφηκε!', 'success'))
+                .catch(() => prompt('Αντιγράψτε το URL:', url));
+        };
+
+        window.copyResultUrl = () => {
+            if (window._lastCreatedUrl) copyUrl(window._lastCreatedUrl);
+        };
+
+        // Delete shop
+        window.deleteShop = async (uid, shopId) => {
+            if (!confirm(`Διαγραφή καταστήματος "${shopId}";\nΑυτό θα διαγράψει και τα δεδομένα στη Firebase.`)) return;
+            try {
+                await remove(ref(db, `users_to_shops/${uid}`));
+                await remove(ref(db, `shop_details/${shopId}`));
+                showToast(`🗑️ Κατάστημα "${shopId}" διαγράφηκε.`, 'success');
+            } catch(e) {
+                showToast('Σφάλμα κατά τη διαγραφή.', 'error');
+            }
+        };
+
+    </script>
+</body>
+</html>
