@@ -60,6 +60,12 @@
         }
         .logo span { color: var(--primary); }
 
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .nav-tabs {
             display: flex;
             gap: 4px;
@@ -87,6 +93,34 @@
         }
         .nav-tab.super.active {
             color: var(--purple);
+        }
+
+        /* ======= LANGUAGE SWITCHER ======= */
+        .lang-switcher {
+            display: flex;
+            gap: 2px;
+            background: var(--bg);
+            padding: 3px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+        .lang-btn {
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+        .lang-btn.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
         }
 
         /* Super admin tab hidden by default */
@@ -529,6 +563,7 @@
             .nav-tab { padding: 7px 10px; font-size: 0.78rem; }
             .page-header h2 { font-size: 1.4rem; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
+            .lang-btn { padding: 4px 7px; font-size: 0.72rem; }
         }
     </style>
 </head>
@@ -540,10 +575,17 @@
     <!-- TOP NAV -->
     <nav class="topnav">
         <div class="logo">Table<span>Reserve</span></div>
-        <div class="nav-tabs">
-            <button class="nav-tab active" id="tab-client" onclick="switchPage('client')">📅 Κράτηση</button>
-            <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')">🔧 Admin</button>
-            <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super Admin</button>
+        <div class="nav-right">
+            <div class="nav-tabs">
+                <button class="nav-tab active" id="tab-client" onclick="switchPage('client')" data-i18n-key="tab_reservation">📅 Κράτηση</button>
+                <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')" data-i18n-key="tab_admin">🔧 Admin</button>
+                <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super Admin</button>
+            </div>
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn active" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
+                <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+            </div>
         </div>
     </nav>
 
@@ -551,52 +593,52 @@
     <div id="page-client" class="page active">
         <div class="container">
             <div class="page-header">
-                <h2>Νέα Κράτηση</h2>
-                <p id="shop-display">Φόρτωση καταστήματος...</p>
+                <h2 data-i18n-key="new_reservation">Νέα Κράτηση</h2>
+                <p id="shop-display" data-i18n-key="loading_shop">Φόρτωση καταστήματος...</p>
             </div>
             <div class="client-layout">
                 <div class="card">
-                    <div class="card-title"><div class="icon">📅</div> Επιλογή Ημ/νίας &amp; Ώρας</div>
+                    <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
                     <div class="input-group">
-                        <label>Ημερομηνία</label>
+                        <label data-i18n-key="date">Ημερομηνία</label>
                         <input type="date" id="cust-date-only">
                     </div>
                     <div class="input-group">
-                        <label>Άτομα</label>
+                        <label data-i18n-key="persons">Άτομα</label>
                         <select id="cust-guests">
-                            <option value="1">1 Άτομο</option>
-                            <option value="2" selected>2 Άτομα</option>
-                            <option value="3">3 Άτομα</option>
-                            <option value="4">4 Άτομα</option>
-                            <option value="5">5 Άτομα</option>
-                            <option value="6">6 Άτομα</option>
-                            <option value="8">8 Άτομα</option>
+                            <option value="1" data-i18n-key="person_1">1 Άτομο</option>
+                            <option value="2" selected data-i18n-key="person_2">2 Άτομα</option>
+                            <option value="3" data-i18n-key="person_3">3 Άτομα</option>
+                            <option value="4" data-i18n-key="person_4">4 Άτομα</option>
+                            <option value="5" data-i18n-key="person_5">5 Άτομα</option>
+                            <option value="6" data-i18n-key="person_6">6 Άτομα</option>
+                            <option value="8" data-i18n-key="person_8">8 Άτομα</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Γρήγορη Επιλογή Ώρας</label>
-                        <select id="time-select"><option value="">-- Επιλογή --</option></select>
+                        <label data-i18n-key="quick_time">Γρήγορη Επιλογή Ώρας</label>
+                        <select id="time-select"><option value="" data-i18n-key="select_opt">-- Επιλογή --</option></select>
                     </div>
-                    <label style="margin-bottom:8px;">Ή επιλέξτε από το grid</label>
+                    <label style="margin-bottom:8px;" data-i18n-key="or_grid">Ή επιλέξτε από το grid</label>
                     <div id="time-slots-container" class="time-grid"></div>
                     <div id="time-badge" class="selected-time-badge">
                         <span>🕐</span>
-                        <span>Επιλεγμένη ώρα: <strong id="badge-time-text"></strong></span>
+                        <span><span data-i18n-key="selected_time">Επιλεγμένη ώρα:</span> <strong id="badge-time-text"></strong></span>
                     </div>
-                    <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;">Συνέχεια →</button>
+                    <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;" data-i18n-key="continue">Συνέχεια →</button>
                 </div>
                 <div class="card info-panel" style="position:sticky; top:84px;">
-                    <div class="card-title"><div class="icon">ℹ️</div> Οδηγίες</div>
+                    <div class="card-title"><div class="icon">ℹ️</div> <span data-i18n-key="instructions">Οδηγίες</span></div>
                     <ol style="padding-left:18px; color:var(--text-muted); font-size:0.9rem; line-height:2.2;">
-                        <li>Επιλέξτε <strong>ημερομηνία</strong></li>
-                        <li>Επιλέξτε <strong>αριθμό ατόμων</strong></li>
-                        <li>Επιλέξτε <strong>ώρα</strong></li>
-                        <li>Πατήστε <strong>"Συνέχεια"</strong></li>
-                        <li>Συμπληρώστε τα στοιχεία σας</li>
+                        <li data-i18n-key="step1">Επιλέξτε <strong>ημερομηνία</strong></li>
+                        <li data-i18n-key="step2">Επιλέξτε <strong>αριθμό ατόμων</strong></li>
+                        <li data-i18n-key="step3">Επιλέξτε <strong>ώρα</strong></li>
+                        <li data-i18n-key="step4">Πατήστε <strong>"Συνέχεια"</strong></li>
+                        <li data-i18n-key="step5">Συμπληρώστε τα στοιχεία σας</li>
                     </ol>
                     <div style="margin-top:24px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
-                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ Άμεση επιβεβαίωση</div>
-                        <div style="font-size:0.82rem; color:#166534;">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
+                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ <span data-i18n-key="instant_confirm">Άμεση επιβεβαίωση</span></div>
+                        <div style="font-size:0.82rem; color:#166534;" data-i18n-key="instant_confirm_desc">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
                     </div>
                 </div>
             </div>
@@ -608,8 +650,8 @@
         <div class="container">
             <div id="login-section" style="max-width:400px; margin:0 auto;">
                 <div class="page-header">
-                    <h2>Είσοδος Admin</h2>
-                    <p>Διαχείριση κρατήσεων καταστήματος</p>
+                    <h2 data-i18n-key="admin_login">Είσοδος Admin</h2>
+                    <p data-i18n-key="admin_login_desc">Διαχείριση κρατήσεων καταστήματος</p>
                 </div>
                 <div class="card">
                     <div class="input-group">
@@ -617,31 +659,31 @@
                         <input type="email" id="email" placeholder="email@example.com">
                     </div>
                     <div class="input-group">
-                        <label>Κωδικός</label>
+                        <label data-i18n-key="password">Κωδικός</label>
                         <input type="password" id="pass" placeholder="••••••••">
                     </div>
-                    <button class="btn-primary" id="btn-login">Σύνδεση</button>
+                    <button class="btn-primary" id="btn-login" data-i18n-key="login">Σύνδεση</button>
                 </div>
             </div>
             <div id="dashboard" style="display:none;">
                 <div class="admin-header-row">
                     <div>
-                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;">Κρατήσεις</h2>
+                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
                         <div class="shop-badge">🏪 <span id="shop-title"></span></div>
                     </div>
-                    <button class="btn-outline" id="btn-logout">Αποσύνδεση</button>
+                    <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card blue"><div class="stat-label">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
-                    <div class="stat-card dark"><div class="stat-label">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+                    <div class="stat-card blue"><div class="stat-label" data-i18n-key="reservations">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
+                    <div class="stat-card dark"><div class="stat-label" data-i18n-key="total_guests">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
                 </div>
                 <div class="card" style="padding:20px 24px; margin-bottom:20px;">
                     <div class="filters-row">
-                        <div class="filter-group"><label>Από</label><input type="date" id="filter-from"></div>
-                        <div class="filter-group"><label>Έως</label><input type="date" id="filter-to"></div>
+                        <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
+                        <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
                     </div>
                 </div>
-                <div id="reservation-list"><div class="no-data">Φόρτωση...</div></div>
+                <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
             </div>
         </div>
     </div>
@@ -654,18 +696,18 @@
             <div id="sa-login" style="max-width:400px; margin:0 auto;">
                 <div class="page-header">
                     <h2>⚡ Super Admin</h2>
-                    <p>Κεντρική διαχείριση όλων των καταστημάτων</p>
+                    <p data-i18n-key="sa_login_desc">Κεντρική διαχείριση όλων των καταστημάτων</p>
                 </div>
                 <div class="card">
                     <div class="input-group">
-                        <label>Email Super Admin</label>
+                        <label data-i18n-key="sa_email_label">Email Super Admin</label>
                         <input type="email" id="sa-email" placeholder="aris@admin.com">
                     </div>
                     <div class="input-group">
-                        <label>Κωδικός</label>
+                        <label data-i18n-key="password">Κωδικός</label>
                         <input type="password" id="sa-pass" placeholder="••••••••">
                     </div>
-                    <button class="btn-purple" id="sa-btn-login">Σύνδεση ως Super Admin</button>
+                    <button class="btn-purple" id="sa-btn-login" data-i18n-key="sa_login_btn">Σύνδεση ως Super Admin</button>
                 </div>
             </div>
 
@@ -674,9 +716,9 @@
                 <div class="super-header">
                     <div>
                         <h2>⚡ Super Admin Panel</h2>
-                        <p>Διαχείριση καταστημάτων & χρηστών</p>
+                        <p data-i18n-key="sa_manage">Διαχείριση καταστημάτων &amp; χρηστών</p>
                     </div>
-                    <button class="btn-outline" id="sa-btn-logout" style="border-color:rgba(255,255,255,0.3); color:white; background:rgba(255,255,255,0.1);">Αποσύνδεση</button>
+                    <button class="btn-outline" id="sa-btn-logout" style="border-color:rgba(255,255,255,0.3); color:white; background:rgba(255,255,255,0.1);" data-i18n-key="logout">Αποσύνδεση</button>
                 </div>
 
                 <div class="superadmin-layout">
@@ -684,29 +726,29 @@
                     <!-- LEFT: Add new shop -->
                     <div>
                         <div class="card">
-                            <div class="card-title"><div class="icon purple">➕</div> Νέο Κατάστημα</div>
+                            <div class="card-title"><div class="icon purple">➕</div> <span data-i18n-key="new_shop">Νέο Κατάστημα</span></div>
 
                             <div class="input-group">
-                                <label>Όνομα Καταστήματος (ID)</label>
+                                <label data-i18n-key="shop_id_label">Όνομα Καταστήματος (ID)</label>
                                 <input type="text" id="sa-shop-id" placeholder="π.χ. kafeneio_athens" style="font-family:monospace;">
-                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" data-i18n-key="shop_id_hint">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
                             </div>
                             <div class="input-group">
-                                <label>Εμφανιζόμενο Όνομα</label>
-                                <input type="text" id="sa-shop-display" placeholder="π.χ. Καφενείο Αθήνας">
+                                <label data-i18n-key="display_name">Εμφανιζόμενο Όνομα</label>
+                                <input type="text" id="sa-shop-display" data-i18n-placeholder="display_name_ph">
                             </div>
                             <div class="form-row">
                                 <div class="input-group" style="margin-bottom:0;">
-                                    <label>Email Admin Μαγαζιού</label>
+                                    <label data-i18n-key="shop_admin_email">Email Admin Μαγαζιού</label>
                                     <input type="email" id="sa-new-email" placeholder="magazi@email.com">
                                 </div>
                                 <div class="input-group" style="margin-bottom:0;">
-                                    <label>Κωδικός</label>
-                                    <input type="password" id="sa-new-pass" placeholder="Τουλ. 6 χαρακτήρες">
+                                    <label data-i18n-key="password">Κωδικός</label>
+                                    <input type="password" id="sa-new-pass" data-i18n-placeholder="pass_hint">
                                 </div>
                             </div>
                             <div style="margin-top:18px;">
-                                <button class="btn-purple" id="sa-btn-create">➕ Δημιουργία Καταστήματος</button>
+                                <button class="btn-purple" id="sa-btn-create" data-i18n-key="create_shop">➕ Δημιουργία Καταστήματος</button>
                             </div>
                         </div>
                     </div>
@@ -714,9 +756,9 @@
                     <!-- RIGHT: Shops list -->
                     <div>
                         <div class="card">
-                            <div class="card-title"><div class="icon purple">🏪</div> Καταστήματα (<span id="sa-shop-count">0</span>)</div>
+                            <div class="card-title"><div class="icon purple">🏪</div> <span data-i18n-key="shops">Καταστήματα</span> (<span id="sa-shop-count">0</span>)</div>
                             <div id="sa-shops-list">
-                                <div class="no-data">Φόρτωση καταστημάτων...</div>
+                                <div class="no-data" data-i18n-key="loading_shops">Φόρτωση καταστημάτων...</div>
                             </div>
                         </div>
                     </div>
@@ -729,22 +771,22 @@
     <!-- ===== BOOKING MODAL ===== -->
     <div id="booking-modal" class="modal">
         <div class="modal-content card">
-            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> Στοιχεία Κράτησης</div>
-            <div class="input-group"><label>Ονοματεπώνυμο *</label><input type="text" id="cust-name" placeholder="π.χ. Νίκος Παπαδόπουλος"></div>
-            <div class="input-group"><label>Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
-            <div class="input-group"><label>Email (Προαιρετικό)</label><input type="email" id="cust-email" placeholder="name@example.com"></div>
+            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
+            <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" data-i18n-placeholder="fullname_ph"></div>
+            <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
+            <div class="input-group"><label data-i18n-key="email_optional">Email (Προαιρετικό)</label><input type="email" id="cust-email" placeholder="name@example.com"></div>
             <div class="input-group">
-                <label>Προτίμηση Χώρου</label>
+                <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
                 <select id="cust-location">
-                    <option value="Εσωτερικός">Εσωτερικός Χώρος</option>
-                    <option value="Εξωτερικός">Εξωτερικός Χώρος</option>
-                    <option value="Δεν έχω προτίμηση">Δεν έχω προτίμηση</option>
+                    <option value="Εσωτερικός" data-i18n-key="indoor">Εσωτερικός Χώρος</option>
+                    <option value="Εξωτερικός" data-i18n-key="outdoor">Εξωτερικός Χώρος</option>
+                    <option value="Δεν έχω προτίμηση" data-i18n-key="no_pref">Δεν έχω προτίμηση</option>
                 </select>
             </div>
-            <div class="input-group"><label>Ειδικό Γεγονός</label><input type="text" id="cust-occasion" placeholder="π.χ. Γενέθλια, Επέτειος"></div>
-            <div class="input-group"><label>Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" placeholder="Οποιαδήποτε ειδική παραγγελία..."></textarea></div>
-            <button class="btn-primary" id="btn-save">✅ Επιβεβαίωση Κράτησης</button>
-            <button class="btn-link" id="close-modal">Ακύρωση</button>
+            <div class="input-group"><label data-i18n-key="occasion">Ειδικό Γεγονός</label><input type="text" id="cust-occasion" data-i18n-placeholder="occasion_ph"></div>
+            <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" data-i18n-placeholder="requests_ph"></textarea></div>
+            <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
+            <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
         </div>
     </div>
 
@@ -770,13 +812,285 @@
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        // ======= TRANSLATIONS =======
+        const translations = {
+            el: {
+                tab_reservation: "📅 Κράτηση",
+                tab_admin: "🔧 Admin",
+                new_reservation: "Νέα Κράτηση",
+                loading_shop: "Φόρτωση καταστήματος...",
+                booking_at: "Κράτηση στο: ",
+                select_date_time: "Επιλογή Ημ/νίας & Ώρας",
+                date: "Ημερομηνία",
+                persons: "Άτομα",
+                person_1: "1 Άτομο",
+                person_2: "2 Άτομα",
+                person_3: "3 Άτομα",
+                person_4: "4 Άτομα",
+                person_5: "5 Άτομα",
+                person_6: "6 Άτομα",
+                person_8: "8 Άτομα",
+                quick_time: "Γρήγορη Επιλογή Ώρας",
+                select_opt: "-- Επιλογή --",
+                or_grid: "Ή επιλέξτε από το grid",
+                selected_time: "Επιλεγμένη ώρα:",
+                continue: "Συνέχεια →",
+                instructions: "Οδηγίες",
+                step1: "Επιλέξτε <strong>ημερομηνία</strong>",
+                step2: "Επιλέξτε <strong>αριθμό ατόμων</strong>",
+                step3: "Επιλέξτε <strong>ώρα</strong>",
+                step4: 'Πατήστε <strong>"Συνέχεια"</strong>',
+                step5: "Συμπληρώστε τα στοιχεία σας",
+                instant_confirm: "Άμεση επιβεβαίωση",
+                instant_confirm_desc: "Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.",
+                admin_login: "Είσοδος Admin",
+                admin_login_desc: "Διαχείριση κρατήσεων καταστήματος",
+                password: "Κωδικός",
+                login: "Σύνδεση",
+                reservations: "Κρατήσεις",
+                logout: "Αποσύνδεση",
+                total_guests: "Σύνολο Ατόμων",
+                from: "Από",
+                to: "Έως",
+                loading: "Φόρτωση...",
+                sa_login_desc: "Κεντρική διαχείριση όλων των καταστημάτων",
+                sa_email_label: "Email Super Admin",
+                sa_login_btn: "Σύνδεση ως Super Admin",
+                sa_manage: "Διαχείριση καταστημάτων & χρηστών",
+                new_shop: "Νέο Κατάστημα",
+                shop_id_label: "Όνομα Καταστήματος (ID)",
+                shop_id_hint: "Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)",
+                display_name: "Εμφανιζόμενο Όνομα",
+                display_name_ph: "π.χ. Καφενείο Αθήνας",
+                shop_admin_email: "Email Admin Μαγαζιού",
+                pass_hint: "Τουλ. 6 χαρακτήρες",
+                create_shop: "➕ Δημιουργία Καταστήματος",
+                shops: "Καταστήματα",
+                loading_shops: "Φόρτωση καταστημάτων...",
+                booking_details: "Στοιχεία Κράτησης",
+                fullname: "Ονοματεπώνυμο *",
+                fullname_ph: "π.χ. Νίκος Παπαδόπουλος",
+                phone: "Τηλέφωνο *",
+                email_optional: "Email (Προαιρετικό)",
+                location_pref: "Προτίμηση Χώρου",
+                indoor: "Εσωτερικός Χώρος",
+                outdoor: "Εξωτερικός Χώρος",
+                no_pref: "Δεν έχω προτίμηση",
+                occasion: "Ειδικό Γεγονός",
+                occasion_ph: "π.χ. Γενέθλια, Επέτειος",
+                requests: "Επιπλέον Αιτήματα",
+                requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
+                confirm_booking: "✅ Επιβεβαίωση Κράτησης",
+                cancel: "Ακύρωση",
+                // alerts & toasts
+                alert_select_date: "Επιλέξτε ημερομηνία πρώτα!",
+                alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!",
+                alert_select_time: "Επιλέξτε ώρα!",
+                alert_select_date2: "Επιλέξτε ημερομηνία!",
+                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!",
+                toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                alert_wrong_creds: "Λάθος στοιχεία!",
+                alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ",
+                alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
+                no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
+                delete_confirm: "Οριστική διαγραφή κράτησης;",
+                delete_text: "Διαγραφή",
+                guests_label: "άτομα",
+                location_label_indoor: "Εσωτερικός",
+                toast_no_access: "Δεν έχετε πρόσβαση Super Admin",
+                alert_wrong_creds_sa: "Λάθος στοιχεία!",
+                no_shops: "Δεν υπάρχουν καταστήματα ακόμα.",
+                copy_title: "Αντιγραφή URL",
+                delete_title: "Διαγραφή",
+                delete_shop_confirm: 'Διαγραφή καταστήματος "',
+                delete_shop_confirm2: '"; Αυτό θα διαγράψει και τα δεδομένα στο Firebase.',
+                toast_copy: "🔗 URL αντιγράφηκε!",
+                copy_prompt: "Αντιγράψτε το URL:",
+                toast_shop_deleted: '🗑️ Το κατάστημα "',
+                toast_shop_deleted2: '" διαγράφηκε.',
+                toast_delete_error: "Σφάλμα κατά τη διαγραφή.",
+                sa_fill_all: "Συμπληρώστε όλα τα πεδία!",
+                sa_id_invalid: "Το ID μαγαζιού: μόνο a-z, 0-9, _",
+                sa_pass_short: "Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!",
+                sa_creating: "Δημιουργία...",
+                sa_relogin_prompt: "Εισάγετε ξανά τον κωδικό Super Admin για επαναφορά:",
+                toast_shop_created: '✅ Κατάστημα "',
+                toast_shop_created2: '" δημιουργήθηκε!',
+                sa_error_create: "Σφάλμα δημιουργίας.",
+                sa_email_in_use: "Το email χρησιμοποιείται ήδη!",
+                sa_invalid_email: "Μη έγκυρο email!",
+            },
+            en: {
+                tab_reservation: "📅 Reservation",
+                tab_admin: "🔧 Admin",
+                new_reservation: "New Reservation",
+                loading_shop: "Loading store...",
+                booking_at: "Booking at: ",
+                select_date_time: "Select Date & Time",
+                date: "Date",
+                persons: "Persons",
+                person_1: "1 Person",
+                person_2: "2 Persons",
+                person_3: "3 Persons",
+                person_4: "4 Persons",
+                person_5: "5 Persons",
+                person_6: "6 Persons",
+                person_8: "8 Persons",
+                quick_time: "Quick Time Selection",
+                select_opt: "-- Select --",
+                or_grid: "Or select from the grid",
+                selected_time: "Selected time:",
+                continue: "Continue →",
+                instructions: "Instructions",
+                step1: "Select a <strong>date</strong>",
+                step2: "Select <strong>number of persons</strong>",
+                step3: "Select a <strong>time</strong>",
+                step4: 'Press <strong>"Continue"</strong>',
+                step5: "Fill in your details",
+                instant_confirm: "Instant confirmation",
+                instant_confirm_desc: "Your reservation is saved immediately and the store is notified automatically.",
+                admin_login: "Admin Login",
+                admin_login_desc: "Manage store reservations",
+                password: "Password",
+                login: "Sign In",
+                reservations: "Reservations",
+                logout: "Sign Out",
+                total_guests: "Total Guests",
+                from: "From",
+                to: "To",
+                loading: "Loading...",
+                sa_login_desc: "Central management of all stores",
+                sa_email_label: "Super Admin Email",
+                sa_login_btn: "Sign In as Super Admin",
+                sa_manage: "Manage stores & users",
+                new_shop: "New Store",
+                shop_id_label: "Store Name (ID)",
+                shop_id_hint: "Only latin letters, numbers, _ (no spaces)",
+                display_name: "Display Name",
+                display_name_ph: "e.g. Athens Café",
+                shop_admin_email: "Store Admin Email",
+                pass_hint: "Min. 6 characters",
+                create_shop: "➕ Create Store",
+                shops: "Stores",
+                loading_shops: "Loading stores...",
+                booking_details: "Booking Details",
+                fullname: "Full Name *",
+                fullname_ph: "e.g. John Smith",
+                phone: "Phone *",
+                email_optional: "Email (Optional)",
+                location_pref: "Seating Preference",
+                indoor: "Indoor",
+                outdoor: "Outdoor",
+                no_pref: "No preference",
+                occasion: "Special Occasion",
+                occasion_ph: "e.g. Birthday, Anniversary",
+                requests: "Additional Requests",
+                requests_ph: "Any special order...",
+                confirm_booking: "✅ Confirm Reservation",
+                cancel: "Cancel",
+                // alerts & toasts
+                alert_select_date: "Please select a date first!",
+                alert_name_phone: "Name and Phone are required!",
+                alert_select_time: "Please select a time!",
+                alert_select_date2: "Please select a date!",
+                toast_saved: "✅ Reservation saved!",
+                toast_save_error: "Save error. Please try again.",
+                alert_wrong_creds: "Wrong credentials!",
+                alert_no_shop_url: "ERROR: No store set in URL!",
+                alert_forbidden: "FORBIDDEN: ",
+                alert_no_shop_linked: "This account is not linked to a store!",
+                no_reservations: "📭 No reservations found for the selected period.",
+                delete_confirm: "Permanently delete reservation?",
+                delete_text: "Delete",
+                guests_label: "guests",
+                location_label_indoor: "Indoor",
+                toast_no_access: "You don't have Super Admin access",
+                alert_wrong_creds_sa: "Wrong credentials!",
+                no_shops: "No stores yet.",
+                copy_title: "Copy URL",
+                delete_title: "Delete",
+                delete_shop_confirm: 'Delete store "',
+                delete_shop_confirm2: '"? This will also delete its data in Firebase.',
+                toast_copy: "🔗 URL copied!",
+                copy_prompt: "Copy the URL:",
+                toast_shop_deleted: '🗑️ Store "',
+                toast_shop_deleted2: '" deleted.',
+                toast_delete_error: "Error during deletion.",
+                sa_fill_all: "Please fill in all fields!",
+                sa_id_invalid: "Store ID: only a-z, 0-9, _",
+                sa_pass_short: "Password needs at least 6 characters!",
+                sa_creating: "Creating...",
+                sa_relogin_prompt: "Enter Super Admin password again to restore session:",
+                toast_shop_created: '✅ Store "',
+                toast_shop_created2: '" created!',
+                sa_error_create: "Creation error.",
+                sa_email_in_use: "Email already in use!",
+                sa_invalid_email: "Invalid email!",
+            }
+        };
+
+        let currentLang = 'el';
+
+        function t(key) {
+            return translations[currentLang][key] || translations['el'][key] || key;
+        }
+
+        window.setLang = function(lang) {
+            currentLang = lang;
+            document.getElementById('lang-el').classList.toggle('active', lang === 'el');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang;
+            applyTranslations();
+        };
+
+        function applyTranslations() {
+            // Text content
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                const val = t(key);
+                if (val !== undefined) el.innerHTML = val;
+            });
+            // Placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const val = t(key);
+                if (val !== undefined) el.placeholder = val;
+            });
+            // Update shop display if already loaded
+            const shopDisplay = document.getElementById('shop-display');
+            if (shopDisplay && shopDisplay.dataset.shopId) {
+                shopDisplay.innerText = t('booking_at') + shopDisplay.dataset.shopId;
+            }
+            // Update select options for location inside modal
+            const locSelect = document.getElementById('cust-location');
+            if (locSelect) {
+                locSelect.options[0].text = t('indoor');
+                locSelect.options[1].text = t('outdoor');
+                locSelect.options[2].text = t('no_pref');
+            }
+            // Update guests select options
+            const guestSelect = document.getElementById('cust-guests');
+            if (guestSelect) {
+                const guestKeys = ['person_1','person_2','person_3','person_4','person_5','person_6','person_8'];
+                for (let i = 0; i < guestSelect.options.length; i++) {
+                    if (guestKeys[i]) guestSelect.options[i].text = t(guestKeys[i]);
+                }
+            }
+            // Update time-select first option
+            const tSelect = document.getElementById('time-select');
+            if (tSelect && tSelect.options.length > 0) {
+                tSelect.options[0].text = t('select_opt');
+            }
+        }
+
         // ======= TOAST =======
         function showToast(msg, type = '') {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.className = 'toast ' + type;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         // ======= PAGE SWITCHING =======
@@ -793,7 +1107,9 @@
         // ======= CLIENT =======
         const urlParams = new URLSearchParams(window.location.search);
         const shopID = urlParams.get('shop') || "default_store";
-        document.getElementById('shop-display').innerText = "Κράτηση στο: " + shopID;
+        const shopDisplayEl = document.getElementById('shop-display');
+        shopDisplayEl.dataset.shopId = shopID;
+        shopDisplayEl.innerText = t('booking_at') + shopID;
 
         let selectedTime = null;
         const timeContainer = document.getElementById('time-slots-container');
@@ -801,14 +1117,14 @@
 
         for (let h = 8; h <= 23; h++) {
             const hs = h < 10 ? '0' + h : '' + h;
-            [`${hs}:00`, `${hs}:30`].forEach(t => {
+            [`${hs}:00`, `${hs}:30`].forEach(time => {
                 const opt = document.createElement('option');
-                opt.value = t; opt.innerText = t;
+                opt.value = time; opt.innerText = time;
                 timeSelect.appendChild(opt);
                 const div = document.createElement('div');
                 div.className = 'time-slot';
-                div.innerText = t; div.dataset.time = t;
-                div.onclick = () => updateSelection(t);
+                div.innerText = time; div.dataset.time = time;
+                div.onclick = () => updateSelection(time);
                 timeContainer.appendChild(div);
             });
         }
@@ -827,7 +1143,7 @@
 
         const modal = document.getElementById('booking-modal');
         document.getElementById('open-modal').onclick = () => {
-            if (!document.getElementById('cust-date-only').value) return alert("Επιλέξτε ημερομηνία πρώτα!");
+            if (!document.getElementById('cust-date-only').value) return alert(t('alert_select_date'));
             modal.classList.add('open');
         };
         document.getElementById('close-modal').onclick = () => modal.classList.remove('open');
@@ -842,12 +1158,12 @@
             const locationChoice = document.getElementById('cust-location').value;
             const occasion = document.getElementById('cust-occasion').value.trim();
             const comments = document.getElementById('cust-comments').value.trim();
-            if (!name || !phone) return alert("Όνομα και Τηλέφωνο είναι υποχρεωτικά!");
-            if (!selectedTime) return alert("Επιλέξτε ώρα!");
-            if (!date) return alert("Επιλέξτε ημερομηνία!");
+            if (!name || !phone) return alert(t('alert_name_phone'));
+            if (!selectedTime) return alert(t('alert_select_time'));
+            if (!date) return alert(t('alert_select_date2'));
             const bookingData = { name, phone, email, date, time: selectedTime, guests, location: locationChoice, occasion, comments, timestamp: Date.now() };
             set(push(ref(db, 'reservations/' + shopID)), bookingData).then(() => {
-                showToast("✅ Η κράτηση αποθηκεύτηκε!", 'success');
+                showToast(t('toast_saved'), 'success');
                 modal.classList.remove('open');
                 ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments'].forEach(id => document.getElementById(id).value = '');
                 selectedTime = null;
@@ -855,7 +1171,7 @@
                 document.getElementById('open-modal').style.display = 'none';
                 document.getElementById('time-badge').classList.remove('show');
                 timeSelect.value = '';
-            }).catch(() => alert("Σφάλμα αποθήκευσης. Δοκιμάστε ξανά."));
+            }).catch(() => alert(t('toast_save_error')));
         };
 
         // ======= ADMIN =======
@@ -863,7 +1179,6 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Έλεγχος αν είναι super admin
                 if (user.email === SUPER_ADMIN_EMAIL) {
                     document.getElementById('tab-superadmin').style.display = 'flex';
                     document.getElementById('sa-login').style.display = 'none';
@@ -872,13 +1187,12 @@
                     return;
                 }
 
-                // Κανονικός admin
                 const urlShop = urlParams.get('shop');
-                if (!urlShop) { alert("ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!"); signOut(auth); return; }
+                if (!urlShop) { alert(t('alert_no_shop_url')); signOut(auth); return; }
                 const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
                 if (snapshot.exists()) {
                     const myShop = snapshot.val();
-                    if (urlShop !== myShop) { alert("ΑΠΑΓΟΡΕΥΕΤΑΙ: " + urlShop); signOut(auth); return; }
+                    if (urlShop !== myShop) { alert(t('alert_forbidden') + urlShop); signOut(auth); return; }
                     document.getElementById('login-section').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     document.getElementById('shop-title').innerText = myShop;
@@ -887,7 +1201,7 @@
                     document.getElementById('filter-to').value = today;
                     listenToReservations(myShop);
                 } else {
-                    alert("Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!");
+                    alert(t('alert_no_shop_linked'));
                     signOut(auth);
                 }
             } else {
@@ -922,23 +1236,24 @@
             document.getElementById('stat-guests').innerText = totalGuests;
             list.innerHTML = '';
             if (filtered.length === 0) {
-                list.innerHTML = "<div class='no-data'>📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.</div>";
+                list.innerHTML = `<div class='no-data'>${t('no_reservations')}</div>`;
                 return;
             }
             filtered.forEach(res => {
                 const div = document.createElement('div');
                 div.className = 'booking-card';
+                const locationDisplay = res.location || t('location_label_indoor');
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${res.time}</div>
                         <div class="date-text">${res.date}</div>
-                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">Διαγραφή</button>
+                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>
                     </div>
                     <div class="card-body">
                         <div class="customer-name">${res.name}</div>
                         <div class="info-row">
-                            <span>👥 <strong>${res.guests} άτομα</strong></span>
-                            <span>📍 ${res.location || 'Εσωτερικός'}</span>
+                            <span>👥 <strong>${res.guests} ${t('guests_label')}</strong></span>
+                            <span>📍 ${locationDisplay}</span>
                         </div>
                         ${res.occasion ? `<div class="occasion-tag">🎉 ${res.occasion}</div>` : ''}
                         ${res.comments ? `<div class="comments-box">${res.comments}</div>` : ''}
@@ -954,26 +1269,25 @@
         document.getElementById('btn-login').onclick = () => {
             const email = document.getElementById('email').value;
             const pass = document.getElementById('pass').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(() => alert("Λάθος στοιχεία!"));
+            signInWithEmailAndPassword(auth, email, pass).catch(() => alert(t('alert_wrong_creds')));
         };
 
         document.getElementById('btn-logout').onclick = () => signOut(auth);
 
         window.deleteBooking = (shop, id) => {
-            if (confirm("Οριστική διαγραφή κράτησης;")) remove(ref(db, `reservations/${shop}/${id}`));
+            if (confirm(t('delete_confirm'))) remove(ref(db, `reservations/${shop}/${id}`));
         };
 
         // ======= SUPER ADMIN =======
         document.getElementById('sa-btn-login').onclick = () => {
             const email = document.getElementById('sa-email').value;
             const pass = document.getElementById('sa-pass').value;
-            if (email !== SUPER_ADMIN_EMAIL) return showToast("Δεν έχετε πρόσβαση Super Admin", 'error');
-            signInWithEmailAndPassword(auth, email, pass).catch(() => showToast("Λάθος στοιχεία!", 'error'));
+            if (email !== SUPER_ADMIN_EMAIL) return showToast(t('toast_no_access'), 'error');
+            signInWithEmailAndPassword(auth, email, pass).catch(() => showToast(t('alert_wrong_creds_sa'), 'error'));
         };
 
         document.getElementById('sa-btn-logout').onclick = () => signOut(auth);
 
-        // Load all shops from users_to_shops
         function loadShops() {
             onValue(ref(db, 'users_to_shops'), (snapshot) => {
                 const list = document.getElementById('sa-shops-list');
@@ -981,15 +1295,14 @@
 
                 if (!snapshot.exists()) {
                     document.getElementById('sa-shop-count').innerText = '0';
-                    list.innerHTML = "<div class='no-data'>Δεν υπάρχουν καταστήματα ακόμα.</div>";
+                    list.innerHTML = `<div class='no-data'>${t('no_shops')}</div>`;
                     return;
                 }
 
                 const data = snapshot.val();
-                const entries = Object.entries(data); // [uid, shopID]
+                const entries = Object.entries(data);
                 document.getElementById('sa-shop-count').innerText = entries.length;
 
-                // Load shop details
                 get(ref(db, 'shop_details')).then(detailsSnap => {
                     const details = detailsSnap.exists() ? detailsSnap.val() : {};
 
@@ -1008,8 +1321,8 @@
                                 <div class="url-preview">${adminUrl}</div>
                             </div>
                             <div class="shop-actions">
-                                <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyShopUrl('${adminUrl}')">🔗</button>
-                                <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
+                                <button class="btn-icon copy" title="${t('copy_title')}" onclick="copyShopUrl('${adminUrl}')">🔗</button>
+                                <button class="btn-icon del" title="${t('delete_title')}" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
                             </div>`;
                         list.appendChild(div);
                     });
@@ -1017,28 +1330,25 @@
             });
         }
 
-        // Copy URL to clipboard
         window.copyShopUrl = (url) => {
             navigator.clipboard.writeText(url).then(() => {
-                showToast("🔗 URL αντιγράφηκε!", 'success');
+                showToast(t('toast_copy'), 'success');
             }).catch(() => {
-                prompt("Αντιγράψτε το URL:", url);
+                prompt(t('copy_prompt'), url);
             });
         };
 
-        // Delete shop
         window.deleteShop = async (uid, shopId) => {
-            if (!confirm(`Διαγραφή καταστήματος "${shopId}"; Αυτό θα διαγράψει και τα δεδομένα στο Firebase.`)) return;
+            if (!confirm(`${t('delete_shop_confirm')}${shopId}${t('delete_shop_confirm2')}`)) return;
             try {
                 await remove(ref(db, `users_to_shops/${uid}`));
                 await remove(ref(db, `shop_details/${shopId}`));
-                showToast(`🗑️ Το κατάστημα "${shopId}" διαγράφηκε.`, 'success');
+                showToast(`${t('toast_shop_deleted')}${shopId}${t('toast_shop_deleted2')}`, 'success');
             } catch(e) {
-                showToast("Σφάλμα κατά τη διαγραφή.", 'error');
+                showToast(t('toast_delete_error'), 'error');
             }
         };
 
-        // Create new shop
         document.getElementById('sa-btn-create').onclick = async () => {
             const shopIdRaw = document.getElementById('sa-shop-id').value.trim();
             const displayName = document.getElementById('sa-shop-display').value.trim();
@@ -1046,25 +1356,23 @@
             const newPass = document.getElementById('sa-new-pass').value;
 
             if (!shopIdRaw || !newEmail || !newPass || !displayName) {
-                return showToast("Συμπληρώστε όλα τα πεδία!", 'error');
+                return showToast(t('sa_fill_all'), 'error');
             }
             if (!/^[a-zA-Z0-9_]+$/.test(shopIdRaw)) {
-                return showToast("Το ID μαγαζιού: μόνο a-z, 0-9, _", 'error');
+                return showToast(t('sa_id_invalid'), 'error');
             }
             if (newPass.length < 6) {
-                return showToast("Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!", 'error');
+                return showToast(t('sa_pass_short'), 'error');
             }
 
             const btn = document.getElementById('sa-btn-create');
-            btn.innerHTML = '<span class="spinner"></span> Δημιουργία...';
+            btn.innerHTML = `<span class="spinner"></span> ${t('sa_creating')}`;
             btn.disabled = true;
 
             try {
-                // Δημιουργία χρήστη στο Firebase Auth
                 const userCred = await createUserWithEmailAndPassword(auth, newEmail, newPass);
                 const newUid = userCred.user.uid;
 
-                // Αποθήκευση στο database
                 await set(ref(db, `users_to_shops/${newUid}`), shopIdRaw);
                 await set(ref(db, `shop_details/${shopIdRaw}`), {
                     displayName: displayName,
@@ -1072,28 +1380,28 @@
                     createdAt: Date.now()
                 });
 
-                // Επαναφορά στον super admin (η δημιουργία user κάνει auto-login)
-                // Κάνουμε re-login ως super admin
-                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, document.getElementById('sa-pass').value || prompt("Εισάγετε ξανά τον κωδικό Super Admin για επαναφορά:"));
+                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, document.getElementById('sa-pass').value || prompt(t('sa_relogin_prompt')));
 
-                showToast(`✅ Κατάστημα "${shopIdRaw}" δημιουργήθηκε!`, 'success');
+                showToast(`${t('toast_shop_created')}${shopIdRaw}${t('toast_shop_created2')}`, 'success');
 
-                // Καθαρισμός φόρμας
                 document.getElementById('sa-shop-id').value = '';
                 document.getElementById('sa-shop-display').value = '';
                 document.getElementById('sa-new-email').value = '';
                 document.getElementById('sa-new-pass').value = '';
 
             } catch(e) {
-                let msg = "Σφάλμα δημιουργίας.";
-                if (e.code === 'auth/email-already-in-use') msg = "Το email χρησιμοποιείται ήδη!";
-                if (e.code === 'auth/invalid-email') msg = "Μη έγκυρο email!";
+                let msg = t('sa_error_create');
+                if (e.code === 'auth/email-already-in-use') msg = t('sa_email_in_use');
+                if (e.code === 'auth/invalid-email') msg = t('sa_invalid_email');
                 showToast(msg, 'error');
             } finally {
-                btn.innerHTML = '➕ Δημιουργία Καταστήματος';
+                btn.innerHTML = t('create_shop');
                 btn.disabled = false;
             }
         };
+
+        // Initial translation apply
+        applyTranslations();
 
     </script>
 </body>
