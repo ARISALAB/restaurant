@@ -330,10 +330,11 @@
             animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
             max-height: 90vh;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(24px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ======= PAGE HEADER ======= */
@@ -555,15 +556,208 @@
         @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ======= MOBILE ======= */
+
+        /* Prevent iOS zoom on inputs */
+        @media (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
+
         @media (max-width: 600px) {
-            .container { padding: 20px 16px; }
-            .card { padding: 22px 18px; }
-            .topnav { padding: 0 16px; }
-            .logo { font-size: 1.2rem; }
-            .nav-tab { padding: 7px 10px; font-size: 0.78rem; }
-            .page-header h2 { font-size: 1.4rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .lang-btn { padding: 4px 7px; font-size: 0.72rem; }
+            /* NAV */
+            .topnav {
+                padding: 0 12px;
+                height: auto;
+                min-height: 56px;
+                flex-wrap: wrap;
+                gap: 8px;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            .logo { font-size: 1.15rem; }
+            .nav-right {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 6px;
+                justify-content: space-between;
+            }
+            .nav-tabs {
+                flex: 1;
+                gap: 2px;
+                padding: 3px;
+            }
+            .nav-tab {
+                padding: 6px 8px;
+                font-size: 0.72rem;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .lang-switcher {
+                padding: 2px;
+                flex-shrink: 0;
+            }
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 0.72rem;
+            }
+
+            /* CONTAINER & CARDS */
+            .container {
+                padding: 16px 12px;
+            }
+            .card {
+                padding: 18px 16px;
+                border-radius: var(--radius-lg);
+            }
+            .page-header {
+                margin-bottom: 16px;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+
+            /* CLIENT LAYOUT: single col on mobile */
+            .client-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .info-panel { display: none; }
+
+            /* TIME GRID: larger touch targets */
+            .time-grid {
+                grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+                gap: 6px;
+                max-height: 200px;
+                padding: 10px;
+            }
+            .time-slot {
+                padding: 12px 4px;
+                font-size: 0.82rem;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* SELECTED TIME BADGE */
+            .selected-time-badge {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+            }
+
+            /* BUTTONS */
+            .btn-primary {
+                padding: 15px;
+                font-size: 1rem;
+            }
+            .btn-outline {
+                padding: 8px 14px;
+                font-size: 0.82rem;
+            }
+
+            /* MODAL: full screen on mobile */
+            .modal {
+                padding: 0;
+                align-items: flex-end;
+            }
+            .modal-content {
+                max-width: 100%;
+                max-height: 95vh;
+                border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+                padding: 24px 20px 32px;
+            }
+
+            /* ADMIN */
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .stat-card {
+                padding: 14px 10px;
+            }
+            .stat-value {
+                font-size: 1.6rem;
+            }
+            .admin-header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            .admin-header-row h2 {
+                font-size: 1.3rem !important;
+            }
+            .filters-row {
+                gap: 8px;
+            }
+            .filter-group {
+                min-width: 0;
+            }
+            .booking-card .card-header {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 10px 14px;
+            }
+            .call-button {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                margin-top: 4px;
+            }
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            /* SUPER ADMIN */
+            .super-header {
+                padding: 20px 18px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .super-header h2 { font-size: 1.15rem; }
+            .superadmin-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .shop-item {
+                padding: 12px 14px;
+                gap: 8px;
+            }
+            .shop-name { font-size: 0.88rem; }
+            .shop-email { font-size: 0.72rem; }
+            .url-preview { display: none; }
+
+            /* Toast: full width */
+            .toast {
+                left: 12px;
+                right: 12px;
+                bottom: 16px;
+                transform: translateY(120px);
+                white-space: normal;
+                text-align: center;
+                width: auto;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+
+        /* Tablet tweaks */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .container { padding: 24px 16px; }
+            .client-layout { grid-template-columns: 1fr; }
+            .info-panel { display: none; }
+            .superadmin-layout { grid-template-columns: 1fr; }
+            .modal { padding: 16px; }
+            .modal-content { max-width: 520px; }
         }
     </style>
 </head>
@@ -576,15 +770,15 @@
     <nav class="topnav">
         <div class="logo">Table<span>Reserve</span></div>
         <div class="nav-right">
-            <div class="nav-tabs">
-                <button class="nav-tab active" id="tab-client" onclick="switchPage('client')" data-i18n-key="tab_reservation">📅 Κράτηση</button>
-                <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')" data-i18n-key="tab_admin">🔧 Admin</button>
-                <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super Admin</button>
-            </div>
             <!-- Language Switcher -->
             <div class="lang-switcher">
                 <button class="lang-btn active" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
                 <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" id="tab-client" onclick="switchPage('client')" data-i18n-key="tab_reservation">📅 Κράτηση</button>
+                <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')" data-i18n-key="tab_admin">🔧 Admin</button>
+                <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super</button>
             </div>
         </div>
     </nav>
