@@ -1055,8 +1055,8 @@
         <div class="nav-right">
             <!-- Language Switcher -->
             <div class="lang-switcher">
-                <button class="lang-btn active" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
-                <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+                <button class="lang-btn" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
+                <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
             </div>
             <div class="nav-tabs">
                 <button class="nav-tab active" id="tab-client" onclick="switchPage('client')" data-i18n-key="tab_reservation">📅 Κράτηση</button>
@@ -1696,7 +1696,7 @@
             }
         };
 
-        let currentLang = 'el';
+        let currentLang = 'en';
 
         function t(key) {
             return translations[currentLang][key] || translations['el'][key] || key;
