@@ -945,11 +945,37 @@
 
     <!-- ===== CLIENT PAGE ===== -->
     <div id="page-client" class="page active">
+
+        <!-- Shop Cover Hero -->
+        <div id="client-cover-wrap" style="display:none; width:100%; max-height:260px; overflow:hidden; background:#0f172a;">
+            <img id="client-cover-img" src="" alt="cover" style="width:100%; max-height:260px; object-fit:cover; display:block; opacity:0.92;">
+        </div>
+
         <div class="container">
-            <div class="page-header">
-                <h2 data-i18n-key="new_reservation">Νέα Κράτηση</h2>
-                <p id="shop-display" data-i18n-key="loading_shop">Φόρτωση καταστήματος...</p>
+
+            <!-- Shop Info Header -->
+            <div id="client-shop-header" style="margin-bottom:28px;">
+                <div style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:0;">
+                        <h2 id="client-shop-name" style="font-family:'Sora',sans-serif; font-size:1.9rem; font-weight:800; letter-spacing:-0.04em; margin-bottom:4px;">
+                            <span id="shop-display" data-i18n-key="loading_shop">Φόρτωση...</span>
+                        </h2>
+                        <p id="client-tagline" style="color:var(--primary); font-weight:600; font-size:1rem; margin-bottom:10px; display:none;"></p>
+                        <p id="client-description" style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; margin-bottom:12px; display:none;"></p>
+                        <div id="client-meta" style="display:flex; flex-wrap:wrap; gap:10px;">
+                            <span id="client-address" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">📍 <span></span></span>
+                            <span id="client-phone-pub" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">📞 <a id="client-phone-link" href="#" style="color:inherit; text-decoration:none;"></a></span>
+                            <span id="client-hours" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">🕐 <span></span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- Gallery strip (if photos exist) -->
+            <div id="client-gallery-wrap" style="display:none; margin-bottom:24px;">
+                <div id="client-gallery-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin;"></div>
+            </div>
+
             <div class="client-layout">
                 <div class="card">
                     <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
@@ -1596,6 +1622,109 @@
         let selectedTime = null;
         const timeContainer = document.getElementById('time-slots-container');
         const timeSelect = document.getElementById('time-select');
+
+        // ======= LOAD SHOP PROFILE ON CLIENT PAGE =======
+        function loadClientShopProfile(shopId) {
+            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
+                if (!snap.exists()) return;
+                const full = snap.val();
+                const info = full.info || {};
+
+                // Display name from shop_details
+                get(ref(db, `shop_details/${shopId}`)).then(detSnap => {
+                    const det = detSnap.exists() ? detSnap.val() : {};
+                    const name = det.displayName || shopId;
+                    document.getElementById('shop-display').innerText = name;
+                });
+
+                // Cover
+                if (full.coverPhoto) {
+                    const wrap = document.getElementById('client-cover-wrap');
+                    const img = document.getElementById('client-cover-img');
+                    img.src = full.coverPhoto;
+                    wrap.style.display = 'block';
+                }
+
+                // Tagline
+                if (info.tagline) {
+                    const el = document.getElementById('client-tagline');
+                    el.innerText = info.tagline;
+                    el.style.display = 'block';
+                }
+
+                // Description
+                if (info.description) {
+                    const el = document.getElementById('client-description');
+                    el.innerText = info.description;
+                    el.style.display = 'block';
+                }
+
+                // Address
+                if (info.address) {
+                    const el = document.getElementById('client-address');
+                    el.querySelector('span').innerText = info.address;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Phone
+                if (info.phone) {
+                    const el = document.getElementById('client-phone-pub');
+                    const link = document.getElementById('client-phone-link');
+                    link.innerText = info.phone;
+                    link.href = 'tel:' + info.phone;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Hours
+                if (info.hours) {
+                    const el = document.getElementById('client-hours');
+                    el.querySelector('span').innerText = info.hours;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Gallery strip
+                if (full.gallery) {
+                    const photos = Object.values(full.gallery);
+                    if (photos.length > 0) {
+                        const strip = document.getElementById('client-gallery-strip');
+                        strip.innerHTML = '';
+                        photos.forEach(p => {
+                            const img = document.createElement('img');
+                            img.src = p.data;
+                            img.alt = p.name || '';
+                            img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
+                            img.onmouseover = () => img.style.transform = 'scale(1.03)';
+                            img.onmouseout = () => img.style.transform = '';
+                            img.onclick = () => openLightbox(p.data, p.name);
+                            strip.appendChild(img);
+                        });
+                        document.getElementById('client-gallery-wrap').style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        // Simple lightbox for gallery
+        function openLightbox(src, caption) {
+            const lb = document.createElement('div');
+            lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;';
+            lb.innerHTML = `<img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
+                ${caption ? `<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">${caption}</div>` : ''}
+                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Κλικ οπουδήποτε για κλείσιμο</div>`;
+            lb.onclick = () => document.body.removeChild(lb);
+            document.body.appendChild(lb);
+        }
+
+        // Load shop display name always (even without profile)
+        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
+            if (detSnap.exists()) {
+                const name = detSnap.val().displayName || shopID;
+                document.getElementById('shop-display').innerText = name;
+            }
+        }).catch(() => {});
+
+        // Load shop profile for client page
+        loadClientShopProfile(shopID);
 
         for (let h = 8; h <= 23; h++) {
             const hs = h < 10 ? '0' + h : '' + h;
