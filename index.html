@@ -449,10 +449,12 @@
         }
         .shop-cover-img {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: auto;
+            max-height: 220px;
+            object-fit: contain;
             object-position: center;
             display: block;
+            background: #f8fafc;
         }
         .shop-cover-placeholder {
             width: 100%;
@@ -529,7 +531,7 @@
 
         /* ── Tablet (601–900px) ── */
         @media (min-width: 601px) and (max-width: 900px) {
-            .shop-cover-img { height: 180px; }
+            .shop-cover-img { max-height: 190px; }
             .shop-logo-img { width: 64px; height: 64px; }
             .shop-hero-name { font-size: 1.4rem; }
         }
@@ -538,7 +540,7 @@
         @media (max-width: 600px) {
             .shop-hero-inner { padding: 0 12px; }
             .shop-cover-box { margin-top: 12px; border-radius: var(--radius-md); }
-            .shop-cover-img { height: 140px; }
+            .shop-cover-img { max-height: 160px; }
             .shop-cover-placeholder { height: 56px; margin-top: 12px; border-radius: var(--radius-md); }
             .shop-hero-info { gap: 12px; padding: 14px 0 18px; }
             .shop-logo-img { width: 54px; height: 54px; border-radius: 11px; }
