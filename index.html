@@ -427,6 +427,127 @@
             font-size: 0.85rem; font-weight: 700; margin-top: 6px;
         }
 
+        /* ======= SHOP HERO (client page) ======= */
+        .shop-hero-wrap {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .shop-hero-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cover image */
+        .shop-cover-box {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .shop-cover-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+        .shop-cover-placeholder {
+            width: 100%;
+            height: 80px;
+            margin-top: 20px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* Info row */
+        .shop-hero-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 0 24px;
+        }
+
+        /* Logo */
+        .shop-logo-wrap {
+            flex-shrink: 0;
+        }
+        .shop-logo-img {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            background: var(--white);
+        }
+
+        /* Text block */
+        .shop-hero-text { flex: 1; min-width: 0; }
+        .shop-hero-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .shop-hero-tagline {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .shop-hero-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .shop-hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .meta-pill {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 4px 11px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ── Tablet (601–900px) ── */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .shop-cover-img { height: 180px; }
+            .shop-logo-img { width: 64px; height: 64px; }
+            .shop-hero-name { font-size: 1.4rem; }
+        }
+
+        /* ── Mobile (≤600px) ── */
+        @media (max-width: 600px) {
+            .shop-hero-inner { padding: 0 12px; }
+            .shop-cover-box { margin-top: 12px; border-radius: var(--radius-md); }
+            .shop-cover-img { height: 140px; }
+            .shop-cover-placeholder { height: 56px; margin-top: 12px; border-radius: var(--radius-md); }
+            .shop-hero-info { gap: 12px; padding: 14px 0 18px; }
+            .shop-logo-img { width: 54px; height: 54px; border-radius: 11px; }
+            .shop-hero-name { font-size: 1.2rem; }
+            .shop-hero-tagline { font-size: 0.85rem; }
+            .shop-hero-desc { font-size: 0.82rem; }
+            .meta-pill { font-size: 0.73rem; padding: 3px 9px; }
+        }
+
         /* ======= SHOP PROFILE / MEDIA ======= */
         .admin-tabs {
             display: flex;
@@ -946,30 +1067,42 @@
     <!-- ===== CLIENT PAGE ===== -->
     <div id="page-client" class="page active">
 
-        <!-- Shop Cover Hero -->
-        <div id="client-cover-wrap" style="display:none; max-width:960px; margin:24px auto 0; padding:0 20px;">
-            <img id="client-cover-img" src="" alt="cover" style="width:100%; height:180px; object-fit:cover; display:block; border-radius:16px; border:1px solid var(--border);">
-        </div>
+        <!-- Shop Hero (cover + logo + info) -->
+        <div class="shop-hero-wrap">
+            <div class="shop-hero-inner">
 
-        <div class="container">
+                <!-- Cover image -->
+                <div id="client-cover-wrap" class="shop-cover-box" style="display:none;">
+                    <img id="client-cover-img" src="" alt="cover" class="shop-cover-img">
+                </div>
+                <!-- Placeholder when no cover -->
+                <div id="client-cover-placeholder" class="shop-cover-placeholder">
+                    <span>🏪</span>
+                </div>
 
-            <!-- Shop Info Header -->
-            <div id="client-shop-header" style="margin-bottom:28px;">
-                <div style="display:flex; align-items:flex-start; gap:16px; flex-wrap:wrap;">
-                    <div style="flex:1; min-width:0;">
-                        <h2 id="client-shop-name" style="font-family:'Sora',sans-serif; font-size:1.9rem; font-weight:800; letter-spacing:-0.04em; margin-bottom:4px;">
-                            <span id="shop-display" data-i18n-key="loading_shop">Φόρτωση...</span>
-                        </h2>
-                        <p id="client-tagline" style="color:var(--primary); font-weight:600; font-size:1rem; margin-bottom:10px; display:none;"></p>
-                        <p id="client-description" style="color:var(--text-muted); font-size:0.9rem; line-height:1.6; margin-bottom:12px; display:none;"></p>
-                        <div id="client-meta" style="display:flex; flex-wrap:wrap; gap:10px;">
-                            <span id="client-address" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">📍 <span></span></span>
-                            <span id="client-phone-pub" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">📞 <a id="client-phone-link" href="#" style="color:inherit; text-decoration:none;"></a></span>
-                            <span id="client-hours" style="display:none; font-size:0.82rem; color:var(--text-muted); background:var(--bg); padding:5px 12px; border-radius:20px; border:1px solid var(--border);">🕐 <span></span></span>
+                <!-- Info row: logo + text -->
+                <div class="shop-hero-info">
+                    <!-- Logo -->
+                    <div id="client-logo-wrap" class="shop-logo-wrap" style="display:none;">
+                        <img id="client-logo-img" src="" alt="logo" class="shop-logo-img">
+                    </div>
+
+                    <div class="shop-hero-text">
+                        <h2 id="shop-display" class="shop-hero-name" data-i18n-key="loading_shop">Φόρτωση...</h2>
+                        <p id="client-tagline" class="shop-hero-tagline" style="display:none;"></p>
+                        <p id="client-description" class="shop-hero-desc" style="display:none;"></p>
+                        <div id="client-meta" class="shop-hero-meta">
+                            <span id="client-address" class="meta-pill" style="display:none;">📍 <span></span></span>
+                            <span id="client-phone-pub" class="meta-pill" style="display:none;">📞 <a id="client-phone-link" href="#" style="color:inherit;text-decoration:none;"></a></span>
+                            <span id="client-hours" class="meta-pill" style="display:none;">🕐 <span></span></span>
                         </div>
                     </div>
                 </div>
+
             </div>
+        </div>
+
+        <div class="container">
 
             <!-- Gallery strip (if photos exist) -->
             <div id="client-gallery-wrap" style="display:none; margin-bottom:24px;">
@@ -1105,6 +1238,29 @@
                         <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
                             💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
                         </button>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🏷️</div> <span>Λογότυπο</span></div>
+                        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+                            <div id="logo-preview-wrap" style="width:80px;height:80px;border-radius:14px;overflow:hidden;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">
+                                <img id="logo-preview-img" src="" alt="logo" style="width:100%;height:100%;object-fit:cover;display:none;">
+                                <span id="logo-preview-placeholder">🏪</span>
+                            </div>
+                            <div style="flex:1;">
+                                <div class="upload-zone" id="logo-zone" style="padding:16px 20px;">
+                                    <input type="file" id="logo-input" accept="image/*" onchange="handleLogoUpload(event)">
+                                    <div class="upload-zone-icon" style="font-size:1.4rem; margin-bottom:4px;">🏷️</div>
+                                    <div class="upload-zone-text" style="font-size:0.82rem;">Κλικ ή σύρτε λογότυπο</div>
+                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 1MB</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveLogoPhoto()">💾 Αποθήκευση Λογότυπου</button>
+                            <button class="btn-outline" id="btn-del-logo" onclick="deleteLogoPhoto()" style="display:none;">🗑️ Διαγραφή</button>
+                        </div>
                     </div>
 
                     <!-- Cover Photo -->
@@ -1643,6 +1799,15 @@
                     const img = document.getElementById('client-cover-img');
                     img.src = full.coverPhoto;
                     wrap.style.display = 'block';
+                    document.getElementById('client-cover-placeholder').style.display = 'none';
+                }
+
+                // Logo
+                if (full.logoPhoto) {
+                    const logoWrap = document.getElementById('client-logo-wrap');
+                    const logoImg = document.getElementById('client-logo-img');
+                    logoImg.src = full.logoPhoto;
+                    logoWrap.style.display = 'block';
                 }
 
                 // Tagline
@@ -2052,6 +2217,9 @@
                 if (full.coverPhoto) {
                     showCoverPreview(full.coverPhoto);
                 }
+                if (full.logoPhoto) {
+                    showLogoPreview(full.logoPhoto);
+                }
                 loadGallery(shopId);
             });
         }
@@ -2088,6 +2256,55 @@
             el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
             el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag-over'); });
         });
+
+        // ======= LOGO =======
+        let pendingLogoBase64 = null;
+
+        function showLogoPreview(base64) {
+            document.getElementById('logo-preview-img').src = base64;
+            document.getElementById('logo-preview-img').style.display = 'block';
+            document.getElementById('logo-preview-placeholder').style.display = 'none';
+            document.getElementById('btn-del-logo').style.display = 'inline-flex';
+        }
+
+        window.handleLogoUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 1 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει το 1MB!', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => { pendingLogoBase64 = e.target.result; showLogoPreview(pendingLogoBase64); };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveLogoPhoto = async () => {
+            if (!currentAdminShop || !pendingLogoBase64) return;
+            const btn = document.querySelector('[onclick="saveLogoPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), pendingLogoBase64);
+                showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
+                pendingLogoBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 Αποθήκευση Λογότυπου`; }
+            }
+        };
+
+        window.deleteLogoPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή λογότυπου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`));
+                document.getElementById('logo-preview-img').style.display = 'none';
+                document.getElementById('logo-preview-placeholder').style.display = 'block';
+                document.getElementById('btn-del-logo').style.display = 'none';
+                pendingLogoBase64 = null;
+                showToast('🗑️ Λογότυπο διαγράφηκε.', 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
 
         // ======= COVER PHOTO =======
         function showCoverPreview(base64) {
