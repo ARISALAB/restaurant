@@ -427,6 +427,166 @@
             font-size: 0.85rem; font-weight: 700; margin-top: 6px;
         }
 
+        /* ======= SHOP PROFILE / MEDIA ======= */
+        .admin-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+        .admin-tab {
+            padding: 8px 18px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .admin-tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+
+        /* Photo upload area */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+            position: relative;
+        }
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .upload-zone-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-zone-text { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+        .upload-zone-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* Photo gallery grid */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .photo-thumb {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+        .photo-thumb img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .photo-thumb .photo-del {
+            position: absolute;
+            top: 6px; right: 6px;
+            width: 26px; height: 26px;
+            background: rgba(239,68,68,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .photo-thumb:hover .photo-del { opacity: 1; }
+        .photo-thumb .photo-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            color: white;
+            font-size: 0.7rem;
+            padding: 16px 6px 4px;
+            font-weight: 600;
+        }
+
+        /* Profile preview banner */
+        .shop-banner {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .shop-banner img {
+            width: 100%; max-height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .char-counter {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .profile-save-btn {
+            padding: 11px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+        .profile-save-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .profile-save-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .photos-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
         /* ======= SUPER ADMIN ======= */
         .super-header {
             background: linear-gradient(135deg, #4c1d95, #7c3aed);
@@ -867,17 +1027,95 @@
                     </div>
                     <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
                 </div>
-                <div class="stats-grid">
-                    <div class="stat-card blue"><div class="stat-label" data-i18n-key="reservations">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
-                    <div class="stat-card dark"><div class="stat-label" data-i18n-key="total_guests">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+
+                <!-- Admin Sub-Tabs -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')">📅 <span data-i18n-key="reservations">Κρατήσεις</span></button>
+                    <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')">🖼️ <span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
                 </div>
-                <div class="card" style="padding:20px 24px; margin-bottom:20px;">
-                    <div class="filters-row">
-                        <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
-                        <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
+
+                <!-- Reservations Section -->
+                <div id="asec-reservations" class="admin-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card blue"><div class="stat-label" data-i18n-key="reservations">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
+                        <div class="stat-card dark"><div class="stat-label" data-i18n-key="total_guests">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+                    </div>
+                    <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+                        <div class="filters-row">
+                            <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
+                            <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
+                        </div>
+                    </div>
+                    <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
+                </div>
+
+                <!-- Shop Profile Section -->
+                <div id="asec-profile" class="admin-section">
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">📝</div> <span data-i18n-key="shop_info_title">Πληροφορίες Μαγαζιού</span></div>
+
+                        <div class="input-group">
+                            <label data-i18n-key="shop_tagline">Σύνθημα / Slogan</label>
+                            <input type="text" id="prof-tagline" maxlength="80" placeholder="π.χ. Το καλύτερο καφέ της πόλης!" oninput="updateCharCount('prof-tagline','cnt-tagline',80)">
+                            <div class="char-counter"><span id="cnt-tagline">0</span>/80</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_description">Περιγραφή</label>
+                            <textarea id="prof-description" rows="4" maxlength="600" placeholder="Γράψτε μια σύντομη περιγραφή του μαγαζιού σας..." oninput="updateCharCount('prof-description','cnt-desc',600)"></textarea>
+                            <div class="char-counter"><span id="cnt-desc">0</span>/600</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_address">Διεύθυνση</label>
+                            <input type="text" id="prof-address" maxlength="120" placeholder="π.χ. Ερμού 12, Αθήνα">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_phone_pub">Τηλέφωνο Επικοινωνίας</label>
+                            <input type="tel" id="prof-phone" maxlength="20" placeholder="π.χ. 210 1234567">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
+                            <input type="text" id="prof-hours" maxlength="100" placeholder="π.χ. Δευ-Σαβ 08:00-23:00, Κυρ 10:00-22:00">
+                        </div>
+                        <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
+                            💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
+                        </button>
+                    </div>
+
+                    <!-- Cover Photo -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🖼️</div> <span data-i18n-key="cover_photo">Εξώφυλλο</span></div>
+                        <div id="cover-preview" class="shop-banner">
+                            <span data-i18n-key="no_cover">Δεν έχει οριστεί εξώφυλλο</span>
+                        </div>
+                        <div class="upload-zone" id="cover-zone">
+                            <input type="file" id="cover-input" accept="image/*" onchange="handleCoverUpload(event)">
+                            <div class="upload-zone-icon">📷</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_cover">Κλικ ή σύρτε φωτογραφία εξωφύλλου</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_hint">JPG, PNG, WEBP · μέγιστο 2MB</div>
+                        </div>
+                        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveCoverPhoto()">💾 <span data-i18n-key="save_cover">Αποθήκευση Εξωφύλλου</span></button>
+                            <button class="btn-outline" id="btn-del-cover" onclick="deleteCoverPhoto()" style="display:none;">🗑️ <span data-i18n-key="delete_cover">Διαγραφή</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Photo Gallery -->
+                    <div class="card">
+                        <div class="card-title">
+                            <div class="icon">🖼️</div>
+                            <span data-i18n-key="photo_gallery">Γκαλερί Φωτογραφιών</span>
+                            <span class="photos-count-badge" id="photos-count-badge">0</span>
+                        </div>
+                        <div class="upload-zone" id="gallery-zone">
+                            <input type="file" id="gallery-input" accept="image/*" multiple onchange="handleGalleryUpload(event)">
+                            <div class="upload-zone-icon">🗂️</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_gallery">Κλικ ή σύρτε φωτογραφίες γκαλερί</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_gallery_hint">Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία</div>
+                        </div>
+                        <div id="gallery-grid" class="photo-gallery"></div>
                     </div>
                 </div>
-                <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
+
             </div>
         </div>
     </div>
@@ -1114,6 +1352,31 @@
                 sa_error_create: "Σφάλμα δημιουργίας.",
                 sa_email_in_use: "Το email χρησιμοποιείται ήδη!",
                 sa_invalid_email: "Μη έγκυρο email!",
+                // shop profile
+                shop_profile: "Προφίλ Μαγαζιού",
+                shop_info_title: "Πληροφορίες Μαγαζιού",
+                shop_tagline: "Σύνθημα / Slogan",
+                shop_description: "Περιγραφή",
+                shop_address: "Διεύθυνση",
+                shop_phone_pub: "Τηλέφωνο Επικοινωνίας",
+                shop_hours: "Ωράριο Λειτουργίας",
+                save_profile: "Αποθήκευση Πληροφοριών",
+                cover_photo: "Εξώφυλλο",
+                no_cover: "Δεν έχει οριστεί εξώφυλλο",
+                upload_cover: "Κλικ ή σύρτε φωτογραφία εξωφύλλου",
+                upload_hint: "JPG, PNG, WEBP · μέγιστο 2MB",
+                save_cover: "Αποθήκευση Εξωφύλλου",
+                delete_cover: "Διαγραφή",
+                photo_gallery: "Γκαλερί Φωτογραφιών",
+                upload_gallery: "Κλικ ή σύρτε φωτογραφίες γκαλερί",
+                upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία",
+                toast_profile_saved: "✅ Πληροφορίες αποθηκεύτηκαν!",
+                toast_cover_saved: "✅ Εξώφυλλο αποθηκεύτηκε!",
+                toast_cover_deleted: "🗑️ Εξώφυλλο διαγράφηκε.",
+                toast_photo_saved: "✅ Φωτογραφία προστέθηκε!",
+                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.",
+                toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 2MB!",
+                toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
                 tab_reservation: "📅 Reservation",
@@ -1221,6 +1484,31 @@
                 sa_error_create: "Creation error.",
                 sa_email_in_use: "Email already in use!",
                 sa_invalid_email: "Invalid email!",
+                // shop profile
+                shop_profile: "Shop Profile",
+                shop_info_title: "Shop Information",
+                shop_tagline: "Tagline / Slogan",
+                shop_description: "Description",
+                shop_address: "Address",
+                shop_phone_pub: "Contact Phone",
+                shop_hours: "Opening Hours",
+                save_profile: "Save Information",
+                cover_photo: "Cover Photo",
+                no_cover: "No cover photo set",
+                upload_cover: "Click or drag a cover photo",
+                upload_hint: "JPG, PNG, WEBP · max 2MB",
+                save_cover: "Save Cover Photo",
+                delete_cover: "Delete",
+                photo_gallery: "Photo Gallery",
+                upload_gallery: "Click or drag gallery photos",
+                upload_gallery_hint: "Multiple photos · max 2MB per photo",
+                toast_profile_saved: "✅ Information saved!",
+                toast_cover_saved: "✅ Cover photo saved!",
+                toast_cover_deleted: "🗑️ Cover photo deleted.",
+                toast_photo_saved: "✅ Photo added!",
+                toast_photo_deleted: "🗑️ Photo deleted.",
+                toast_img_too_big: "⚠️ Photo exceeds 2MB!",
+                toast_save_error2: "Save error. Please try again.",
             }
         };
 
@@ -1390,15 +1678,18 @@
                     document.getElementById('login-section').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     document.getElementById('shop-title').innerText = myShop;
+                    currentAdminShop = myShop;
                     const today = new Date().toISOString().split('T')[0];
                     document.getElementById('filter-from').value = today;
                     document.getElementById('filter-to').value = today;
                     listenToReservations(myShop);
+                    loadShopProfile(myShop);
                 } else {
                     alert(t('alert_no_shop_linked'));
                     signOut(auth);
                 }
             } else {
+                currentAdminShop = null;
                 document.getElementById('login-section').style.display = 'block';
                 document.getElementById('dashboard').style.display = 'none';
                 document.getElementById('tab-superadmin').style.display = 'none';
@@ -1591,6 +1882,185 @@
             } finally {
                 btn.innerHTML = t('create_shop');
                 btn.disabled = false;
+            }
+        };
+
+        // ======= ADMIN TABS =======
+        window.switchAdminTab = (tab) => {
+            ['reservations','profile'].forEach(t => {
+                document.getElementById('asec-' + t).classList.remove('active');
+                document.getElementById('atab-' + t).classList.remove('active');
+            });
+            document.getElementById('asec-' + tab).classList.add('active');
+            document.getElementById('atab-' + tab).classList.add('active');
+        };
+
+        // ======= CHAR COUNTER =======
+        window.updateCharCount = (inputId, counterId, max) => {
+            const len = document.getElementById(inputId).value.length;
+            document.getElementById(counterId).innerText = len;
+        };
+
+        // ======= SHOP PROFILE =======
+        let currentAdminShop = null;
+        let pendingCoverBase64 = null;
+
+        function loadShopProfile(shopId) {
+            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
+                if (!snap.exists()) return;
+                const full = snap.val();
+                const p = full.info || {};
+                const setVal = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val || ''; };
+                setVal('prof-tagline', p.tagline);
+                setVal('prof-description', p.description);
+                setVal('prof-address', p.address);
+                setVal('prof-phone', p.phone);
+                setVal('prof-hours', p.hours);
+                ['prof-tagline','prof-description'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.dispatchEvent(new Event('input'));
+                });
+                if (full.coverPhoto) {
+                    showCoverPreview(full.coverPhoto);
+                }
+                loadGallery(shopId);
+            });
+        }
+
+        window.saveShopProfile = async () => {
+            if (!currentAdminShop) return;
+            const btn = document.getElementById('btn-save-profile');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> ${t('sa_creating')}`;
+            const data = {
+                tagline: document.getElementById('prof-tagline').value.trim(),
+                description: document.getElementById('prof-description').value.trim(),
+                address: document.getElementById('prof-address').value.trim(),
+                phone: document.getElementById('prof-phone').value.trim(),
+                hours: document.getElementById('prof-hours').value.trim(),
+                updatedAt: Date.now()
+            };
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/info`), data);
+                showToast(t('toast_profile_saved'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `💾 <span>${t('save_profile')}</span>`;
+            }
+        };
+
+        // Drag-over styling
+        ['cover-zone','gallery-zone'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+            el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+            el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag-over'); });
+        });
+
+        // ======= COVER PHOTO =======
+        function showCoverPreview(base64) {
+            const preview = document.getElementById('cover-preview');
+            preview.innerHTML = `<img src="${base64}" alt="cover">`;
+            document.getElementById('btn-del-cover').style.display = 'inline-flex';
+        }
+
+        window.handleCoverUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                pendingCoverBase64 = e.target.result;
+                showCoverPreview(pendingCoverBase64);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveCoverPhoto = async () => {
+            if (!currentAdminShop || !pendingCoverBase64) return;
+            const btn = document.querySelector('[onclick="saveCoverPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), pendingCoverBase64);
+                showToast(t('toast_cover_saved'), 'success');
+                pendingCoverBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 <span>${t('save_cover')}</span>`; }
+            }
+        };
+
+        window.deleteCoverPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή εξωφύλλου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`));
+                document.getElementById('cover-preview').innerHTML = `<span>${t('no_cover')}</span>`;
+                document.getElementById('btn-del-cover').style.display = 'none';
+                pendingCoverBase64 = null;
+                showToast(t('toast_cover_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
+
+        // ======= GALLERY =======
+        function loadGallery(shopId) {
+            onValue(ref(db, `shop_profile/${shopId}/gallery`), (snap) => {
+                const grid = document.getElementById('gallery-grid');
+                const badge = document.getElementById('photos-count-badge');
+                grid.innerHTML = '';
+                if (!snap.exists()) { badge.innerText = '0'; return; }
+                const photos = snap.val();
+                const keys = Object.keys(photos);
+                badge.innerText = keys.length;
+                keys.forEach(key => {
+                    const p = photos[key];
+                    const thumb = document.createElement('div');
+                    thumb.className = 'photo-thumb';
+                    thumb.innerHTML = `
+                        <img src="${p.data}" alt="${p.name || ''}">
+                        <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="Διαγραφή">✕</button>
+                        ${p.name ? `<div class="photo-label">${p.name}</div>` : ''}
+                    `;
+                    grid.appendChild(thumb);
+                });
+            });
+        }
+
+        window.handleGalleryUpload = async (event) => {
+            const files = Array.from(event.target.files);
+            if (!currentAdminShop || !files.length) return;
+            for (const file of files) {
+                if (file.size > 2 * 1024 * 1024) { showToast(`⚠️ ${file.name}: > 2MB`, 'error'); continue; }
+                const base64 = await new Promise((res, rej) => {
+                    const r = new FileReader();
+                    r.onload = e => res(e.target.result);
+                    r.onerror = rej;
+                    r.readAsDataURL(file);
+                });
+                const entry = { data: base64, name: file.name.replace(/\.[^.]+$/, ''), uploadedAt: Date.now() };
+                try {
+                    await set(ref(db, `shop_profile/${currentAdminShop}/gallery/${Date.now()}_${Math.random().toString(36).slice(2,7)}`), entry);
+                    showToast(t('toast_photo_saved'), 'success');
+                } catch(e) {
+                    showToast(t('toast_save_error2'), 'error');
+                }
+            }
+            event.target.value = '';
+        };
+
+        window.deleteGalleryPhoto = async (shopId, key) => {
+            if (!confirm('Διαγραφή φωτογραφίας;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${shopId}/gallery/${key}`));
+                showToast(t('toast_photo_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
             }
         };
 
