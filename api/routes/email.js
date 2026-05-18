@@ -1,106 +1,137 @@
-const express = require("express");
-const router = express.Router();
-const { Resend } = require("resend");
-const { getDb } = require("../firebase");
+const express  = require('express');
+const router   = express.Router();
+const nodemailer = require('nodemailer');
+const { getDb } = require('../firebase');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Gmail transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  }
+});
 
 /**
  * POST /v3/email/notify
- * Στέλνει email ειδοποίησης για νέα κράτηση
+ * Στέλνει email ειδοποίηση για νέα κράτηση
  * Body: { shopId, bookingId }
  */
-router.post("/notify", async (req, res) => {
+router.post('/notify', async (req, res) => {
   try {
     const { shopId, bookingId } = req.body;
 
     if (!shopId || !bookingId) {
-      return res.status(400).json({ error: "shopId και bookingId απαιτούνται" });
+      return res.status(400).json({ error: 'shopId και bookingId απαιτούνται' });
     }
 
     const db = getDb();
 
+    // Φόρτωσε κράτηση
     const bookingSnap = await db.ref(`reservations/${shopId}/${bookingId}`).get();
     if (!bookingSnap.exists()) {
-      return res.status(200).json({ message: "Κράτηση δεν βρέθηκε" });
+      return res.status(404).json({ error: 'Κράτηση δεν βρέθηκε' });
     }
     const booking = bookingSnap.val();
 
+    // Φόρτωσε notification email μαγαζιού
     const emailSnap = await db.ref(`shop_profile/${shopId}/info/notificationEmail`).get();
     if (!emailSnap.exists() || !emailSnap.val()) {
-      return res.status(200).json({ message: "Δεν υπάρχει notification email" });
+      return res.status(200).json({ message: 'Δεν υπάρχει notification email για αυτό το μαγαζί' });
     }
     const notificationEmail = emailSnap.val();
 
-    const shopName = shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, " ");
-    const sourceLabel = booking.source === "google" ? "Google" : "TableReserve";
-    const statusLabel = booking.status === "confirmed" ? "Επιβεβαιωμένη" : booking.status === "pending" ? "Εκκρεμής" : booking.status;
+    // Φόρτωσε όνομα μαγαζιού
+    const shopNameSnap = await db.ref(`shop_profile/${shopId}/info/tagline`).get();
+    const shopName = shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
 
-    const html = `
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"></head>
-<body style="font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:20px;">
-  <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-    <div style="background:#2c3e50;padding:24px;text-align:center;">
-      <h1 style="color:#fff;margin:0;font-size:22px;">Νέα Κράτηση - ${shopName}</h1>
-    </div>
-    <div style="padding:24px;">
-      <p style="color:#333;font-size:15px;">Λάβατε μια νέα κράτηση μέσω <strong>${sourceLabel}</strong>.</p>
-      <table style="width:100%;border-collapse:collapse;margin-top:16px;">
-        <tr style="background:#f8f9fa;">
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Κατάσταση</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${statusLabel}</td>
-        </tr>
-        <tr>
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Όνομα</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.customerName || "-"}</td>
-        </tr>
-        <tr style="background:#f8f9fa;">
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Τηλέφωνο</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.customerPhone || "-"}</td>
-        </tr>
-        <tr>
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Ημερομηνία</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.date || "-"}</td>
-        </tr>
-        <tr style="background:#f8f9fa;">
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Ώρα</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.time || "-"}</td>
-        </tr>
-        <tr>
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Άτομα</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.partySize || "-"}</td>
-        </tr>
-        ${booking.notes ? `
-        <tr style="background:#f8f9fa;">
-          <td style="padding:10px;border:1px solid #dee2e6;font-weight:bold;color:#495057;">Σημειώσεις</td>
-          <td style="padding:10px;border:1px solid #dee2e6;color:#333;">${booking.notes}</td>
-        </tr>` : ""}
-      </table>
-      <div style="margin-top:24px;text-align:center;">
-        <a href="https://tablereserve.gr/?shop=${shopId}" style="background:#2c3e50;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-size:15px;">Δες τις Κρατήσεις</a>
-      </div>
-    </div>
-    <div style="background:#f8f9fa;padding:16px;text-align:center;">
-      <p style="color:#999;font-size:12px;margin:0;">TableReserve &bull; noreply@tablereserve.gr</p>
-    </div>
-  </div>
-</body>
-</html>`;
+    // Φόρτωσε source label
+    const sourceLabel = booking.source === 'google' ? '🔵 Google Reserve' : '🌐 TableReserve';
 
-    await resend.emails.send({
-      from: "TableReserve <noreply@tablereserve.gr>",
+    // Στείλε email
+    const mailOptions = {
+      from: `"TableReserve" <${process.env.GMAIL_USER}>`,
       to: notificationEmail,
-      subject: `Νέα Κράτηση - ${shopName} | ${booking.date || ""} ${booking.time || ""}`,
-      html,
-    });
+      subject: `📅 Νέα Κράτηση — ${booking.name} — ${booking.date} ${booking.time}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;">
+          
+          <div style="background: #1A3C8F; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 24px;">📅 Νέα Κράτηση!</h1>
+            <p style="color: #cce0ff; margin: 5px 0 0 0;">${shopName}</p>
+          </div>
 
-    return res.status(200).json({ message: "Email εστάλη επιτυχώς" });
+          <div style="background: white; padding: 24px; border-radius: 0 0 8px 8px;">
+            
+            <div style="background: #f0f4ff; border-left: 4px solid #1A3C8F; padding: 12px 16px; margin-bottom: 20px; border-radius: 0 4px 4px 0;">
+              <p style="margin: 0; color: #1A3C8F; font-weight: bold;">${sourceLabel}</p>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666; width: 40%;">👤 Όνομα</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.name || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">📞 Τηλέφωνο</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.phone || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">📧 Email</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.email || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">📅 Ημερομηνία</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.date || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">🕐 Ώρα</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.time || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">👥 Άτομα</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.guests || '-'}</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">🪑 Θέση</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.location || '-'}</td>
+              </tr>
+              ${booking.occasion ? `
+              <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 0; color: #666;">🎉 Περίσταση</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.occasion}</td>
+              </tr>` : ''}
+              ${booking.comments ? `
+              <tr>
+                <td style="padding: 10px 0; color: #666;">💬 Σχόλια</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #1a1a1a;">${booking.comments}</td>
+              </tr>` : ''}
+            </table>
+
+            <div style="margin-top: 24px; text-align: center;">
+              <a href="https://restableres.netlify.app/?shop=${shopId}" 
+                 style="background: #1A3C8F; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">
+                Δες τις Κρατήσεις →
+              </a>
+            </div>
+
+          </div>
+
+          <p style="text-align: center; color: #999; font-size: 12px; margin-top: 16px;">
+            TableReserve · restableres.netlify.app
+          </p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log(`[email] ✅ Εστάλη σε ${notificationEmail} για κράτηση ${bookingId} @ ${shopId}`);
+
+    res.json({ success: true, sentTo: notificationEmail });
 
   } catch (err) {
-    console.error("Email error:", err);
-    return res.status(500).json({ error: "Αποτυχία αποστολής email", details: err.message });
+    console.error('[email] Error:', err);
+    res.status(500).json({ error: 'Σφάλμα αποστολής email', details: err.message });
   }
 });
 
