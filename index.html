@@ -1237,6 +1237,11 @@
                             <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
                             <input type="text" id="prof-hours" maxlength="100" placeholder="π.χ. Δευ-Σαβ 08:00-23:00, Κυρ 10:00-22:00">
                         </div>
+                        <div class="input-group">
+                            <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
+                            <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr">
+                            <small style="color:#64748b;font-size:0.8rem;">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
+                        </div>
                         <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
                             💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
                         </button>
@@ -1943,7 +1948,15 @@
             if (!selectedTime) return alert(t('alert_select_time'));
             if (!date) return alert(t('alert_select_date2'));
             const bookingData = { name, phone, email, date, time: selectedTime, guests, location: locationChoice, occasion, comments, timestamp: Date.now() };
-            set(push(ref(db, 'reservations/' + shopID)), bookingData).then(() => {
+            const newBookingRef = push(ref(db, 'reservations/' + shopID));
+            set(newBookingRef, bookingData).then(() => {
+                // Στείλε email ειδοποίηση
+                const bookingId = newBookingRef.key;
+                fetch('https://tablereserve-api-838820261500.europe-west1.run.app/v3/email/notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ shopId: shopID, bookingId })
+                }).catch(e => console.warn('[email] notification failed:', e));
                 showToast(t('toast_saved'), 'success');
                 modal.classList.remove('open');
                 ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments'].forEach(id => document.getElementById(id).value = '');
@@ -2214,6 +2227,7 @@
                 setVal('prof-description', p.description);
                 setVal('prof-address', p.address);
                 setVal('prof-phone', p.phone);
+                setVal('prof-notification-email', p.notificationEmail || '');
                 setVal('prof-hours', p.hours);
                 ['prof-tagline','prof-description'].forEach(id => {
                     const el = document.getElementById(id);
@@ -2240,6 +2254,7 @@
                 address: document.getElementById('prof-address').value.trim(),
                 phone: document.getElementById('prof-phone').value.trim(),
                 hours: document.getElementById('prof-hours').value.trim(),
+                notificationEmail: document.getElementById('prof-notification-email').value.trim(),
                 updatedAt: Date.now()
             };
             try {
