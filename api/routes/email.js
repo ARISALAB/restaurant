@@ -1,9 +1,15 @@
-const express = require("express");
-const router  = express.Router();
-const { Resend } = require("resend");
+const express  = require("express");
+const router   = express.Router();
+const nodemailer = require("nodemailer");
 const { getDb } = require("../firebase");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 router.post("/notify", async (req, res) => {
   try {
@@ -53,17 +59,12 @@ router.post("/notify", async (req, res) => {
       '</div>'
     ].join("");
 
-    const { data, error } = await resend.emails.send({
-      from: "TableReserve <onboarding@resend.dev>",
+    await transporter.sendMail({
+      from: '"TableReserve" <' + process.env.GMAIL_USER + '>',
       to: notificationEmail,
       subject: "Νεα Κρατηση - " + (booking.name || "") + " - " + (booking.date || "") + " " + (booking.time || ""),
-      html: htmlBody
+      html: htmlBody,
     });
-
-    if (error) {
-      console.error("[email] Resend error:", error);
-      return res.status(500).json({ error: error.message });
-    }
 
     console.log("[email] Εσταλη σε " + notificationEmail + " για " + bookingId + " @ " + shopId);
     res.json({ success: true, sentTo: notificationEmail });
