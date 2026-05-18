@@ -9,6 +9,7 @@ const availabilityRouter  = require('./routes/availability');
 const bookingsRouter      = require('./routes/bookings');
 const feedRouter          = require('./routes/feed');
 const notificationsRouter = require('./routes/notifications');
+const emailRouter         = require('./routes/email');
 
 // ── Init ──────────────────────────────────────────────
 initFirebase();
@@ -43,6 +44,7 @@ app.use('/feeds', feedRouter);
 app.use('/v3/availability',  authMiddleware, availabilityRouter);
 app.use('/v3/bookings',      authMiddleware, bookingsRouter);
 app.use('/v3/notifications', authMiddleware, notificationsRouter);
+app.use('/v3/email',        emailRouter);
 
 // ── 404 handler ───────────────────────────────────────
 app.use((req, res) => {
