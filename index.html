@@ -2001,7 +2001,7 @@
         // Load shop profile for client page
         loadClientShopProfile(shopID);
 
-        for (let h = 8; h <= 23; h++) {
+        for (let h = 8; h < 23; h++ {
             const hs = h < 10 ? '0' + h : '' + h;
             [`${hs}:00`, `${hs}:30`].forEach(time => {
                 const opt = document.createElement('option');
