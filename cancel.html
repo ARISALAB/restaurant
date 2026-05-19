@@ -159,47 +159,86 @@
 
   <script>
     const API = 'https://tablereserve-api-838820261500.europe-west1.run.app';
-    const params = new URLSearchParams(window.location.search);
-    const token    = params.get('token');
-    const shopId   = params.get('shop');
+    const params    = new URLSearchParams(window.location.search);
+    const token     = params.get('token');
+    const shopId    = params.get('shop');
     const bookingId = params.get('id');
-    const card = document.getElementById('card');
+    const lang      = params.get('lang') || 'el';
+    const card      = document.getElementById('card');
+    const isEn      = lang === 'en';
+    const txt = isEn ? {
+      invalid_title:   'Invalid Link',
+      invalid_desc:    'The cancellation link is invalid or has expired.',
+      back_home:       '← Home',
+      title:           'Cancel Reservation',
+      confirm_q:       'Are you sure you want to cancel your reservation?',
+      warn:            '⚠️ Cancellation is only allowed up to <strong>2 hours</strong> before the reservation. After that, please contact the restaurant directly.',
+      btn_cancel:      '❌ Yes, Cancel Reservation',
+      btn_back:        '← Back to Restaurant',
+      cancelling:      'Cancelling...',
+      success_title:   'Reservation Cancelled',
+      success_desc:    'Your reservation has been successfully cancelled.<br>Thank you for letting us know — we hope to see you soon!',
+      new_booking:     '📅 New Reservation',
+      already_title:   'Already Cancelled',
+      already_desc:    'This reservation has already been cancelled.',
+      too_late_title:  'Cancellation Not Allowed',
+      too_late_desc:   'Cancellation is not possible within <strong>2 hours</strong> of the reservation time.',
+      too_late_desc2:  'Please contact the restaurant directly.',
+      back:            '← Back',
+      invalid_token_t: 'Invalid Link',
+      invalid_token_d: 'The cancellation link is not valid.',
+      error_generic:   'Something went wrong. Please try again.',
+      conn_error:      'Connection error. Please check your internet and try again.',
+    } : {
+      invalid_title:   'Μη έγκυρος σύνδεσμος',
+      invalid_desc:    'Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος ή έχει λήξει.',
+      back_home:       '← Αρχική Σελίδα',
+      title:           'Ακύρωση Κράτησης',
+      confirm_q:       'Είστε σίγουροι ότι θέλετε να ακυρώσετε την κράτησή σας;',
+      warn:            '⚠️ Η ακύρωση επιτρέπεται μόνο έως <strong>2 ώρες</strong> πριν την κράτηση. Μετά από αυτό το διάστημα, παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.',
+      btn_cancel:      '❌ Ναι, Ακύρωση Κράτησης',
+      btn_back:        '← Πίσω στο Κατάστημα',
+      cancelling:      'Ακύρωση...',
+      success_title:   'Η κράτηση ακυρώθηκε',
+      success_desc:    'Η κράτησή σας ακυρώθηκε επιτυχώς.<br>Σας ευχαριστούμε για την ενημέρωση και ελπίζουμε να σας δούμε σύντομα!',
+      new_booking:     '📅 Νέα Κράτηση',
+      already_title:   'Ήδη ακυρωμένη',
+      already_desc:    'Η κράτηση αυτή έχει ήδη ακυρωθεί.',
+      too_late_title:  'Δεν επιτρέπεται η ακύρωση',
+      too_late_desc:   'Η ακύρωση δεν είναι δυνατή εντός <strong>2 ωρών</strong> από την ώρα της κράτησης.',
+      too_late_desc2:  'Παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.',
+      back:            '← Πίσω',
+      invalid_token_t: 'Μη έγκυρος σύνδεσμος',
+      invalid_token_d: 'Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος.',
+      error_generic:   'Κάτι πήγε στραβά. Δοκιμάστε ξανά.',
+      conn_error:      'Σφάλμα σύνδεσης. Ελέγξτε το internet και δοκιμάστε ξανά.',
+    };
+    const shopName = shopId ? shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g,' ') : '';
 
-    // Μη έγκυρος σύνδεσμος
     if (!token || !shopId || !bookingId) {
       card.innerHTML = `
         <div class="icon">❌</div>
-        <h1>Μη έγκυρος σύνδεσμος</h1>
-        <p>Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος ή έχει λήξει.</p>
-        <a href="https://tablereserve.gr" class="btn btn-gray" style="margin-top:20px;">← Αρχική Σελίδα</a>
+        <h1>${txt.invalid_title}</h1>
+        <p>${txt.invalid_desc}</p>
+        <a href="https://tablereserve.gr" class="btn btn-gray" style="margin-top:20px;">${txt.back_home}</a>
       `;
     } else {
-      // Εμφάνιση φόρμας επιβεβαίωσης
       card.innerHTML = `
         <div class="icon">🗓️</div>
-        <h1>Ακύρωση Κράτησης</h1>
-        <p>Είστε σίγουροι ότι θέλετε να ακυρώσετε την κράτησή σας;</p>
+        <h1>${txt.title}</h1>
+        <p>${txt.confirm_q}</p>
         <div class="booking-box">
-          <div class="datetime" id="booking-datetime">Φόρτωση...</div>
-          <div class="details" id="booking-details"></div>
+          <div class="datetime">${shopName}</div>
         </div>
-        <div class="warn-box">
-          ⚠️ Η ακύρωση επιτρέπεται μόνο έως <strong>2 ώρες</strong> πριν την κράτηση.
-          Μετά από αυτό το διάστημα, παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.
-        </div>
-        <button class="btn btn-red" id="btn-cancel">❌ Ναι, Ακύρωση Κράτησης</button>
-        <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray">← Πίσω στο Κατάστημα</a>
+        <div class="warn-box">${txt.warn}</div>
+        <button class="btn btn-red" id="btn-cancel">${txt.btn_cancel}</button>
+        <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray">${txt.btn_back}</a>
       `;
-
-      // Φόρτωση στοιχείων κράτησης από URL params (αν υπάρχουν) ή αφήνουμε το API να επιστρέψει error
-      // (δεν χρειάζεται GET endpoint — τα στοιχεία ήταν στο email)
-      document.getElementById('booking-datetime').innerText = 'Επιβεβαίωση ακύρωσης';
-      document.getElementById('booking-details').innerText = `${shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g,' ')}`;
 
       document.getElementById('btn-cancel').onclick = async () => {
         const btn = document.getElementById('btn-cancel');
         btn.disabled = true;
-        btn.innerHTML = '<span class="spinner"></span> Ακύρωση...';
+        btn.innerHTML = `<span class="spinner"></span> ${txt.cancelling}`;
 
         try {
           const res = await fetch(`${API}/v3/email/cancel`, {
@@ -212,47 +251,37 @@
           if (data.success) {
             card.innerHTML = `
               <div class="icon">✅</div>
-              <h1>Η κράτηση ακυρώθηκε</h1>
-              <p>Η κράτησή σας ακυρώθηκε επιτυχώς.<br>Σας ευχαριστούμε για την ενημέρωση και ελπίζουμε να σας δούμε σύντομα!</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
-                📅 Νέα Κράτηση
-              </a>
-            `;
+              <h1>${txt.success_title}</h1>
+              <p>${txt.success_desc}</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.alreadyCancelled) {
             card.innerHTML = `
               <div class="icon">ℹ️</div>
-              <h1>Ήδη ακυρωμένη</h1>
-              <p>Η κράτηση αυτή έχει ήδη ακυρωθεί.</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
-                📅 Νέα Κράτηση
-              </a>
-            `;
+              <h1>${txt.already_title}</h1>
+              <p>${txt.already_desc}</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.error === 'too_late') {
             card.innerHTML = `
               <div class="icon">⏰</div>
-              <h1>Δεν επιτρέπεται η ακύρωση</h1>
-              <p>Η ακύρωση δεν είναι δυνατή εντός <strong>2 ωρών</strong> από την ώρα της κράτησης.</p>
-              <p style="margin-top:10px;">Παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
-                ← Πίσω
-              </a>
-            `;
+              <h1>${txt.too_late_title}</h1>
+              <p>${txt.too_late_desc}</p>
+              <p style="margin-top:10px;">${txt.too_late_desc2}</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
           } else if (data.error === 'Μη έγκυρο token ακύρωσης') {
             card.innerHTML = `
               <div class="icon">🔒</div>
-              <h1>Μη έγκυρος σύνδεσμος</h1>
-              <p>Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος.</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">← Πίσω</a>
-            `;
+              <h1>${txt.invalid_token_t}</h1>
+              <p>${txt.invalid_token_d}</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
           } else {
             btn.disabled = false;
-            btn.innerHTML = '❌ Ναι, Ακύρωση Κράτησης';
-            alert('Σφάλμα: ' + (data.error || 'Κάτι πήγε στραβά. Δοκιμάστε ξανά.'));
+            btn.innerHTML = txt.btn_cancel;
+            alert(data.error || txt.error_generic);
           }
         } catch (e) {
           btn.disabled = false;
-          btn.innerHTML = '❌ Ναι, Ακύρωση Κράτησης';
-          alert('Σφάλμα σύνδεσης. Ελέγξτε το internet και δοκιμάστε ξανά.');
+          btn.innerHTML = txt.btn_cancel;
+          alert(txt.conn_error);
         }
       };
     }
