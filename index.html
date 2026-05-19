@@ -1,130 +1,2547 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Οικονομικός Έλεγχος Εστιατορίου</title>
-   
+    <title>TableReserve</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: rgba(37,99,235,0.08);
+            --danger: #ef4444;
+            --success: #10b981;
+            --purple: #7c3aed;
+            --purple-light: rgba(124,58,237,0.08);
+            --bg: #f0f2f7;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* ======= TOP NAV ======= */
+        .topnav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+        }
+        .logo span { color: var(--primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+        }
+
+        .nav-tab {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .nav-tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-tab.super.active {
+            color: var(--purple);
+        }
+
+        /* ======= LANGUAGE SWITCHER ======= */
+        .lang-switcher {
+            display: flex;
+            gap: 2px;
+            background: var(--bg);
+            padding: 3px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+        .lang-btn {
+            padding: 5px 10px;
+            border-radius: 7px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+            letter-spacing: 0.02em;
+        }
+        .lang-btn.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Super admin tab hidden by default */
+        #tab-superadmin { display: none; }
+
+        /* ======= PAGES ======= */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .client-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 700px) {
+            .client-layout { grid-template-columns: 1fr; }
+            .info-panel { display: none; }
+        }
+
+        /* ======= CARDS ======= */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            border: 1px solid rgba(0,0,0,0.04);
+            box-shadow: var(--shadow-sm);
+            padding: 32px 28px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title .icon {
+            width: 32px; height: 32px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem;
+        }
+        .card-title .icon.purple { background: var(--purple-light); }
+
+        /* ======= FORM ======= */
+        .input-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s;
+            background: #fafbfc;
+            color: var(--text-main);
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        /* ======= TIME GRID ======= */
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: var(--radius-lg);
+            border: 1.5px solid var(--border);
+            scrollbar-width: thin;
+        }
+
+        .time-slot {
+            padding: 10px 6px;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .time-slot:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
+
+        .selected-time-badge {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--primary), #3b82f6);
+            color: white;
+            border-radius: var(--radius-md);
+            margin-top: 14px;
+            font-weight: 700;
+        }
+        .selected-time-badge.show { display: flex; }
+
+        /* ======= BUTTONS ======= */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+
+        .btn-purple {
+            width: 100%;
+            padding: 14px;
+            background: var(--purple);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(124,58,237,0.25);
+        }
+        .btn-purple:hover { background: #6d28d9; transform: translateY(-1px); }
+
+        .btn-outline {
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-outline:hover { border-color: var(--danger); color: var(--danger); }
+
+        .btn-link {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .btn-link:hover { color: var(--danger); }
+
+        /* ======= MODAL ======= */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15,23,42,0.65);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.open { display: flex; }
+        .modal-content {
+            width: 100%;
+            max-width: 480px;
+            animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+            max-height: 90vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ======= PAGE HEADER ======= */
+        .page-header { margin-bottom: 32px; }
+        .page-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+        .page-header p { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+
+        /* ======= ADMIN ======= */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .stat-card { border-radius: var(--radius-lg); padding: 20px; text-align: center; }
+        .stat-card.blue { background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; }
+        .stat-card.dark { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; }
+        .stat-label { font-size: 0.75rem; font-weight: 600; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-value { font-size: 2rem; font-weight: 800; font-family: 'Sora', sans-serif; margin-top: 4px; }
+
+        .filters-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .filter-group { flex: 1; min-width: 140px; }
+
+        .booking-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .booking-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .booking-card .card-header {
+            display: flex; align-items: center; gap: 10px;
+            padding: 12px 18px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+        .time-badge {
+            background: var(--primary); color: white;
+            font-size: 0.85rem; font-weight: 800;
+            padding: 4px 12px; border-radius: 20px;
+            font-family: 'Sora', sans-serif;
+        }
+        .date-text { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; flex: 1; }
+        .delete-link {
+            font-size: 0.78rem; color: var(--danger); cursor: pointer;
+            border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;
+            border-radius: 6px; background: rgba(239,68,68,0.06);
+            font-weight: 600; transition: all 0.2s; font-family: inherit;
+        }
+        .delete-link:hover { background: var(--danger); color: white; }
+        .booking-card .card-body { padding: 16px 18px; }
+        .customer-name { font-size: 1.05rem; font-weight: 700; font-family: 'Sora', sans-serif; margin-bottom: 8px; }
+        .info-row { display: flex; gap: 16px; color: var(--text-muted); font-size: 0.875rem; margin-bottom: 8px; flex-wrap: wrap; }
+        .occasion-tag {
+            display: inline-block; background: #fef3c7; color: #92400e;
+            font-size: 0.8rem; font-weight: 600; padding: 3px 10px;
+            border-radius: 20px; margin-bottom: 8px;
+        }
+        .comments-box {
+            background: #f8fafc; border-left: 3px solid var(--primary);
+            padding: 8px 12px; border-radius: 0 8px 8px 0;
+            font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;
+        }
+        .call-button {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; text-decoration: none;
+            border-radius: 8px; font-size: 0.85rem; font-weight: 700; transition: all 0.2s;
+        }
+        .call-button:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
+
+        .no-data { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 0.95rem; }
+
+        .admin-header-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+        }
+        .shop-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; background: var(--primary-light);
+            color: var(--primary); border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; margin-top: 6px;
+        }
+
+        /* ======= SHOP HERO (client page) ======= */
+        .shop-hero-wrap {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .shop-hero-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cover image */
+        .shop-cover-box {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .shop-cover-img {
+            width: 100%;
+            height: auto;
+            max-height: 220px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            background: #f8fafc;
+        }
+        .shop-cover-placeholder {
+            width: 100%;
+            height: 80px;
+            margin-top: 20px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        /* Info row */
+        .shop-hero-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 0 24px;
+        }
+
+        /* Logo */
+        .shop-logo-wrap {
+            flex-shrink: 0;
+        }
+        .shop-logo-img {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            background: var(--white);
+        }
+
+        /* Text block */
+        .shop-hero-text { flex: 1; min-width: 0; }
+        .shop-hero-name {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .shop-hero-tagline {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+        .shop-hero-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .shop-hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .meta-pill {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 4px 11px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ── Tablet (601–900px) ── */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .shop-cover-img { max-height: 190px; }
+            .shop-logo-img { width: 64px; height: 64px; }
+            .shop-hero-name { font-size: 1.4rem; }
+        }
+
+        /* ── Mobile (≤600px) ── */
+        @media (max-width: 600px) {
+            .shop-hero-inner { padding: 0 12px; }
+            .shop-cover-box { margin-top: 12px; border-radius: var(--radius-md); }
+            .shop-cover-img { max-height: 160px; }
+            .shop-cover-placeholder { height: 56px; margin-top: 12px; border-radius: var(--radius-md); }
+            .shop-hero-info { gap: 12px; padding: 14px 0 18px; }
+            .shop-logo-img { width: 54px; height: 54px; border-radius: 11px; }
+            .shop-hero-name { font-size: 1.2rem; }
+            .shop-hero-tagline { font-size: 0.85rem; }
+            .shop-hero-desc { font-size: 0.82rem; }
+            .meta-pill { font-size: 0.73rem; padding: 3px 9px; }
+        }
+
+        /* ======= SHOP PROFILE / MEDIA ======= */
+        .admin-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--bg);
+            padding: 4px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+        .admin-tab {
+            padding: 8px 18px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .admin-tab.active {
+            background: var(--white);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .admin-section { display: none; }
+        .admin-section.active { display: block; }
+
+        /* Photo upload area */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
+            position: relative;
+        }
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+        .upload-zone-icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .upload-zone-text { font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+        .upload-zone-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* Photo gallery grid */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .photo-thumb {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+        }
+        .photo-thumb img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .photo-thumb .photo-del {
+            position: absolute;
+            top: 6px; right: 6px;
+            width: 26px; height: 26px;
+            background: rgba(239,68,68,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .photo-thumb:hover .photo-del { opacity: 1; }
+        .photo-thumb .photo-label {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.6));
+            color: white;
+            font-size: 0.7rem;
+            padding: 16px 6px 4px;
+            font-weight: 600;
+        }
+
+        /* Profile preview banner */
+        .shop-banner {
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+        }
+        .shop-banner img {
+            width: 100%; max-height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .char-counter {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .profile-save-btn {
+            padding: 11px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Sora', sans-serif;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+        .profile-save-btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .profile-save-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .photos-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+
+        /* ======= SUPER ADMIN ======= */
+        .super-header {
+            background: linear-gradient(135deg, #4c1d95, #7c3aed);
+            border-radius: var(--radius-xl);
+            padding: 28px 32px;
+            color: white;
+            margin-bottom: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .super-header h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+        .super-header p { opacity: 0.8; font-size: 0.9rem; margin-top: 4px; }
+
+        .superadmin-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.6fr;
+            gap: 24px;
+            align-items: start;
+        }
+        @media (max-width: 750px) {
+            .superadmin-layout { grid-template-columns: 1fr; }
+        }
+
+        /* Shop list */
+        .shop-item {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+        .shop-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+        .shop-icon {
+            width: 42px; height: 42px;
+            background: var(--purple-light);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .shop-info { flex: 1; min-width: 0; }
+        .shop-name {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .shop-email { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .shop-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .btn-icon {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .btn-icon.copy { background: #e0f2fe; color: #0369a1; }
+        .btn-icon.copy:hover { background: #0369a1; color: white; }
+        .btn-icon.del { background: rgba(239,68,68,0.08); color: var(--danger); }
+        .btn-icon.del:hover { background: var(--danger); color: white; }
+
+        .url-preview {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-family: monospace;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* New shop form */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 500px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #0f172a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 99999;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px; height: 16px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ======= MOBILE ======= */
+
+        /* Prevent iOS zoom on inputs */
+        @media (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            /* NAV */
+            .topnav {
+                padding: 0 12px;
+                height: auto;
+                min-height: 56px;
+                flex-wrap: wrap;
+                gap: 8px;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            .logo { font-size: 1.15rem; }
+            .nav-right {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 6px;
+                justify-content: space-between;
+            }
+            .nav-tabs {
+                flex: 1;
+                gap: 2px;
+                padding: 3px;
+            }
+            .nav-tab {
+                padding: 6px 8px;
+                font-size: 0.72rem;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+            }
+            .lang-switcher {
+                padding: 2px;
+                flex-shrink: 0;
+            }
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 0.72rem;
+            }
+
+            /* CONTAINER & CARDS */
+            .container {
+                padding: 16px 12px;
+            }
+            .card {
+                padding: 18px 16px;
+                border-radius: var(--radius-lg);
+            }
+            .page-header {
+                margin-bottom: 16px;
+            }
+            .page-header h2 {
+                font-size: 1.3rem;
+            }
+
+            /* CLIENT LAYOUT: single col on mobile */
+            .client-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .info-panel { display: none; }
+
+            /* TIME GRID: larger touch targets */
+            .time-grid {
+                grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+                gap: 6px;
+                max-height: 200px;
+                padding: 10px;
+            }
+            .time-slot {
+                padding: 12px 4px;
+                font-size: 0.82rem;
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* SELECTED TIME BADGE */
+            .selected-time-badge {
+                padding: 12px 14px;
+                font-size: 0.9rem;
+            }
+
+            /* BUTTONS */
+            .btn-primary {
+                padding: 15px;
+                font-size: 1rem;
+            }
+            .btn-outline {
+                padding: 8px 14px;
+                font-size: 0.82rem;
+            }
+
+            /* MODAL: full screen on mobile */
+            .modal {
+                padding: 0;
+                align-items: flex-end;
+            }
+            .modal-content {
+                max-width: 100%;
+                max-height: 95vh;
+                border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+                padding: 24px 20px 32px;
+            }
+
+            /* ADMIN */
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .stat-card {
+                padding: 14px 10px;
+            }
+            .stat-value {
+                font-size: 1.6rem;
+            }
+            .admin-header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 16px;
+            }
+            .admin-header-row h2 {
+                font-size: 1.3rem !important;
+            }
+            .filters-row {
+                gap: 8px;
+            }
+            .filter-group {
+                min-width: 0;
+            }
+            .booking-card .card-header {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 10px 14px;
+            }
+            .call-button {
+                width: 100%;
+                justify-content: center;
+                padding: 10px;
+                margin-top: 4px;
+            }
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            /* SUPER ADMIN */
+            .super-header {
+                padding: 20px 18px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .super-header h2 { font-size: 1.15rem; }
+            .superadmin-layout {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .shop-item {
+                padding: 12px 14px;
+                gap: 8px;
+            }
+            .shop-name { font-size: 0.88rem; }
+            .shop-email { font-size: 0.72rem; }
+            .url-preview { display: none; }
+
+            /* Toast: full width */
+            .toast {
+                left: 12px;
+                right: 12px;
+                bottom: 16px;
+                transform: translateY(120px);
+                white-space: normal;
+                text-align: center;
+                width: auto;
+            }
+            .toast.show {
+                transform: translateY(0);
+            }
+        }
+
+        /* Tablet tweaks */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .container { padding: 24px 16px; }
+            .client-layout { grid-template-columns: 1fr; }
+            .info-panel { display: none; }
+            .superadmin-layout { grid-template-columns: 1fr; }
+            .modal { padding: 16px; }
+            .modal-content { max-width: 520px; }
+        }
+
+        /* ======= SPLASH SCREEN ======= */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #2563eb;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #splash.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .splash-icon {
+            width: 96px;
+            height: 96px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: splashPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+            opacity: 0;
+        }
+        .splash-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: white;
+            margin-top: 20px;
+            animation: splashFadeUp 0.5s ease 0.3s forwards;
+            opacity: 0;
+        }
+        .splash-title span { color: rgba(255,255,255,0.65); }
+        .splash-sub {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 8px;
+            animation: splashFadeUp 0.5s ease 0.45s forwards;
+            opacity: 0;
+        }
+        .splash-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 48px;
+            animation: splashFadeUp 0.5s ease 0.6s forwards;
+            opacity: 0;
+        }
+        .splash-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+        }
+        .splash-dot:nth-child(1) { animation: dotPulse 1s ease 0.7s infinite; }
+        .splash-dot:nth-child(2) { animation: dotPulse 1s ease 0.9s infinite; }
+        .splash-dot:nth-child(3) { animation: dotPulse 1s ease 1.1s infinite; }
+
+        @keyframes splashPop {
+            0%   { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes splashFadeUp {
+            0%   { opacity: 0; transform: translateY(16px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes dotPulse {
+            0%, 100% { background: rgba(255,255,255,0.3); transform: scale(1); }
+            50%       { background: rgba(255,255,255,0.9); transform: scale(1.3); }
+        }
+    </style>
 </head>
 <body>
-    
-    <div class="container">
-        
-<button onclick="window.location.href='index.html'">Αρχική Σελίδα</button>
-<button onclick="window.location.href='daily-report.html'">Ημερήσια Αναφορά</button>
-<button onclick="window.location.href='weekly-report.html'">Εβδομαδιαία Αναφορά</button>
-        <h1>Οικονομικός Έλεγχος Εστιατορίου</h1>
-        
 
-    
-        <label for="datepicker">Επιλέξτε ημερομηνία:</label>
-        <input type="date" id="datepicker">
-        <p id="selectedDateLabel">Ημερομηνία:</p>
-        <button id="saveButton" onclick="saveData()">Αποθήκευση Δεδομένων</button>
-    </div>
-
-    <div class="data-tables">
-        <div class="income-table">
-            <h2>Πίνακας Εσόδων</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Είδος Εσόδων</th>
-                        <th>Ποσότητα</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Μετρητά</td>
-                        <td><input type="number" id="cashIncome" oninput="calculateTotalIncome()"></td>
-                    </tr>
-                    <tr>
-                        <td>Κάρτες</td>
-                        <td><input type="number" id="cardIncome" oninput="calculateTotalIncome()"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Σύνολο Εσόδων</strong></td>
-                        <td id="totalIncome">0</td>
-                    </tr>
-                </tbody>
-            </table>
+    <!-- Splash Screen -->
+    <div id="splash">
+        <div class="splash-icon">
+            <svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <rect x="19" y="15" width="3" height="34" rx="1.5" fill="white"/>
+                <rect x="16.5" y="10" width="2" height="13" rx="1" fill="white"/>
+                <rect x="19.5" y="10" width="2" height="13" rx="1" fill="white"/>
+                <rect x="22.5" y="10" width="2" height="13" rx="1" fill="white"/>
+                <rect x="42" y="15" width="3" height="34" rx="1.5" fill="white"/>
+                <path d="M42 10 Q48 15 46.5 23 L42 23 Z" fill="white"/>
+                <circle cx="32" cy="37" r="12" fill="none" stroke="white" stroke-width="2.2" opacity="0.95"/>
+                <circle cx="32" cy="37" r="7" fill="white" opacity="0.25"/>
+            </svg>
         </div>
-
-        <div class="expense-table">
-            <h2>Πίνακας Εξόδων</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Είδος Εξόδων</th>
-                        <th>Ποσότητα</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Μετρητά</td>
-                        <td><input type="number" id="cashExpense" oninput="calculateTotalExpense()"></td>
-                    </tr>
-                    <tr>
-                        <td>Κάρτες</td>
-                        <td><input type="number" id="cardExpense" oninput="calculateTotalExpense()"></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Σύνολο Εξόδων</strong></td>
-                        <td id="totalExpense">0</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="summary-table">
-            <h2>Σύνολα</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Τύπος</th>
-                        <th>Σύνολο</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Μετρητά</td>
-                        <td id="totalCash">0</td>
-                    </tr>
-                    <tr>
-                        <td>Κάρτες</td>
-                        <td id="totalCard">0</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="splash-title">Table<span>Reserve</span></div>
+        <div class="splash-sub">Διαχείριση Κρατήσεων</div>
+        <div class="splash-dots">
+            <div class="splash-dot"></div>
+            <div class="splash-dot"></div>
+            <div class="splash-dot"></div>
         </div>
     </div>
 
-    <!-- Προσθήκη πίνακα για τα αποθηκευμένα δεδομένα -->
-    <div class="saved-data-table">
-        <h2>Αποθηκευμένα Δεδομένα</h2>
-        <table id="savedDataTable">
-            <thead>
-                <tr>
-                    <th>Ημερομηνία</th>
-                    <th>Έσοδα (Μετρητά)</th>
-                    <th>Έσοδα (Κάρτες)</th>
-                    <th>Σύνολο Εσόδων</th>
-                    <th>Έξοδα (Μετρητά)</th>
-                    <th>Έξοδα (Κάρτες)</th>
-                    <th>Σύνολο Εξόδων</th>
-                    <th>Συνολικά Μετρητά</th>
-                    <th>Συνολικές Κάρτες</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- TOP NAV -->
+    <nav class="topnav">
+        <div class="logo">Table<span>Reserve</span></div>
+        <div class="nav-right">
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
+                <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" id="tab-client" onclick="switchPage('client')" data-i18n-key="tab_reservation">📅 Κράτηση</button>
+                <button class="nav-tab" id="tab-admin" onclick="switchPage('admin')" data-i18n-key="tab_admin">🔧 Admin</button>
+                <button class="nav-tab super" id="tab-superadmin" onclick="switchPage('superadmin')">⚡ Super</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== CLIENT PAGE ===== -->
+    <div id="page-client" class="page active">
+
+        <!-- Shop Hero (cover + logo + info) -->
+        <div class="shop-hero-wrap">
+            <div class="shop-hero-inner">
+
+                <!-- Cover image -->
+                <div id="client-cover-wrap" class="shop-cover-box" style="display:none;">
+                    <img id="client-cover-img" src="" alt="cover" class="shop-cover-img">
+                </div>
+                <!-- Placeholder when no cover -->
+                <div id="client-cover-placeholder" class="shop-cover-placeholder">
+                    <span>🏪</span>
+                </div>
+
+                <!-- Info row: logo + text -->
+                <div class="shop-hero-info">
+                    <!-- Logo -->
+                    <div id="client-logo-wrap" class="shop-logo-wrap" style="display:none;">
+                        <img id="client-logo-img" src="" alt="logo" class="shop-logo-img">
+                    </div>
+
+                    <div class="shop-hero-text">
+                        <h2 id="shop-display" class="shop-hero-name" data-i18n-key="loading_shop">Φόρτωση...</h2>
+                        <p id="client-tagline" class="shop-hero-tagline" style="display:none;"></p>
+                        <p id="client-description" class="shop-hero-desc" style="display:none;"></p>
+                        <div id="client-meta" class="shop-hero-meta">
+                            <span id="client-address" class="meta-pill" style="display:none;">📍 <span></span></span>
+                            <span id="client-phone-pub" class="meta-pill" style="display:none;">📞 <a id="client-phone-link" href="#" style="color:inherit;text-decoration:none;"></a></span>
+                            <span id="client-hours" class="meta-pill" style="display:none;">🕐 <span></span></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+
+            <!-- Gallery strip (if photos exist) -->
+            <div id="client-gallery-wrap" style="display:none; margin-bottom:24px;">
+                <div id="client-gallery-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin;"></div>
+            </div>
+
+            <div class="client-layout">
+                <div class="card">
+                    <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
+                    <div class="input-group">
+                        <label data-i18n-key="date">Ημερομηνία</label>
+                        <input type="date" id="cust-date-only">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n-key="persons">Άτομα</label>
+                        <select id="cust-guests">
+                            <option value="1" data-i18n-key="person_1">1 Άτομο</option>
+                            <option value="2" selected data-i18n-key="person_2">2 Άτομα</option>
+                            <option value="3" data-i18n-key="person_3">3 Άτομα</option>
+                            <option value="4" data-i18n-key="person_4">4 Άτομα</option>
+                            <option value="5" data-i18n-key="person_5">5 Άτομα</option>
+                            <option value="6" data-i18n-key="person_6">6 Άτομα</option>
+                            <option value="8" data-i18n-key="person_8">8 Άτομα</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n-key="quick_time">Γρήγορη Επιλογή Ώρας</label>
+                        <select id="time-select"><option value="" data-i18n-key="select_opt">-- Επιλογή --</option></select>
+                    </div>
+                    <label style="margin-bottom:8px;" data-i18n-key="or_grid">Ή επιλέξτε από το grid</label>
+                    <div id="time-slots-container" class="time-grid"></div>
+                    <div id="time-badge" class="selected-time-badge">
+                        <span>🕐</span>
+                        <span><span data-i18n-key="selected_time">Επιλεγμένη ώρα:</span> <strong id="badge-time-text"></strong></span>
+                    </div>
+                    <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;" data-i18n-key="continue">Συνέχεια →</button>
+                </div>
+                <div class="card info-panel" style="position:sticky; top:84px;">
+                    <div class="card-title"><div class="icon">ℹ️</div> <span data-i18n-key="instructions">Οδηγίες</span></div>
+                    <ol style="padding-left:18px; color:var(--text-muted); font-size:0.9rem; line-height:2.2;">
+                        <li data-i18n-key="step1">Επιλέξτε <strong>ημερομηνία</strong></li>
+                        <li data-i18n-key="step2">Επιλέξτε <strong>αριθμό ατόμων</strong></li>
+                        <li data-i18n-key="step3">Επιλέξτε <strong>ώρα</strong></li>
+                        <li data-i18n-key="step4">Πατήστε <strong>"Συνέχεια"</strong></li>
+                        <li data-i18n-key="step5">Συμπληρώστε τα στοιχεία σας</li>
+                    </ol>
+                    <div style="margin-top:24px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
+                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ <span data-i18n-key="instant_confirm">Άμεση επιβεβαίωση</span></div>
+                        <div style="font-size:0.82rem; color:#166534;" data-i18n-key="instant_confirm_desc">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-   <!-- ... Υπόλοιπος κώδικας ... -->
+    <!-- ===== ADMIN PAGE ===== -->
+    <div id="page-admin" class="page">
+        <div class="container">
+            <div id="login-section" style="max-width:400px; margin:0 auto;">
+                <div class="page-header">
+                    <h2 data-i18n-key="admin_login">Είσοδος Admin</h2>
+                    <p data-i18n-key="admin_login_desc">Διαχείριση κρατήσεων καταστήματος</p>
+                </div>
+                <div class="card">
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="email@example.com">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n-key="password">Κωδικός</label>
+                        <input type="password" id="pass" placeholder="••••••••">
+                    </div>
+                    <button class="btn-primary" id="btn-login" data-i18n-key="login">Σύνδεση</button>
+                </div>
+            </div>
+            <div id="dashboard" style="display:none;">
+                <div class="admin-header-row">
+                    <div>
+                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
+                        <div class="shop-badge">🏪 <span id="shop-title"></span></div>
+                    </div>
+                    <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
+                </div>
 
-<script src="script.js"></script>
+                <!-- Admin Sub-Tabs -->
+                <div class="admin-tabs">
+                    <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')">📅 <span data-i18n-key="reservations">Κρατήσεις</span></button>
+                    <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')">🖼️ <span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
+                </div>
 
+                <!-- Reservations Section -->
+                <div id="asec-reservations" class="admin-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card blue"><div class="stat-label" data-i18n-key="reservations">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
+                        <div class="stat-card dark"><div class="stat-label" data-i18n-key="total_guests">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+                    </div>
+                    <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+                        <div class="filters-row">
+                            <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
+                            <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
+                        </div>
+                    </div>
+                    <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
+                </div>
 
+                <!-- Shop Profile Section -->
+                <div id="asec-profile" class="admin-section">
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">📝</div> <span data-i18n-key="shop_info_title">Πληροφορίες Μαγαζιού</span></div>
+
+                        <div class="input-group">
+                            <label data-i18n-key="shop_tagline">Σύνθημα / Slogan</label>
+                            <input type="text" id="prof-tagline" maxlength="80" placeholder="π.χ. Το καλύτερο καφέ της πόλης!" oninput="updateCharCount('prof-tagline','cnt-tagline',80)">
+                            <div class="char-counter"><span id="cnt-tagline">0</span>/80</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_description">Περιγραφή</label>
+                            <textarea id="prof-description" rows="4" maxlength="600" placeholder="Γράψτε μια σύντομη περιγραφή του μαγαζιού σας..." oninput="updateCharCount('prof-description','cnt-desc',600)"></textarea>
+                            <div class="char-counter"><span id="cnt-desc">0</span>/600</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_address">Διεύθυνση</label>
+                            <input type="text" id="prof-address" maxlength="120" placeholder="π.χ. Ερμού 12, Αθήνα">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_phone_pub">Τηλέφωνο Επικοινωνίας</label>
+                            <input type="tel" id="prof-phone" maxlength="20" placeholder="π.χ. 210 1234567">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
+                            <input type="text" id="prof-hours" maxlength="100" placeholder="π.χ. Δευ-Σαβ 08:00-23:00, Κυρ 10:00-22:00">
+                        </div>
+                        <div class="input-group">
+                            <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
+                            <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr">
+                            <small style="color:#64748b;font-size:0.8rem;">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
+                        </div>
+                        <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
+                            💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
+                        </button>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🏷️</div> <span>Λογότυπο</span></div>
+                        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+                            <div id="logo-preview-wrap" style="width:80px;height:80px;border-radius:14px;overflow:hidden;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">
+                                <img id="logo-preview-img" src="" alt="logo" style="width:100%;height:100%;object-fit:cover;display:none;">
+                                <span id="logo-preview-placeholder">🏪</span>
+                            </div>
+                            <div style="flex:1;">
+                                <div class="upload-zone" id="logo-zone" style="padding:16px 20px;">
+                                    <input type="file" id="logo-input" accept="image/*" onchange="handleLogoUpload(event)">
+                                    <div class="upload-zone-icon" style="font-size:1.4rem; margin-bottom:4px;">🏷️</div>
+                                    <div class="upload-zone-text" style="font-size:0.82rem;">Κλικ ή σύρτε λογότυπο</div>
+                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 1MB</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveLogoPhoto()">💾 Αποθήκευση Λογότυπου</button>
+                            <button class="btn-outline" id="btn-del-logo" onclick="deleteLogoPhoto()" style="display:none;">🗑️ Διαγραφή</button>
+                        </div>
+                    </div>
+
+                    <!-- Cover Photo -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🖼️</div> <span data-i18n-key="cover_photo">Εξώφυλλο</span></div>
+                        <div id="cover-preview" class="shop-banner">
+                            <span data-i18n-key="no_cover">Δεν έχει οριστεί εξώφυλλο</span>
+                        </div>
+                        <div class="upload-zone" id="cover-zone">
+                            <input type="file" id="cover-input" accept="image/*" onchange="handleCoverUpload(event)">
+                            <div class="upload-zone-icon">📷</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_cover">Κλικ ή σύρτε φωτογραφία εξωφύλλου</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_hint">JPG, PNG, WEBP · μέγιστο 2MB</div>
+                        </div>
+                        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveCoverPhoto()">💾 <span data-i18n-key="save_cover">Αποθήκευση Εξωφύλλου</span></button>
+                            <button class="btn-outline" id="btn-del-cover" onclick="deleteCoverPhoto()" style="display:none;">🗑️ <span data-i18n-key="delete_cover">Διαγραφή</span></button>
+                        </div>
+                    </div>
+
+                    <!-- Photo Gallery -->
+                    <div class="card">
+                        <div class="card-title">
+                            <div class="icon">🖼️</div>
+                            <span data-i18n-key="photo_gallery">Γκαλερί Φωτογραφιών</span>
+                            <span class="photos-count-badge" id="photos-count-badge">0</span>
+                        </div>
+                        <div class="upload-zone" id="gallery-zone">
+                            <input type="file" id="gallery-input" accept="image/*" multiple onchange="handleGalleryUpload(event)">
+                            <div class="upload-zone-icon">🗂️</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_gallery">Κλικ ή σύρτε φωτογραφίες γκαλερί</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_gallery_hint">Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία</div>
+                        </div>
+                        <div id="gallery-grid" class="photo-gallery"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SUPER ADMIN PAGE ===== -->
+    <div id="page-superadmin" class="page">
+        <div class="container">
+
+            <!-- Super Admin Login -->
+            <div id="sa-login" style="max-width:400px; margin:0 auto;">
+                <div class="page-header">
+                    <h2>⚡ Super Admin</h2>
+                    <p data-i18n-key="sa_login_desc">Κεντρική διαχείριση όλων των καταστημάτων</p>
+                </div>
+                <div class="card">
+                    <div class="input-group">
+                        <label data-i18n-key="sa_email_label">Email Super Admin</label>
+                        <input type="email" id="sa-email" placeholder="aris@admin.com">
+                    </div>
+                    <div class="input-group">
+                        <label data-i18n-key="password">Κωδικός</label>
+                        <input type="password" id="sa-pass" placeholder="••••••••">
+                    </div>
+                    <button class="btn-purple" id="sa-btn-login" data-i18n-key="sa_login_btn">Σύνδεση ως Super Admin</button>
+                </div>
+            </div>
+
+            <!-- Super Admin Dashboard -->
+            <div id="sa-dashboard" style="display:none;">
+                <div class="super-header">
+                    <div>
+                        <h2>⚡ Super Admin Panel</h2>
+                        <p data-i18n-key="sa_manage">Διαχείριση καταστημάτων &amp; χρηστών</p>
+                    </div>
+                    <button class="btn-outline" id="sa-btn-logout" style="border-color:rgba(255,255,255,0.3); color:white; background:rgba(255,255,255,0.1);" data-i18n-key="logout">Αποσύνδεση</button>
+                </div>
+
+                <div class="superadmin-layout">
+
+                    <!-- LEFT: Add new shop -->
+                    <div>
+                        <div class="card">
+                            <div class="card-title"><div class="icon purple">➕</div> <span data-i18n-key="new_shop">Νέο Κατάστημα</span></div>
+
+                            <div class="input-group">
+                                <label data-i18n-key="shop_id_label">Όνομα Καταστήματος (ID)</label>
+                                <input type="text" id="sa-shop-id" placeholder="π.χ. kafeneio_athens" style="font-family:monospace;">
+                                <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;" data-i18n-key="shop_id_hint">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
+                            </div>
+                            <div class="input-group">
+                                <label data-i18n-key="display_name">Εμφανιζόμενο Όνομα</label>
+                                <input type="text" id="sa-shop-display" data-i18n-placeholder="display_name_ph">
+                            </div>
+                            <div class="form-row">
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label data-i18n-key="shop_admin_email">Email Admin Μαγαζιού</label>
+                                    <input type="email" id="sa-new-email" placeholder="magazi@email.com">
+                                </div>
+                                <div class="input-group" style="margin-bottom:0;">
+                                    <label data-i18n-key="password">Κωδικός</label>
+                                    <input type="password" id="sa-new-pass" data-i18n-placeholder="pass_hint">
+                                </div>
+                            </div>
+                            <div style="margin-top:18px;">
+                                <button class="btn-purple" id="sa-btn-create" data-i18n-key="create_shop">➕ Δημιουργία Καταστήματος</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: Shops list -->
+                    <div>
+                        <div class="card">
+                            <div class="card-title"><div class="icon purple">🏪</div> <span data-i18n-key="shops">Καταστήματα</span> (<span id="sa-shop-count">0</span>)</div>
+                            <div id="sa-shops-list">
+                                <div class="no-data" data-i18n-key="loading_shops">Φόρτωση καταστημάτων...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BOOKING MODAL ===== -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content card">
+            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
+            <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" data-i18n-placeholder="fullname_ph"></div>
+            <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
+            <div class="input-group"><label data-i18n-key="email_optional">Email (Προαιρετικό)</label><input type="email" id="cust-email" placeholder="name@example.com"></div>
+            <div class="input-group">
+                <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
+                <select id="cust-location">
+                    <option value="Εσωτερικός" data-i18n-key="indoor">Εσωτερικός Χώρος</option>
+                    <option value="Εξωτερικός" data-i18n-key="outdoor">Εξωτερικός Χώρος</option>
+                    <option value="Δεν έχω προτίμηση" data-i18n-key="no_pref">Δεν έχω προτίμηση</option>
+                </select>
+            </div>
+            <div class="input-group"><label data-i18n-key="occasion">Ειδικό Γεγονός</label><input type="text" id="cust-occasion" data-i18n-placeholder="occasion_ph"></div>
+            <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" data-i18n-placeholder="requests_ph"></textarea></div>
+            <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
+            <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import {
+            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
+            createUserWithEmailAndPassword, deleteUser, fetchSignInMethodsForEmail
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+            authDomain: "reser-dfb9a.firebaseapp.com",
+            databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "reser-dfb9a",
+            
+            
+            
+            
+        };
+
+        const SUPER_ADMIN_EMAIL = "aris@admin.com";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // ======= TRANSLATIONS =======
+        const translations = {
+            el: {
+                tab_reservation: "📅 Κράτηση",
+                tab_admin: "🔧 Admin",
+                new_reservation: "Νέα Κράτηση",
+                loading_shop: "Φόρτωση καταστήματος...",
+                booking_at: "Κράτηση στο: ",
+                select_date_time: "Επιλογή Ημ/νίας & Ώρας",
+                date: "Ημερομηνία",
+                persons: "Άτομα",
+                person_1: "1 Άτομο",
+                person_2: "2 Άτομα",
+                person_3: "3 Άτομα",
+                person_4: "4 Άτομα",
+                person_5: "5 Άτομα",
+                person_6: "6 Άτομα",
+                person_8: "8 Άτομα",
+                quick_time: "Γρήγορη Επιλογή Ώρας",
+                select_opt: "-- Επιλογή --",
+                or_grid: "Ή επιλέξτε από το grid",
+                selected_time: "Επιλεγμένη ώρα:",
+                continue: "Συνέχεια →",
+                instructions: "Οδηγίες",
+                step1: "Επιλέξτε <strong>ημερομηνία</strong>",
+                step2: "Επιλέξτε <strong>αριθμό ατόμων</strong>",
+                step3: "Επιλέξτε <strong>ώρα</strong>",
+                step4: 'Πατήστε <strong>"Συνέχεια"</strong>',
+                step5: "Συμπληρώστε τα στοιχεία σας",
+                instant_confirm: "Άμεση επιβεβαίωση",
+                instant_confirm_desc: "Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.",
+                admin_login: "Είσοδος Admin",
+                admin_login_desc: "Διαχείριση κρατήσεων καταστήματος",
+                password: "Κωδικός",
+                login: "Σύνδεση",
+                reservations: "Κρατήσεις",
+                logout: "Αποσύνδεση",
+                total_guests: "Σύνολο Ατόμων",
+                from: "Από",
+                to: "Έως",
+                loading: "Φόρτωση...",
+                sa_login_desc: "Κεντρική διαχείριση όλων των καταστημάτων",
+                sa_email_label: "Email Super Admin",
+                sa_login_btn: "Σύνδεση ως Super Admin",
+                sa_manage: "Διαχείριση καταστημάτων & χρηστών",
+                new_shop: "Νέο Κατάστημα",
+                shop_id_label: "Όνομα Καταστήματος (ID)",
+                shop_id_hint: "Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)",
+                display_name: "Εμφανιζόμενο Όνομα",
+                display_name_ph: "π.χ. Καφενείο Αθήνας",
+                shop_admin_email: "Email Admin Μαγαζιού",
+                pass_hint: "Τουλ. 6 χαρακτήρες",
+                create_shop: "➕ Δημιουργία Καταστήματος",
+                shops: "Καταστήματα",
+                loading_shops: "Φόρτωση καταστημάτων...",
+                booking_details: "Στοιχεία Κράτησης",
+                fullname: "Ονοματεπώνυμο *",
+                fullname_ph: "π.χ. Νίκος Παπαδόπουλος",
+                phone: "Τηλέφωνο *",
+                email_optional: "Email (Προαιρετικό)",
+                location_pref: "Προτίμηση Χώρου",
+                indoor: "Εσωτερικός Χώρος",
+                outdoor: "Εξωτερικός Χώρος",
+                no_pref: "Δεν έχω προτίμηση",
+                occasion: "Ειδικό Γεγονός",
+                occasion_ph: "π.χ. Γενέθλια, Επέτειος",
+                requests: "Επιπλέον Αιτήματα",
+                requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
+                confirm_booking: "✅ Επιβεβαίωση Κράτησης",
+                cancel: "Ακύρωση",
+                // alerts & toasts
+                alert_select_date: "Επιλέξτε ημερομηνία πρώτα!",
+                alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!",
+                alert_select_time: "Επιλέξτε ώρα!",
+                alert_select_date2: "Επιλέξτε ημερομηνία!",
+                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!",
+                toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                alert_wrong_creds: "Λάθος στοιχεία!",
+                alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ",
+                alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
+                no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
+                delete_confirm: "Οριστική διαγραφή κράτησης;",
+                delete_text: "Διαγραφή",
+                guests_label: "άτομα",
+                location_label_indoor: "Εσωτερικός",
+                toast_no_access: "Δεν έχετε πρόσβαση Super Admin",
+                alert_wrong_creds_sa: "Λάθος στοιχεία!",
+                no_shops: "Δεν υπάρχουν καταστήματα ακόμα.",
+                copy_title: "Αντιγραφή URL",
+                delete_title: "Διαγραφή",
+                delete_shop_confirm: 'Διαγραφή καταστήματος "',
+                delete_shop_confirm2: '"; Αυτό θα διαγράψει και τα δεδομένα στο Firebase.',
+                toast_copy: "🔗 URL αντιγράφηκε!",
+                copy_prompt: "Αντιγράψτε το URL:",
+                toast_shop_deleted: '🗑️ Το κατάστημα "',
+                toast_shop_deleted2: '" διαγράφηκε.',
+                toast_delete_error: "Σφάλμα κατά τη διαγραφή.",
+                sa_fill_all: "Συμπληρώστε όλα τα πεδία!",
+                sa_id_invalid: "Το ID μαγαζιού: μόνο a-z, 0-9, _",
+                sa_pass_short: "Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!",
+                sa_creating: "Δημιουργία...",
+                sa_relogin_prompt: "Εισάγετε ξανά τον κωδικό Super Admin για επαναφορά:",
+                toast_shop_created: '✅ Κατάστημα "',
+                toast_shop_created2: '" δημιουργήθηκε!',
+                sa_error_create: "Σφάλμα δημιουργίας.",
+                sa_email_in_use: "Το email χρησιμοποιείται ήδη!",
+                sa_invalid_email: "Μη έγκυρο email!",
+                // shop profile
+                shop_profile: "Προφίλ Μαγαζιού",
+                shop_info_title: "Πληροφορίες Μαγαζιού",
+                shop_tagline: "Σύνθημα / Slogan",
+                shop_description: "Περιγραφή",
+                shop_address: "Διεύθυνση",
+                shop_phone_pub: "Τηλέφωνο Επικοινωνίας",
+                shop_hours: "Ωράριο Λειτουργίας",
+                save_profile: "Αποθήκευση Πληροφοριών",
+                cover_photo: "Εξώφυλλο",
+                no_cover: "Δεν έχει οριστεί εξώφυλλο",
+                upload_cover: "Κλικ ή σύρτε φωτογραφία εξωφύλλου",
+                upload_hint: "JPG, PNG, WEBP · μέγιστο 2MB",
+                save_cover: "Αποθήκευση Εξωφύλλου",
+                delete_cover: "Διαγραφή",
+                photo_gallery: "Γκαλερί Φωτογραφιών",
+                upload_gallery: "Κλικ ή σύρτε φωτογραφίες γκαλερί",
+                upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία",
+                toast_profile_saved: "✅ Πληροφορίες αποθηκεύτηκαν!",
+                toast_cover_saved: "✅ Εξώφυλλο αποθηκεύτηκε!",
+                toast_cover_deleted: "🗑️ Εξώφυλλο διαγράφηκε.",
+                toast_photo_saved: "✅ Φωτογραφία προστέθηκε!",
+                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.",
+                toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 2MB!",
+                toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+            },
+            en: {
+                tab_reservation: "📅 Reservation",
+                tab_admin: "🔧 Admin",
+                new_reservation: "New Reservation",
+                loading_shop: "Loading store...",
+                booking_at: "Booking at: ",
+                select_date_time: "Select Date & Time",
+                date: "Date",
+                persons: "Persons",
+                person_1: "1 Person",
+                person_2: "2 Persons",
+                person_3: "3 Persons",
+                person_4: "4 Persons",
+                person_5: "5 Persons",
+                person_6: "6 Persons",
+                person_8: "8 Persons",
+                quick_time: "Quick Time Selection",
+                select_opt: "-- Select --",
+                or_grid: "Or select from the grid",
+                selected_time: "Selected time:",
+                continue: "Continue →",
+                instructions: "Instructions",
+                step1: "Select a <strong>date</strong>",
+                step2: "Select <strong>number of persons</strong>",
+                step3: "Select a <strong>time</strong>",
+                step4: 'Press <strong>"Continue"</strong>',
+                step5: "Fill in your details",
+                instant_confirm: "Instant confirmation",
+                instant_confirm_desc: "Your reservation is saved immediately and the store is notified automatically.",
+                admin_login: "Admin Login",
+                admin_login_desc: "Manage store reservations",
+                password: "Password",
+                login: "Sign In",
+                reservations: "Reservations",
+                logout: "Sign Out",
+                total_guests: "Total Guests",
+                from: "From",
+                to: "To",
+                loading: "Loading...",
+                sa_login_desc: "Central management of all stores",
+                sa_email_label: "Super Admin Email",
+                sa_login_btn: "Sign In as Super Admin",
+                sa_manage: "Manage stores & users",
+                new_shop: "New Store",
+                shop_id_label: "Store Name (ID)",
+                shop_id_hint: "Only latin letters, numbers, _ (no spaces)",
+                display_name: "Display Name",
+                display_name_ph: "e.g. Athens Café",
+                shop_admin_email: "Store Admin Email",
+                pass_hint: "Min. 6 characters",
+                create_shop: "➕ Create Store",
+                shops: "Stores",
+                loading_shops: "Loading stores...",
+                booking_details: "Booking Details",
+                fullname: "Full Name *",
+                fullname_ph: "e.g. John Smith",
+                phone: "Phone *",
+                email_optional: "Email (Optional)",
+                location_pref: "Seating Preference",
+                indoor: "Indoor",
+                outdoor: "Outdoor",
+                no_pref: "No preference",
+                occasion: "Special Occasion",
+                occasion_ph: "e.g. Birthday, Anniversary",
+                requests: "Additional Requests",
+                requests_ph: "Any special order...",
+                confirm_booking: "✅ Confirm Reservation",
+                cancel: "Cancel",
+                // alerts & toasts
+                alert_select_date: "Please select a date first!",
+                alert_name_phone: "Name and Phone are required!",
+                alert_select_time: "Please select a time!",
+                alert_select_date2: "Please select a date!",
+                toast_saved: "✅ Reservation saved!",
+                toast_save_error: "Save error. Please try again.",
+                alert_wrong_creds: "Wrong credentials!",
+                alert_no_shop_url: "ERROR: No store set in URL!",
+                alert_forbidden: "FORBIDDEN: ",
+                alert_no_shop_linked: "This account is not linked to a store!",
+                no_reservations: "📭 No reservations found for the selected period.",
+                delete_confirm: "Permanently delete reservation?",
+                delete_text: "Delete",
+                guests_label: "guests",
+                location_label_indoor: "Indoor",
+                toast_no_access: "You don't have Super Admin access",
+                alert_wrong_creds_sa: "Wrong credentials!",
+                no_shops: "No stores yet.",
+                copy_title: "Copy URL",
+                delete_title: "Delete",
+                delete_shop_confirm: 'Delete store "',
+                delete_shop_confirm2: '"? This will also delete its data in Firebase.',
+                toast_copy: "🔗 URL copied!",
+                copy_prompt: "Copy the URL:",
+                toast_shop_deleted: '🗑️ Store "',
+                toast_shop_deleted2: '" deleted.',
+                toast_delete_error: "Error during deletion.",
+                sa_fill_all: "Please fill in all fields!",
+                sa_id_invalid: "Store ID: only a-z, 0-9, _",
+                sa_pass_short: "Password needs at least 6 characters!",
+                sa_creating: "Creating...",
+                sa_relogin_prompt: "Enter Super Admin password again to restore session:",
+                toast_shop_created: '✅ Store "',
+                toast_shop_created2: '" created!',
+                sa_error_create: "Creation error.",
+                sa_email_in_use: "Email already in use!",
+                sa_invalid_email: "Invalid email!",
+                // shop profile
+                shop_profile: "Shop Profile",
+                shop_info_title: "Shop Information",
+                shop_tagline: "Tagline / Slogan",
+                shop_description: "Description",
+                shop_address: "Address",
+                shop_phone_pub: "Contact Phone",
+                shop_hours: "Opening Hours",
+                save_profile: "Save Information",
+                cover_photo: "Cover Photo",
+                no_cover: "No cover photo set",
+                upload_cover: "Click or drag a cover photo",
+                upload_hint: "JPG, PNG, WEBP · max 2MB",
+                save_cover: "Save Cover Photo",
+                delete_cover: "Delete",
+                photo_gallery: "Photo Gallery",
+                upload_gallery: "Click or drag gallery photos",
+                upload_gallery_hint: "Multiple photos · max 2MB per photo",
+                toast_profile_saved: "✅ Information saved!",
+                toast_cover_saved: "✅ Cover photo saved!",
+                toast_cover_deleted: "🗑️ Cover photo deleted.",
+                toast_photo_saved: "✅ Photo added!",
+                toast_photo_deleted: "🗑️ Photo deleted.",
+                toast_img_too_big: "⚠️ Photo exceeds 2MB!",
+                toast_save_error2: "Save error. Please try again.",
+            }
+        };
+
+        let currentLang = 'en';
+
+        function t(key) {
+            return translations[currentLang][key] || translations['el'][key] || key;
+        }
+
+        window.setLang = function(lang) {
+            currentLang = lang;
+            document.getElementById('lang-el').classList.toggle('active', lang === 'el');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang;
+            applyTranslations();
+        };
+
+        function applyTranslations() {
+            // Text content
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                const val = t(key);
+                if (val !== undefined) el.innerHTML = val;
+            });
+            // Placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                const val = t(key);
+                if (val !== undefined) el.placeholder = val;
+            });
+            // Update shop display if already loaded
+            const shopDisplay = document.getElementById('shop-display');
+            if (shopDisplay && shopDisplay.dataset.shopId) {
+                shopDisplay.innerText = t('booking_at') + shopDisplay.dataset.shopId;
+            }
+            // Update select options for location inside modal
+            const locSelect = document.getElementById('cust-location');
+            if (locSelect) {
+                locSelect.options[0].text = t('indoor');
+                locSelect.options[1].text = t('outdoor');
+                locSelect.options[2].text = t('no_pref');
+            }
+            // Update guests select options
+            const guestSelect = document.getElementById('cust-guests');
+            if (guestSelect) {
+                const guestKeys = ['person_1','person_2','person_3','person_4','person_5','person_6','person_8'];
+                for (let i = 0; i < guestSelect.options.length; i++) {
+                    if (guestKeys[i]) guestSelect.options[i].text = t(guestKeys[i]);
+                }
+            }
+            // Update time-select first option
+            const tSelect = document.getElementById('time-select');
+            if (tSelect && tSelect.options.length > 0) {
+                tSelect.options[0].text = t('select_opt');
+            }
+        }
+
+        // ======= TOAST =======
+        function showToast(msg, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ======= PAGE SWITCHING =======
+        const pages = ['client', 'admin', 'superadmin'];
+        window.switchPage = (page) => {
+            pages.forEach(p => {
+                document.getElementById('page-' + p).classList.remove('active');
+                document.getElementById('tab-' + p).classList.remove('active');
+            });
+            document.getElementById('page-' + page).classList.add('active');
+            document.getElementById('tab-' + page).classList.add('active');
+        };
+
+        // ======= CLIENT =======
+        const urlParams = new URLSearchParams(window.location.search);
+        const shopID = urlParams.get('shop') || "default_store";
+        const shopDisplayEl = document.getElementById('shop-display');
+        shopDisplayEl.dataset.shopId = shopID;
+        shopDisplayEl.innerText = t('booking_at') + shopID;
+
+        let selectedTime = null;
+        const timeContainer = document.getElementById('time-slots-container');
+        const timeSelect = document.getElementById('time-select');
+
+        // ======= LOAD SHOP PROFILE ON CLIENT PAGE =======
+        function loadClientShopProfile(shopId) {
+            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
+                if (!snap.exists()) return;
+                const full = snap.val();
+                const info = full.info || {};
+
+                // Display name from shop_details
+                get(ref(db, `shop_details/${shopId}`)).then(detSnap => {
+                    const det = detSnap.exists() ? detSnap.val() : {};
+                    const name = det.displayName || shopId;
+                    document.getElementById('shop-display').innerText = name;
+                });
+
+                // Cover
+                if (full.coverPhoto) {
+                    const wrap = document.getElementById('client-cover-wrap');
+                    const img = document.getElementById('client-cover-img');
+                    img.src = full.coverPhoto;
+                    wrap.style.display = 'block';
+                    document.getElementById('client-cover-placeholder').style.display = 'none';
+                }
+
+                // Logo
+                if (full.logoPhoto) {
+                    const logoWrap = document.getElementById('client-logo-wrap');
+                    const logoImg = document.getElementById('client-logo-img');
+                    logoImg.src = full.logoPhoto;
+                    logoWrap.style.display = 'block';
+                }
+
+                // Tagline
+                if (info.tagline) {
+                    const el = document.getElementById('client-tagline');
+                    el.innerText = info.tagline;
+                    el.style.display = 'block';
+                }
+
+                // Description
+                if (info.description) {
+                    const el = document.getElementById('client-description');
+                    el.innerText = info.description;
+                    el.style.display = 'block';
+                }
+
+                // Address
+                if (info.address) {
+                    const el = document.getElementById('client-address');
+                    el.querySelector('span').innerText = info.address;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Phone
+                if (info.phone) {
+                    const el = document.getElementById('client-phone-pub');
+                    const link = document.getElementById('client-phone-link');
+                    link.innerText = info.phone;
+                    link.href = 'tel:' + info.phone;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Hours
+                if (info.hours) {
+                    const el = document.getElementById('client-hours');
+                    el.querySelector('span').innerText = info.hours;
+                    el.style.display = 'inline-flex';
+                }
+
+                // Gallery strip
+                if (full.gallery) {
+                    const photos = Object.values(full.gallery);
+                    if (photos.length > 0) {
+                        const strip = document.getElementById('client-gallery-strip');
+                        strip.innerHTML = '';
+                        photos.forEach(p => {
+                            const img = document.createElement('img');
+                            img.src = p.data;
+                            img.alt = p.name || '';
+                            img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
+                            img.onmouseover = () => img.style.transform = 'scale(1.03)';
+                            img.onmouseout = () => img.style.transform = '';
+                            img.onclick = () => openLightbox(p.data, p.name);
+                            strip.appendChild(img);
+                        });
+                        document.getElementById('client-gallery-wrap').style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        // Simple lightbox for gallery
+        function openLightbox(src, caption) {
+            const lb = document.createElement('div');
+            lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;';
+            lb.innerHTML = `<img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
+                ${caption ? `<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">${caption}</div>` : ''}
+                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Κλικ οπουδήποτε για κλείσιμο</div>`;
+            lb.onclick = () => document.body.removeChild(lb);
+            document.body.appendChild(lb);
+        }
+
+        // Load shop display name always (even without profile)
+        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
+            if (detSnap.exists()) {
+                const name = detSnap.val().displayName || shopID;
+                document.getElementById('shop-display').innerText = name;
+            }
+        }).catch(() => {});
+
+        // Load shop profile for client page
+        loadClientShopProfile(shopID);
+
+        for (let h = 8; h <= 23; h++) {
+            const hs = h < 10 ? '0' + h : '' + h;
+            [`${hs}:00`, `${hs}:30`].forEach(time => {
+                const opt = document.createElement('option');
+                opt.value = time; opt.innerText = time;
+                timeSelect.appendChild(opt);
+                const div = document.createElement('div');
+                div.className = 'time-slot';
+                div.innerText = time; div.dataset.time = time;
+                div.onclick = () => updateSelection(time);
+                timeContainer.appendChild(div);
+            });
+        }
+
+        function updateSelection(time) {
+            selectedTime = time;
+            timeSelect.value = time;
+            document.querySelectorAll('.time-slot').forEach(s =>
+                s.classList.toggle('selected', s.dataset.time === time));
+            document.getElementById('open-modal').style.display = 'block';
+            document.getElementById('badge-time-text').innerText = time;
+            document.getElementById('time-badge').classList.add('show');
+        }
+
+        timeSelect.onchange = (e) => { if (e.target.value) updateSelection(e.target.value); };
+
+        const modal = document.getElementById('booking-modal');
+        document.getElementById('open-modal').onclick = () => {
+            if (!document.getElementById('cust-date-only').value) return alert(t('alert_select_date'));
+            modal.classList.add('open');
+        };
+        document.getElementById('close-modal').onclick = () => modal.classList.remove('open');
+        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
+
+        document.getElementById('btn-save').onclick = () => {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const email = document.getElementById('cust-email').value.trim();
+            const date = document.getElementById('cust-date-only').value;
+            const guests = document.getElementById('cust-guests').value;
+            const locationChoice = document.getElementById('cust-location').value;
+            const occasion = document.getElementById('cust-occasion').value.trim();
+            const comments = document.getElementById('cust-comments').value.trim();
+            if (!name || !phone) return alert(t('alert_name_phone'));
+            if (!selectedTime) return alert(t('alert_select_time'));
+            if (!date) return alert(t('alert_select_date2'));
+            const bookingData = { name, phone, email, date, time: selectedTime, guests, location: locationChoice, occasion, comments, timestamp: Date.now() };
+            const newBookingRef = push(ref(db, 'reservations/' + shopID));
+            set(newBookingRef, bookingData).then(() => {
+                // Στείλε email ειδοποίηση
+                const bookingId = newBookingRef.key;
+                fetch('https://tablereserve-api-838820261500.europe-west1.run.app/v3/email/notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ shopId: shopID, bookingId })
+                }).then(r => r.json()).then(d => console.log('[email] success:', d)).catch(e => console.warn('[email] notification failed:', e));
+                showToast(t('toast_saved'), 'success');
+                modal.classList.remove('open');
+                ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments'].forEach(id => document.getElementById(id).value = '');
+                selectedTime = null;
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.getElementById('open-modal').style.display = 'none';
+                document.getElementById('time-badge').classList.remove('show');
+                timeSelect.value = '';
+            }).catch(() => alert(t('toast_save_error')));
+        };
+
+        // ======= ADMIN =======
+        let allReservations = [];
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                if (user.email === SUPER_ADMIN_EMAIL) {
+                    document.getElementById('tab-superadmin').style.display = 'flex';
+                    document.getElementById('sa-login').style.display = 'none';
+                    document.getElementById('sa-dashboard').style.display = 'block';
+                    loadShops();
+                    return;
+                }
+
+                const urlShop = urlParams.get('shop');
+                if (!urlShop) { alert(t('alert_no_shop_url')); signOut(auth); return; }
+                const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
+                if (snapshot.exists()) {
+                    const myShop = snapshot.val();
+                    if (urlShop !== myShop) { alert(t('alert_forbidden') + urlShop); signOut(auth); return; }
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    document.getElementById('shop-title').innerText = myShop;
+                    currentAdminShop = myShop;
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('filter-from').value = today;
+                    document.getElementById('filter-to').value = today;
+                    listenToReservations(myShop);
+                    loadShopProfile(myShop);
+                } else {
+                    alert(t('alert_no_shop_linked'));
+                    signOut(auth);
+                }
+            } else {
+                currentAdminShop = null;
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('tab-superadmin').style.display = 'none';
+                document.getElementById('sa-login').style.display = 'block';
+                document.getElementById('sa-dashboard').style.display = 'none';
+            }
+        });
+
+        function listenToReservations(shop) {
+            onValue(ref(db, 'reservations/' + shop), (snapshot) => {
+                allReservations = [];
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    allReservations = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                }
+                renderDashboard(shop);
+            });
+        }
+
+        function renderDashboard(shop) {
+            const fromDate = document.getElementById('filter-from').value;
+            const toDate = document.getElementById('filter-to').value;
+            const list = document.getElementById('reservation-list');
+            let filtered = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
+            filtered.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.localeCompare(b.time));
+            let totalGuests = 0;
+            filtered.forEach(r => totalGuests += parseInt(r.guests || 0));
+            document.getElementById('stat-count').innerText = filtered.length;
+            document.getElementById('stat-guests').innerText = totalGuests;
+            list.innerHTML = '';
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class='no-data'>${t('no_reservations')}</div>`;
+                return;
+            }
+            filtered.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'booking-card';
+                const locationDisplay = res.location || t('location_label_indoor');
+                div.innerHTML = `
+                    <div class="card-header">
+                        <div class="time-badge">${res.time}</div>
+                        <div class="date-text">${res.date}</div>
+                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="customer-name">${res.name}</div>
+                        <div class="info-row">
+                            <span>👥 <strong>${res.guests} ${t('guests_label')}</strong></span>
+                            <span>📍 ${locationDisplay}</span>
+                        </div>
+                        ${res.occasion ? `<div class="occasion-tag">🎉 ${res.occasion}</div>` : ''}
+                        ${res.comments ? `<div class="comments-box">${res.comments}</div>` : ''}
+                        <a href="tel:${res.phone}" class="call-button">📞 ${res.phone}</a>
+                    </div>`;
+                list.appendChild(div);
+            });
+        }
+
+        document.getElementById('filter-from').onchange = () => renderDashboard(document.getElementById('shop-title').innerText);
+        document.getElementById('filter-to').onchange = () => renderDashboard(document.getElementById('shop-title').innerText);
+
+        document.getElementById('btn-login').onclick = () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, email, pass).catch(() => alert(t('alert_wrong_creds')));
+        };
+
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+
+        window.deleteBooking = (shop, id) => {
+            if (confirm(t('delete_confirm'))) remove(ref(db, `reservations/${shop}/${id}`));
+        };
+
+        // ======= SUPER ADMIN =======
+        document.getElementById('sa-btn-login').onclick = () => {
+            const email = document.getElementById('sa-email').value;
+            const pass = document.getElementById('sa-pass').value;
+            if (email !== SUPER_ADMIN_EMAIL) return showToast(t('toast_no_access'), 'error');
+            signInWithEmailAndPassword(auth, email, pass).catch(() => showToast(t('alert_wrong_creds_sa'), 'error'));
+        };
+
+        document.getElementById('sa-btn-logout').onclick = () => signOut(auth);
+
+        function loadShops() {
+            onValue(ref(db, 'users_to_shops'), (snapshot) => {
+                const list = document.getElementById('sa-shops-list');
+                list.innerHTML = '';
+
+                if (!snapshot.exists()) {
+                    document.getElementById('sa-shop-count').innerText = '0';
+                    list.innerHTML = `<div class='no-data'>${t('no_shops')}</div>`;
+                    return;
+                }
+
+                const data = snapshot.val();
+                const entries = Object.entries(data);
+                document.getElementById('sa-shop-count').innerText = entries.length;
+
+                get(ref(db, 'shop_details')).then(detailsSnap => {
+                    const details = detailsSnap.exists() ? detailsSnap.val() : {};
+
+                    entries.forEach(([uid, shopId]) => {
+                        const info = details[shopId] || {};
+                        const baseUrl = window.location.origin + window.location.pathname;
+                        const adminUrl = `${baseUrl}?shop=${shopId}`;
+
+                        const div = document.createElement('div');
+                        div.className = 'shop-item';
+                        div.innerHTML = `
+                            <div class="shop-icon">🏪</div>
+                            <div class="shop-info">
+                                <div class="shop-name">${info.displayName || shopId}</div>
+                                <div class="shop-email">${info.email || uid}</div>
+                                <div class="url-preview">${adminUrl}</div>
+                            </div>
+                            <div class="shop-actions">
+                                <button class="btn-icon copy" title="${t('copy_title')}" onclick="copyShopUrl('${adminUrl}')">🔗</button>
+                                <button class="btn-icon del" title="${t('delete_title')}" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
+                            </div>`;
+                        list.appendChild(div);
+                    });
+                });
+            });
+        }
+
+        window.copyShopUrl = (url) => {
+            navigator.clipboard.writeText(url).then(() => {
+                showToast(t('toast_copy'), 'success');
+            }).catch(() => {
+                prompt(t('copy_prompt'), url);
+            });
+        };
+
+        window.deleteShop = async (uid, shopId) => {
+            if (!confirm(`${t('delete_shop_confirm')}${shopId}${t('delete_shop_confirm2')}`)) return;
+            try {
+                await remove(ref(db, `users_to_shops/${uid}`));
+                await remove(ref(db, `shop_details/${shopId}`));
+                showToast(`${t('toast_shop_deleted')}${shopId}${t('toast_shop_deleted2')}`, 'success');
+            } catch(e) {
+                showToast(t('toast_delete_error'), 'error');
+            }
+        };
+
+        document.getElementById('sa-btn-create').onclick = async () => {
+            const shopIdRaw = document.getElementById('sa-shop-id').value.trim();
+            const displayName = document.getElementById('sa-shop-display').value.trim();
+            const newEmail = document.getElementById('sa-new-email').value.trim();
+            const newPass = document.getElementById('sa-new-pass').value;
+
+            if (!shopIdRaw || !newEmail || !newPass || !displayName) {
+                return showToast(t('sa_fill_all'), 'error');
+            }
+            if (!/^[a-zA-Z0-9_]+$/.test(shopIdRaw)) {
+                return showToast(t('sa_id_invalid'), 'error');
+            }
+            if (newPass.length < 6) {
+                return showToast(t('sa_pass_short'), 'error');
+            }
+
+            const btn = document.getElementById('sa-btn-create');
+            btn.innerHTML = `<span class="spinner"></span> ${t('sa_creating')}`;
+            btn.disabled = true;
+
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, newEmail, newPass);
+                const newUid = userCred.user.uid;
+
+                await set(ref(db, `users_to_shops/${newUid}`), shopIdRaw);
+                await set(ref(db, `shop_details/${shopIdRaw}`), {
+                    displayName: displayName,
+                    email: newEmail,
+                    createdAt: Date.now()
+                });
+
+                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, document.getElementById('sa-pass').value || prompt(t('sa_relogin_prompt')));
+
+                showToast(`${t('toast_shop_created')}${shopIdRaw}${t('toast_shop_created2')}`, 'success');
+
+                document.getElementById('sa-shop-id').value = '';
+                document.getElementById('sa-shop-display').value = '';
+                document.getElementById('sa-new-email').value = '';
+                document.getElementById('sa-new-pass').value = '';
+
+            } catch(e) {
+                let msg = t('sa_error_create');
+                if (e.code === 'auth/email-already-in-use') msg = t('sa_email_in_use');
+                if (e.code === 'auth/invalid-email') msg = t('sa_invalid_email');
+                showToast(msg, 'error');
+            } finally {
+                btn.innerHTML = t('create_shop');
+                btn.disabled = false;
+            }
+        };
+
+        // ======= ADMIN TABS =======
+        window.switchAdminTab = (tab) => {
+            ['reservations','profile'].forEach(t => {
+                document.getElementById('asec-' + t).classList.remove('active');
+                document.getElementById('atab-' + t).classList.remove('active');
+            });
+            document.getElementById('asec-' + tab).classList.add('active');
+            document.getElementById('atab-' + tab).classList.add('active');
+        };
+
+        // ======= CHAR COUNTER =======
+        window.updateCharCount = (inputId, counterId, max) => {
+            const len = document.getElementById(inputId).value.length;
+            document.getElementById(counterId).innerText = len;
+        };
+
+        // ======= SHOP PROFILE =======
+        let currentAdminShop = null;
+        let pendingCoverBase64 = null;
+
+        function loadShopProfile(shopId) {
+            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
+                if (!snap.exists()) return;
+                const full = snap.val();
+                const p = full.info || {};
+                const setVal = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val || ''; };
+                setVal('prof-tagline', p.tagline);
+                setVal('prof-description', p.description);
+                setVal('prof-address', p.address);
+                setVal('prof-phone', p.phone);
+                setVal('prof-notification-email', p.notificationEmail || '');
+                setVal('prof-hours', p.hours);
+                ['prof-tagline','prof-description'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.dispatchEvent(new Event('input'));
+                });
+                if (full.coverPhoto) {
+                    showCoverPreview(full.coverPhoto);
+                }
+                if (full.logoPhoto) {
+                    showLogoPreview(full.logoPhoto);
+                }
+                loadGallery(shopId);
+            });
+        }
+
+        window.saveShopProfile = async () => {
+            if (!currentAdminShop) return;
+            const btn = document.getElementById('btn-save-profile');
+            btn.disabled = true;
+            btn.innerHTML = `<span class="spinner"></span> ${t('sa_creating')}`;
+            const data = {
+                tagline: document.getElementById('prof-tagline').value.trim(),
+                description: document.getElementById('prof-description').value.trim(),
+                address: document.getElementById('prof-address').value.trim(),
+                phone: document.getElementById('prof-phone').value.trim(),
+                hours: document.getElementById('prof-hours').value.trim(),
+                notificationEmail: document.getElementById('prof-notification-email').value.trim(),
+                updatedAt: Date.now()
+            };
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/info`), data);
+                showToast(t('toast_profile_saved'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `💾 <span>${t('save_profile')}</span>`;
+            }
+        };
+
+        // Drag-over styling
+        ['cover-zone','gallery-zone'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+            el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+            el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag-over'); });
+        });
+
+        // ======= LOGO =======
+        let pendingLogoBase64 = null;
+
+        function showLogoPreview(base64) {
+            document.getElementById('logo-preview-img').src = base64;
+            document.getElementById('logo-preview-img').style.display = 'block';
+            document.getElementById('logo-preview-placeholder').style.display = 'none';
+            document.getElementById('btn-del-logo').style.display = 'inline-flex';
+        }
+
+        window.handleLogoUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 1 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει το 1MB!', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => { pendingLogoBase64 = e.target.result; showLogoPreview(pendingLogoBase64); };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveLogoPhoto = async () => {
+            if (!currentAdminShop || !pendingLogoBase64) return;
+            const btn = document.querySelector('[onclick="saveLogoPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), pendingLogoBase64);
+                showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
+                pendingLogoBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 Αποθήκευση Λογότυπου`; }
+            }
+        };
+
+        window.deleteLogoPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή λογότυπου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`));
+                document.getElementById('logo-preview-img').style.display = 'none';
+                document.getElementById('logo-preview-placeholder').style.display = 'block';
+                document.getElementById('btn-del-logo').style.display = 'none';
+                pendingLogoBase64 = null;
+                showToast('🗑️ Λογότυπο διαγράφηκε.', 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
+
+        // ======= COVER PHOTO =======
+        function showCoverPreview(base64) {
+            const preview = document.getElementById('cover-preview');
+            preview.innerHTML = `<img src="${base64}" alt="cover">`;
+            document.getElementById('btn-del-cover').style.display = 'inline-flex';
+        }
+
+        window.handleCoverUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                pendingCoverBase64 = e.target.result;
+                showCoverPreview(pendingCoverBase64);
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.saveCoverPhoto = async () => {
+            if (!currentAdminShop || !pendingCoverBase64) return;
+            const btn = document.querySelector('[onclick="saveCoverPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), pendingCoverBase64);
+                showToast(t('toast_cover_saved'), 'success');
+                pendingCoverBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 <span>${t('save_cover')}</span>`; }
+            }
+        };
+
+        window.deleteCoverPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή εξωφύλλου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`));
+                document.getElementById('cover-preview').innerHTML = `<span>${t('no_cover')}</span>`;
+                document.getElementById('btn-del-cover').style.display = 'none';
+                pendingCoverBase64 = null;
+                showToast(t('toast_cover_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
+
+        // ======= GALLERY =======
+        function loadGallery(shopId) {
+            onValue(ref(db, `shop_profile/${shopId}/gallery`), (snap) => {
+                const grid = document.getElementById('gallery-grid');
+                const badge = document.getElementById('photos-count-badge');
+                grid.innerHTML = '';
+                if (!snap.exists()) { badge.innerText = '0'; return; }
+                const photos = snap.val();
+                const keys = Object.keys(photos);
+                badge.innerText = keys.length;
+                keys.forEach(key => {
+                    const p = photos[key];
+                    const thumb = document.createElement('div');
+                    thumb.className = 'photo-thumb';
+                    thumb.innerHTML = `
+                        <img src="${p.data}" alt="${p.name || ''}">
+                        <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="Διαγραφή">✕</button>
+                        ${p.name ? `<div class="photo-label">${p.name}</div>` : ''}
+                    `;
+                    grid.appendChild(thumb);
+                });
+            });
+        }
+
+        window.handleGalleryUpload = async (event) => {
+            const files = Array.from(event.target.files);
+            if (!currentAdminShop || !files.length) return;
+            for (const file of files) {
+                if (file.size > 2 * 1024 * 1024) { showToast(`⚠️ ${file.name}: > 2MB`, 'error'); continue; }
+                const base64 = await new Promise((res, rej) => {
+                    const r = new FileReader();
+                    r.onload = e => res(e.target.result);
+                    r.onerror = rej;
+                    r.readAsDataURL(file);
+                });
+                const entry = { data: base64, name: file.name.replace(/\.[^.]+$/, ''), uploadedAt: Date.now() };
+                try {
+                    await set(ref(db, `shop_profile/${currentAdminShop}/gallery/${Date.now()}_${Math.random().toString(36).slice(2,7)}`), entry);
+                    showToast(t('toast_photo_saved'), 'success');
+                } catch(e) {
+                    showToast(t('toast_save_error2'), 'error');
+                }
+            }
+            event.target.value = '';
+        };
+
+        window.deleteGalleryPhoto = async (shopId, key) => {
+            if (!confirm('Διαγραφή φωτογραφίας;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${shopId}/gallery/${key}`));
+                showToast(t('toast_photo_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
+
+        // Initial translation apply
+        applyTranslations();
+
+        // Splash screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash');
+                if (splash) splash.classList.add('hide');
+                setTimeout(() => { if (splash) splash.remove(); }, 500);
+            }, 2000);
+        });
+
+    </script>
 </body>
 </html>
