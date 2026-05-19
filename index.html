@@ -1220,15 +1220,7 @@
                     </div>
                     <div class="input-group">
                         <label data-i18n-key="persons">Άτομα</label>
-                        <select id="cust-guests">
-                            <option value="1" data-i18n-key="person_1">1 Άτομο</option>
-                            <option value="2" selected data-i18n-key="person_2">2 Άτομα</option>
-                            <option value="3" data-i18n-key="person_3">3 Άτομα</option>
-                            <option value="4" data-i18n-key="person_4">4 Άτομα</option>
-                            <option value="5" data-i18n-key="person_5">5 Άτομα</option>
-                            <option value="6" data-i18n-key="person_6">6 Άτομα</option>
-                            <option value="8" data-i18n-key="person_8">8 Άτομα</option>
-                        </select>
+                        <select id="cust-guests"><option value="2" selected>2 Άτομα</option></select>
                     </div>
                     <div class="input-group">
                         <label data-i18n-key="quick_time">Γρήγορη Επιλογή Ώρας</label>
@@ -2001,19 +1993,41 @@
         // Load shop profile for client page
         loadClientShopProfile(shopID);
 
-        for (let h = 8; h < 23; h++ {
-            const hs = h < 10 ? '0' + h : '' + h;
-            [`${hs}:00`, `${hs}:30`].forEach(time => {
+        // Dynamic time slots and guests from Firebase shop_details
+        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
+            const det = detSnap.exists() ? detSnap.val() : {};
+            const openHour  = typeof det.openHour  === 'number' ? det.openHour  : 8;
+            const closeHour = typeof det.closeHour === 'number' ? det.closeHour : 23;
+            const maxGuests = typeof det.maxGuests === 'number' ? det.maxGuests : 8;
+
+            // Generate guest options dynamically
+            const guestSelect = document.getElementById('cust-guests');
+            guestSelect.innerHTML = '';
+            for (let i = 1; i <= maxGuests; i++) {
                 const opt = document.createElement('option');
-                opt.value = time; opt.innerText = time;
-                timeSelect.appendChild(opt);
-                const div = document.createElement('div');
-                div.className = 'time-slot';
-                div.innerText = time; div.dataset.time = time;
-                div.onclick = () => updateSelection(time);
-                timeContainer.appendChild(div);
-            });
-        }
+                opt.value = i;
+                opt.innerText = i === 1 ? '1 Άτομο' : i + ' Άτομα';
+                if (i === 2) opt.selected = true;
+                guestSelect.appendChild(opt);
+            }
+
+            // Generate time slots dynamically
+            timeContainer.innerHTML = '';
+            timeSelect.innerHTML = '<option value="">-- Επιλογή --</option>';
+            for (let h = openHour; h < closeHour; h++) {
+                const hs = h < 10 ? '0' + h : '' + h;
+                [`${hs}:00`, `${hs}:30`].forEach(time => {
+                    const opt = document.createElement('option');
+                    opt.value = time; opt.innerText = time;
+                    timeSelect.appendChild(opt);
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    div.innerText = time; div.dataset.time = time;
+                    div.onclick = () => updateSelection(time);
+                    timeContainer.appendChild(div);
+                });
+            }
+        });
 
         function updateSelection(time) {
             selectedTime = time;
