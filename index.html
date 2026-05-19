@@ -1063,7 +1063,7 @@
             <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
             <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" data-i18n-placeholder="fullname_ph"></div>
             <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
-            <div class="input-group"><label data-i18n-key="email_optional">Email (Προαιρετικό)</label><input type="email" id="cust-email" placeholder="name@example.com"></div>
+            <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="cust-email" placeholder="name@example.com" required></div>
             <div class="input-group">
                 <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
                 <select id="cust-location">
@@ -1127,12 +1127,12 @@
                 pass_hint: "Τουλ. 6 χαρακτήρες", create_shop: "➕ Δημιουργία Καταστήματος",
                 shops: "Καταστήματα", loading_shops: "Φόρτωση καταστημάτων...",
                 booking_details: "Στοιχεία Κράτησης", fullname: "Ονοματεπώνυμο *",
-                fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)",
+                fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)", email_required: "Email *",
                 location_pref: "Προτίμηση Χώρου", indoor: "Εσωτερικός Χώρος", outdoor: "Εξωτερικός Χώρος",
                 no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
                 confirm_booking: "✅ Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
-                alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!",
+                alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
@@ -1189,12 +1189,12 @@
                 pass_hint: "Min. 6 characters", create_shop: "➕ Create Store",
                 shops: "Stores", loading_shops: "Loading stores...",
                 booking_details: "Booking Details", fullname: "Full Name *",
-                fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)",
+                fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)", email_required: "Email *",
                 location_pref: "Seating Preference", indoor: "Indoor", outdoor: "Outdoor",
                 no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary",
                 requests: "Additional Requests", requests_ph: "Any special order...",
                 confirm_booking: "✅ Confirm Reservation", cancel: "Cancel",
-                alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!",
+                alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
@@ -1449,7 +1449,7 @@
             const occasion       = document.getElementById('cust-occasion').value.trim();
             const comments       = document.getElementById('cust-comments').value.trim();
 
-            if (!name || !phone) return alert(t('alert_name_phone'));
+            if (!name || !phone || !email) return alert(t('alert_name_phone_email'));
             if (!selectedTime)   return alert(t('alert_select_time'));
             if (!date)           return alert(t('alert_select_date2'));
 
