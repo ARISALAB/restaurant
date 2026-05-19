@@ -1,6 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const { Resend } = require('resend');
 const { getDb } = require('../firebase');
 
 /**
@@ -83,6 +84,68 @@ router.post('/', async (req, res) => {
 
     await db.ref(`reservations/${merchantId}/${bookingId}`).set(bookingData);
     console.log(`[bookings] Νέα κράτηση από Google: ${bookingId} @ ${merchantId} — ${dateStr} ${timeStr}`);
+
+    // Email ειδοποίηση μέσω Resend
+    try {
+      const resendClient = new Resend(process.env.RESEND_API_KEY);
+      const emailSnap = await db.ref(`shop_profile/${merchantId}/info/notificationEmail`).get();
+      if (emailSnap.exists() && emailSnap.val()) {
+        const shopName = shopConfig.displayName || merchantId.charAt(0).toUpperCase() + merchantId.slice(1).replace(/_/g, ' ');
+        await resendClient.emails.send({
+          from: 'TableReserve <noreply@tablereserve.gr>',
+          to: emailSnap.val(),
+          subject: `Νεα Κρατηση Google - ${shopName} | ${dateStr} ${timeStr} | ${bookingData.name}`,
+          html: `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
+  <div style="max-width:580px;margin:0 auto;">
+    <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">🍽️</div>
+      <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">Νεα Κρατηση</h1>
+      <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${shopName} &bull; μεσω Google Reserve</p>
+    </div>
+    <div style="background:#fff;padding:28px 32px;">
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
+        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${dateStr} &bull; ${timeStr}</p>
+        <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${requestedPax} ατομα</p>
+      </div>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:35%;">👤 Ονομα</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${bookingData.name || '-'}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">📞 Τηλεφωνο</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${bookingData.phone || '-'}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">✉️ Email</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${bookingData.email || '-'}</td>
+        </tr>
+        ${bookingData.comments ? `
+        <tr>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">💬 Σχολια</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${bookingData.comments}</td>
+        </tr>` : ''}
+      </table>
+      <div style="margin-top:24px;text-align:center;">
+        <a href="https://tablereserve.gr/?shop=${merchantId}" style="display:inline-block;background:#2563eb;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">Δες τις Κρατησεις →</a>
+      </div>
+    </div>
+    <div style="background:#f8fafc;border-radius:0 0 12px 12px;padding:16px;text-align:center;border:1px solid #e2e8f0;border-top:none;">
+      <p style="color:#94a3b8;font-size:12px;margin:0;">TableReserve &bull; noreply@tablereserve.gr</p>
+    </div>
+  </div>
+</body>
+</html>`
+        });
+        console.log(`[email] Εσταλη στο ${emailSnap.val()}`);
+      }
+    } catch (emailErr) {
+      console.warn('[email] notification failed:', emailErr.message);
+    }
 
     // Απάντηση στη Google
     res.status(200).json({
