@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ακύρωση Κράτησης - TableReserve</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #f0f2f7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #0f172a;
+      margin-bottom: 24px;
+    }
+    .logo span { color: #2563eb; }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 40px 32px;
+      max-width: 460px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .icon { font-size: 3.5rem; margin-bottom: 16px; }
+
+    h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.65;
+    }
+
+    .booking-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .booking-box .datetime {
+      color: #1d4ed8;
+      font-size: 1.3rem;
+      font-weight: 800;
+      font-family: 'Sora', sans-serif;
+    }
+    .booking-box .details {
+      color: #3b82f6;
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    .warn-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 20px 0;
+      color: #991b1b;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      font-family: 'Sora', sans-serif;
+      transition: all 0.2s;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-red {
+      background: #ef4444;
+      color: white;
+      box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+    }
+    .btn-red:hover { background: #dc2626; }
+    .btn-red:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .btn-gray {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+    }
+    .btn-gray:hover { background: #e2e8f0; }
+
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer {
+      margin-top: 24px;
+      color: #94a3b8;
+      font-size: 0.78rem;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px; border-radius: 18px; }
+      h1 { font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">Table<span>Reserve</span></div>
+
+  <div class="card" id="card">
+    <div class="icon">⏳</div>
+    <h1>Φόρτωση...</h1>
+    <p>Παρακαλώ περιμένετε.</p>
+  </div>
+
+  <div class="footer">TableReserve &bull; noreply@tablereserve.gr</div>
+
+  <script>
+    const API = 'https://tablereserve-api-838820261500.europe-west1.run.app';
+    const params = new URLSearchParams(window.location.search);
+    const token    = params.get('token');
+    const shopId   = params.get('shop');
+    const bookingId = params.get('id');
+    const card = document.getElementById('card');
+
+    // Μη έγκυρος σύνδεσμος
+    if (!token || !shopId || !bookingId) {
+      card.innerHTML = `
+        <div class="icon">❌</div>
+        <h1>Μη έγκυρος σύνδεσμος</h1>
+        <p>Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος ή έχει λήξει.</p>
+        <a href="https://tablereserve.gr" class="btn btn-gray" style="margin-top:20px;">← Αρχική Σελίδα</a>
+      `;
+    } else {
+      // Εμφάνιση φόρμας επιβεβαίωσης
+      card.innerHTML = `
+        <div class="icon">🗓️</div>
+        <h1>Ακύρωση Κράτησης</h1>
+        <p>Είστε σίγουροι ότι θέλετε να ακυρώσετε την κράτησή σας;</p>
+        <div class="booking-box">
+          <div class="datetime" id="booking-datetime">Φόρτωση...</div>
+          <div class="details" id="booking-details"></div>
+        </div>
+        <div class="warn-box">
+          ⚠️ Η ακύρωση επιτρέπεται μόνο έως <strong>2 ώρες</strong> πριν την κράτηση.
+          Μετά από αυτό το διάστημα, παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.
+        </div>
+        <button class="btn btn-red" id="btn-cancel">❌ Ναι, Ακύρωση Κράτησης</button>
+        <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray">← Πίσω στο Κατάστημα</a>
+      `;
+
+      // Φόρτωση στοιχείων κράτησης από URL params (αν υπάρχουν) ή αφήνουμε το API να επιστρέψει error
+      // (δεν χρειάζεται GET endpoint — τα στοιχεία ήταν στο email)
+      document.getElementById('booking-datetime').innerText = 'Επιβεβαίωση ακύρωσης';
+      document.getElementById('booking-details').innerText = `${shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g,' ')}`;
+
+      document.getElementById('btn-cancel').onclick = async () => {
+        const btn = document.getElementById('btn-cancel');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Ακύρωση...';
+
+        try {
+          const res = await fetch(`${API}/v3/email/cancel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, shopId, bookingId })
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            card.innerHTML = `
+              <div class="icon">✅</div>
+              <h1>Η κράτηση ακυρώθηκε</h1>
+              <p>Η κράτησή σας ακυρώθηκε επιτυχώς.<br>Σας ευχαριστούμε για την ενημέρωση και ελπίζουμε να σας δούμε σύντομα!</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
+                📅 Νέα Κράτηση
+              </a>
+            `;
+          } else if (data.alreadyCancelled) {
+            card.innerHTML = `
+              <div class="icon">ℹ️</div>
+              <h1>Ήδη ακυρωμένη</h1>
+              <p>Η κράτηση αυτή έχει ήδη ακυρωθεί.</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
+                📅 Νέα Κράτηση
+              </a>
+            `;
+          } else if (data.error === 'too_late') {
+            card.innerHTML = `
+              <div class="icon">⏰</div>
+              <h1>Δεν επιτρέπεται η ακύρωση</h1>
+              <p>Η ακύρωση δεν είναι δυνατή εντός <strong>2 ωρών</strong> από την ώρα της κράτησης.</p>
+              <p style="margin-top:10px;">Παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">
+                ← Πίσω
+              </a>
+            `;
+          } else if (data.error === 'Μη έγκυρο token ακύρωσης') {
+            card.innerHTML = `
+              <div class="icon">🔒</div>
+              <h1>Μη έγκυρος σύνδεσμος</h1>
+              <p>Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος.</p>
+              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">← Πίσω</a>
+            `;
+          } else {
+            btn.disabled = false;
+            btn.innerHTML = '❌ Ναι, Ακύρωση Κράτησης';
+            alert('Σφάλμα: ' + (data.error || 'Κάτι πήγε στραβά. Δοκιμάστε ξανά.'));
+          }
+        } catch (e) {
+          btn.disabled = false;
+          btn.innerHTML = '❌ Ναι, Ακύρωση Κράτησης';
+          alert('Σφάλμα σύνδεσης. Ελέγξτε το internet και δοκιμάστε ξανά.');
+        }
+      };
+    }
+  </script>
+
+</body>
+</html>
