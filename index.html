@@ -2056,7 +2056,7 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ shopId: shopID, bookingId })
-                }).catch(e => console.warn('[email] notification failed:', e));
+                }).then(r => r.json()).then(d => console.log('[email] success:', d)).catch(e => console.warn('[email] notification failed:', e));
                 showToast(t('toast_saved'), 'success');
                 modal.classList.remove('open');
                 ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments'].forEach(id => document.getElementById(id).value = '');
