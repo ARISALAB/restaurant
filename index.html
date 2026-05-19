@@ -1263,9 +1263,10 @@
             }
             const guestSelect = document.getElementById('cust-guests');
             if (guestSelect) {
-                const guestKeys = ['person_1','person_2','person_3','person_4','person_5','person_6','person_8'];
                 for (let i = 0; i < guestSelect.options.length; i++) {
-                    if (guestKeys[i]) guestSelect.options[i].text = t(guestKeys[i]);
+                    const val = parseInt(guestSelect.options[i].value);
+                    if (val === 1) guestSelect.options[i].text = t('person_1');
+                    else guestSelect.options[i].text = val + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
                 }
             }
             const tSelect = document.getElementById('time-select');
@@ -1397,13 +1398,13 @@
             for (let i = 1; i <= maxGuests; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
-                opt.innerText = i === 1 ? '1 Άτομο' : i + ' Άτομα';
+                opt.innerText = i === 1 ? t('person_1') : i + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
                 if (i === 2) opt.selected = true;
                 guestSelect.appendChild(opt);
             }
 
             timeContainer.innerHTML = '';
-            timeSelect.innerHTML = '<option value="">-- Επιλογή --</option>';
+            timeSelect.innerHTML = `<option value="">${t('select_opt')}</option>`;
             for (let h = openHour; h < closeHour; h++) {
                 const hs = h < 10 ? '0' + h : '' + h;
                 [`${hs}:00`, `${hs}:30`].forEach(time => {
