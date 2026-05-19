@@ -1488,7 +1488,7 @@
                     fetch(`${API}/v3/email/notify-customer`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ shopId: shopID, bookingId, cancelToken })
+                        body: JSON.stringify({ shopId: shopID, bookingId, cancelToken, lang: currentLang })
                     })
                     .then(r => r.json())
                     .then(d => console.log('[email-customer] success:', d))
