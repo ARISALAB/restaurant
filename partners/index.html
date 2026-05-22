@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Συνεργαστείτε — TableReserve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;
+  --accent:#2563eb;--accent2:#1d4ed8;
+  --text:#ede8df;--muted:#6b6860;
+  --border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(16px);background:rgba(9,9,10,0.82);border-bottom:0.5px solid var(--border2)}
+.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px}
+.logo em{font-style:normal;color:var(--accent)}
+nav ul{display:flex;gap:36px;list-style:none}
+nav ul a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+nav ul a:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#ffffff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:90px 6% 10vh;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 78% 22%,rgba(37,99,235,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 18% 80%,rgba(37,99,235,.04) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%)}
+.hero-label{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .7s .2s forwards}
+.hero-label::before{content:'';width:28px;height:1px;background:var(--accent)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,8vw,94px);line-height:1.04;letter-spacing:-2px;margin-bottom:30px;max-width:860px;opacity:0;animation:fadeUp .8s .35s forwards}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:17px;color:var(--muted);max-width:500px;line-height:1.78;margin-bottom:48px;opacity:0;animation:fadeUp .8s .5s forwards}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .65s forwards}
+.btn-main{background:var(--accent);color:#ffffff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:17px 36px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-outline{border:0.5px solid rgba(237,232,223,.15);color:var(--text);font-size:15px;padding:17px 36px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s,transform .15s;display:inline-flex;align-items:center}
+.btn-outline:hover{border-color:rgba(37,99,235,.4);color:var(--accent);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:40px;right:6%;writing-mode:vertical-rl;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s 1.2s forwards}
+.hero-scroll::after{content:'';width:1px;height:50px;background:var(--muted);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.3;transform:scaleY(.5)}}
+
+/* STATS */
+.stats{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2);display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:36px 28px;border-right:0.5px solid var(--border2);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Playfair Display',serif;font-size:48px;line-height:1;color:var(--accent);margin-bottom:6px}
+.stat-l{font-size:12px;color:var(--muted);letter-spacing:.06em}
+
+/* SECTIONS */
+section{padding:110px 6%}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4.5vw,56px);line-height:1.09;letter-spacing:-1.5px;margin-bottom:20px;max-width:700px}
+.section-sub{font-size:16px;color:var(--muted);max-width:500px;line-height:1.75}
+
+/* HOW */
+.how{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:70px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
+.step{background:var(--card);padding:40px 32px;border-right:0.5px solid var(--border2);position:relative;overflow:hidden;transition:background .25s}
+.step:last-child{border-right:none}
+.step:hover{background:#1a1a1c}
+.step::before{content:attr(data-n);position:absolute;bottom:-10px;right:16px;font-family:'Playfair Display',serif;font-size:80px;color:rgba(37,99,235,.06);line-height:1;pointer-events:none}
+.step-dot{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.12);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent)}
+.step h3{font-size:15px;font-weight:500;margin-bottom:10px;margin-top:14px}
+.step p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* BENEFITS */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:70px}
+.benefit{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:30px 26px;transition:transform .2s,border-color .2s}
+.benefit:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 8px 32px rgba(37,99,235,.15)}
+.b-icon{width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,.08);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.benefit h3{font-size:15px;font-weight:500;margin-bottom:8px}
+.benefit p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* PRICING */
+.pricing{background:var(--bg2)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:70px;max-width:820px}
+.price-card{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:36px 30px;position:relative;transition:border-color .2s}
+.price-card.hot{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
+.hot-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#ffffff;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 16px;border-radius:40px;white-space:nowrap}
+.plan-name{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.plan-price{font-family:'Playfair Display',serif;font-size:54px;line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:22px;vertical-align:super;font-family:'Syne',sans-serif;font-weight:300}
+.plan-price sub{font-size:16px;font-family:'Syne',sans-serif;font-weight:300;color:var(--muted)}
+.plan-desc{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.plan-features{list-style:none;margin-bottom:30px}
+.plan-features li{font-size:13px;color:var(--muted);padding:9px 0;border-bottom:0.5px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px}
+.plan-features li::before{content:'✓';color:var(--accent);font-weight:500;flex-shrink:0}
+.plan-features li.dim{color:rgba(107,104,96,.45)}
+.plan-features li.dim::before{content:'–';color:rgba(107,104,96,.35)}
+.btn-plan{display:block;text-align:center;padding:14px;border-radius:40px;font-size:14px;font-weight:500;font-family:'Syne',sans-serif;text-decoration:none;transition:all .2s}
+.btn-plan-g{border:0.5px solid rgba(37,99,235,.3);color:var(--accent)}
+.btn-plan-g:hover{background:rgba(37,99,235,.08)}
+.btn-plan-s{background:var(--accent);color:#ffffff}
+.btn-plan-s:hover{background:var(--accent2)}
+
+/* FORM */
+.form-wrap{max-width:620px;background:var(--card);border:0.5px solid var(--border2);border-radius:22px;padding:52px 44px;margin-top:70px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{margin-bottom:20px}
+label{display:block;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+input,select,textarea{width:100%;background:rgba(255,255,255,.035);border:0.5px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;font-size:14px;font-family:'Syne',sans-serif;font-weight:300;color:var(--text);outline:none;transition:border-color .2s,background .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);background:rgba(37,99,235,.04)}
+select option{background:#161618}
+textarea{resize:vertical;min-height:90px}
+.btn-submit{width:100%;background:var(--accent);color:#ffffff;border:none;padding:18px;border-radius:40px;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;cursor:pointer;transition:background .2s,transform .15s;margin-top:6px}
+.btn-submit:hover{background:var(--accent2);transform:translateY(-2px)}
+.form-note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:0.5px solid var(--border2);padding:36px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer p{font-size:13px;color:var(--muted)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--accent)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Table<em>Reserve</em></div>
+  <ul>
+    <li><a href="#how">Πώς λειτουργεί</a></li>
+    <li><a href="#benefits">Οφέλη</a></li>
+    <li><a href="#pricing">Τιμές</a></li>
+    <li><a href="#contact">Επικοινωνία</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">1 μήνας δωρεάν →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
+  <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο.</em></h1>
+  <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και κουμπί κράτησης κατευθείαν στη Google.</p>
+  <div class="hero-ctas">
+    <a href="#contact" class="btn-main">1 μήνας δωρεάν →</a>
+    <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<div class="stats reveal">
+  <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Χρόνος εγκατάστασης</div></div>
+  <div class="stat"><div class="stat-n">1</div><div class="stat-l">Μήνας δωρεάν δοκιμή</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online κρατήσεις</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Αυτόματα emails</div></div>
+</div>
+
+<section class="how" id="how">
+  <div class="reveal">
+    <div class="eyebrow">Πώς λειτουργεί</div>
+    <h2>Από εγγραφή σε live<br>κρατήσεις σε 4 βήματα</h2>
+  </div>
+  <div class="steps reveal">
+    <div class="step" data-n="01">
+      <div class="step-dot">01</div>
+      <h3>Εγγραφή &amp; ρύθμιση</h3>
+      <p>Συμπληρώνετε τα στοιχεία του καταστήματος, ώρες λειτουργίας και διαθέσιμα τραπέζια. Έτοιμο σε λεπτά.</p>
+    </div>
+    <div class="step" data-n="02">
+      <div class="step-dot">02</div>
+      <h3>Μοιραστείτε τον σύνδεσμο</h3>
+      <p>Παίρνετε μοναδικό link (tablereserve.gr/?shop=το-μαγαζί-σας) για Instagram bio, Google Maps, website.</p>
+    </div>
+    <div class="step" data-n="03">
+      <div class="step-dot">03</div>
+      <h3>Δέχεστε κρατήσεις αυτόματα</h3>
+      <p>Οι πελάτες κλείνουν τραπέζι online, λαμβάνουν αυτόματο email. Εσείς τα βλέπετε όλα στο admin panel.</p>
+    </div>
+    <div class="step" data-n="04">
+      <div class="step-dot">04</div>
+      <h3>Google ορατότητα</h3>
+      <p>Εμφανίζεστε με κουμπί «Κράτηση» στη Google Search και Maps μέσω Reserve with Google.</p>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="reveal">
+    <div class="eyebrow">Γιατί TableReserve</div>
+    <h2>Όλα όσα χρειάζεστε,<br>τίποτα που δεν χρειάζεστε</h2>
+    <p class="section-sub">Σχεδιασμένο για μικρές και μεσαίες επιχειρήσεις εστίασης στην Ελλάδα.</p>
+  </div>
+  <div class="benefits-grid reveal">
+    <div class="benefit"><div class="b-icon">📧</div><h3>Αυτόματα emails</h3><p>Επιβεβαίωση και ακύρωση στέλνονται αυτόματα — σε Ελληνικά ή Αγγλικά ανάλογα τον πελάτη.</p></div>
+    <div class="benefit"><div class="b-icon">📱</div><h3>Admin panel real-time</h3><p>Βλέπετε όλες τις κρατήσεις από το κινητό σε πραγματικό χρόνο, ακόμα κι από την κουζίνα.</p></div>
+    <div class="benefit"><div class="b-icon">🌐</div><h3>Δίγλωσσο ΕΛ / EN</h3><p>Αυτόματη γλώσσα για τουρίστες. Κλείνουν τραπέζι στα Αγγλικά, λαμβάνουν email στα Αγγλικά.</p></div>
+    <div class="benefit"><div class="b-icon">🔍</div><h3>Reserve with Google</h3><p>Κουμπί «Κράτηση» απευθείας στα αποτελέσματα Google Search και Google Maps. Μηδέν επιπλέον κόστος.</p></div>
+    <div class="benefit"><div class="b-icon">❌</div><h3>Έξυπνες ακυρώσεις</h3><p>Πολιτική 2 ωρών πριν. Ο πελάτης ακυρώνει μόνος του — εσείς ειδοποιείστε αμέσως.</p></div>
+    <div class="benefit"><div class="b-icon">📊</div><h3>Στατιστικά κρατήσεων</h3><p>Ποιες ώρες γεμίζει το μαγαζί, πόσες ακυρώσεις έχετε, ποια μέρα είναι πιο δημοφιλής.</p></div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="reveal">
+    <div class="eyebrow">Τιμολόγηση</div>
+    <h2>Απλό, διαφανές<br>τιμολόγιο</h2>
+    <p class="section-sub">1 μήνας δωρεάν με όλες τις υπηρεσίες. Μετά €99/χρόνο.</p>
+  </div>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="plan-name">Δωρεάν δοκιμή</div>
+      <div class="plan-price"><sup>€</sup>0<sub>/1 μήνα</sub></div>
+      <p class="plan-desc">Δοκιμάστε όλες τις υπηρεσίες δωρεάν για έναν ολόκληρο μήνα. Χωρίς κάρτα.</p>
+      <ul class="plan-features">
+        <li>Απεριόριστες κρατήσεις</li>
+        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
+        <li>Admin panel real-time</li>
+        <li>Σύνδεσμος κράτησης</li>
+        <li>Reserve with Google</li>
+        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Πλήρης support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-g" onclick="setPlan('Starter — Δωρεάν 1 μήνας')">Ξεκινήστε δωρεάν — 1 μήνας</a>
+    </div>
+    <div class="price-card hot">
+      <div class="hot-badge">Πιο δημοφιλές</div>
+      <div class="plan-name">Pro</div>
+      <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
+      <p class="plan-desc">Για εστιατόρια που θέλουν να αναπτυχθούν.</p>
+      <ul class="plan-features">
+        <li>Απεριόριστες κρατήσεις</li>
+        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
+        <li>Admin panel real-time</li>
+        <li>Σύνδεσμος κράτησης</li>
+        <li>Reserve with Google</li>
+        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Προτεραιότητα support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-s" onclick="setPlan('Pro — €99/χρόνο')">Θέλω το Pro</a>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="reveal">
+    <div class="eyebrow">Εγγραφή</div>
+    <h2>Ξεκινήστε σήμερα —<br>1 μήνας δωρεάν</h2>
+    <p class="section-sub">Συμπληρώστε τη φόρμα και θα σας δώσουμε πλήρη πρόσβαση για 1 μήνα, δωρεάν. Όλες οι υπηρεσίες, χωρίς κάρτα.</p>
+  </div>
+  <div class="form-wrap reveal">
+    <form id="partnerForm" action="https://formspree.io/f/mnjrvapy" method="POST">
+      <input type="hidden" name="πλάνο" id="selectedPlan" value="Starter — Δωρεάν 1 μήνας">
+      <div class="form-row">
+        <div class="fg"><label>Όνομα υπευθύνου</label><input type="text" name="όνομα" placeholder="π.χ. Γιώργης Παπαδόπουλος" required></div>
+        <div class="fg"><label>Τηλέφωνο</label><input type="tel" name="τηλέφωνο" placeholder="69XXXXXXXX" required></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" name="email" placeholder="info@το-μαγαζί-σας.gr" required></div>
+      <div class="form-row">
+        <div class="fg"><label>Όνομα καταστήματος</label><input type="text" name="κατάστημα" placeholder="π.χ. Taverna Plaka" required></div>
+        <div class="fg"><label>Τύπος επιχείρησης</label>
+          <select name="τύπος"><option value="">Επιλέξτε...</option><option>Εστιατόριο</option><option>Ταβέρνα</option><option>Καφέ / Bistro</option><option>Μπαρ</option><option>Άλλο</option></select>
+        </div>
+      </div>
+      <div class="fg"><label>Σχόλια / Ερωτήσεις (προαιρετικό)</label><textarea name="σχόλια" placeholder="π.χ. Έχω 25 τραπέζια, ρωτάω αν μπορώ να βάλω walk-in..."></textarea></div>
+      <button type="submit" class="btn-submit" id="submitBtn">Στείλτε αίτηση συνεργασίας →</button>
+      <p class="form-note">🔒 Τα στοιχεία σας είναι ασφαλή. Δεν πωλούνται ποτέ σε τρίτους.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Table<em style="font-style:normal;color:var(--accent)">Reserve</em></div>
+  <p>© 2026 TableReserve · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
+  <p><a href="https://tablereserve.gr">tablereserve.gr</a></p>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+</script>
+
+<!-- STICKY MOBILE BAR -->
+<div class="sticky-bar">
+  <p>1 μήνας δωρεάν — όλες οι υπηρεσίες</p>
+  <a href="#contact">Ξεκίνα δωρεάν →</a>
+</div>
+
+<script>
+// Counter animation for stats
+function animateCounter(el, target, suffix='') {
+  const isText = isNaN(target);
+  if (isText) return; // skip non-numeric like "24/7"
+  let start = 0;
+  const duration = 1800;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  };
+  requestAnimationFrame(step);
+}
+
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const text = el.textContent;
+    if (text === "3'") { animateCounter(el, 3, "'"); }
+    else if (text === '1') { animateCounter(el, 1, ''); }
+    else if (text === '100%') { animateCounter(el, 100, '%'); }
+    statObs.unobserve(el);
+  });
+}, {threshold: 0.5});
+document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
+</script>
+
+
+<script>
+function setPlan(plan) {
+  document.getElementById('selectedPlan').value = plan;
+  // Update form title to reflect chosen plan
+  const h2 = document.querySelector('#contact h2');
+  if (plan.includes('Pro')) {
+    h2.innerHTML = 'Επιλέξατε το Pro —<br>ας ξεκινήσουμε!';
+  } else {
+    h2.innerHTML = 'Ξεκινήστε σήμερα —<br>1 μήνας δωρεάν';
+  }
+}
+
+document.getElementById('partnerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Αποστολή...';
+  btn.disabled = true;
+
+  const data = new FormData(this);
+  const res = await fetch(this.action, {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  });
+
+  if (res.ok) {
+    btn.textContent = '✓ Η αίτησή σας στάλθηκε!';
+    btn.style.background = '#16a34a';
+    this.querySelectorAll('input,select,textarea').forEach(el => el.disabled = true);
+  } else {
+    btn.textContent = '✗ Κάτι πήγε στραβά — δοκιμάστε ξανά';
+    btn.style.background = '#dc2626';
+    btn.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
