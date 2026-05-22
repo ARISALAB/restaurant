@@ -12,7 +12,7 @@
 :root{
   --bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;
   --accent:#2563eb;--accent2:#1d4ed8;
-  --text:#ede8df;--muted:#6b6860;
+  --text:#ede8df;--muted:#c8c4bb;
   --border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);
 }
 html{scroll-behavior:smooth}
@@ -138,7 +138,7 @@ footer a:hover{color:var(--accent)}
     <li><a href="#pricing">Τιμές</a></li>
     <li><a href="#contact">Επικοινωνία</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">1 μήνας δωρεάν →</a>
+  <a href="#contact" class="nav-cta">Ξεκινήστε τώρα →</a>
 </nav>
 
 <section class="hero">
@@ -146,9 +146,9 @@ footer a:hover{color:var(--accent)}
   <div class="hero-grid"></div>
   <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
   <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο.</em></h1>
-  <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και κουμπί κράτησης κατευθείαν στη Google.</p>
+  <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και κουμπί κράτησης κατευθείαν στη Google. Από €39/τρίμηνο.</p>
   <div class="hero-ctas">
-    <a href="#contact" class="btn-main">1 μήνας δωρεάν →</a>
+    <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
     <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
   </div>
   <div class="hero-scroll">Scroll</div>
@@ -156,7 +156,7 @@ footer a:hover{color:var(--accent)}
 
 <div class="stats reveal">
   <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Χρόνος εγκατάστασης</div></div>
-  <div class="stat"><div class="stat-n">1</div><div class="stat-l">Μήνας δωρεάν δοκιμή</div></div>
+  <div class="stat"><div class="stat-n">€99</div><div class="stat-l">Χρονιαία συνδρομή</div></div>
   <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online κρατήσεις</div></div>
   <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Αυτόματα emails</div></div>
 </div>
@@ -210,13 +210,13 @@ footer a:hover{color:var(--accent)}
   <div class="reveal">
     <div class="eyebrow">Τιμολόγηση</div>
     <h2>Απλό, διαφανές<br>τιμολόγιο</h2>
-    <p class="section-sub">1 μήνας δωρεάν με όλες τις υπηρεσίες. Μετά €99/χρόνο.</p>
+    <p class="section-sub">Τρίμηνο €39 · Εξάμηνο €69 · Χρονιαίο €99 — όλα με πλήρεις υπηρεσίες.</p>
   </div>
-  <div class="pricing-grid reveal">
+  <div class="pricing-grid reveal" style="max-width:1000px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
     <div class="price-card">
-      <div class="plan-name">Δωρεάν δοκιμή</div>
-      <div class="plan-price"><sup>€</sup>0<sub>/1 μήνα</sub></div>
-      <p class="plan-desc">Δοκιμάστε όλες τις υπηρεσίες δωρεάν για έναν ολόκληρο μήνα. Χωρίς κάρτα.</p>
+      <div class="plan-name">Τρίμηνο</div>
+      <div class="plan-price"><sup>€</sup>39<sub>/3μηνο</sub></div>
+      <p class="plan-desc">Δοκιμάστε το TableReserve για 3 μήνες με όλες τις υπηρεσίες.</p>
       <ul class="plan-features">
         <li>Απεριόριστες κρατήσεις</li>
         <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
@@ -226,13 +226,12 @@ footer a:hover{color:var(--accent)}
         <li>Στατιστικά &amp; αναφορές</li>
         <li>Πλήρης support</li>
       </ul>
-      <a href="#contact" class="btn-plan btn-plan-g" onclick="setPlan('Starter — Δωρεάν 1 μήνας')">Ξεκινήστε δωρεάν — 1 μήνας</a>
+      <a href="#contact" class="btn-plan btn-plan-g" onclick="setPlan('Τρίμηνο — €39')">Επιλογή τριμήνου</a>
     </div>
-    <div class="price-card hot">
-      <div class="hot-badge">Πιο δημοφιλές</div>
-      <div class="plan-name">Pro</div>
-      <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
-      <p class="plan-desc">Για εστιατόρια που θέλουν να αναπτυχθούν.</p>
+    <div class="price-card">
+      <div class="plan-name">Εξάμηνο</div>
+      <div class="plan-price"><sup>€</sup>69<sub>/6μηνο</sub></div>
+      <p class="plan-desc">Εξάμηνη συνδρομή με όλες τις υπηρεσίες — εξοικονομείστε €9 vs τρίμηνο.</p>
       <ul class="plan-features">
         <li>Απεριόριστες κρατήσεις</li>
         <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
@@ -240,9 +239,25 @@ footer a:hover{color:var(--accent)}
         <li>Σύνδεσμος κράτησης</li>
         <li>Reserve with Google</li>
         <li>Στατιστικά &amp; αναφορές</li>
-        <li>Προτεραιότητα support</li>
+        <li>Πλήρης support</li>
       </ul>
-      <a href="#contact" class="btn-plan btn-plan-s" onclick="setPlan('Pro — €99/χρόνο')">Θέλω το Pro</a>
+      <a href="#contact" class="btn-plan btn-plan-g" onclick="setPlan('Εξάμηνο — €69')">Επιλογή εξαμήνου</a>
+    </div>
+    <div class="price-card hot">
+      <div class="hot-badge">Πιο συμφέρον</div>
+      <div class="plan-name">Χρονιαίο</div>
+      <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
+      <p class="plan-desc">Εξοικονομείστε €57 vs τρίμηνο — μόλις €8.25/μήνα για όλες τις υπηρεσίες.</p>
+      <ul class="plan-features">
+        <li>Απεριόριστες κρατήσεις</li>
+        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
+        <li>Admin panel real-time</li>
+        <li>Σύνδεσμος κράτησης</li>
+        <li>Reserve with Google</li>
+        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Πλήρης support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-s" onclick="setPlan('Χρονιαίο — €99')">Επιλογή χρονιαίου</a>
     </div>
   </div>
 </section>
@@ -250,12 +265,12 @@ footer a:hover{color:var(--accent)}
 <section id="contact">
   <div class="reveal">
     <div class="eyebrow">Εγγραφή</div>
-    <h2>Ξεκινήστε σήμερα —<br>1 μήνας δωρεάν</h2>
-    <p class="section-sub">Συμπληρώστε τη φόρμα και θα σας δώσουμε πλήρη πρόσβαση για 1 μήνα, δωρεάν. Όλες οι υπηρεσίες, χωρίς κάρτα.</p>
+    <h2>Ξεκινήστε σήμερα —<br>επιλέξτε πλάνο</h2>
+    <p class="section-sub">Συμπληρώστε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών. Τρίμηνο €39 · Εξάμηνο €69 · Χρονιαίο €99.</p>
   </div>
   <div class="form-wrap reveal">
     <form id="partnerForm" action="https://formspree.io/f/mnjrvapy" method="POST">
-      <input type="hidden" name="πλάνο" id="selectedPlan" value="Starter — Δωρεάν 1 μήνας">
+      <input type="hidden" name="πλάνο" id="selectedPlan" value="Δεν επιλέχθηκε πλάνο">
       <div class="form-row">
         <div class="fg"><label>Όνομα υπευθύνου</label><input type="text" name="όνομα" placeholder="π.χ. Γιώργης Παπαδόπουλος" required></div>
         <div class="fg"><label>Τηλέφωνο</label><input type="tel" name="τηλέφωνο" placeholder="69XXXXXXXX" required></div>
@@ -287,8 +302,8 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
 
 <!-- STICKY MOBILE BAR -->
 <div class="sticky-bar">
-  <p>1 μήνας δωρεάν — όλες οι υπηρεσίες</p>
-  <a href="#contact">Ξεκίνα δωρεάν →</a>
+  <p>Από €39 — όλες οι υπηρεσίες</p>
+  <a href="#contact">Ξεκινήστε τώρα →</a>
 </div>
 
 <script>
@@ -329,10 +344,14 @@ function setPlan(plan) {
   document.getElementById('selectedPlan').value = plan;
   // Update form title to reflect chosen plan
   const h2 = document.querySelector('#contact h2');
-  if (plan.includes('Pro')) {
-    h2.innerHTML = 'Επιλέξατε το Pro —<br>ας ξεκινήσουμε!';
+  if (plan.includes('Χρονιαίο')) {
+    h2.innerHTML = 'Επιλέξατε το Χρονιαίο —<br>ας ξεκινήσουμε!';
+  } else if (plan.includes('Εξάμηνο')) {
+    h2.innerHTML = 'Επιλέξατε το Εξάμηνο —<br>ας ξεκινήσουμε!';
+  } else if (plan.includes('Τρίμηνο')) {
+    h2.innerHTML = 'Επιλέξατε το Τρίμηνο —<br>ας ξεκινήσουμε!';
   } else {
-    h2.innerHTML = 'Ξεκινήστε σήμερα —<br>1 μήνας δωρεάν';
+    h2.innerHTML = 'Ξεκινήστε σήμερα —<br>επιλέξτε πλάνο';
   }
 }
 
