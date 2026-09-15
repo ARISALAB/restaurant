@@ -3,3 +3,7 @@
   node_bundler = "esbuild"
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
+
+[[edge_functions]]
+  path = "/"
+  function = "root-rewrite"

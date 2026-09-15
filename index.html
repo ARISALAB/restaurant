@@ -1379,9 +1379,6 @@
 
         // ======= CLIENT =======
         const urlParams = new URLSearchParams(window.location.search);
-        if (!urlParams.has('shop')) {
-            window.location.replace('/partners/');
-        }
         const shopID = urlParams.get('shop') || "default_store";
         const shopDisplayEl = document.getElementById('shop-display');
         shopDisplayEl.dataset.shopId = shopID;
