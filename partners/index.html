@@ -30,8 +30,11 @@ nav ul a:hover{color:var(--text)}
 
 /* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:90px 6% 10vh;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 78% 22%,rgba(37,99,235,.07) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 18% 80%,rgba(37,99,235,.04) 0%,transparent 60%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%)}
+.hero-copy{position:relative;z-index:2;max-width:640px}
+.hero-photo{position:absolute;left:50%;top:50%;height:108%;aspect-ratio:2/1;transform:translate(-50%,-50%) scale(1);background-image:url('assets/hero-table.jpg');background-size:cover;background-position:center;animation:kenBurns 26s ease-in-out infinite alternate;overflow:hidden}
+@keyframes kenBurns{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.09)}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,10,.1) 0%,rgba(9,9,10,.2) 60%,var(--bg) 98%),linear-gradient(90deg,rgba(9,9,10,.78) 0%,rgba(9,9,10,.3) 45%,rgba(9,9,10,0) 72%)}
+
 .hero-label{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .7s .2s forwards}
 .hero-label::before{content:'';width:28px;height:1px;background:var(--accent)}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,8vw,94px);line-height:1.04;letter-spacing:-2px;margin-bottom:30px;max-width:860px;opacity:0;animation:fadeUp .8s .35s forwards}
@@ -142,14 +145,16 @@ footer a:hover{color:var(--accent)}
 </nav>
 
 <section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
-  <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο.</em></h1>
-  <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και κουμπί κράτησης κατευθείαν στη Google. Από €39/τρίμηνο.</p>
-  <div class="hero-ctas">
-    <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
-    <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
+  <div class="hero-photo"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-copy">
+    <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
+    <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο.</em></h1>
+    <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και σύνδεσμο κράτησης για Instagram, Google Maps και ιστοσελίδα. Από €39/τρίμηνο.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
+      <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
+    </div>
   </div>
   <div class="hero-scroll">Scroll</div>
 </section>
@@ -185,7 +190,7 @@ footer a:hover{color:var(--accent)}
     <div class="step" data-n="04">
       <div class="step-dot">04</div>
       <h3>Google ορατότητα</h3>
-      <p>Εμφανίζεστε με κουμπί «Κράτηση» στη Google Search και Maps μέσω Reserve with Google.</p>
+      <p>Προσθέτετε τον σύνδεσμο κράτησης στο Google Business Profile σας — οι πελάτες κλείνουν τραπέζι με ένα κλικ από το Google Maps.</p>
     </div>
   </div>
 </section>
@@ -200,7 +205,7 @@ footer a:hover{color:var(--accent)}
     <div class="benefit"><div class="b-icon">📧</div><h3>Αυτόματα emails</h3><p>Επιβεβαίωση και ακύρωση στέλνονται αυτόματα — σε Ελληνικά ή Αγγλικά ανάλογα τον πελάτη.</p></div>
     <div class="benefit"><div class="b-icon">📱</div><h3>Admin panel real-time</h3><p>Βλέπετε όλες τις κρατήσεις από το κινητό σε πραγματικό χρόνο, ακόμα κι από την κουζίνα.</p></div>
     <div class="benefit"><div class="b-icon">🌐</div><h3>Δίγλωσσο ΕΛ / EN</h3><p>Αυτόματη γλώσσα για τουρίστες. Κλείνουν τραπέζι στα Αγγλικά, λαμβάνουν email στα Αγγλικά.</p></div>
-    <div class="benefit"><div class="b-icon">🔍</div><h3>Reserve with Google</h3><p>Κουμπί «Κράτηση» απευθείας στα αποτελέσματα Google Search και Google Maps. Μηδέν επιπλέον κόστος.</p></div>
+    <div class="benefit"><div class="b-icon">🔍</div><h3>Σύνδεσμος για Google Maps</h3><p>Προσθέστε τον σύνδεσμο κράτησης στο προφίλ σας στο Google Maps — οι πελάτες κλείνουν τραπέζι με ένα κλικ, μηδέν επιπλέον κόστος.</p></div>
     <div class="benefit"><div class="b-icon">❌</div><h3>Έξυπνες ακυρώσεις</h3><p>Πολιτική 2 ωρών πριν. Ο πελάτης ακυρώνει μόνος του — εσείς ειδοποιείστε αμέσως.</p></div>
     <div class="benefit"><div class="b-icon">📊</div><h3>Στατιστικά κρατήσεων</h3><p>Ποιες ώρες γεμίζει το μαγαζί, πόσες ακυρώσεις έχετε, ποια μέρα είναι πιο δημοφιλής.</p></div>
   </div>
@@ -222,7 +227,6 @@ footer a:hover{color:var(--accent)}
         <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
         <li>Admin panel real-time</li>
         <li>Σύνδεσμος κράτησης</li>
-        <li>Reserve with Google</li>
         <li>Στατιστικά &amp; αναφορές</li>
         <li>Πλήρης support</li>
       </ul>
@@ -237,7 +241,6 @@ footer a:hover{color:var(--accent)}
         <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
         <li>Admin panel real-time</li>
         <li>Σύνδεσμος κράτησης</li>
-        <li>Reserve with Google</li>
         <li>Στατιστικά &amp; αναφορές</li>
         <li>Πλήρης support</li>
       </ul>
@@ -253,7 +256,6 @@ footer a:hover{color:var(--accent)}
         <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
         <li>Admin panel real-time</li>
         <li>Σύνδεσμος κράτησης</li>
-        <li>Reserve with Google</li>
         <li>Στατιστικά &amp; αναφορές</li>
         <li>Πλήρης support</li>
       </ul>
