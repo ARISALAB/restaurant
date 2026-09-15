@@ -158,7 +158,7 @@
   <div class="footer">TableReserve &bull; noreply@tablereserve.gr</div>
 
   <script>
-    const API = 'https://tablereserve-api-838820261500.europe-west1.run.app';
+    const API = '/.netlify/functions';
     const params    = new URLSearchParams(window.location.search);
     const token     = params.get('token');
     const shopId    = params.get('shop');
@@ -241,7 +241,7 @@
         btn.innerHTML = `<span class="spinner"></span> ${txt.cancelling}`;
 
         try {
-          const res = await fetch(`${API}/v3/email/cancel`, {
+          const res = await fetch(`${API}/cancel`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ token, shopId, bookingId })

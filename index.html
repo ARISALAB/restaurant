@@ -1095,7 +1095,7 @@
         };
 
         const SUPER_ADMIN_EMAIL = "aris@admin.com";
-        const API = "https://tablereserve-api-838820261500.europe-west1.run.app";
+        const API = "/.netlify/functions";
 
         const app  = initializeApp(firebaseConfig);
         const db   = getDatabase(app);
@@ -1475,7 +1475,7 @@
                 const bookingId = newBookingRef.key;
 
                 // 1. Email ειδοποίηση στο μαγαζί
-                fetch(`${API}/v3/email/notify`, {
+                fetch(`${API}/notify`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ shopId: shopID, bookingId })
@@ -1486,7 +1486,7 @@
 
                 // 2. Email επιβεβαίωσης στον πελάτη (μόνο αν έχει δώσει email)
                 if (email) {
-                    fetch(`${API}/v3/email/notify-customer`, {
+                    fetch(`${API}/notify-customer`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ shopId: shopID, bookingId, cancelToken, lang: currentLang })
