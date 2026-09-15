@@ -129,6 +129,19 @@ footer a:hover{color:var(--accent)}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 
+.faq{max-width:760px}
+.faq-item{border-bottom:0.5px solid var(--border2)}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;font-weight:500}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{flex-shrink:0;width:22px;height:22px;position:relative}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--accent);top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-icon::before{width:14px;height:1.5px}
+.faq-icon::after{width:1.5px;height:14px;transition:transform .25s ease}
+.faq-item.open .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scale(0)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:220px}
+.faq-a p{color:var(--muted);font-size:14px;line-height:1.7;padding:0 0 24px}
+
 .sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}</style>
 </head>
 <body>
@@ -139,6 +152,7 @@ footer a:hover{color:var(--accent)}
     <li><a href="#how">Πώς λειτουργεί</a></li>
     <li><a href="#benefits">Οφέλη</a></li>
     <li><a href="#pricing">Τιμές</a></li>
+    <li><a href="#faq">Ερωτήσεις</a></li>
     <li><a href="#contact">Επικοινωνία</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Ξεκινήστε τώρα →</a>
@@ -264,6 +278,39 @@ footer a:hover{color:var(--accent)}
   </div>
 </section>
 
+<section id="faq">
+  <div class="reveal">
+    <div class="eyebrow">Συχνές ερωτήσεις</div>
+    <h2>Έχετε απορίες;<br>Μάλλον απαντάμε εδώ</h2>
+  </div>
+  <div class="faq reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Πόσο γρήγορα ξεκινάω<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Συνήθως μέσα σε λίγα λεπτά από τη στιγμή που συμπληρώνετε τα στοιχεία του καταστήματός σας — ώρες λειτουργίας, τραπέζια και έτοιμο το μοναδικό σας link κράτησης</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Χρειάζομαι τεχνικές γνώσεις<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Όχι καθόλου Το admin panel είναι σχεδιασμένο για να το χρησιμοποιεί κανείς από το κινητό, χωρίς καμία τεχνική εμπειρία</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να αλλάξω πλάνο αργότερα<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ναι Μπορείτε να ανανεώσετε ή να αλλάξετε πλάνο όποτε θέλετε, απλά επικοινωνήστε μαζί μας</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν λήξει η συνδρομή μου<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Θα σας ειδοποιήσουμε πριν τη λήξη ώστε να ανανεώσετε χωρίς διακοπή στις κρατήσεις σας</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Δουλεύει σε κινητό και υπολογιστή<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ναι Τόσο η σελίδα κράτησης όσο και το admin panel λειτουργούν άψογα σε κινητό, tablet και υπολογιστή</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Υπάρχει κόστος εγκατάστασης<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Όχι Πληρώνετε μόνο το πλάνο συνδρομής που επιλέγετε — καμία κρυφή χρέωση</p></div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
   <div class="reveal">
     <div class="eyebrow">Εγγραφή</div>
@@ -346,6 +393,13 @@ document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
 
 
 <script>
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
 function setPlan(plan) {
   document.getElementById('selectedPlan').value = plan;
   const chip = document.getElementById('planChip');
