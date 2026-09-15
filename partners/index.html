@@ -271,8 +271,12 @@ footer a:hover{color:var(--accent)}
     <p class="section-sub">Συμπληρώστε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών. Τρίμηνο €39 · Εξάμηνο €69 · Χρονιαίο €99.</p>
   </div>
   <div class="form-wrap reveal">
-    <form id="partnerForm" action="https://formspree.io/f/mnjrvapy" method="POST">
+    <form id="partnerForm" action="/.netlify/functions/partner-inquiry" method="POST">
       <input type="hidden" name="πλάνο" id="selectedPlan" value="Δεν επιλέχθηκε πλάνο">
+      <div class="plan-chip" id="planChip" style="display:none;margin-bottom:20px;padding:10px 16px;border-radius:10px;background:rgba(37,99,235,.1);border:0.5px solid rgba(37,99,235,.3);color:var(--accent);font-size:13px;font-weight:500;">
+        ✓ Επιλεγμένο πλάνο: <span id="planChipText"></span>
+        <a href="#pricing" style="color:var(--muted);text-decoration:underline;margin-left:8px;font-weight:400;">αλλαγή</a>
+      </div>
       <div class="form-row">
         <div class="fg"><label>Όνομα υπευθύνου</label><input type="text" name="όνομα" placeholder="π.χ. Γιώργης Παπαδόπουλος" required></div>
         <div class="fg"><label>Τηλέφωνο</label><input type="tel" name="τηλέφωνο" placeholder="69XXXXXXXX" required></div>
@@ -344,6 +348,10 @@ document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
 <script>
 function setPlan(plan) {
   document.getElementById('selectedPlan').value = plan;
+  const chip = document.getElementById('planChip');
+  const chipText = document.getElementById('planChipText');
+  chip.style.display = 'block';
+  chipText.textContent = plan;
   // Update form title to reflect chosen plan
   const h2 = document.querySelector('#contact h2');
   if (plan.includes('Χρονιαίο')) {
@@ -363,18 +371,26 @@ document.getElementById('partnerForm').addEventListener('submit', async function
   btn.textContent = 'Αποστολή...';
   btn.disabled = true;
 
-  const data = new FormData(this);
-  const res = await fetch(this.action, {
-    method: 'POST',
-    body: data,
-    headers: { 'Accept': 'application/json' }
-  });
+  const formData = new FormData(this);
+  const data = Object.fromEntries(formData.entries());
 
-  if (res.ok) {
-    btn.textContent = '✓ Η αίτησή σας στάλθηκε!';
-    btn.style.background = '#16a34a';
-    this.querySelectorAll('input,select,textarea').forEach(el => el.disabled = true);
-  } else {
+  try {
+    const res = await fetch(this.action, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (res.ok) {
+      btn.textContent = '✓ Η αίτησή σας στάλθηκε!';
+      btn.style.background = '#16a34a';
+      this.querySelectorAll('input,select,textarea').forEach(el => el.disabled = true);
+    } else {
+      btn.textContent = '✗ Κάτι πήγε στραβά — δοκιμάστε ξανά';
+      btn.style.background = '#dc2626';
+      btn.disabled = false;
+    }
+  } catch (err) {
     btn.textContent = '✗ Κάτι πήγε στραβά — δοκιμάστε ξανά';
     btn.style.background = '#dc2626';
     btn.disabled = false;
