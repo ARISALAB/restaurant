@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Φόρτωση…</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f6ede0;
+  --cream2:#efe3d0;
+  --ink:#2b2420;
+  --muted:#6b5d4f;
+  --terracotta:#c1522f;
+  --terracotta-dark:#a8431f;
+  --olive:#5c6b3f;
+  --gold:#c9a15a;
+  --border:rgba(43,36,32,.12);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--ink);line-height:1.6}
+h1,h2,h3{font-family:'Playfair Display',serif;font-weight:700}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 6%}
+img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* Loading / not-found states */
+#loading,#notfound{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+#notfound h1{font-size:26px;margin-bottom:10px}
+#notfound p{color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--terracotta);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(246,237,224,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--ink)}
+.logo-mark{width:38px;height:38px;border-radius:50%;background:var(--terracotta);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;overflow:hidden;flex-shrink:0}
+.nav-links{display:flex;gap:32px;font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--terracotta)}
+.nav-cta{background:var(--terracotta);color:#fff!important;padding:11px 22px;border-radius:8px;font-size:14px;font-weight:600;white-space:nowrap}
+.nav-cta:hover{background:var(--terracotta-dark)}
+@media (max-width:720px){.nav-links{display:none}}
+
+/* HERO */
+.hero{position:relative;min-height:88vh;display:flex;align-items:flex-end;overflow:hidden;background:var(--ink)}
+.hero-photo{position:absolute;inset:0}
+.hero-photo-fallback{position:absolute;inset:0;background:repeating-linear-gradient(135deg,#8a5a3f 0px,#8a5a3f 2px,#7a4d34 2px,#7a4d34 40px)}
+.hero-photo-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,36,32,.15) 0%,rgba(43,36,32,.8) 100%)}
+.hero-content{position:relative;z-index:2;padding:0 6% 64px;color:#fff;max-width:640px}
+.hero-eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600}
+.hero h1{font-size:clamp(40px,7vw,72px);line-height:1.05;margin-bottom:16px}
+.hero p{font-size:17px;color:rgba(255,255,255,.85);max-width:460px;margin-bottom:28px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-main{background:var(--terracotta);color:#fff;padding:15px 30px;border-radius:9px;font-weight:600;font-size:15px;display:inline-block}
+.btn-main:hover{background:var(--terracotta-dark)}
+.btn-ghost{border:1.5px solid rgba(255,255,255,.5);color:#fff;padding:15px 30px;border-radius:9px;font-weight:600;font-size:15px;display:inline-block}
+.btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+
+/* ABOUT */
+.about{padding:100px 0 80px}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--terracotta);font-weight:700;margin-bottom:16px}
+.about h2{font-size:34px;margin-bottom:20px}
+.about p{color:var(--muted);font-size:15.5px;margin-bottom:14px;white-space:pre-line}
+.about-photo{aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:repeating-linear-gradient(45deg,#e8d4b8 0px,#e8d4b8 2px,#ddc8a8 2px,#ddc8a8 32px);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;font-weight:500;text-align:center;padding:20px}
+@media (max-width:760px){.about .wrap{grid-template-columns:1fr}.about-photo{order:-1}}
+
+/* INFO STRIP */
+.info-strip{background:var(--ink);color:var(--cream);padding:60px 0}
+.info-strip .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.info-card h3{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.info-card p{color:rgba(246,237,224,.85);font-size:15px;line-height:1.8;white-space:pre-line}
+@media (max-width:760px){.info-strip .wrap{grid-template-columns:1fr;gap:28px}}
+
+/* GALLERY */
+.gallery{padding:90px 0}
+.gallery-head{text-align:center;margin-bottom:44px}
+.gallery-head .about-eyebrow{justify-content:center;display:flex}
+.gallery-head h2{font-size:32px}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.gal-item{aspect-ratio:1;border-radius:12px;overflow:hidden;background:repeating-linear-gradient(135deg,#ead9bc 0px,#ead9bc 2px,#dfc9a3 2px,#dfc9a3 30px)}
+@media (max-width:640px){.gal-grid{grid-template-columns:1fr 1fr}}
+
+/* CTA BAND */
+.cta-band{background:var(--olive);color:#fff;padding:64px 0;text-align:center}
+.cta-band h2{font-size:30px;margin-bottom:14px;color:#fff}
+.cta-band p{color:rgba(255,255,255,.85);margin-bottom:26px}
+.cta-band .btn-main{background:#fff;color:var(--olive)}
+.cta-band .btn-main:hover{background:var(--cream)}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(246,237,224,.6);padding:36px 0;font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+footer a{color:var(--gold)}
+footer a:hover{text-decoration:underline}
+
+.site-hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div></div>
+
+<div id="notfound" class="site-hidden">
+  <div>
+    <h1>Δεν βρέθηκε το κατάστημα</h1>
+    <p>Ελέγξτε ότι το link είναι σωστό.</p>
+  </div>
+</div>
+
+<div id="site" class="site-hidden">
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><div class="logo-mark" id="logo-mark">🍽️</div><span id="nav-name"></span></div>
+    <div class="nav-links">
+      <a href="#about">Η ταβέρνα</a>
+      <a href="#gallery" id="nav-gallery-link">Φωτογραφίες</a>
+      <a href="#info">Ώρες &amp; Διεύθυνση</a>
+    </div>
+    <a href="#" id="nav-cta" class="nav-cta">Κράτηση τραπεζιού</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-photo" id="hero-photo"><div class="hero-photo-fallback"></div></div>
+  <div class="hero-photo-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Εστιατόριο</div>
+    <h1 id="hero-name"></h1>
+    <p id="hero-tagline"></p>
+    <div class="hero-ctas">
+      <a href="#" id="hero-cta" class="btn-main">Κάντε κράτηση →</a>
+      <a href="#info" class="btn-ghost">Δείτε ώρες &amp; διεύθυνση</a>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div>
+      <div class="about-eyebrow">Η ιστορία μας</div>
+      <h2>Καλώς ήρθατε<span id="about-name-span"></span></h2>
+      <p id="about-description"></p>
+    </div>
+    <div class="about-photo" id="about-photo">📷</div>
+  </div>
+</section>
+
+<section class="info-strip" id="info">
+  <div class="wrap">
+    <div class="info-card">
+      <h3>Ώρες λειτουργίας</h3>
+      <p id="info-hours">—</p>
+    </div>
+    <div class="info-card">
+      <h3>Διεύθυνση</h3>
+      <p id="info-address">—</p>
+    </div>
+    <div class="info-card">
+      <h3>Τηλέφωνο</h3>
+      <p id="info-phone">—</p>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery-section">
+  <div class="wrap">
+    <div class="gallery-head">
+      <div class="about-eyebrow">Γκαλερί</div>
+      <h2 id="gallery-title">Μια γεύση</h2>
+    </div>
+    <div class="gal-grid" id="gal-grid"></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Κλείστε τραπέζι σε 30 δευτερόλεπτα</h2>
+    <p>Άμεση επιβεβαίωση, χωρίς τηλεφώνημα</p>
+    <a href="#" id="band-cta" class="btn-main">Κάντε κράτηση τώρα →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div id="footer-name"></div>
+    <div>Το site σας, δωρεάν, από το <a href="https://tablereserve.gr/partners/" target="_blank" rel="noopener">TableReserve</a></div>
+  </div>
+</footer>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+  authDomain: "reser-dfb9a.firebaseapp.com",
+  databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "reser-dfb9a",
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+
+const urlParams = new URLSearchParams(window.location.search);
+const shopId = urlParams.get('shop');
+
+function displayName(id) {
+  return id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');
+}
+
+async function init() {
+  if (!shopId) { showNotFound(); return; }
+
+  let snap;
+  try {
+    snap = await get(ref(db, `shop_profile/${shopId}`));
+  } catch (e) {
+    showNotFound();
+    return;
+  }
+
+  if (!snap.exists()) { showNotFound(); return; }
+
+  const full = snap.val();
+  const info = full.info || {};
+  const name = info.displayName || displayName(shopId);
+  const bookingUrl = `https://tablereserve.gr/?shop=${encodeURIComponent(shopId)}`;
+
+  document.title = name + ' — Κράτηση τραπεζιού';
+
+  // Nav
+  document.getElementById('nav-name').textContent = name;
+  document.getElementById('nav-cta').href = bookingUrl;
+  if (full.logoPhoto) {
+    document.getElementById('logo-mark').innerHTML = `<img src="${full.logoPhoto}" alt="${name}">`;
+  } else {
+    document.getElementById('logo-mark').textContent = name.charAt(0);
+  }
+
+  // Hero
+  document.getElementById('hero-name').textContent = name;
+  document.getElementById('hero-tagline').textContent = info.tagline || `Καλώς ήρθατε στο ${name}`;
+  document.getElementById('hero-cta').href = bookingUrl;
+  document.getElementById('band-cta').href = bookingUrl;
+  if (full.coverPhoto) {
+    document.getElementById('hero-photo').innerHTML = `<img src="${full.coverPhoto}" alt="${name}">`;
+  }
+
+  // About
+  document.getElementById('about-name-span').textContent = ' στο ' + name;
+  document.getElementById('about-description').textContent =
+    info.description || `Το ${name} είναι ένα εστιατόριο που θα λατρέψετε — κάντε κράτηση για να το ανακαλύψετε.`;
+  if (full.coverPhoto) {
+    document.getElementById('about-photo').innerHTML = `<img src="${full.coverPhoto}" alt="${name}">`;
+  } else {
+    document.getElementById('about-photo').textContent = '📷';
+  }
+
+  // Info strip
+  document.getElementById('info-hours').textContent   = info.hours   || 'Επικοινωνήστε μαζί μας';
+  document.getElementById('info-address').textContent = info.address || 'Επικοινωνήστε μαζί μας';
+  document.getElementById('info-phone').textContent   = info.phone   || '—';
+
+  // Gallery
+  const gallery = full.gallery ? Object.values(full.gallery) : [];
+  const galSection = document.getElementById('gallery-section');
+  const navGalleryLink = document.getElementById('nav-gallery-link');
+  if (gallery.length === 0) {
+    galSection.classList.add('site-hidden');
+    navGalleryLink.classList.add('site-hidden');
+  } else {
+    const grid = document.getElementById('gal-grid');
+    grid.innerHTML = gallery.map(g => {
+      const src = typeof g === 'string' ? g : (g.image || g.url || '');
+      return src ? `<div class="gal-item"><img src="${src}" alt="${name}"></div>` : '';
+    }).join('');
+  }
+
+  // Footer
+  document.getElementById('footer-name').textContent = `© ${new Date().getFullYear()} ${name}`;
+
+  document.getElementById('loading').classList.add('site-hidden');
+  document.getElementById('site').classList.remove('site-hidden');
+}
+
+function showNotFound() {
+  document.getElementById('loading').classList.add('site-hidden');
+  document.getElementById('notfound').classList.remove('site-hidden');
+}
+
+init();
+</script>
+
+</body>
+</html>
