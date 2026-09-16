@@ -277,7 +277,7 @@ async function init() {
   } else {
     const grid = document.getElementById('gal-grid');
     grid.innerHTML = gallery.map(g => {
-      const src = typeof g === 'string' ? g : (g.image || g.url || '');
+      const src = typeof g === 'string' ? g : (g.data || g.image || g.url || '');
       return src ? `<div class="gal-item"><img src="${src}" alt="${name}"></div>` : '';
     }).join('');
   }
