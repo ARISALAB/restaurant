@@ -1,3 +1,5 @@
 https://restableres.netlify.app/* https://tablereserve.gr/:splat 301!
 /superadmin.html  /superadmin/  301
 /admin.html       /admin/       301
+/__/auth/*      https://reser-dfb9a.firebaseapp.com/__/auth/:splat      200
+/__/firebase/*  https://reser-dfb9a.firebaseapp.com/__/firebase/:splat  200

@@ -155,7 +155,12 @@ footer a:hover{color:var(--accent)}
     <li><a href="#faq">Ερωτήσεις</a></li>
     <li><a href="#contact">Επικοινωνία</a></li>
   </ul>
-  <a href="#contact" class="nav-cta">Ξεκινήστε τώρα →</a>
+  <a href="#contact" class="nav-cta" id="navCta">Ξεκινήστε τώρα →</a>
+  <a href="/admin" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
+    <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
+    <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
+    <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Πίνακας διαχείρισης →</span></span>
+  </a>
 </nav>
 
 <section class="hero">
@@ -491,14 +496,25 @@ document.getElementById('partnerForm').addEventListener('submit', async function
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 const app = initializeApp({
   apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
-  authDomain: "reser-dfb9a.firebaseapp.com",
+  authDomain: "tablereserve.gr",
   databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "reser-dfb9a"
 });
 const auth = getAuth(app);
+
+onAuthStateChanged(auth, user => {
+  const cta = document.getElementById('navCta'), box = document.getElementById('navUser');
+  if (!user) { box.style.display = 'none'; cta.style.display = ''; return; }
+  const name = user.displayName || user.email || '';
+  document.getElementById('navUserName').textContent = name;
+  const img = document.getElementById('navUserPhoto'), ini = document.getElementById('navUserInitial');
+  if (user.photoURL) { img.src = user.photoURL; img.style.display = 'block'; }
+  else { ini.textContent = name.charAt(0).toUpperCase(); ini.style.display = 'flex'; }
+  cta.style.display = 'none'; box.style.display = 'flex';
+});
 const btn = document.getElementById('googleBtn');
 const err = document.getElementById('formError');
 const showErr = m => { err.textContent = m; err.style.display = 'block'; err.scrollIntoView({ block: 'center', behavior: 'smooth' }); };

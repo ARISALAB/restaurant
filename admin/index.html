@@ -764,6 +764,11 @@
     <nav class="topnav">
         <div class="logo">Table<span>Reserve</span></div>
         <div class="nav-right">
+            <div id="user-chip" style="display:none; align-items:center; gap:8px; font-size:0.9rem; font-weight:500; color:#1e293b; margin-right:12px;">
+                <img id="user-photo" src="" alt="" referrerpolicy="no-referrer" style="width:32px; height:32px; border-radius:50%; object-fit:cover; display:none;">
+                <span id="user-initial" style="width:32px; height:32px; border-radius:50%; background:#2563eb; color:#fff; display:none; align-items:center; justify-content:center; font-weight:600;"></span>
+                <span id="user-name" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
+            </div>
             <div class="lang-switcher">
                 <button class="lang-btn" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
                 <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
@@ -1000,7 +1005,7 @@
 
         const firebaseConfig = {
             apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
-            authDomain: "reser-dfb9a.firebaseapp.com",
+            authDomain: "tablereserve.gr",
             databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "reser-dfb9a",
         };
@@ -1241,7 +1246,19 @@
             return res.ok;
         }
 
+        function renderUserChip(user) {
+            const chip = document.getElementById('user-chip');
+            if (!user) { chip.style.display = 'none'; return; }
+            const name = user.displayName || user.email || '';
+            document.getElementById('user-name').textContent = name;
+            const img = document.getElementById('user-photo'), ini = document.getElementById('user-initial');
+            if (user.photoURL) { img.src = user.photoURL; img.style.display = 'block'; ini.style.display = 'none'; }
+            else { ini.textContent = name.charAt(0).toUpperCase(); ini.style.display = 'flex'; img.style.display = 'none'; }
+            chip.style.display = 'flex';
+        }
+
         onAuthStateChanged(auth, async (user) => {
+            renderUserChip(user);
             if (!user) { currentAdminShop = null; show('login-section'); return; }
             if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
 
