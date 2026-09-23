@@ -789,6 +789,8 @@
                         <input type="password" id="pass" placeholder="••••••••">
                     </div>
                     <button class="btn-primary" id="btn-login" data-i18n-key="login">Σύνδεση</button>
+                    <div style="display:flex;align-items:center;gap:12px;margin:18px 0;color:#94a3b8;font-size:0.8rem;"><span style="flex:1;height:1px;background:#e2e8f0;"></span><span data-i18n-key="or">ή</span><span style="flex:1;height:1px;background:#e2e8f0;"></span></div>
+                    <button type="button" id="btn-google" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:1px solid #dadce0;padding:13px;border-radius:12px;font-size:0.95rem;font-weight:500;font-family:inherit;cursor:pointer;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span data-i18n-key="google_login">Σύνδεση με Google</span></button>
                 </div>
             </div>
             <div id="verify-section" style="display:none; max-width:440px; margin:0 auto;">
@@ -993,7 +995,7 @@
         import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import {
             getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            createUserWithEmailAndPassword
+            createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -1054,7 +1056,7 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
                 verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
@@ -1126,7 +1128,7 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
+                alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
                 verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", copy: "Copy", copied: "Copied!",
                 no_reservations: "📭 No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
@@ -1244,7 +1246,7 @@
             if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
 
             const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
-            if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); signOut(auth); return; }
+            if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); if (user.providerData.some(p => p.providerId === 'google.com')) { user.delete().catch(() => signOut(auth)); } else { signOut(auth); } return; }
             const myShop = snapshot.val();
 
             const status = (await get(ref(db, `shop_details/${myShop}/status`))).val();
@@ -1270,6 +1272,12 @@
             }
             openDashboard(myShop);
         });
+
+        document.getElementById('btn-google').onclick = () => {
+            signInWithPopup(auth, new GoogleAuthProvider()).catch(e => {
+                if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') alert(t('google_failed'));
+            });
+        };
 
         document.getElementById('btn-copy-link').onclick = async () => {
             try { await navigator.clipboard.writeText(document.getElementById('booking-link').href); showToast(t('copied'), 'success'); } catch (e) {}

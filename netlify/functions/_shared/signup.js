@@ -43,7 +43,7 @@ const T = {
 
 async function sendVerificationEmail({ to, shopName, link, lang }) {
   const t = T[lang] || T.el;
-  return resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: FROM,
     to,
     subject: t.subject,
@@ -63,9 +63,11 @@ async function sendVerificationEmail({ to, shopName, link, lang }) {
   </div>
 </body></html>`
   });
+  if (error) throw new Error('resend: ' + (error.message || JSON.stringify(error)));
+  return data;
 }
 
-async function notifyOwner({ shopId, shopName, email, phone, type, plan }) {
+async function notifyOwner({ shopId, shopName, email, phone, type, plan, status = 'σε αναμονή επιβεβαίωσης email' }) {
   return resend.emails.send({
     from: FROM,
     to: OWNER_EMAIL,
@@ -74,7 +76,7 @@ async function notifyOwner({ shopId, shopName, email, phone, type, plan }) {
       <h2 style="margin:0 0 12px;">Νέα εγγραφή στο TableReserve</h2>
       <p><b>Κατάστημα:</b> ${esc(shopName)}<br><b>ID:</b> ${esc(shopId)}<br><b>Email:</b> ${esc(email)}<br>
       <b>Τηλέφωνο:</b> ${esc(phone || '-')}<br><b>Τύπος:</b> ${esc(type || '-')}<br><b>Πλάνο που επέλεξε:</b> ${esc(plan || '-')}</p>
-      <p>Κατάσταση: σε αναμονή επιβεβαίωσης email.</p>
+      <p>Κατάσταση: ${esc(status)}.</p>
     </div>`
   });
 }

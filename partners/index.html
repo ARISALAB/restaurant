@@ -335,15 +335,18 @@ footer a:hover{color:var(--accent)}
           <select id="f-type" name="type"><option value="">Επιλέξτε...</option><option>Εστιατόριο</option><option>Ταβέρνα</option><option>Καφέ / Bistro</option><option>Μπαρ</option><option>Άλλο</option></select>
         </div>
       </div>
+      <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;line-height:1.5;margin:4px 0 18px;cursor:pointer;">
+        <input id="f-terms" type="checkbox" name="acceptTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);" required>
+        <span>Αποδέχομαι τους <a href="/terms?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Όρους Χρήσης</a> και την <a href="/privacy?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Πολιτική Απορρήτου</a></span>
+      </label>
+      <button type="button" id="googleBtn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:none;padding:15px;border-radius:40px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;margin:0 0 6px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Εγγραφή με Google</span></button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 18px;">Χωρίς κωδικό και χωρίς email επιβεβαίωσης.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 22px;color:var(--muted);font-size:12px;"><span style="flex:1;height:0.5px;background:var(--border2);"></span>ή με email<span style="flex:1;height:0.5px;background:var(--border2);"></span></div>
       <div class="form-row">
         <div class="fg"><label for="f-email">Email</label><input id="f-email" type="email" name="email" placeholder="info@to-magazi-sas.gr" autocomplete="email" required></div>
         <div class="fg"><label for="f-phone">Τηλέφωνο</label><input id="f-phone" type="tel" name="phone" placeholder="69XXXXXXXX" autocomplete="tel"></div>
       </div>
       <div class="fg"><label for="f-pass">Κωδικός</label><input id="f-pass" type="password" name="password" placeholder="Τουλάχιστον 8 χαρακτήρες" minlength="8" autocomplete="new-password" required></div>
-      <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;line-height:1.5;margin:4px 0 18px;cursor:pointer;">
-        <input id="f-terms" type="checkbox" name="acceptTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);" required>
-        <span>Αποδέχομαι τους <a href="/terms?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Όρους Χρήσης</a> και την <a href="/privacy?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Πολιτική Απορρήτου</a></span>
-      </label>
       <p id="formError" role="alert" style="display:none;color:#f87171;font-size:13px;margin:0 0 12px;"></p>
       <button type="submit" class="btn-submit" id="submitBtn">Δημιουργία λογαριασμού →</button>
       <p class="form-note">Έχετε ήδη λογαριασμό; <a href="/admin" style="color:var(--accent);">Σύνδεση</a> · Ερωτήσεις; <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
@@ -483,6 +486,49 @@ document.getElementById('partnerForm').addEventListener('submit', async function
   }
   btn.textContent = 'Δημιουργία λογαριασμού →';
   btn.disabled = false;
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+const app = initializeApp({
+  apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+  authDomain: "reser-dfb9a.firebaseapp.com",
+  databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "reser-dfb9a"
+});
+const auth = getAuth(app);
+const btn = document.getElementById('googleBtn');
+const err = document.getElementById('formError');
+const showErr = m => { err.textContent = m; err.style.display = 'block'; err.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+
+btn.addEventListener('click', async () => {
+  const f = document.getElementById('partnerForm');
+  err.style.display = 'none';
+  const shopName = f.shopName.value.trim();
+  if (!shopName) { f.shopName.focus(); return showErr('Γράψτε πρώτα το όνομα του καταστήματος.'); }
+  if (!f.acceptTerms.checked) return showErr('Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.');
+
+  const label = btn.querySelector('span'); const orig = label.textContent;
+  btn.disabled = true; label.textContent = 'Σύνδεση με Google...';
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const token = await cred.user.getIdToken();
+    const res = await fetch('/.netlify/functions/signup-google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'el' })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin'; return; }
+    await signOut(auth);
+    showErr(out.error === 'name_too_long' ? 'Το όνομα καταστήματος είναι πολύ μεγάλο.' : 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.');
+  } catch (e) {
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request')
+      showErr(e.code === 'auth/popup-blocked' ? 'Ο browser μπλόκαρε το παράθυρο της Google. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.' : 'Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.');
+  }
+  btn.disabled = false; label.textContent = orig;
 });
 </script>
 

@@ -32,7 +32,7 @@ exports.handler = async (event) => {
     await metaRef.set(Date.now());
   } catch (e) {
     console.error('resend verification failed', e);
-    return json(500, { error: 'send_failed' });
+    return json(500, { error: 'send_failed', detail: e.code || e.message || String(e) });
   }
   return json(200, { ok: true });
 };
