@@ -361,7 +361,7 @@
             <div class="card">
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" id="sa-email" placeholder="aris@admin.com" autocomplete="username">
+                    <input type="email" id="sa-email" placeholder="email" autocomplete="username">
                 </div>
                 <div class="input-group">
                     <label>Κωδικός</label>
@@ -442,8 +442,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, get, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import {
-            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            createUserWithEmailAndPassword
+            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -455,7 +454,7 @@
         };
 
         const SUPER_ADMIN_EMAIL = "aris@admin.com";
-        const SHOP_BASE_URL = "https://restableres.netlify.app/";
+        const SHOP_BASE_URL = "https://tablereserve.gr/";
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
@@ -567,30 +566,31 @@
             btn.disabled = true;
             document.getElementById('create-result').style.display = 'none';
 
-            // Αποθήκευση κωδικού super admin πριν χαθεί το session
-            const saPass = document.getElementById('sa-pass').value;
-
             try {
-                // Δημιουργία νέου χρήστη
-                const userCred = await createUserWithEmailAndPassword(auth, newEmail, newPass);
-                const newUid = userCred.user.uid;
-
-                // Εγγραφή στη database
-                await set(ref(db, `users_to_shops/${newUid}`), shopIdRaw);
-                await set(ref(db, `shop_details/${shopIdRaw}`), {
-                    displayName,
-                    email: newEmail,
-                    createdAt: Date.now()
+                const idToken = await auth.currentUser.getIdToken();
+                const res = await fetch('/.netlify/functions/create-shop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+                    body: JSON.stringify({ shopId: shopIdRaw, displayName, email: newEmail, password: newPass })
                 });
+                const data = await res.json().catch(() => ({}));
 
-                // Επαναφορά super admin session
-                await signInWithEmailAndPassword(auth, SUPER_ADMIN_EMAIL, saPass);
+                if (!res.ok) {
+                    const messages = {
+                        email_in_use:   'Αυτό το email χρησιμοποιείται ήδη!',
+                        invalid_email:  'Μη έγκυρο email!',
+                        weak_password:  'Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!',
+                        shop_exists:    'Υπάρχει ήδη κατάστημα με αυτό το ID!',
+                        invalid_shop_id:'Το ID: μόνο λατινικά, αριθμοί, _',
+                        not_superadmin: 'Δεν έχεις δικαίωμα δημιουργίας καταστημάτων.'
+                    };
+                    return showToast(messages[data.error] || 'Σφάλμα δημιουργίας.', 'error');
+                }
 
                 // Εμφάνιση URL
-                const shopUrl = `${SHOP_BASE_URL}?shop=${shopIdRaw}`;
-                document.getElementById('result-url').textContent = shopUrl;
+                document.getElementById('result-url').textContent = data.url;
                 document.getElementById('create-result').style.display = 'block';
-                window._lastCreatedUrl = shopUrl;
+                window._lastCreatedUrl = data.url;
 
                 showToast(`✅ Κατάστημα "${shopIdRaw}" δημιουργήθηκε!`, 'success');
 
@@ -601,11 +601,7 @@
                 document.getElementById('sa-new-pass').value = '';
 
             } catch(e) {
-                let msg = 'Σφάλμα δημιουργίας.';
-                if (e.code === 'auth/email-already-in-use') msg = 'Αυτό το email χρησιμοποιείται ήδη!';
-                if (e.code === 'auth/invalid-email') msg = 'Μη έγκυρο email!';
-                if (e.code === 'auth/weak-password') msg = 'Πολύ αδύναμος κωδικός!';
-                showToast(msg, 'error');
+                showToast('Σφάλμα σύνδεσης με τον server.', 'error');
             } finally {
                 btn.innerHTML = '➕ Δημιουργία Καταστήματος';
                 btn.disabled = false;
