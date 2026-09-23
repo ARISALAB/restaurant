@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TableReserve</title>
+    <title>Admin | TableReserve</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -730,6 +730,7 @@
         @keyframes splashFadeUp { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes dotPulse { 0%, 100% { background: rgba(255,255,255,0.3); transform: scale(1); } 50% { background: rgba(255,255,255,0.9); transform: scale(1.3); } }
     </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
 <body>
 
@@ -770,99 +771,207 @@
         </div>
     </nav>
 
-    <!-- ===== CLIENT PAGE ===== -->
-    <div id="page-client" class="page active">
-
-        <div class="shop-hero-wrap">
-            <div class="shop-hero-inner">
-                <div id="client-cover-wrap" class="shop-cover-box" style="display:none;">
-                    <img id="client-cover-img" src="" alt="cover" class="shop-cover-img">
+    <!-- ===== ADMIN PAGE ===== -->
+    <div id="page-admin" class="page active">
+        <div class="container">
+            <div id="login-section" style="max-width:400px; margin:0 auto;">
+                <div class="page-header">
+                    <h2 data-i18n-key="admin_login">Είσοδος Admin</h2>
+                    <p data-i18n-key="admin_login_desc">Διαχείριση κρατήσεων καταστήματος</p>
                 </div>
-                <div id="client-cover-placeholder" class="shop-cover-placeholder"><span>🏪</span></div>
-
-                <div class="shop-hero-info">
-                    <div id="client-logo-wrap" class="shop-logo-wrap" style="display:none;">
-                        <img id="client-logo-img" src="" alt="logo" class="shop-logo-img">
+                <div class="card">
+                    <div class="input-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="email@example.com">
                     </div>
-                    <div class="shop-hero-text">
-                        <h2 id="shop-display" class="shop-hero-name" data-i18n-key="loading_shop">Φόρτωση...</h2>
-                        <p id="client-tagline" class="shop-hero-tagline" style="display:none;"></p>
-                        <p id="client-description" class="shop-hero-desc" style="display:none;"></p>
-                        <div id="client-meta" class="shop-hero-meta">
-                            <span id="client-address" class="meta-pill" style="display:none;">📍 <span></span></span>
-                            <span id="client-phone-pub" class="meta-pill" style="display:none;">📞 <a id="client-phone-link" href="#" style="color:inherit;text-decoration:none;"></a></span>
-                            <span id="client-hours" class="meta-pill" style="display:none;">🕐 <span></span></span>
+                    <div class="input-group">
+                        <label data-i18n-key="password">Κωδικός</label>
+                        <input type="password" id="pass" placeholder="••••••••">
+                    </div>
+                    <button class="btn-primary" id="btn-login" data-i18n-key="login">Σύνδεση</button>
+                </div>
+            </div>
+            <div id="dashboard" style="display:none;">
+                <div class="admin-header-row">
+                    <div>
+                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
+                        <div class="shop-badge">🏪 <span id="shop-title"></span></div>
+                    </div>
+                    <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
+                </div>
+
+                <div class="admin-tabs">
+                    <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')">📅 <span data-i18n-key="reservations">Κρατήσεις</span></button>
+                    <button class="admin-tab" id="atab-analytics" onclick="switchAdminTab('analytics')">📊 <span data-i18n-key="analytics_tab">Analytics</span></button>
+                    <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')">🖼️ <span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
+                </div>
+
+                <!-- Reservations Section -->
+                <div id="asec-reservations" class="admin-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card blue"><div class="stat-label" data-i18n-key="reservations">Κρατήσεις</div><div class="stat-value" id="stat-count">0</div></div>
+                        <div class="stat-card dark"><div class="stat-label" data-i18n-key="total_guests">Σύνολο Ατόμων</div><div class="stat-value" id="stat-guests">0</div></div>
+                    </div>
+                    <div class="card" style="padding:20px 24px; margin-bottom:20px;">
+                        <div class="filters-row">
+                            <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
+                            <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
+                        </div>
+                    </div>
+                    <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div id="asec-analytics" class="admin-section">
+                    <div class="stats-grid cols-4">
+                        <div class="stat-card blue"><div class="stat-label" data-i18n-key="an_avg_party">Μέσος όρος ατόμων</div><div class="stat-value" id="an-avg-party">0</div></div>
+                        <div class="stat-card dark"><div class="stat-label" data-i18n-key="an_cancel_rate">Ποσοστό ακυρώσεων</div><div class="stat-value" id="an-cancel-rate">0%</div></div>
+                        <div class="stat-card blue"><div class="stat-label" data-i18n-key="an_repeat_customers">Επαναλαμβανόμενοι</div><div class="stat-value" id="an-repeat-count">0</div></div>
+                        <div class="stat-card dark"><div class="stat-label" data-i18n-key="an_google_share">Μέσω Google</div><div class="stat-value" id="an-google-share">0%</div></div>
+                    </div>
+
+                    <div class="card" style="padding:20px 24px;margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">📈</div> <span data-i18n-key="an_trend_title">Κρατήσεις ανά ημέρα</span></div>
+                        <canvas id="chart-trend" height="90"></canvas>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">⏰</div> <span data-i18n-key="an_hours_title">Πιο απασχολημένες ώρες</span></div>
+                            <canvas id="chart-hours" height="180"></canvas>
+                        </div>
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="an_days_title">Πιο απασχολημένες μέρες</span></div>
+                            <canvas id="chart-dow" height="180"></canvas>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">👥</div> <span data-i18n-key="an_week_guests_title">Άτομα ανά εβδομάδα</span></div>
+                            <canvas id="chart-week-guests" height="150"></canvas>
+                        </div>
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">👥</div> <span data-i18n-key="an_month_guests_title">Άτομα ανά μήνα</span></div>
+                            <canvas id="chart-month-guests" height="150"></canvas>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">🔗</div> <span data-i18n-key="an_source_title">Πηγή κράτησης</span></div>
+                            <canvas id="chart-source" height="180"></canvas>
+                        </div>
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">📍</div> <span data-i18n-key="an_location_title">Τοποθεσία</span></div>
+                            <canvas id="chart-location" height="180"></canvas>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">🎉</div> <span data-i18n-key="an_occasion_title">Τύποι γεγονότων</span></div>
+                            <canvas id="chart-occasion" height="180"></canvas>
+                        </div>
+                        <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">🔁</div> <span data-i18n-key="an_repeat_title">Κορυφαίοι επαναλαμβανόμενοι πελάτες</span></div>
+                            <div id="repeat-customer-list"><div class="no-data" data-i18n-key="an_no_repeats">Δεν υπάρχουν ακόμα</div></div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="container">
-            <div id="client-gallery-wrap" style="display:none; margin-bottom:24px;">
-                <div id="client-gallery-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin;"></div>
-            </div>
+                <!-- Shop Profile Section -->
+                <div id="asec-profile" class="admin-section">
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">📝</div> <span data-i18n-key="shop_info_title">Πληροφορίες Μαγαζιού</span></div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_tagline">Σύνθημα / Slogan</label>
+                            <input type="text" id="prof-tagline" maxlength="80" placeholder="π.χ. Το καλύτερο καφέ της πόλης!" oninput="updateCharCount('prof-tagline','cnt-tagline',80)">
+                            <div class="char-counter"><span id="cnt-tagline">0</span>/80</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_description">Περιγραφή</label>
+                            <textarea id="prof-description" rows="4" maxlength="600" placeholder="Γράψτε μια σύντομη περιγραφή του μαγαζιού σας..." oninput="updateCharCount('prof-description','cnt-desc',600)"></textarea>
+                            <div class="char-counter"><span id="cnt-desc">0</span>/600</div>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_address">Διεύθυνση</label>
+                            <input type="text" id="prof-address" maxlength="120" placeholder="π.χ. Ερμού 12, Αθήνα">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_phone_pub">Τηλέφωνο Επικοινωνίας</label>
+                            <input type="tel" id="prof-phone" maxlength="20" placeholder="π.χ. 210 1234567">
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
+                            <input type="text" id="prof-hours" maxlength="100" placeholder="π.χ. Δευ-Σαβ 08:00-23:00, Κυρ 10:00-22:00">
+                        </div>
+                        <div class="input-group">
+                            <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
+                            <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr">
+                            <small style="color:#64748b;font-size:0.8rem;">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
+                        </div>
+                        <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
+                            💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
+                        </button>
+                    </div>
 
-            <div class="client-layout">
-                <div class="card">
-                    <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
-                    <div class="input-group">
-                        <label data-i18n-key="date">Ημερομηνία</label>
-                        <input type="date" id="cust-date-only">
+                    <!-- Logo Upload -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🏷️</div> <span>Λογότυπο</span></div>
+                        <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
+                            <div id="logo-preview-wrap" style="width:80px;height:80px;border-radius:14px;overflow:hidden;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">
+                                <img id="logo-preview-img" src="" alt="logo" style="width:100%;height:100%;object-fit:cover;display:none;">
+                                <span id="logo-preview-placeholder">🏪</span>
+                            </div>
+                            <div style="flex:1;">
+                                <div class="upload-zone" id="logo-zone" style="padding:16px 20px;">
+                                    <input type="file" id="logo-input" accept="image/*" onchange="handleLogoUpload(event)">
+                                    <div class="upload-zone-icon" style="font-size:1.4rem; margin-bottom:4px;">🏷️</div>
+                                    <div class="upload-zone-text" style="font-size:0.82rem;">Κλικ ή σύρτε λογότυπο</div>
+                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 1MB</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveLogoPhoto()">💾 Αποθήκευση Λογότυπου</button>
+                            <button class="btn-outline" id="btn-del-logo" onclick="deleteLogoPhoto()" style="display:none;">🗑️ Διαγραφή</button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label data-i18n-key="persons">Άτομα</label>
-                        <select id="cust-guests"><option value="2" selected>2 Άτομα</option></select>
+
+                    <!-- Cover Photo -->
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title"><div class="icon">🖼️</div> <span data-i18n-key="cover_photo">Εξώφυλλο</span></div>
+                        <div id="cover-preview" class="shop-banner"><span data-i18n-key="no_cover">Δεν έχει οριστεί εξώφυλλο</span></div>
+                        <div class="upload-zone" id="cover-zone">
+                            <input type="file" id="cover-input" accept="image/*" onchange="handleCoverUpload(event)">
+                            <div class="upload-zone-icon">📷</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_cover">Κλικ ή σύρτε φωτογραφία εξωφύλλου</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_hint">JPG, PNG, WEBP · μέγιστο 2MB</div>
+                        </div>
+                        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="profile-save-btn" onclick="saveCoverPhoto()">💾 <span data-i18n-key="save_cover">Αποθήκευση Εξωφύλλου</span></button>
+                            <button class="btn-outline" id="btn-del-cover" onclick="deleteCoverPhoto()" style="display:none;">🗑️ <span data-i18n-key="delete_cover">Διαγραφή</span></button>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label data-i18n-key="quick_time">Γρήγορη Επιλογή Ώρας</label>
-                        <select id="time-select"><option value="" data-i18n-key="select_opt">-- Επιλογή --</option></select>
+
+                    <!-- Photo Gallery -->
+                    <div class="card">
+                        <div class="card-title">
+                            <div class="icon">🖼️</div>
+                            <span data-i18n-key="photo_gallery">Γκαλερί Φωτογραφιών</span>
+                            <span class="photos-count-badge" id="photos-count-badge">0</span>
+                        </div>
+                        <div class="upload-zone" id="gallery-zone">
+                            <input type="file" id="gallery-input" accept="image/*" multiple onchange="handleGalleryUpload(event)">
+                            <div class="upload-zone-icon">🗂️</div>
+                            <div class="upload-zone-text" data-i18n-key="upload_gallery">Κλικ ή σύρτε φωτογραφίες γκαλερί</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_gallery_hint">Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία</div>
+                        </div>
+                        <div id="gallery-grid" class="photo-gallery"></div>
                     </div>
-                    <label style="margin-bottom:8px;" data-i18n-key="or_grid">Ή επιλέξτε από το grid</label>
-                    <div id="time-slots-container" class="time-grid"></div>
-                    <div id="time-badge" class="selected-time-badge">
-                        <span>🕐</span>
-                        <span><span data-i18n-key="selected_time">Επιλεγμένη ώρα:</span> <strong id="badge-time-text"></strong></span>
-                    </div>
-                    <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;" data-i18n-key="continue">Συνέχεια →</button>
                 </div>
-                <div class="card info-panel" style="position:sticky; top:84px;">
-                    <div class="card-title"><div class="icon">ℹ️</div> <span data-i18n-key="instructions">Οδηγίες</span></div>
-                    <ol style="padding-left:18px; color:var(--text-muted); font-size:0.9rem; line-height:2.2;">
-                        <li data-i18n-key="step1">Επιλέξτε <strong>ημερομηνία</strong></li>
-                        <li data-i18n-key="step2">Επιλέξτε <strong>αριθμό ατόμων</strong></li>
-                        <li data-i18n-key="step3">Επιλέξτε <strong>ώρα</strong></li>
-                        <li data-i18n-key="step4">Πατήστε <strong>"Συνέχεια"</strong></li>
-                        <li data-i18n-key="step5">Συμπληρώστε τα στοιχεία σας</li>
-                    </ol>
-                    <div style="margin-top:24px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
-                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ <span data-i18n-key="instant_confirm">Άμεση επιβεβαίωση</span></div>
-                        <div style="font-size:0.82rem; color:#166534;" data-i18n-key="instant_confirm_desc">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
-                    </div>
-                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- ===== BOOKING MODAL ===== -->
-    <div id="booking-modal" class="modal">
-        <div class="modal-content card">
-            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
-            <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" data-i18n-placeholder="fullname_ph"></div>
-            <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
-            <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="cust-email" placeholder="name@example.com" required></div>
-            <div class="input-group">
-                <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
-                <select id="cust-location">
-                    <option value="Εσωτερικός" data-i18n-key="indoor">Εσωτερικός Χώρος</option>
-                    <option value="Εξωτερικός" data-i18n-key="outdoor">Εξωτερικός Χώρος</option>
-                    <option value="Δεν έχω προτίμηση" data-i18n-key="no_pref">Δεν έχω προτίμηση</option>
-                </select>
-            </div>
-            <div class="input-group"><label data-i18n-key="occasion">Ειδικό Γεγονός</label><input type="text" id="cust-occasion" data-i18n-placeholder="occasion_ph"></div>
-            <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" data-i18n-placeholder="requests_ph"></textarea></div>
-            <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
-            <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
         </div>
     </div>
 
@@ -1087,222 +1196,454 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ======= CLIENT =======
-        const urlParams = new URLSearchParams(window.location.search);
-        const shopID = urlParams.get('shop') || "default_store";
-        const shopDisplayEl = document.getElementById('shop-display');
-        shopDisplayEl.dataset.shopId = shopID;
-        shopDisplayEl.innerText = t('booking_at') + shopID;
+        // ======= ADMIN =======
+        let allReservations = [];
+        let currentAdminShop = null;
+        const SUPERADMIN_UID = "cGhWqj5Mtiey6AC8CMpiUZDxAGh1";
 
-        let selectedTime = null;
-        const timeContainer = document.getElementById('time-slots-container');
-        const timeSelect    = document.getElementById('time-select');
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
+                const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
+                if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); signOut(auth); return; }
+                const myShop = snapshot.val();
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('shop-title').innerText = myShop;
+                currentAdminShop = myShop;
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('filter-from').value = today;
+                document.getElementById('filter-to').value = today;
+                listenToReservations(myShop);
+                loadShopProfile(myShop);
+            } else {
+                currentAdminShop = null;
+                document.getElementById('login-section').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'none';
+            }
+        });
 
-        // Load shop profile for client page
-        function loadClientShopProfile(shopId) {
-            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
-                if (!snap.exists()) return;
-                const full = snap.val();
-                const info = full.info || {};
+        function listenToReservations(shop) {
+            onValue(ref(db, 'reservations/' + shop), (snapshot) => {
+                allReservations = [];
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    allReservations = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                }
+                renderAll(shop);
+            });
+        }
 
-                get(ref(db, `shop_details/${shopId}`)).then(detSnap => {
-                    const det = detSnap.exists() ? detSnap.val() : {};
-                    document.getElementById('shop-display').innerText = det.displayName || shopId;
-                });
+        function renderAll(shop) {
+            renderDashboard(shop);
+            if (document.getElementById('atab-analytics').classList.contains('active')) {
+                renderAnalytics(shop);
+            }
+        }
 
-                if (full.coverPhoto) {
-                    document.getElementById('client-cover-img').src = full.coverPhoto;
-                    document.getElementById('client-cover-wrap').style.display = 'block';
-                    document.getElementById('client-cover-placeholder').style.display = 'none';
-                }
-                if (full.logoPhoto) {
-                    document.getElementById('client-logo-img').src = full.logoPhoto;
-                    document.getElementById('client-logo-wrap').style.display = 'block';
-                }
-                if (info.tagline) {
-                    const el = document.getElementById('client-tagline');
-                    el.innerText = info.tagline; el.style.display = 'block';
-                }
-                if (info.description) {
-                    const el = document.getElementById('client-description');
-                    el.innerText = info.description; el.style.display = 'block';
-                }
-                if (info.address) {
-                    const el = document.getElementById('client-address');
-                    el.querySelector('span').innerText = info.address; el.style.display = 'inline-flex';
-                }
-                if (info.phone) {
-                    const el   = document.getElementById('client-phone-pub');
-                    const link = document.getElementById('client-phone-link');
-                    link.innerText = info.phone; link.href = 'tel:' + info.phone;
-                    el.style.display = 'inline-flex';
-                }
-                if (info.hours) {
-                    const el = document.getElementById('client-hours');
-                    el.querySelector('span').innerText = info.hours; el.style.display = 'inline-flex';
-                }
-                if (full.gallery) {
-                    const photos = Object.values(full.gallery);
-                    if (photos.length > 0) {
-                        const strip = document.getElementById('client-gallery-strip');
-                        strip.innerHTML = '';
-                        photos.forEach(p => {
-                            const img = document.createElement('img');
-                            img.src = p.data; img.alt = p.name || '';
-                            img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
-                            img.onmouseover = () => img.style.transform = 'scale(1.03)';
-                            img.onmouseout  = () => img.style.transform = '';
-                            img.onclick = () => openLightbox(p.data, p.name);
-                            strip.appendChild(img);
-                        });
-                        document.getElementById('client-gallery-wrap').style.display = 'block';
-                    }
+        function renderDashboard(shop) {
+            const fromDate = document.getElementById('filter-from').value;
+            const toDate   = document.getElementById('filter-to').value;
+            const list     = document.getElementById('reservation-list');
+            let filtered   = allReservations.filter(r => r.date >= fromDate && r.date <= toDate && r.status !== 'cancelled');
+            filtered.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.localeCompare(b.time));
+            let totalGuests = 0;
+            filtered.forEach(r => totalGuests += parseInt(r.guests || 0));
+            document.getElementById('stat-count').innerText  = filtered.length;
+            document.getElementById('stat-guests').innerText = totalGuests;
+            list.innerHTML = '';
+            if (filtered.length === 0) {
+                list.innerHTML = `<div class='no-data'>${t('no_reservations')}</div>`;
+                return;
+            }
+            filtered.forEach(res => {
+                const div = document.createElement('div');
+                div.className = 'booking-card';
+                const locationDisplay = res.location || t('location_label_indoor');
+                div.innerHTML = `
+                    <div class="card-header">
+                        <div class="time-badge">${res.time}</div>
+                        <div class="date-text">${res.date}</div>
+                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="customer-name">${res.name}</div>
+                        <div class="info-row">
+                            <span>👥 <strong>${res.guests} ${t('guests_label')}</strong></span>
+                            <span>📍 ${locationDisplay}</span>
+                            ${res.source === 'google' ? '<span>🔵 Google Reserve</span>' : ''}
+                        </div>
+                        ${res.occasion ? `<div class="occasion-tag">🎉 ${res.occasion}</div>` : ''}
+                        ${res.comments ? `<div class="comments-box">${res.comments}</div>` : ''}
+                        <a href="tel:${res.phone}" class="call-button">📞 ${res.phone}</a>
+                    </div>`;
+                list.appendChild(div);
+            });
+        }
+
+        // ======= ANALYTICS =======
+        const chartInstances = {};
+        function drawChart(canvasId, type, labels, data, color) {
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) return;
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            chartInstances[canvasId] = new Chart(ctx, {
+                type,
+                data: { labels, datasets: [{ data, backgroundColor: type === 'line' ? 'rgba(37,99,235,.12)' : color, borderColor: color, borderWidth: type === 'line' ? 2 : 0, tension: .35, fill: type === 'line', borderRadius: type === 'bar' ? 6 : 0 }] },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
                 }
             });
         }
 
-        function openLightbox(src, caption) {
-            const lb = document.createElement('div');
-            lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;';
-            lb.innerHTML = `<img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
-                ${caption ? `<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">${caption}</div>` : ''}
-                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">Κλικ οπουδήποτε για κλείσιμο</div>`;
-            lb.onclick = () => document.body.removeChild(lb);
-            document.body.appendChild(lb);
+        function drawDoughnut(canvasId, labels, data) {
+            const ctx = document.getElementById(canvasId);
+            if (!ctx) return;
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+            const palette = ['#2563eb', '#0f172a', '#3b82f6', '#64748b', '#93c5fd', '#1e293b', '#60a5fa', '#334155'];
+            chartInstances[canvasId] = new Chart(ctx, {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data, backgroundColor: labels.map((_, i) => palette[i % palette.length]) }] },
+                options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
+            });
         }
 
-        // Load display name
-        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
-            if (detSnap.exists()) {
-                document.getElementById('shop-display').innerText = detSnap.val().displayName || shopID;
-            }
-        }).catch(() => {});
+        function renderAnalytics(shop) {
+            const fromDate = document.getElementById('filter-from').value;
+            const toDate   = document.getElementById('filter-to').value;
+            const inRange  = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
+            const active   = inRange.filter(r => r.status !== 'cancelled');
+            const cancelled = inRange.filter(r => r.status === 'cancelled');
 
-        loadClientShopProfile(shopID);
+            const totalGuests = active.reduce((s, r) => s + parseInt(r.guests || 0), 0);
+            document.getElementById('an-avg-party').innerText = active.length ? (totalGuests / active.length).toFixed(1) : '0';
 
-        // Dynamic time slots and guests from Firebase
-        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
-            const det       = detSnap.exists() ? detSnap.val() : {};
-            const openHour  = typeof det.openHour  === 'number' ? det.openHour  : 8;
-            const closeHour = typeof det.closeHour === 'number' ? det.closeHour : 23;
-            const maxGuests = typeof det.maxGuests === 'number' ? det.maxGuests : 8;
+            const cancelRate = inRange.length ? Math.round(cancelled.length / inRange.length * 100) : 0;
+            document.getElementById('an-cancel-rate').innerText = cancelRate + '%';
 
-            const guestSelect = document.getElementById('cust-guests');
-            guestSelect.innerHTML = '';
-            for (let i = 1; i <= maxGuests; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.innerText = i === 1 ? t('person_1') : i + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
-                if (i === 2) opt.selected = true;
-                guestSelect.appendChild(opt);
-            }
+            const byPhone = {};
+            active.forEach(r => {
+                const key = (r.phone || '').trim();
+                if (!key) return;
+                if (!byPhone[key]) byPhone[key] = { name: r.name, count: 0 };
+                byPhone[key].count++;
+            });
+            const repeatEntries = Object.values(byPhone).filter(c => c.count > 1).sort((a, b) => b.count - a.count);
+            document.getElementById('an-repeat-count').innerText = repeatEntries.length;
+            const repeatListEl = document.getElementById('repeat-customer-list');
+            repeatListEl.innerHTML = repeatEntries.length === 0
+                ? `<div class="no-data">${t('an_no_repeats')}</div>`
+                : repeatEntries.slice(0, 10).map(c => `<div class="repeat-item"><span>${c.name || '-'}</span><span class="rc-count">${c.count}×</span></div>`).join('');
 
-            timeContainer.innerHTML = '';
-            timeSelect.innerHTML = `<option value="">${t('select_opt')}</option>`;
-            for (let h = openHour; h < closeHour; h++) {
-                const hs = h < 10 ? '0' + h : '' + h;
-                [`${hs}:00`, `${hs}:30`].forEach(time => {
-                    const opt = document.createElement('option');
-                    opt.value = time; opt.innerText = time;
-                    timeSelect.appendChild(opt);
-                    const div = document.createElement('div');
-                    div.className = 'time-slot'; div.innerText = time; div.dataset.time = time;
-                    div.onclick = () => updateSelection(time);
-                    timeContainer.appendChild(div);
+            const googleCount = active.filter(r => r.source === 'google').length;
+            document.getElementById('an-google-share').innerText = (active.length ? Math.round(googleCount / active.length * 100) : 0) + '%';
+
+            const dayMap = {};
+            active.forEach(r => { dayMap[r.date] = (dayMap[r.date] || 0) + 1; });
+            const sortedDates = Object.keys(dayMap).sort();
+            drawChart('chart-trend', 'line', sortedDates, sortedDates.map(d => dayMap[d]), '#2563eb');
+
+            const hourMap = {};
+            active.forEach(r => {
+                const h = (r.time || '').split(':')[0];
+                if (h !== '') hourMap[h] = (hourMap[h] || 0) + 1;
+            });
+            const sortedHours = Object.keys(hourMap).sort((a, b) => a - b);
+            drawChart('chart-hours', 'bar', sortedHours.map(h => h + ':00'), sortedHours.map(h => hourMap[h]), '#3b82f6');
+
+            const dowLabels = currentLang === 'en' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['Κυρ','Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ'];
+            const dowCounts = [0,0,0,0,0,0,0];
+            active.forEach(r => {
+                const d = new Date(r.date + 'T00:00:00');
+                if (!isNaN(d)) dowCounts[d.getDay()]++;
+            });
+            drawChart('chart-dow', 'bar', dowLabels, dowCounts, '#0f172a');
+
+            const getMonday = (dateStr) => {
+                const d = new Date(dateStr + 'T00:00:00');
+                const day = d.getDay();
+                d.setDate(d.getDate() + (day === 0 ? -6 : 1) - day);
+                return d;
+            };
+            const fmtDayMonth = (d) => String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+            const weekMap = {};
+            active.forEach(r => {
+                const d = new Date(r.date + 'T00:00:00');
+                if (isNaN(d)) return;
+                const monday = getMonday(r.date);
+                const key = monday.toISOString().slice(0,10);
+                if (!weekMap[key]) weekMap[key] = { label: fmtDayMonth(monday), guests: 0 };
+                weekMap[key].guests += parseInt(r.guests || 0);
+            });
+            const weekKeys = Object.keys(weekMap).sort();
+            drawChart('chart-week-guests', 'bar', weekKeys.map(k => weekMap[k].label), weekKeys.map(k => weekMap[k].guests), '#2563eb');
+
+            const monthNames = currentLang === 'en'
+                ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+                : ['Ιαν','Φεβ','Μάρ','Απρ','Μάι','Ιούν','Ιούλ','Αύγ','Σεπ','Οκτ','Νοέ','Δεκ'];
+            const monthMap = {};
+            active.forEach(r => {
+                const key = (r.date || '').slice(0, 7);
+                if (!key) return;
+                monthMap[key] = (monthMap[key] || 0) + parseInt(r.guests || 0);
+            });
+            const monthKeys = Object.keys(monthMap).sort();
+            const monthLabels = monthKeys.map(k => { const [y, m] = k.split('-'); return monthNames[parseInt(m, 10) - 1] + ' ' + y; });
+            drawChart('chart-month-guests', 'bar', monthLabels, monthKeys.map(k => monthMap[k]), '#0f172a');
+
+            const sourceCounts = { direct: 0, google: 0 };
+            active.forEach(r => { r.source === 'google' ? sourceCounts.google++ : sourceCounts.direct++; });
+            drawDoughnut('chart-source', [t('an_direct'), t('an_google')], [sourceCounts.direct, sourceCounts.google]);
+
+            const locCounts = {};
+            active.forEach(r => {
+                const loc = r.location || t('an_indoor');
+                locCounts[loc] = (locCounts[loc] || 0) + 1;
+            });
+            drawDoughnut('chart-location', Object.keys(locCounts), Object.values(locCounts));
+
+            const occCounts = {};
+            active.forEach(r => { if (r.occasion) occCounts[r.occasion] = (occCounts[r.occasion] || 0) + 1; });
+            const occLabels = Object.keys(occCounts).length ? Object.keys(occCounts) : [t('an_no_occasion')];
+            const occData   = Object.keys(occCounts).length ? Object.values(occCounts) : [1];
+            drawDoughnut('chart-occasion', occLabels, occData);
+        }
+
+
+        document.getElementById('filter-from').onchange = () => renderAll(document.getElementById('shop-title').innerText);
+        document.getElementById('filter-to').onchange   = () => renderAll(document.getElementById('shop-title').innerText);
+
+        document.getElementById('btn-login').onclick = () => {
+            const email = document.getElementById('email').value;
+            const pass  = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, email, pass).catch(() => alert(t('alert_wrong_creds')));
+        };
+
+        document.getElementById('btn-logout').onclick = () => signOut(auth);
+
+        window.deleteBooking = (shop, id) => {
+            if (confirm(t('delete_confirm'))) remove(ref(db, `reservations/${shop}/${id}`));
+        };
+
+        // ======= ADMIN TABS =======
+        window.switchAdminTab = (tab) => {
+            ['reservations','analytics','profile'].forEach(t => {
+                document.getElementById('asec-' + t).classList.remove('active');
+                document.getElementById('atab-' + t).classList.remove('active');
+            });
+            document.getElementById('asec-' + tab).classList.add('active');
+            document.getElementById('atab-' + tab).classList.add('active');
+            if (tab === 'analytics') renderAnalytics(document.getElementById('shop-title').innerText);
+        };
+
+        window.updateCharCount = (inputId, counterId, max) => {
+            document.getElementById(counterId).innerText = document.getElementById(inputId).value.length;
+        };
+
+        // ======= SHOP PROFILE =======
+        let pendingCoverBase64 = null;
+        let pendingLogoBase64  = null;
+
+        function loadShopProfile(shopId) {
+            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
+                if (!snap.exists()) return;
+                const full = snap.val();
+                const p    = full.info || {};
+                const setVal = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val || ''; };
+                setVal('prof-tagline',            p.tagline);
+                setVal('prof-description',        p.description);
+                setVal('prof-address',            p.address);
+                setVal('prof-phone',              p.phone);
+                setVal('prof-notification-email', p.notificationEmail || '');
+                setVal('prof-hours',              p.hours);
+                ['prof-tagline','prof-description'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.dispatchEvent(new Event('input'));
                 });
+                if (full.coverPhoto) showCoverPreview(full.coverPhoto);
+                if (full.logoPhoto)  showLogoPreview(full.logoPhoto);
+                loadGallery(shopId);
+            });
+        }
+
+        window.saveShopProfile = async () => {
+            if (!currentAdminShop) return;
+            const btn = document.getElementById('btn-save-profile');
+            btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`;
+            const data = {
+                tagline:           document.getElementById('prof-tagline').value.trim(),
+                description:       document.getElementById('prof-description').value.trim(),
+                address:           document.getElementById('prof-address').value.trim(),
+                phone:             document.getElementById('prof-phone').value.trim(),
+                hours:             document.getElementById('prof-hours').value.trim(),
+                notificationEmail: document.getElementById('prof-notification-email').value.trim(),
+                updatedAt:         Date.now()
+            };
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/info`), data);
+                showToast(t('toast_profile_saved'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `💾 <span>${t('save_profile')}</span>`;
             }
+        };
+
+        ['cover-zone','gallery-zone'].forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('drag-over'); });
+            el.addEventListener('dragleave', ()  => el.classList.remove('drag-over'));
+            el.addEventListener('drop',      e => { e.preventDefault(); el.classList.remove('drag-over'); });
         });
 
-        function updateSelection(time) {
-            selectedTime = time;
-            timeSelect.value = time;
-            document.querySelectorAll('.time-slot').forEach(s =>
-                s.classList.toggle('selected', s.dataset.time === time));
-            document.getElementById('open-modal').style.display = 'block';
-            document.getElementById('badge-time-text').innerText = time;
-            document.getElementById('time-badge').classList.add('show');
+        // ======= LOGO =======
+        function showLogoPreview(base64) {
+            document.getElementById('logo-preview-img').src = base64;
+            document.getElementById('logo-preview-img').style.display = 'block';
+            document.getElementById('logo-preview-placeholder').style.display = 'none';
+            document.getElementById('btn-del-logo').style.display = 'inline-flex';
         }
 
-        timeSelect.onchange = (e) => { if (e.target.value) updateSelection(e.target.value); };
-
-        const modal = document.getElementById('booking-modal');
-        document.getElementById('open-modal').onclick = () => {
-            if (!document.getElementById('cust-date-only').value) return alert(t('alert_select_date'));
-            modal.classList.add('open');
+        window.handleLogoUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 1 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει το 1MB!', 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => { pendingLogoBase64 = e.target.result; showLogoPreview(pendingLogoBase64); };
+            reader.readAsDataURL(file);
         };
-        document.getElementById('close-modal').onclick = () => modal.classList.remove('open');
-        modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('open'); };
 
-        // ======= BOOKING SAVE — με cancelToken + email πελάτη =======
-        document.getElementById('btn-save').onclick = () => {
-            const name           = document.getElementById('cust-name').value.trim();
-            const phone          = document.getElementById('cust-phone').value.trim();
-            const email          = document.getElementById('cust-email').value.trim();
-            const date           = document.getElementById('cust-date-only').value;
-            const guests         = document.getElementById('cust-guests').value;
-            const locationChoice = document.getElementById('cust-location').value;
-            const occasion       = document.getElementById('cust-occasion').value.trim();
-            const comments       = document.getElementById('cust-comments').value.trim();
+        window.saveLogoPhoto = async () => {
+            if (!currentAdminShop || !pendingLogoBase64) return;
+            const btn = document.querySelector('[onclick="saveLogoPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), pendingLogoBase64);
+                showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
+                pendingLogoBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 Αποθήκευση Λογότυπου`; }
+            }
+        };
 
-            if (!name || !phone || !email) return alert(t('alert_name_phone_email'));
-            if (!selectedTime)   return alert(t('alert_select_time'));
-            if (!date)           return alert(t('alert_select_date2'));
+        window.deleteLogoPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή λογότυπου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`));
+                document.getElementById('logo-preview-img').style.display = 'none';
+                document.getElementById('logo-preview-placeholder').style.display = 'block';
+                document.getElementById('btn-del-logo').style.display = 'none';
+                pendingLogoBase64 = null;
+                showToast('🗑️ Λογότυπο διαγράφηκε.', 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
 
-            // Δημιουργία μοναδικού cancelToken
-            const cancelToken = Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
+        // ======= COVER PHOTO =======
+        function showCoverPreview(base64) {
+            document.getElementById('cover-preview').innerHTML = `<img src="${base64}" alt="cover">`;
+            document.getElementById('btn-del-cover').style.display = 'inline-flex';
+        }
 
-            const bookingData = {
-                name, phone, email, date,
-                time:      selectedTime,
-                guests,
-                location:  locationChoice,
-                occasion,
-                comments,
-                timestamp: Date.now(),
-                cancelToken,           // νέο
-                status:    'confirmed' // νέο
-            };
+        window.handleCoverUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
+            const reader = new FileReader();
+            reader.onload = (e) => { pendingCoverBase64 = e.target.result; showCoverPreview(pendingCoverBase64); };
+            reader.readAsDataURL(file);
+        };
 
-            const newBookingRef = push(ref(db, 'reservations/' + shopID));
+        window.saveCoverPhoto = async () => {
+            if (!currentAdminShop || !pendingCoverBase64) return;
+            const btn = document.querySelector('[onclick="saveCoverPhoto()"]');
+            if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
+            try {
+                await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), pendingCoverBase64);
+                showToast(t('toast_cover_saved'), 'success');
+                pendingCoverBase64 = null;
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 <span>${t('save_cover')}</span>`; }
+            }
+        };
 
-            set(newBookingRef, bookingData).then(() => {
-                const bookingId = newBookingRef.key;
+        window.deleteCoverPhoto = async () => {
+            if (!currentAdminShop) return;
+            if (!confirm('Διαγραφή εξωφύλλου;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`));
+                document.getElementById('cover-preview').innerHTML = `<span>${t('no_cover')}</span>`;
+                document.getElementById('btn-del-cover').style.display = 'none';
+                pendingCoverBase64 = null;
+                showToast(t('toast_cover_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
+        };
 
-                // 1. Email ειδοποίηση στο μαγαζί
-                fetch(`${API}/notify`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ shopId: shopID, bookingId })
-                })
-                .then(r => r.json())
-                .then(d => console.log('[email-shop] success:', d))
-                .catch(e => console.warn('[email-shop] failed:', e));
+        // ======= GALLERY =======
+        function loadGallery(shopId) {
+            onValue(ref(db, `shop_profile/${shopId}/gallery`), (snap) => {
+                const grid  = document.getElementById('gallery-grid');
+                const badge = document.getElementById('photos-count-badge');
+                grid.innerHTML = '';
+                if (!snap.exists()) { badge.innerText = '0'; return; }
+                const photos = snap.val();
+                const keys   = Object.keys(photos);
+                badge.innerText = keys.length;
+                keys.forEach(key => {
+                    const p     = photos[key];
+                    const thumb = document.createElement('div');
+                    thumb.className = 'photo-thumb';
+                    thumb.innerHTML = `
+                        <img src="${p.data}" alt="${p.name || ''}">
+                        <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="Διαγραφή">✕</button>
+                        ${p.name ? `<div class="photo-label">${p.name}</div>` : ''}
+                    `;
+                    grid.appendChild(thumb);
+                });
+            });
+        }
 
-                // 2. Email επιβεβαίωσης στον πελάτη (μόνο αν έχει δώσει email)
-                if (email) {
-                    fetch(`${API}/notify-customer`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ shopId: shopID, bookingId, cancelToken, lang: currentLang })
-                    })
-                    .then(r => r.json())
-                    .then(d => console.log('[email-customer] success:', d))
-                    .catch(e => console.warn('[email-customer] failed:', e));
+        window.handleGalleryUpload = async (event) => {
+            const files = Array.from(event.target.files);
+            if (!currentAdminShop || !files.length) return;
+            for (const file of files) {
+                if (file.size > 2 * 1024 * 1024) { showToast(`⚠️ ${file.name}: > 2MB`, 'error'); continue; }
+                const base64 = await new Promise((res, rej) => {
+                    const r = new FileReader();
+                    r.onload = e => res(e.target.result); r.onerror = rej;
+                    r.readAsDataURL(file);
+                });
+                const entry = { data: base64, name: file.name.replace(/\.[^.]+$/, ''), uploadedAt: Date.now() };
+                try {
+                    await set(ref(db, `shop_profile/${currentAdminShop}/gallery/${Date.now()}_${Math.random().toString(36).slice(2,7)}`), entry);
+                    showToast(t('toast_photo_saved'), 'success');
+                } catch(e) {
+                    showToast(t('toast_save_error2'), 'error');
                 }
+            }
+            event.target.value = '';
+        };
 
-                showToast(t('toast_saved'), 'success');
-                modal.classList.remove('open');
-
-                // Reset form
-                ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments']
-                    .forEach(id => document.getElementById(id).value = '');
-                selectedTime = null;
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                document.getElementById('open-modal').style.display = 'none';
-                document.getElementById('time-badge').classList.remove('show');
-                timeSelect.value = '';
-
-            }).catch(() => alert(t('toast_save_error')));
+        window.deleteGalleryPhoto = async (shopId, key) => {
+            if (!confirm('Διαγραφή φωτογραφίας;')) return;
+            try {
+                await remove(ref(db, `shop_profile/${shopId}/gallery/${key}`));
+                showToast(t('toast_photo_deleted'), 'success');
+            } catch(e) {
+                showToast(t('toast_save_error2'), 'error');
+            }
         };
 
         // Initial translations

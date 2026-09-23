@@ -1,1 +1,3 @@
 https://restableres.netlify.app/* https://tablereserve.gr/:splat 301!
+/superadmin.html  /superadmin/  301
+/admin.html       /admin/       301

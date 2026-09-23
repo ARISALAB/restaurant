@@ -29,7 +29,7 @@ exports.handler = async (event) => {
   let body;
   try { body = JSON.parse(event.body || '{}'); } catch { return json(400, { error: 'bad_json' }); }
 
-  const shopId      = String(body.shopId || '').trim();
+  const shopId      = String(body.shopId || '').trim().toLowerCase();
   const displayName = String(body.displayName || '').trim();
   const email       = String(body.email || '').trim().toLowerCase();
   const password    = String(body.password || '');

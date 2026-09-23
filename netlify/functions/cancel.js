@@ -87,7 +87,7 @@ exports.handler = async (event) => {
         </tr>` : ''}
       </table>
       <div style="margin-top:24px;text-align:center;">
-        <a href="https://tablereserve.gr/?shop=${shopId}"
+        <a href="https://tablereserve.gr/admin"
            style="display:inline-block;background:#2563eb;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">
           Δες τις Κρατησεις →
         </a>

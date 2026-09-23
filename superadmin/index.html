@@ -392,7 +392,7 @@
 
                         <div class="input-group">
                             <label>ID Καταστήματος</label>
-                            <input type="text" id="sa-shop-id" placeholder="π.χ. ALMPOURO" style="font-family:monospace; text-transform:uppercase;">
+                            <input type="text" id="sa-shop-id" placeholder="π.χ. almpouro" style="font-family:monospace; text-transform:lowercase;">
                             <div class="hint">Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)</div>
                         </div>
                         <div class="input-group">
@@ -546,7 +546,7 @@
 
         // Create shop
         window.createShop = async () => {
-            const shopIdRaw = document.getElementById('sa-shop-id').value.trim().toUpperCase();
+            const shopIdRaw = document.getElementById('sa-shop-id').value.trim().toLowerCase();
             const displayName = document.getElementById('sa-shop-display').value.trim();
             const newEmail = document.getElementById('sa-new-email').value.trim();
             const newPass = document.getElementById('sa-new-pass').value;
