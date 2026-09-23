@@ -791,11 +791,24 @@
                     <button class="btn-primary" id="btn-login" data-i18n-key="login">Σύνδεση</button>
                 </div>
             </div>
+            <div id="verify-section" style="display:none; max-width:440px; margin:0 auto;">
+                <div class="page-header">
+                    <h2 data-i18n-key="verify_title">Επιβεβαιώστε το email σας</h2>
+                    <p data-i18n-key="verify_desc">Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.</p>
+                </div>
+                <div class="card">
+                    <p style="margin:0 0 18px; color:var(--text-muted, #64748b); font-size:0.95rem;"><span data-i18n-key="verify_sent_to">Στάλθηκε στο:</span> <strong id="verify-email"></strong></p>
+                    <button class="btn-primary" id="btn-verify-check" data-i18n-key="verify_check">Το επιβεβαίωσα</button>
+                    <button class="btn-link" id="btn-verify-resend" style="display:block; margin:14px auto 0;" data-i18n-key="verify_resend">Στείλε ξανά το email</button>
+                    <button class="btn-link" id="btn-verify-logout" style="display:block; margin:6px auto 0;" data-i18n-key="logout_link">Αποσύνδεση</button>
+                </div>
+            </div>
             <div id="dashboard" style="display:none;">
                 <div class="admin-header-row">
                     <div>
                         <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
                         <div class="shop-badge">🏪 <span id="shop-title"></span></div>
+                        <div style="margin-top:8px; font-size:0.85rem; color:#64748b;"><span data-i18n-key="booking_link">Link κρατήσεων:</span> <a id="booking-link" href="#" target="_blank" rel="noopener"></a> <button type="button" id="btn-copy-link" class="btn-link" style="font-size:0.85rem; padding:0 4px;" data-i18n-key="copy">Αντιγραφή</button></div>
                     </div>
                     <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
                 </div>
@@ -1042,6 +1055,7 @@
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
+                verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
                 guests_label: "άτομα", location_label_indoor: "Εσωτερικός",
@@ -1113,6 +1127,7 @@
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
+                verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", copy: "Copy", copied: "Copied!",
                 no_reservations: "📭 No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
                 guests_label: "guests", location_label_indoor: "Indoor",
@@ -1201,27 +1216,64 @@
         let currentAdminShop = null;
         const SUPERADMIN_UID = "cGhWqj5Mtiey6AC8CMpiUZDxAGh1";
 
+        const show = (id) => ['login-section','verify-section','dashboard'].forEach(x => document.getElementById(x).style.display = (x === id ? 'block' : 'none'));
+
+        async function openDashboard(myShop) {
+            show('dashboard');
+            document.getElementById('shop-title').innerText = myShop;
+            const url = `https://tablereserve.gr/?shop=${myShop}`;
+            const a = document.getElementById('booking-link'); a.href = url; a.textContent = url.replace('https://','');
+            currentAdminShop = myShop;
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('filter-from').value = today;
+            document.getElementById('filter-to').value = today;
+            listenToReservations(myShop);
+            loadShopProfile(myShop);
+        }
+
+        async function activateIfVerified(user, myShop) {
+            await user.reload();
+            if (!auth.currentUser.emailVerified) return false;
+            const token = await auth.currentUser.getIdToken(true);
+            const res = await fetch(`${API}/activate-shop`, { method:'POST', headers:{ 'Authorization': `Bearer ${token}` } });
+            return res.ok;
+        }
+
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
-                const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
-                if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); signOut(auth); return; }
-                const myShop = snapshot.val();
-                document.getElementById('login-section').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                document.getElementById('shop-title').innerText = myShop;
-                currentAdminShop = myShop;
-                const today = new Date().toISOString().split('T')[0];
-                document.getElementById('filter-from').value = today;
-                document.getElementById('filter-to').value = today;
-                listenToReservations(myShop);
-                loadShopProfile(myShop);
-            } else {
-                currentAdminShop = null;
-                document.getElementById('login-section').style.display = 'block';
-                document.getElementById('dashboard').style.display = 'none';
+            if (!user) { currentAdminShop = null; show('login-section'); return; }
+            if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
+
+            const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
+            if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); signOut(auth); return; }
+            const myShop = snapshot.val();
+
+            const status = (await get(ref(db, `shop_details/${myShop}/status`))).val();
+            if (status === 'pending') {
+                if (await activateIfVerified(user, myShop)) return openDashboard(myShop);
+                document.getElementById('verify-email').textContent = user.email;
+                show('verify-section');
+                document.getElementById('btn-verify-check').onclick = async () => {
+                    if (await activateIfVerified(user, myShop)) openDashboard(myShop);
+                    else showToast(t('verify_not_yet'), 'error');
+                };
+                document.getElementById('btn-verify-resend').onclick = async () => {
+                    try {
+                        const token = await auth.currentUser.getIdToken();
+                        const res = await fetch(`${API}/resend-verification`, { method:'POST', headers:{ 'Authorization': `Bearer ${token}` } });
+                        const data = await res.json().catch(() => ({}));
+                        if (res.ok) showToast(t('verify_resent'), 'success');
+                        else showToast(t(data.error === 'too_soon' ? 'verify_too_soon' : 'verify_error'), 'error');
+                    } catch (e) { showToast(t('verify_error'), 'error'); }
+                };
+                document.getElementById('btn-verify-logout').onclick = () => signOut(auth);
+                return;
             }
+            openDashboard(myShop);
         });
+
+        document.getElementById('btn-copy-link').onclick = async () => {
+            try { await navigator.clipboard.writeText(document.getElementById('booking-link').href); showToast(t('copied'), 'success'); } catch (e) {}
+        };
 
         function listenToReservations(shop) {
             onValue(ref(db, 'reservations/' + shop), (snapshot) => {
