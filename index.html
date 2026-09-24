@@ -748,7 +748,8 @@
             </svg>
         </div>
         <div class="splash-title">Table<span>Reserve</span></div>
-        <div class="splash-sub">Διαχείριση Κρατήσεων</div>
+        <div class="splash-sub" id="splash-sub">Online κρατήσεις</div>
+        <script>try{var p=new URLSearchParams(location.search).get('lang');var l=(p==='el'||p==='en')?p:(localStorage.getItem('tr_guest_lang')||((navigator.language||'').toLowerCase().indexOf('el')===0?'el':'en'));if(l==='en')document.getElementById('splash-sub').textContent='Online reservations';}catch(e){}</script>
         <div class="splash-dots">
             <div class="splash-dot"></div>
             <div class="splash-dot"></div>

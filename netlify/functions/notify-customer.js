@@ -1,6 +1,7 @@
 const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
+const { locationLabel } = require('./_shared/location');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -89,7 +90,7 @@ exports.handler = async (event) => {
       <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:40%;">${txt.location_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.location || txt.no_pref}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${locationLabel(booking.location, lang) || txt.no_pref}</td>
         </tr>
         ${booking.occasion ? `
         <tr>

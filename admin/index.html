@@ -749,7 +749,8 @@
             </svg>
         </div>
         <div class="splash-title">Table<span>Reserve</span></div>
-        <div class="splash-sub">Διαχείριση Κρατήσεων</div>
+        <div class="splash-sub" id="splash-sub">Διαχείριση Κρατήσεων</div>
+        <script>try{var l=localStorage.getItem('tr_admin_lang')||((navigator.language||'').toLowerCase().indexOf('el')===0?'el':'en');if(l==='en')document.getElementById('splash-sub').textContent='Reservation management';}catch(e){}</script>
         <div class="splash-dots">
             <div class="splash-dot"></div>
             <div class="splash-dot"></div>
@@ -1178,7 +1179,9 @@
             document.getElementById('lang-el').classList.toggle('active', lang === 'el');
             document.getElementById('lang-en').classList.toggle('active', lang === 'en');
             document.documentElement.lang = lang;
+            try { localStorage.setItem('tr_admin_lang', lang); } catch (e) {}
             applyTranslations();
+            if (currentAdminShop) renderBilling(currentAdminShop, auth.currentUser).catch(() => {});
         };
 
         function applyTranslations() {
@@ -1287,6 +1290,12 @@
         }
 
         async function openDashboard(myShop) {
+            try {
+                if (!localStorage.getItem('tr_admin_lang')) {
+                    const shopLang = (await get(ref(db, `shop_details/${myShop}/lang`))).val();
+                    if (shopLang === 'el' || shopLang === 'en') setLang(shopLang);
+                }
+            } catch (e) {}
             show('dashboard');
             document.getElementById('shop-title').innerText = myShop;
             const url = `https://tablereserve.gr/?shop=${myShop}`;
@@ -1398,7 +1407,8 @@
             filtered.forEach(res => {
                 const div = document.createElement('div');
                 div.className = 'booking-card';
-                const locationDisplay = res.location || t('location_label_indoor');
+                const locMap = { 'Εσωτερικός': t('indoor'), 'Εξωτερικός': t('outdoor'), 'Δεν έχω προτίμηση': t('no_pref') };
+                const locationDisplay = locMap[res.location] || res.location || t('location_label_indoor');
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${res.time}</div>
@@ -1785,8 +1795,9 @@
             }
         };
 
-        // Initial translations
-        applyTranslations();
+        // Initial translations (με την τελευταία γλώσσα που διάλεξε ο χρήστης)
+        try { const saved = localStorage.getItem('tr_admin_lang'); if (saved === 'el' || saved === 'en') setLang(saved); else applyTranslations(); }
+        catch (e) { applyTranslations(); }
 
         // Splash screen
         window.addEventListener('load', () => {
