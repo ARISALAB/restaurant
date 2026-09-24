@@ -504,6 +504,28 @@
         window.doLogout = () => signOut(auth);
 
         // Load shops
+        function paidLabel(info) {
+            if (!info.paidUntil) return '<span style="color:#64748b;">Χωρίς όριο (παλιό κατάστημα)</span>';
+            const left = Math.ceil((info.paidUntil - Date.now()) / 86400000);
+            const date = new Date(info.paidUntil).toLocaleDateString('el-GR');
+            const color = left <= 0 ? '#dc2626' : left <= 3 ? '#d97706' : '#16a34a';
+            const st = info.billingStatus || '';
+            return `<span style="color:${color};font-weight:600;">${left <= 0 ? 'Έληξε' : 'Έως'} ${date}</span> <span style="color:#64748b;">(${st}${left > 0 ? ', ' + left + ' ημ.' : ''})</span>`;
+        }
+
+        window.extendShop = async (shopId) => {
+            const days = parseInt(prompt(`Πόσες ημέρες να προστεθούν στο "${shopId}";\n(π.χ. 90 για τρίμηνο, 365 για χρόνο)`, '90'), 10);
+            if (!days || days < 1) return;
+            try {
+                const cur = (await get(ref(db, `shop_details/${shopId}/paidUntil`))).val() || 0;
+                const until = Math.max(cur, Date.now()) + days * 86400000;
+                await set(ref(db, `shop_details/${shopId}/paidUntil`), until);
+                await set(ref(db, `shop_details/${shopId}/billingStatus`), 'manual');
+                document.getElementById(`paid-${shopId}`).innerHTML = paidLabel({ paidUntil: until, billingStatus: 'manual' });
+                showToast(`✅ Ενεργό έως ${new Date(until).toLocaleDateString('el-GR')}`, 'success');
+            } catch (e) { showToast('Σφάλμα επέκτασης', 'error'); }
+        };
+
         function loadShops() {
             onValue(ref(db, 'users_to_shops'), (snapshot) => {
                 const list = document.getElementById('sa-shops-list');
@@ -533,8 +555,10 @@
                                 <div class="shop-name">${info.displayName || shopId}</div>
                                 <div class="shop-email">${info.email || uid}</div>
                                 <div class="shop-url">${shopUrl}</div>
+                                <div id="paid-${shopId}" style="font-size:12px;margin-top:4px;">${paidLabel(info)}</div>
                             </div>
                             <div class="shop-actions">
+                                <button class="btn-icon copy" title="Επέκταση συνδρομής" onclick="extendShop('${shopId}')">⏱</button>
                                 <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyUrl('${shopUrl}')">🔗</button>
                                 <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
                             </div>`;

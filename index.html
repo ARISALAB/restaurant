@@ -1097,8 +1097,10 @@
         const shopID = urlParams.get('shop') || "default_store";
 
         // Κατάστημα που δεν έχει ενεργοποιηθεί ακόμα: δεν δέχεται κρατήσεις
-        get(ref(db, `shop_details/${shopID}/status`)).then(snap => {
-            if (snap.val() !== 'pending') return;
+        get(ref(db, `shop_details/${shopID}`)).then(snap => {
+            const d = snap.val() || {};
+            const inactive = d.status === 'pending' || (d.paidUntil && d.paidUntil < Date.now());
+            if (!inactive) return;
             const lay = document.querySelector('.client-layout');
             if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🕐</div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;
         }).catch(() => {});

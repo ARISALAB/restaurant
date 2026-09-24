@@ -2,6 +2,8 @@ const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { slugify, sendVerificationEmail, notifyOwner, ADMIN_URL } = require('./_shared/signup');
+const TRIAL_MS = 14 * 24 * 60 * 60 * 1000;
+
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflightOk();
@@ -57,7 +59,8 @@ exports.handler = async (event) => {
       [`users_to_shops/${user.uid}`]: shopId,
       [`shop_details/${shopId}`]: {
         displayName: shopName, email, status: 'pending', source: 'signup',
-        createdAt: now, termsAcceptedAt: now, lang, phone, type, plan
+        createdAt: now, termsAcceptedAt: now, lang, phone, type, plan,
+        paidUntil: now + TRIAL_MS, billingStatus: 'trial'
       },
       [`shop_profile/${shopId}/info/notificationEmail`]: email,
       [`signup_meta/${user.uid}/lastVerifySent`]: now

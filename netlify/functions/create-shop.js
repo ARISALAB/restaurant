@@ -59,7 +59,7 @@ exports.handler = async (event) => {
   try {
     await db.ref().update({
       [`users_to_shops/${user.uid}`]: shopId,
-      [`shop_details/${shopId}`]: { displayName, email, createdAt: Date.now() },
+      [`shop_details/${shopId}`]: { displayName, email, createdAt: Date.now(), paidUntil: Date.now() + 14 * 24 * 60 * 60 * 1000, billingStatus: 'trial' },
     });
   } catch (e) {
     console.error('db write failed, rolling back user', e);

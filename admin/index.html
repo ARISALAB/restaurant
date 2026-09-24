@@ -762,8 +762,9 @@
 
     <!-- TOP NAV -->
     <nav class="topnav">
-        <div class="logo">Table<span>Reserve</span></div>
+        <a href="/" class="logo" style="text-decoration:none;color:inherit;">Table<span>Reserve</span></a>
         <div class="nav-right">
+            <a href="/" data-i18n-key="nav_home" style="font-size:0.9rem;font-weight:500;color:#64748b;text-decoration:none;margin-right:14px;">← Αρχική</a>
             <div id="user-chip" style="display:none; align-items:center; gap:8px; font-size:0.9rem; font-weight:500; color:#1e293b; margin-right:12px;">
                 <img id="user-photo" src="" alt="" referrerpolicy="no-referrer" style="width:32px; height:32px; border-radius:50%; object-fit:cover; display:none;">
                 <span id="user-initial" style="width:32px; height:32px; border-radius:50%; background:#2563eb; color:#fff; display:none; align-items:center; justify-content:center; font-weight:600;"></span>
@@ -811,6 +812,10 @@
                 </div>
             </div>
             <div id="dashboard" style="display:none;">
+                <div id="billing-banner" style="display:none; border-radius:14px; padding:18px 20px; margin:0 0 20px;">
+                    <div id="billing-text" style="font-weight:600; margin-bottom:12px;"></div>
+                    <div id="billing-plans" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+                </div>
                 <div class="admin-header-row">
                     <div>
                         <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
@@ -1061,7 +1066,7 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
                 verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
@@ -1133,7 +1138,7 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
+                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
                 verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", copy: "Copy", copied: "Copied!",
                 no_reservations: "📭 No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
@@ -1225,6 +1230,62 @@
 
         const show = (id) => ['login-section','verify-section','dashboard'].forEach(x => document.getElementById(x).style.display = (x === id ? 'block' : 'none'));
 
+
+        // ======= ΣΥΝΔΡΟΜΗ =======
+        const PLANS = [
+            { key: 'quarter', el: 'Τρίμηνο · 39 €', en: 'Quarterly · €39' },
+            { key: 'half',    el: 'Εξάμηνο · 69 €', en: '6 months · €69' },
+            { key: 'year',    el: 'Χρονιαίο · 99 €', en: 'Yearly · €99' }
+        ];
+        async function renderBilling(shopId, user) {
+            const box = document.getElementById('billing-banner');
+            const d = (await get(ref(db, `shop_details/${shopId}`))).val() || {};
+            if (!d.paidUntil) { box.style.display = 'none'; return; }
+            const el = currentLang !== 'en';
+            const daysLeft = Math.ceil((d.paidUntil - Date.now()) / 86400000);
+            const dateStr = new Date(d.paidUntil).toLocaleDateString(el ? 'el-GR' : 'en-GB');
+            const active = d.billingStatus === 'active' || d.billingStatus === 'manual';
+            const plansEl = document.getElementById('billing-plans');
+            plansEl.innerHTML = '';
+
+            if (active && daysLeft > 0) {
+                box.style.cssText += 'display:block; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;';
+                document.getElementById('billing-text').textContent = el ? `✓ Συνδρομή ενεργή έως ${dateStr}` : `✓ Subscription active until ${dateStr}`;
+                if (d.lemonPortalUrl) {
+                    const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
+                    a.textContent = el ? 'Διαχείριση συνδρομής →' : 'Manage subscription →';
+                    a.style.cssText = 'color:#065f46; font-weight:600;'; plansEl.appendChild(a);
+                }
+                return;
+            }
+
+            const expired = daysLeft <= 0;
+            box.style.cssText += expired
+                ? 'display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b;'
+                : 'display:block; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a;';
+            document.getElementById('billing-text').textContent = expired
+                ? (el ? 'Η συνδρομή σας έληξε και οι online κρατήσεις είναι σε παύση. Επιλέξτε πακέτο για να συνεχίσετε.' : 'Your subscription has ended and online bookings are paused. Choose a plan to continue.')
+                : (el ? `Δωρεάν δοκιμή: απομένουν ${daysLeft} ${daysLeft === 1 ? 'ημέρα' : 'ημέρες'} (έως ${dateStr}). Επιλέξτε πακέτο για να συνεχίσετε χωρίς διακοπή.` : `Free trial: ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left (until ${dateStr}). Choose a plan to keep going without interruption.`);
+
+            let links = {};
+            try { links = await (await fetch('/billing.json', { cache: 'no-store' })).json(); } catch (e) {}
+            PLANS.forEach(pl => {
+                const base = links[pl.key];
+                const a = document.createElement('a');
+                a.textContent = el ? pl.el : pl.en;
+                a.style.cssText = 'background:#2563eb; color:#fff; padding:10px 16px; border-radius:10px; font-weight:600; text-decoration:none; font-size:0.9rem;';
+                if (base) {
+                    const u = new URL(base);
+                    u.searchParams.set('checkout[custom][shop_id]', shopId);
+                    if (user.email) u.searchParams.set('checkout[email]', user.email);
+                    a.href = u.toString(); a.target = '_blank'; a.rel = 'noopener';
+                } else {
+                    a.href = 'mailto:info@tablereserve.gr?subject=' + encodeURIComponent('Συνδρομή TableReserve: ' + shopId);
+                }
+                plansEl.appendChild(a);
+            });
+        }
+
         async function openDashboard(myShop) {
             show('dashboard');
             document.getElementById('shop-title').innerText = myShop;
@@ -1236,6 +1297,7 @@
             document.getElementById('filter-to').value = today;
             listenToReservations(myShop);
             loadShopProfile(myShop);
+            renderBilling(myShop, auth.currentUser).catch(() => {});
         }
 
         async function activateIfVerified(user, myShop) {
