@@ -105,7 +105,10 @@
       var f = frames[i];
       if (f.contentWindow !== e.source) continue;
       if (e.data.type === 'height' && e.data.height > 0) {
-        var h = Math.ceil(e.data.height) + 'px';
+        var hn = Math.min(Math.ceil(e.data.height), 4000);
+        if (Math.abs(hn - (f._trH || 0)) < 2) return;
+        f._trH = hn;
+        var h = hn + 'px';
         f.style.height = h;
         f.style.minHeight = h;
       } else if (e.data.type === 'scrollTop' && f !== overlayFrame) {
