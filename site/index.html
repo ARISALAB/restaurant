@@ -217,18 +217,17 @@ function displayName(id) {
 async function init() {
   if (!shopId) { showNotFound(); return; }
 
-  let snap;
-  try {
-    snap = await get(ref(db, `shop_profile/${shopId}`));
-  } catch (e) {
-    showNotFound();
-    return;
-  }
+  // Μόνο δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
+  const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
+  const [pCover, pGallery, pLogo, address, description, iDisplayName, hours, phone, tagline, detName] = await Promise.all([
+    P('coverPhoto'), P('gallery'), P('logoPhoto'), P('info/address'), P('info/description'), P('info/displayName'),
+    P('info/hours'), P('info/phone'), P('info/tagline'),
+    get(ref(db, `shop_details/${shopId}/displayName`)).then(x => x.val()).catch(() => null)
+  ]);
+  if (!pCover && !pGallery && !pLogo && !address && !description && !hours && !phone && !tagline && !detName) { showNotFound(); return; }
 
-  if (!snap.exists()) { showNotFound(); return; }
-
-  const full = snap.val();
-  const info = full.info || {};
+  const full = { coverPhoto: pCover, gallery: pGallery, logoPhoto: pLogo };
+  const info = { address, description, displayName: iDisplayName || detName, hours, phone, tagline };
   const name = info.displayName || displayName(shopId);
   const bookingUrl = `https://tablereserve.gr/?shop=${encodeURIComponent(shopId)}`;
 

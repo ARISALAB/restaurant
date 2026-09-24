@@ -1099,8 +1099,8 @@
         const shopID = urlParams.get('shop') || "default_store";
 
         // Κατάστημα που δεν έχει ενεργοποιηθεί ακόμα: δεν δέχεται κρατήσεις
-        get(ref(db, `shop_details/${shopID}`)).then(snap => {
-            const d = snap.val() || {};
+        Promise.all(['status', 'paidUntil'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()))).then(([status, paidUntil]) => {
+            const d = { status, paidUntil };
             const inactive = d.status === 'pending' || (d.paidUntil && d.paidUntil < Date.now());
             if (!inactive) return;
             const lay = document.querySelector('.client-layout');
@@ -1116,15 +1116,16 @@
 
         // Load shop profile for client page
         function loadClientShopProfile(shopId) {
-            get(ref(db, `shop_profile/${shopId}`)).then(snap => {
-                if (!snap.exists()) return;
-                const full = snap.val();
-                const info = full.info || {};
+            // Διαβάζουμε μόνο τα δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
+            const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
+            Promise.all(['coverPhoto', 'gallery', 'logoPhoto', 'info/address', 'info/description', 'info/hours', 'info/phone', 'info/tagline'].map(P))
+            .then(([coverPhoto, gallery, logoPhoto, address, description, hours, phone, tagline]) => {
+                const full = { coverPhoto, gallery, logoPhoto };
+                const info = { address, description, hours, phone, tagline };
 
-                get(ref(db, `shop_details/${shopId}`)).then(detSnap => {
-                    const det = detSnap.exists() ? detSnap.val() : {};
-                    document.getElementById('shop-display').innerText = det.displayName || shopId;
-                });
+                get(ref(db, `shop_details/${shopId}/displayName`)).then(nameSnap => {
+                    document.getElementById('shop-display').innerText = nameSnap.val() || shopId;
+                }).catch(() => {});
 
                 if (full.coverPhoto) {
                     document.getElementById('client-cover-img').src = full.coverPhoto;
@@ -1188,17 +1189,15 @@
         }
 
         // Load display name
-        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
-            if (detSnap.exists()) {
-                document.getElementById('shop-display').innerText = detSnap.val().displayName || shopID;
-            }
+        get(ref(db, `shop_details/${shopID}/displayName`)).then(nameSnap => {
+            if (nameSnap.exists()) document.getElementById('shop-display').innerText = nameSnap.val() || shopID;
         }).catch(() => {});
 
         loadClientShopProfile(shopID);
 
         // Dynamic time slots and guests from Firebase
-        get(ref(db, `shop_details/${shopID}`)).then(detSnap => {
-            const det       = detSnap.exists() ? detSnap.val() : {};
+        Promise.all(['openHour', 'closeHour', 'maxGuests'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()).catch(() => null))).then(([openHour_, closeHour_, maxGuests_]) => {
+            const det       = { openHour: openHour_, closeHour: closeHour_, maxGuests: maxGuests_ };
             const openHour  = typeof det.openHour  === 'number' ? det.openHour  : 8;
             const closeHour = typeof det.closeHour === 'number' ? det.closeHour : 23;
             const maxGuests = typeof det.maxGuests === 'number' ? det.maxGuests : 8;
