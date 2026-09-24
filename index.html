@@ -1047,6 +1047,7 @@
             document.getElementById('lang-el').classList.toggle('active', lang === 'el');
             document.getElementById('lang-en').classList.toggle('active', lang === 'en');
             document.documentElement.lang = lang;
+            try { localStorage.setItem('tr_guest_lang', lang); } catch (e) {}
             applyTranslations();
         };
 
@@ -1319,8 +1320,17 @@
             }).catch(() => alert(t('toast_save_error')));
         };
 
-        // Initial translations
-        applyTranslations();
+        // Αρχική γλώσσα: ?lang= στο link, αλλιώς η τελευταία επιλογή του πελάτη, αλλιώς η γλώσσα της συσκευής του
+        (function () {
+            let lang = null;
+            try {
+                const p = new URLSearchParams(location.search).get('lang');
+                if (p === 'el' || p === 'en') lang = p;
+                if (!lang) { const saved = localStorage.getItem('tr_guest_lang'); if (saved === 'el' || saved === 'en') lang = saved; }
+            } catch (e) {}
+            if (!lang) lang = (navigator.language || '').toLowerCase().startsWith('el') ? 'el' : 'en';
+            setLang(lang);
+        })();
 
         // Splash screen
         window.addEventListener('load', () => {
