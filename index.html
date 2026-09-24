@@ -1101,7 +1101,7 @@
         // Κατάστημα που δεν έχει ενεργοποιηθεί ακόμα: δεν δέχεται κρατήσεις
         Promise.all(['status', 'paidUntil'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()))).then(([status, paidUntil]) => {
             const d = { status, paidUntil };
-            const inactive = d.status === 'pending' || (d.paidUntil && d.paidUntil < Date.now());
+            const inactive = d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < Date.now());
             if (!inactive) return;
             const lay = document.querySelector('.client-layout');
             if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🕐</div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;

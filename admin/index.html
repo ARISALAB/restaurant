@@ -812,6 +812,14 @@
                     <button class="btn-link" id="btn-verify-logout" style="display:block; margin:6px auto 0;" data-i18n-key="logout_link">Αποσύνδεση</button>
                 </div>
             </div>
+            <div id="closed-section" style="display:none; max-width:480px; margin:0 auto; text-align:center;">
+                <div class="card">
+                    <div style="font-size:2rem; margin-bottom:10px;">🔒</div>
+                    <h2 style="margin:0 0 10px;" data-i18n-key="closed_title">Ο λογαριασμός έχει κλείσει</h2>
+                    <p style="color:#64748b; line-height:1.6; margin:0 0 18px;"><span data-i18n-key="closed_desc">Τα δεδομένα θα διαγραφούν οριστικά στις</span> <strong id="closed-date"></strong>. <span data-i18n-key="closed_restore">Για επαναφορά ή αντίγραφο των κρατήσεων γράψτε στο info@tablereserve.gr.</span></p>
+                    <button class="btn-link" id="btn-closed-logout" data-i18n-key="logout_link">Αποσύνδεση</button>
+                </div>
+            </div>
             <div id="dashboard" style="display:none;">
                 <div id="billing-banner" style="display:none; border-radius:14px; padding:18px 20px; margin:0 0 20px;">
                     <div id="billing-text" style="font-weight:600; margin-bottom:12px;"></div>
@@ -996,6 +1004,12 @@
                         </div>
                         <div id="gallery-grid" class="photo-gallery"></div>
                     </div>
+                    <!-- Κλείσιμο λογαριασμού -->
+                    <div class="card" style="margin-top:20px; border:1px solid #fecaca;">
+                        <div class="card-title"><div class="icon">⚠️</div><span data-i18n-key="close_title">Κλείσιμο λογαριασμού</span></div>
+                        <p style="color:#64748b; font-size:0.9rem; line-height:1.6; margin:0 0 16px;" data-i18n-key="close_desc">Οι online κρατήσεις σταματούν αμέσως. Όλα τα δεδομένα του καταστήματος (κρατήσεις, προφίλ, φωτογραφίες, λογαριασμός) διαγράφονται οριστικά μετά από 30 ημέρες. Μέχρι τότε μπορείτε να ζητήσετε αντίγραφο των κρατήσεων ή επαναφορά στο info@tablereserve.gr.</p>
+                        <button type="button" id="btn-close-account" style="background:#fff; color:#dc2626; border:1px solid #fca5a5; padding:11px 18px; border-radius:10px; font-weight:600; font-family:inherit; cursor:pointer;" data-i18n-key="close_btn">Κλείσιμο λογαριασμού</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1067,7 +1081,11 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", close_title: "Κλείσιμο λογαριασμού", close_btn: "Κλείσιμο λογαριασμού",
+                close_desc: "Οι online κρατήσεις σταματούν αμέσως. Όλα τα δεδομένα του καταστήματος (κρατήσεις, προφίλ, φωτογραφίες, λογαριασμός) διαγράφονται οριστικά μετά από 30 ημέρες. Μέχρι τότε μπορείτε να ζητήσετε αντίγραφο των κρατήσεων ή επαναφορά στο info@tablereserve.gr.",
+                close_confirm: "Για επιβεβαίωση, γράψτε το ID του καταστήματος: {shop}\n\nΑν έχετε ενεργή συνδρομή, θα ακυρωθεί.", close_mismatch: "Το ID δεν ταιριάζει. Ο λογαριασμός δεν έκλεισε.",
+                close_done: "Ο λογαριασμός έκλεισε. Τα δεδομένα θα διαγραφούν σε 30 ημέρες.", close_reauth: "Για λόγους ασφαλείας, αποσυνδεθείτε, συνδεθείτε ξανά και επαναλάβετε.",
+                closed_title: "Ο λογαριασμός έχει κλείσει", closed_desc: "Τα δεδομένα θα διαγραφούν οριστικά στις", closed_restore: "Για επαναφορά ή αντίγραφο των κρατήσεων γράψτε στο info@tablereserve.gr.", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
                 verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
@@ -1139,7 +1157,11 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
+                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", close_title: "Close account", close_btn: "Close account",
+                close_desc: "Online bookings stop immediately. All restaurant data (reservations, profile, photos, account) is permanently deleted after 30 days. Until then you can request a copy of your reservations or a restore at info@tablereserve.gr.",
+                close_confirm: "To confirm, type your restaurant ID: {shop}\n\nIf you have an active subscription, it will be cancelled.", close_mismatch: "The ID does not match. Your account was not closed.",
+                close_done: "Your account is closed. Your data will be deleted in 30 days.", close_reauth: "For security, please sign out, sign in again and repeat.",
+                closed_title: "This account is closed", closed_desc: "Your data will be permanently deleted on", closed_restore: "To restore it or get a copy of your reservations, write to info@tablereserve.gr.", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
                 verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", copy: "Copy", copied: "Copied!",
                 no_reservations: "📭 No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
@@ -1231,7 +1253,7 @@
         let currentAdminShop = null;
         const SUPERADMIN_UID = "cGhWqj5Mtiey6AC8CMpiUZDxAGh1";
 
-        const show = (id) => ['login-section','verify-section','dashboard'].forEach(x => document.getElementById(x).style.display = (x === id ? 'block' : 'none'));
+        const show = (id) => ['login-section','verify-section','closed-section','dashboard'].forEach(x => document.getElementById(x).style.display = (x === id ? 'block' : 'none'));
 
 
         // ======= ΣΥΝΔΡΟΜΗ =======
@@ -1262,12 +1284,30 @@
                 return;
             }
 
+            // Ακυρωμένη συνδρομή που ισχύει ακόμα μέχρι το τέλος της περιόδου
+            if ((d.billingStatus === 'cancelled' || d.billingStatus === 'past_due') && daysLeft > 0) {
+                box.style.cssText += 'display:block; background:#fffbeb; border:1px solid #fde68a; color:#92400e;';
+                document.getElementById('billing-text').textContent = d.billingStatus === 'cancelled'
+                    ? (el ? `Η συνδρομή ακυρώθηκε και ισχύει έως ${dateStr}. Μετά οι online κρατήσεις μπαίνουν σε παύση.` : `Your subscription was cancelled and stays active until ${dateStr}. After that, online bookings are paused.`)
+                    : (el ? `Η τελευταία πληρωμή δεν πέρασε. Ενημερώστε την κάρτα σας έως ${dateStr} για να μη σταματήσουν οι κρατήσεις.` : `Your last payment failed. Please update your card by ${dateStr} to keep bookings running.`);
+                if (d.lemonPortalUrl) {
+                    const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
+                    a.textContent = d.billingStatus === 'cancelled'
+                        ? (el ? 'Επαναφορά συνδρομής →' : 'Resume subscription →')
+                        : (el ? 'Ενημέρωση κάρτας →' : 'Update card →');
+                    a.style.cssText = 'color:#92400e; font-weight:600;'; plansEl.appendChild(a);
+                }
+                return;
+            }
+
             const expired = daysLeft <= 0;
             box.style.cssText += expired
                 ? 'display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b;'
                 : 'display:block; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a;';
+            const isTrial = !d.billingStatus || d.billingStatus === 'trial';
             document.getElementById('billing-text').textContent = expired
                 ? (el ? 'Η συνδρομή σας έληξε και οι online κρατήσεις είναι σε παύση. Επιλέξτε πακέτο για να συνεχίσετε.' : 'Your subscription has ended and online bookings are paused. Choose a plan to continue.')
+                : !isTrial ? (el ? `Η συνδρομή λήγει σε ${daysLeft} ${daysLeft === 1 ? 'ημέρα' : 'ημέρες'} (${dateStr}). Επιλέξτε πακέτο για να συνεχίσετε.` : `Your plan ends in ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} (${dateStr}). Choose a plan to continue.`)
                 : (el ? `Δωρεάν δοκιμή: απομένουν ${daysLeft} ${daysLeft === 1 ? 'ημέρα' : 'ημέρες'} (έως ${dateStr}). Επιλέξτε πακέτο για να συνεχίσετε χωρίς διακοπή.` : `Free trial: ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left (until ${dateStr}). Choose a plan to keep going without interruption.`);
 
             let links = {};
@@ -1338,6 +1378,13 @@
             const myShop = snapshot.val();
 
             const status = (await get(ref(db, `shop_details/${myShop}/status`))).val();
+            if (status === 'closed') {
+                const del = (await get(ref(db, `shop_details/${myShop}/deleteAfter`))).val();
+                document.getElementById('closed-date').textContent = del ? new Date(del).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'el-GR') : '-';
+                document.getElementById('btn-closed-logout').onclick = () => signOut(auth);
+                show('closed-section');
+                return;
+            }
             if (status === 'pending') {
                 if (await activateIfVerified(user, myShop)) return openDashboard(myShop);
                 document.getElementById('verify-email').textContent = user.email;
@@ -1365,6 +1412,21 @@
             signInWithPopup(auth, new GoogleAuthProvider()).catch(e => {
                 if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') alert(t('google_failed'));
             });
+        };
+
+        document.getElementById('btn-close-account').onclick = async () => {
+            const shop = currentAdminShop;
+            if (!shop) return;
+            const typed = prompt(t('close_confirm').replace('{shop}', shop));
+            if (typed === null) return;
+            if (typed.trim().toLowerCase() !== shop.toLowerCase()) { alert(t('close_mismatch')); return; }
+            try {
+                const token = await auth.currentUser.getIdToken(true);
+                const res = await fetch(`${API}/close-account`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+                const out = await res.json().catch(() => ({}));
+                if (res.ok) { alert(t('close_done')); window.location.reload(); return; }
+                alert(out.error === 'reauth_required' ? t('close_reauth') : t('verify_error'));
+            } catch (e) { alert(t('verify_error')); }
         };
 
         document.getElementById('btn-copy-link').onclick = async () => {

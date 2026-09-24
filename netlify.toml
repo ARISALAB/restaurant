@@ -7,3 +7,5 @@
 [[edge_functions]]
   path = "/"
   function = "root-rewrite"
+[functions."purge-closed"]
+  schedule = "@daily"
