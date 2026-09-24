@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="el">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Συνεργαστείτε — TableReserve</title>
+<title>TableReserve: online reservations for restaurants</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500&display=swap" rel="stylesheet">
@@ -146,35 +146,26 @@ footer a:hover{color:var(--accent)}
 <link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
 <link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
 <link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
-<script>
-(function(){try{
-  var p=new URLSearchParams(location.search).get('lang');
-  if(p==='el'){localStorage.setItem('tr_lang','el');return;}
-  if(/bot|crawl|spider|slurp/i.test(navigator.userAgent))return;
-  var s=localStorage.getItem('tr_lang');
-  var nav=(navigator.language||'').toLowerCase();
-  if(s==='en'||(!s&&nav.indexOf('el')!==0))location.replace('/en/'+location.hash);
-}catch(e){}})();
-</script>
+<script>try{localStorage.setItem('tr_lang','en')}catch(e){}</script>
 </head>
 <body>
 
 <nav>
   <div class="logo">Table<em>Reserve</em></div>
   <ul>
-    <li><a href="#how">Πώς λειτουργεί</a></li>
-    <li><a href="#benefits">Οφέλη</a></li>
-    <li><a href="#pricing">Τιμές</a></li>
-    <li><a href="#faq">Ερωτήσεις</a></li>
-    <li><a href="#contact">Επικοινωνία</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#benefits">Features</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <div style="display:flex;align-items:center;">
-  <a href="/en/?lang=en" hreflang="en" style="color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;border:0.5px solid var(--border2);border-radius:20px;padding:5px 10px;margin-right:14px;">EN</a>
-  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Σύνδεση</a><a href="#contact" class="nav-cta" id="navCta">Ξεκινήστε τώρα →</a></span>
+  <a href="/?lang=el" hreflang="el" style="color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;border:0.5px solid var(--border2);border-radius:20px;padding:5px 10px;margin-right:14px;">ΕΛ</a>
+  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Log in</a><a href="#contact" class="nav-cta" id="navCta">Get started →</a></span>
   <a href="/admin" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
     <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
     <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
-    <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Πίνακας διαχείρισης →</span></span>
+    <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Dashboard →</span></span>
   </a>
   </div>
 </nav>
@@ -183,213 +174,213 @@ footer a:hover{color:var(--accent)}
   <div class="hero-photo"></div>
   <div class="hero-overlay"></div>
   <div class="hero-copy">
-    <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
-    <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο</em></h1>
-    <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και σύνδεσμο κράτησης για Instagram, Google Maps και ιστοσελίδα. 14 ημέρες δωρεάν, μετά από €39/τρίμηνο</p>
+    <div class="hero-label">For restaurants &amp; cafés</div>
+    <h1>Online reservations<br>for your restaurant,<br><em>without the hassle</em></h1>
+    <p>Take table bookings 24/7, with automatic confirmation emails and a booking link for Instagram, Google Maps and your website. Free for 14 days, then from €39 a quarter</p>
     <div class="hero-ctas">
-      <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
-      <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
+      <a href="#contact" class="btn-main">Get started →</a>
+      <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">See the live demo ↗</a>
     </div>
   </div>
   <div class="hero-scroll">Scroll</div>
 </section>
 
 <div class="stats reveal">
-  <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Χρόνος εγκατάστασης</div></div>
-  <div class="stat"><div class="stat-n">€99</div><div class="stat-l">Χρονιαία συνδρομή</div></div>
-  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online κρατήσεις</div></div>
-  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Αυτόματα emails</div></div>
+  <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Setup time</div></div>
+  <div class="stat"><div class="stat-n">€99</div><div class="stat-l">Annual plan</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online reservations</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Automatic emails</div></div>
 </div>
 
 <section class="how" id="how">
   <div class="reveal">
-    <div class="eyebrow">Πώς λειτουργεί</div>
-    <h2>Από εγγραφή σε live<br>κρατήσεις σε 4 βήματα</h2>
+    <div class="eyebrow">How it works</div>
+    <h2>From sign-up to live<br>bookings in 4 steps</h2>
   </div>
   <div class="steps reveal">
     <div class="step" data-n="01">
       <div class="step-dot">01</div>
-      <h3>Εγγραφή &amp; ρύθμιση</h3>
-      <p>Συμπληρώνετε τα στοιχεία του καταστήματος, ώρες λειτουργίας και διαθέσιμα τραπέζια. Έτοιμο σε λεπτά</p>
+      <h3>Sign up &amp; set up</h3>
+      <p>Add your restaurant details, opening hours and available tables. Ready in minutes</p>
     </div>
     <div class="step" data-n="02">
       <div class="step-dot">02</div>
-      <h3>Μοιραστείτε τον σύνδεσμο</h3>
-      <p>Παίρνετε μοναδικό link (tablereserve.gr/?shop=το-μαγαζί-σας) για Instagram bio, Google Maps, website</p>
+      <h3>Share your link</h3>
+      <p>Get your own link (tablereserve.gr/?shop=your-restaurant) for your Instagram bio, Google Maps and website</p>
     </div>
     <div class="step" data-n="03">
       <div class="step-dot">03</div>
-      <h3>Δέχεστε κρατήσεις αυτόματα</h3>
-      <p>Οι πελάτες κλείνουν τραπέζι online, λαμβάνουν αυτόματο email. Εσείς τα βλέπετε όλα στο admin panel</p>
+      <h3>Take bookings automatically</h3>
+      <p>Guests book a table online and get an automatic email. You see everything in your dashboard</p>
     </div>
     <div class="step" data-n="04">
       <div class="step-dot">04</div>
-      <h3>Google ορατότητα</h3>
-      <p>Προσθέτετε τον σύνδεσμο κράτησης στο Google Business Profile σας — οι πελάτες κλείνουν τραπέζι με ένα κλικ από το Google Maps</p>
+      <h3>Get found on Google</h3>
+      <p>Add your booking link to your Google Business Profile, so guests can book with one click from Google Maps</p>
     </div>
   </div>
 </section>
 
 <section id="benefits">
   <div class="reveal">
-    <div class="eyebrow">Γιατί TableReserve</div>
-    <h2>Όλα όσα έχετε ανάγκη,<br>τίποτα που δεν χρειάζεστε</h2>
-    <p class="section-sub">Σχεδιασμένο για μικρές και μεσαίες επιχειρήσεις εστίασης στην Ελλάδα</p>
+    <div class="eyebrow">Why TableReserve</div>
+    <h2>Everything you need,<br>nothing you don't</h2>
+    <p class="section-sub">Built for independent restaurants, cafés and bars</p>
   </div>
   <div class="benefits-grid reveal">
-    <div class="benefit"><div class="b-icon">📧</div><h3>Αυτόματα emails</h3><p>Επιβεβαίωση και ακύρωση στέλνονται αυτόματα — σε Ελληνικά ή Αγγλικά ανάλογα τον πελάτη</p></div>
-    <div class="benefit"><div class="b-icon">📱</div><h3>Admin panel real-time</h3><p>Βλέπετε όλες τις κρατήσεις από το κινητό σε πραγματικό χρόνο, ακόμα κι από την κουζίνα</p></div>
-    <div class="benefit"><div class="b-icon">🌐</div><h3>Δίγλωσσο ΕΛ / EN</h3><p>Αυτόματη γλώσσα για τουρίστες. Κλείνουν τραπέζι στα Αγγλικά, λαμβάνουν email στα Αγγλικά</p></div>
-    <div class="benefit"><div class="b-icon">🔍</div><h3>Σύνδεσμος για Google Maps</h3><p>Προσθέστε τον σύνδεσμο κράτησης στο προφίλ σας στο Google Maps — οι πελάτες κλείνουν τραπέζι με ένα κλικ, μηδέν επιπλέον κόστος</p></div>
-    <div class="benefit"><div class="b-icon">❌</div><h3>Έξυπνες ακυρώσεις</h3><p>Πολιτική 2 ωρών πριν. Ο πελάτης ακυρώνει μόνος του — εσείς ειδοποιείστε αμέσως</p></div>
-    <div class="benefit"><div class="b-icon">📊</div><h3>Στατιστικά κρατήσεων</h3><p>Ποιες ώρες γεμίζει το μαγαζί, πόσες ακυρώσεις έχετε, ποια μέρα είναι πιο δημοφιλής</p></div>
+    <div class="benefit"><div class="b-icon">📧</div><h3>Automatic emails</h3><p>Confirmations and cancellations go out automatically, in English or Greek depending on the guest</p></div>
+    <div class="benefit"><div class="b-icon">📱</div><h3>Real-time dashboard</h3><p>See every booking on your phone in real time, even from the kitchen</p></div>
+    <div class="benefit"><div class="b-icon">🌐</div><h3>Bilingual EN / EL</h3><p>Automatic language for visitors: they book in English and get their email in English</p></div>
+    <div class="benefit"><div class="b-icon">🔍</div><h3>Link for Google Maps</h3><p>Add your booking link to your Google Maps profile, and guests book with one click at no extra cost</p></div>
+    <div class="benefit"><div class="b-icon">❌</div><h3>Smart cancellations</h3><p>Guests can cancel up to 2 hours before. They do it themselves, and you are notified instantly</p></div>
+    <div class="benefit"><div class="b-icon">📊</div><h3>Booking analytics</h3><p>See your busiest hours, how many cancellations you get and which day is most popular</p></div>
   </div>
 </section>
 
 <section class="pricing" id="pricing">
   <div class="reveal">
-    <div class="eyebrow">Τιμολόγηση</div>
-    <h2>Απλό, διαφανές<br>τιμολόγιο</h2>
-    <p class="section-sub">Ξεκινήστε με 14 ημέρες δωρεάν δοκιμή. Τρίμηνο €39 · Εξάμηνο €69 · Χρονιαίο €99, όλα με πλήρεις υπηρεσίες</p>
+    <div class="eyebrow">Pricing</div>
+    <h2>Simple, transparent<br>pricing</h2>
+    <p class="section-sub">Start with a 14-day free trial. Quarterly €39 · Semi-annual €69 · Annual €99, every feature included</p>
   </div>
   <div class="pricing-grid reveal" style="max-width:1000px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
     <div class="price-card">
-      <div class="plan-name">Τρίμηνο</div>
-      <div class="plan-price"><sup>€</sup>39<sub>/3μηνο</sub></div>
-      <p class="plan-desc">Όλες οι υπηρεσίες, με χρέωση ανά 3 μήνες</p>
+      <div class="plan-name">Quarterly</div>
+      <div class="plan-price"><sup>€</sup>39<sub>/quarter</sub></div>
+      <p class="plan-desc">Every feature, billed every 3 months</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
-        <li>Πλήρης support</li>
+        <li>Unlimited reservations</li>
+        <li>Confirmation &amp; cancellation emails</li>
+        <li>Real-time dashboard</li>
+        <li>Booking link</li>
+        <li>Analytics &amp; reports</li>
+        <li>Full support</li>
       </ul>
-      <a href="#contact" class="btn-plan btn-plan-g" data-plan="quarter" onclick="setPlan('Τρίμηνο — €39')">Επιλογή τριμήνου</a>
+      <a href="#contact" class="btn-plan btn-plan-g" data-plan="quarter" onclick="setPlan('Quarterly — €39')">Choose quarterly</a>
     </div>
     <div class="price-card">
-      <div class="plan-name">Εξάμηνο</div>
-      <div class="plan-price"><sup>€</sup>69<sub>/6μηνο</sub></div>
-      <p class="plan-desc">Εξάμηνη συνδρομή με όλες τις υπηρεσίες — εξοικονομείστε €9 vs τρίμηνο</p>
+      <div class="plan-name">Semi-annual</div>
+      <div class="plan-price"><sup>€</sup>69<sub>/6 months</sub></div>
+      <p class="plan-desc">Every feature, billed every 6 months. Save €9 vs quarterly</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
-        <li>Πλήρης support</li>
+        <li>Unlimited reservations</li>
+        <li>Confirmation &amp; cancellation emails</li>
+        <li>Real-time dashboard</li>
+        <li>Booking link</li>
+        <li>Analytics &amp; reports</li>
+        <li>Full support</li>
       </ul>
-      <a href="#contact" class="btn-plan btn-plan-g" data-plan="half" onclick="setPlan('Εξάμηνο — €69')">Επιλογή εξαμήνου</a>
+      <a href="#contact" class="btn-plan btn-plan-g" data-plan="half" onclick="setPlan('Semi-annual — €69')">Choose semi-annual</a>
     </div>
     <div class="price-card hot">
-      <div class="hot-badge">Πιο συμφέρον</div>
-      <div class="plan-name">Χρονιαίο</div>
-      <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
-      <p class="plan-desc">Εξοικονομείστε €57 vs τρίμηνο — μόλις €8.25/μήνα για όλες τις υπηρεσίες</p>
+      <div class="hot-badge">Best value</div>
+      <div class="plan-name">Annual</div>
+      <div class="plan-price"><sup>€</sup>99<sub>/year</sub></div>
+      <p class="plan-desc">Save €57 vs quarterly: just €8.25 a month for every feature</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
-        <li>Πλήρης support</li>
+        <li>Unlimited reservations</li>
+        <li>Confirmation &amp; cancellation emails</li>
+        <li>Real-time dashboard</li>
+        <li>Booking link</li>
+        <li>Analytics &amp; reports</li>
+        <li>Full support</li>
       </ul>
-      <a href="#contact" class="btn-plan btn-plan-s" data-plan="year" onclick="setPlan('Χρονιαίο — €99')">Επιλογή χρονιαίου</a>
+      <a href="#contact" class="btn-plan btn-plan-s" data-plan="year" onclick="setPlan('Annual — €99')">Choose annual</a>
     </div>
   </div>
 </section>
 
 <section id="faq">
   <div class="reveal">
-    <div class="eyebrow">Συχνές ερωτήσεις</div>
-    <h2>Έχετε απορίες;<br>Απαντάμε εδώ</h2>
+    <div class="eyebrow">FAQ</div>
+    <h2>Got questions?<br>We have answers</h2>
   </div>
   <div class="faq reveal">
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Πόσο γρήγορα ξεκινάω<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Συνήθως μέσα σε λίγα λεπτά από τη στιγμή που συμπληρώνετε τα στοιχεία του καταστήματός σας — ώρες λειτουργίας, τραπέζια και έτοιμο το μοναδικό σας link κράτησης</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">How quickly can I start<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Usually within minutes of adding your restaurant details: opening hours, tables, and your own booking link is ready</p></div>
     </div>
       <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Πόσο κοστίζει η πρώτη εγκατάσταση<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Καμία χρέωση. Η εγκατάσταση είναι δωρεάν και έχετε 14 ημέρες δοκιμή με όλες τις υπηρεσίες πριν επιλέξετε πακέτο</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">Is there a setup fee<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>No. Setup is free, and you get 14 days to try every feature before choosing a plan</p></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να κάνω αλλαγές μόνος μου αργότερα<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Φυσικά. Μέσα από το admin panel διαχειρίζεστε εύκολα και γρήγορα κάθε αλλαγή — ώρες λειτουργίας, τραπέζια, στοιχεία καταστήματος — χωρίς να χρειάζεται να επικοινωνήσετε μαζί μας</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">Can I make changes myself later<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Of course. From your dashboard you can change opening hours, tables and restaurant details anytime, without contacting us</p></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Χρειάζομαι τεχνικές γνώσεις<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Όχι καθόλου. Το admin panel είναι σχεδιασμένο για να το χρησιμοποιεί κανείς από το κινητό, χωρίς καμία τεχνική εμπειρία</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">Do I need technical skills<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Not at all. The dashboard is designed to be used from your phone, with no technical experience needed</p></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να αλλάξω πλάνο αργότερα<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ναι. Αλλάζετε ή ακυρώνετε τη συνδρομή σας όποτε θέλετε από τον πίνακα διαχείρισης</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">Can I change my plan later<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Yes. You can change or cancel your subscription anytime from your dashboard</p></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν λήξει η συνδρομή μου<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Η συνδρομή ανανεώνεται αυτόματα. Αν την ακυρώσετε, μένει ενεργή μέχρι το τέλος της περιόδου που πληρώσατε και μετά οι online κρατήσεις μπαίνουν σε παύση</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">What happens when my subscription ends<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Your subscription renews automatically. If you cancel, it stays active until the end of the period you paid for, and then online bookings are paused</p></div>
     </div>
     <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Δουλεύει σε κινητό και υπολογιστή<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Τόσο η σελίδα κράτησης όσο και το admin panel λειτουργούν άψογα σε κινητό, tablet και υπολογιστή</p></div>
+      <button class="faq-q" onclick="toggleFaq(this)">Does it work on mobile and desktop<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Yes. Both the booking page and the dashboard work smoothly on phones, tablets and computers</p></div>
     </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="reveal">
-    <div class="eyebrow">Εγγραφή</div>
-    <h2>Ξεκινήστε σήμερα —<br>δημιουργήστε λογαριασμό</h2>
-    <p class="section-sub">Δημιουργήστε τον λογαριασμό του καταστήματός σας σε δύο λεπτά και πάρτε αμέσως το δικό σας link κρατήσεων. Δωρεάν για 14 ημέρες, χωρίς κάρτα.</p>
+    <div class="eyebrow">Sign up</div>
+    <h2>Start today —<br>create your account</h2>
+    <p class="section-sub">Create your restaurant account in two minutes and get your own booking link right away. Free for 14 days, no card required.</p>
   </div>
   <div class="form-wrap reveal" id="signupWrap">
     <form id="partnerForm" novalidate>
       <input type="hidden" name="plan" id="selectedPlan" value="">
       <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="plan-chip" id="planChip" style="display:none;margin-bottom:20px;padding:10px 16px;border-radius:10px;background:rgba(37,99,235,.1);border:0.5px solid rgba(37,99,235,.3);color:var(--accent);font-size:13px;font-weight:500;">
-        ✓ Επιλεγμένο πλάνο: <span id="planChipText"></span>
-        <a href="#pricing" style="color:var(--muted);text-decoration:underline;margin-left:8px;font-weight:400;">αλλαγή</a>
+        ✓ Selected plan: <span id="planChipText"></span>
+        <a href="#pricing" style="color:var(--muted);text-decoration:underline;margin-left:8px;font-weight:400;">change</a>
       </div>
       <div class="form-row">
-        <div class="fg"><label for="f-shop">Όνομα καταστήματος</label><input id="f-shop" type="text" name="shopName" placeholder="π.χ. Taverna Plaka" maxlength="80" required></div>
-        <div class="fg"><label for="f-type">Τύπος επιχείρησης</label>
-          <select id="f-type" name="type"><option value="">Επιλέξτε...</option><option>Εστιατόριο</option><option>Ταβέρνα</option><option>Καφέ / Bistro</option><option>Μπαρ</option><option>Άλλο</option></select>
+        <div class="fg"><label for="f-shop">Restaurant name</label><input id="f-shop" type="text" name="shopName" placeholder="e.g. The Corner Bistro" maxlength="80" required></div>
+        <div class="fg"><label for="f-type">Business type</label>
+          <select id="f-type" name="type"><option value="">Select...</option><option>Restaurant</option><option>Taverna</option><option>Café / Bistro</option><option>Bar</option><option>Other</option></select>
         </div>
       </div>
       <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;line-height:1.5;margin:4px 0 18px;cursor:pointer;">
         <input id="f-terms" type="checkbox" name="acceptTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);" required>
-        <span>Αποδέχομαι τους <a href="/terms?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Όρους Χρήσης</a> και την <a href="/privacy?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Πολιτική Απορρήτου</a></span>
+        <span>I accept the <a href="/terms?lang=en" target="_blank" rel="noopener" style="color:var(--accent);">Terms of Service</a> and the <a href="/privacy?lang=en" target="_blank" rel="noopener" style="color:var(--accent);">Privacy Policy</a></span>
       </label>
-      <button type="button" id="googleBtn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:none;padding:15px;border-radius:40px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;margin:0 0 6px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Εγγραφή με Google</span></button>
-      <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 18px;">Χωρίς κωδικό και χωρίς email επιβεβαίωσης.</p>
-      <div style="display:flex;align-items:center;gap:12px;margin:0 0 22px;color:var(--muted);font-size:12px;"><span style="flex:1;height:0.5px;background:var(--border2);"></span>ή με email<span style="flex:1;height:0.5px;background:var(--border2);"></span></div>
+      <button type="button" id="googleBtn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:none;padding:15px;border-radius:40px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;margin:0 0 6px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Sign up with Google</span></button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 18px;">No password, no confirmation email.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 22px;color:var(--muted);font-size:12px;"><span style="flex:1;height:0.5px;background:var(--border2);"></span>or with email<span style="flex:1;height:0.5px;background:var(--border2);"></span></div>
       <div class="form-row">
-        <div class="fg"><label for="f-email">Email</label><input id="f-email" type="email" name="email" placeholder="info@to-magazi-sas.gr" autocomplete="email" required></div>
-        <div class="fg"><label for="f-phone">Τηλέφωνο</label><input id="f-phone" type="tel" name="phone" placeholder="69XXXXXXXX" autocomplete="tel"></div>
+        <div class="fg"><label for="f-email">Email</label><input id="f-email" type="email" name="email" placeholder="hello@yourrestaurant.com" autocomplete="email" required></div>
+        <div class="fg"><label for="f-phone">Phone</label><input id="f-phone" type="tel" name="phone" placeholder="+44 20 1234 5678" autocomplete="tel"></div>
       </div>
-      <div class="fg"><label for="f-pass">Κωδικός</label><input id="f-pass" type="password" name="password" placeholder="Τουλάχιστον 8 χαρακτήρες" minlength="8" autocomplete="new-password" required></div>
+      <div class="fg"><label for="f-pass">Password</label><input id="f-pass" type="password" name="password" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required></div>
       <p id="formError" role="alert" style="display:none;color:#f87171;font-size:13px;margin:0 0 12px;"></p>
-      <button type="submit" class="btn-submit" id="submitBtn">Δημιουργία λογαριασμού →</button>
-      <p class="form-note">Έχετε ήδη λογαριασμό; <a href="/admin" style="color:var(--accent);">Σύνδεση</a> · Ερωτήσεις; <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
+      <button type="submit" class="btn-submit" id="submitBtn">Create account →</button>
+      <p class="form-note">Already have an account? <a href="/admin" style="color:var(--accent);">Log in</a> · Questions? <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
     </form>
     <div id="signedInBox" style="display:none;text-align:center;">
-      <div style="font-size:15px;color:var(--muted);margin:0 0 8px;">Είστε συνδεδεμένος ως</div>
+      <div style="font-size:15px;color:var(--muted);margin:0 0 8px;">Signed in as</div>
       <div id="signedInName" style="font-size:20px;font-weight:600;margin:0 0 22px;"></div>
-      <a href="/admin" class="btn-main">Πίνακας διαχείρισης →</a>
+      <a href="/admin" class="btn-main">Dashboard →</a>
     </div>
     <div id="signupDone" style="display:none;text-align:center;">
       <div style="font-size:42px;margin-bottom:14px;">✉️</div>
-      <h3 style="font-size:22px;margin:0 0 12px;">Ελέγξτε το email σας</h3>
-      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;">Στείλαμε σύνδεσμο επιβεβαίωσης στο <strong id="doneEmail" style="color:var(--text);"></strong>. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας. Αν δεν το βρίσκετε, κοιτάξτε και στα ανεπιθύμητα.</p>
-      <a href="/admin" class="btn-main">Μετάβαση στη σύνδεση →</a>
+      <h3 style="font-size:22px;margin:0 0 12px;">Check your email</h3>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;">We sent a confirmation link to <strong id="doneEmail" style="color:var(--text);"></strong>. Click it to activate your restaurant. If you can't find it, check your spam folder.</p>
+      <a href="/admin" class="btn-main">Go to log in →</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="logo">Table<em style="font-style:normal;color:var(--accent)">Reserve</em></div>
-  <p>© 2026 TableReserve · AR Akron Services · Αρ. ΓΕΜΗ 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
-  <p><a href="/privacy?lang=el">Πολιτική Απορρήτου</a> · <a href="/terms?lang=el">Όροι Χρήσης</a></p>
+  <p>© 2026 TableReserve · AR Akron Services · G.E.MI. 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
+  <p><a href="/privacy?lang=en">Privacy Policy</a> · <a href="/terms?lang=en">Terms of Service</a></p>
 </footer>
 
 <script>
@@ -399,8 +390,8 @@ document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
 
 <!-- STICKY MOBILE BAR -->
 <div class="sticky-bar">
-  <p>Από €39 — όλες οι υπηρεσίες</p>
-  <a href="#contact">Ξεκινήστε τώρα →</a>
+  <p>From €39, every feature included</p>
+  <a href="#contact">Get started →</a>
 </div>
 
 <script>
@@ -452,14 +443,14 @@ function setPlan(plan) {
   chipText.textContent = plan;
   // Update form title to reflect chosen plan
   const h2 = document.querySelector('#contact h2');
-  if (plan.includes('Χρονιαίο')) {
-    h2.innerHTML = 'Επιλέξατε το Χρονιαίο —<br>ας ξεκινήσουμε!';
-  } else if (plan.includes('Εξάμηνο')) {
-    h2.innerHTML = 'Επιλέξατε το Εξάμηνο —<br>ας ξεκινήσουμε!';
-  } else if (plan.includes('Τρίμηνο')) {
-    h2.innerHTML = 'Επιλέξατε το Τρίμηνο —<br>ας ξεκινήσουμε!';
+  if (plan.includes('Annual')) {
+    h2.innerHTML = 'You chose Annual —<br>let\'s get started!';
+  } else if (plan.includes('Semi-annual')) {
+    h2.innerHTML = 'You chose Semi-annual —<br>let\'s get started!';
+  } else if (plan.includes('Quarterly')) {
+    h2.innerHTML = 'You chose Quarterly —<br>let\'s get started!';
   } else {
-    h2.innerHTML = 'Ξεκινήστε σήμερα —<br>δημιουργήστε λογαριασμό';
+    h2.innerHTML = 'Start today —<br>create your account';
   }
 }
 
@@ -480,20 +471,20 @@ document.getElementById('partnerForm').addEventListener('submit', async function
     plan: f.plan.value,
     website: f.website.value,
     acceptTerms: f.acceptTerms.checked,
-    lang: 'el'
+    lang: 'en'
   };
-  if (!data.shopName || !data.email || !data.password) return showErr('Συμπληρώστε όνομα καταστήματος, email και κωδικό.');
-  if (data.password.length < 8) return showErr('Ο κωδικός χρειάζεται τουλάχιστον 8 χαρακτήρες.');
-  if (!data.acceptTerms) return showErr('Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.');
+  if (!data.shopName || !data.email || !data.password) return showErr('Please enter your restaurant name, email and password.');
+  if (data.password.length < 8) return showErr('Your password needs at least 8 characters.');
+  if (!data.acceptTerms) return showErr('Please accept the Terms of Service and the Privacy Policy.');
 
-  btn.textContent = 'Δημιουργία...';
+  btn.textContent = 'Creating...';
   btn.disabled = true;
   const messages = {
-    email_in_use: 'Υπάρχει ήδη λογαριασμός με αυτό το email. Συνδεθείτε από τη σελίδα Σύνδεσης.',
-    invalid_email: 'Το email δεν είναι έγκυρο.',
-    weak_password: 'Ο κωδικός χρειάζεται τουλάχιστον 8 χαρακτήρες.',
-    terms_required: 'Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.',
-    name_too_long: 'Το όνομα καταστήματος είναι πολύ μεγάλο.'
+    email_in_use: 'An account with this email already exists. Please log in instead.',
+    invalid_email: 'That email address is not valid.',
+    weak_password: 'Your password needs at least 8 characters.',
+    terms_required: 'Please accept the Terms of Service and the Privacy Policy.',
+    name_too_long: 'The restaurant name is too long.'
   };
   try {
     const res = await fetch('/.netlify/functions/signup', {
@@ -506,11 +497,11 @@ document.getElementById('partnerForm').addEventListener('submit', async function
       document.getElementById('signupDone').style.display = 'block';
       return;
     }
-    showErr(messages[out.error] || 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.');
+    showErr(messages[out.error] || 'Something went wrong. Please try again shortly.');
   } catch (x) {
-    showErr('Δεν ήταν δυνατή η σύνδεση. Ελέγξτε το internet σας και δοκιμάστε ξανά.');
+    showErr('Could not connect. Please check your internet connection and try again.');
   }
-  btn.textContent = 'Δημιουργία λογαριασμού →';
+  btn.textContent = 'Create account →';
   btn.disabled = false;
 });
 </script>
@@ -571,26 +562,26 @@ btn.addEventListener('click', async () => {
   const f = document.getElementById('partnerForm');
   err.style.display = 'none';
   const shopName = f.shopName.value.trim();
-  if (!shopName) { f.shopName.focus(); return showErr('Γράψτε πρώτα το όνομα του καταστήματος.'); }
-  if (!f.acceptTerms.checked) return showErr('Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.');
+  if (!shopName) { f.shopName.focus(); return showErr('Please enter your restaurant name first.'); }
+  if (!f.acceptTerms.checked) return showErr('Please accept the Terms of Service and the Privacy Policy.');
 
   const label = btn.querySelector('span'); const orig = label.textContent;
-  btn.disabled = true; label.textContent = 'Σύνδεση με Google...';
+  btn.disabled = true; label.textContent = 'Signing in with Google...';
   try {
     const cred = await signInWithPopup(auth, new GoogleAuthProvider());
     const token = await cred.user.getIdToken();
     const res = await fetch('/.netlify/functions/signup-google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'el' })
+      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'en' })
     });
     const out = await res.json().catch(() => ({}));
     if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin'; return; }
     await signOut(auth);
-    showErr(out.error === 'name_too_long' ? 'Το όνομα καταστήματος είναι πολύ μεγάλο.' : 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.');
+    showErr(out.error === 'name_too_long' ? 'The restaurant name is too long.' : 'Something went wrong. Please try again shortly.');
   } catch (e) {
     if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request')
-      showErr(e.code === 'auth/popup-blocked' ? 'Ο browser μπλόκαρε το παράθυρο της Google. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.' : 'Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.');
+      showErr(e.code === 'auth/popup-blocked' ? 'Your browser blocked the Google window. Please allow pop-ups and try again.' : 'Google sign-in did not complete. Please try again.');
   }
   btn.disabled = false; label.textContent = orig;
 });
