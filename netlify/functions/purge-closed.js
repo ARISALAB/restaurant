@@ -5,6 +5,7 @@ const { getDb } = require('./_shared/firebase');
 exports.handler = async () => {
   const db = getDb();
   const now = Date.now();
+  await cleanupBookingHelpers(db, now).catch(e => console.error('cleanup', e.message));
   const details = (await db.ref('shop_details').get()).val() || {};
   const due = Object.entries(details).filter(([, d]) => d && d.status === 'closed' && d.deleteAfter && d.deleteAfter <= now);
   if (!due.length) { console.log('purge: nothing to delete'); return { statusCode: 200, body: 'nothing' }; }
@@ -18,7 +19,8 @@ exports.handler = async () => {
     const upd = {
       [`reservations/${shopId}`]: null,
       [`shop_profile/${shopId}`]: null,
-      [`shop_details/${shopId}`]: null
+      [`shop_details/${shopId}`]: null,
+      [`slot_holds/${shopId}`]: null
     };
     uids.forEach(uid => { upd[`users_to_shops/${uid}`] = null; upd[`signup_meta/${uid}`] = null; });
     await db.ref().update(upd);
@@ -26,3 +28,14 @@ exports.handler = async () => {
   }
   return { statusCode: 200, body: `purged ${due.length}` };
 };
+
+// Βοηθητικά δεδομένα της κράτησης (book.js): προσωρινές θέσεις και όριο ανά IP. Σβήνονται τα παλιά.
+async function cleanupBookingHelpers(db, now) {
+  const today = new Date(now).toISOString().slice(0, 10);
+  const upd = {};
+  const holds = (await db.ref('slot_holds').get()).val() || {};
+  Object.entries(holds).forEach(([shop, dates]) => Object.keys(dates || {}).forEach(d => { if (d < today) upd[`slot_holds/${shop}/${d}`] = null; }));
+  const rate = (await db.ref('booking_rate').get()).val() || {};
+  Object.entries(rate).forEach(([k, v]) => { if (!v || now - (v.start || 0) > 86400000) upd[`booking_rate/${k}`] = null; });
+  if (Object.keys(upd).length) await db.ref().update(upd);
+}
