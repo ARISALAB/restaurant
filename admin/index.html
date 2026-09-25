@@ -742,6 +742,40 @@
         .wh-add, .wh-del { background: none; border: none; color: #2563eb; font-weight: 600; font-size: 0.82rem; cursor: pointer; padding: 4px; }
         .wh-del { color: #dc2626; }
         @media (max-width: 600px) { .wh-day { width: 100%; } }
+
+        /* ======= DASHBOARD HEADER ======= */
+        .dash-head { background: var(--white); border: 1px solid #e5e7eb; border-radius: 16px; padding: 22px 24px 0; margin: 0 0 18px; display: grid; grid-template-columns: 1fr auto; gap: 16px 20px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+        .dash-id { display: flex; align-items: center; gap: 16px; min-width: 0; }
+        .dash-logo { width: 60px; height: 60px; border-radius: 14px; border: 1px solid #e5e7eb; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .dash-logo img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+        .dash-logo span { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.4rem; color: var(--primary); }
+        .dash-meta { min-width: 0; }
+        .dash-name { font-family: 'Sora', sans-serif; font-size: 1.45rem; font-weight: 700; letter-spacing: -0.02em; color: #0f172a; margin: 0 0 4px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .dash-sub { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #64748b; flex-wrap: wrap; }
+        .dash-live { display: inline-flex; align-items: center; gap: 6px; color: #15803d; font-weight: 600; }
+        .dash-live i { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
+        .dash-sep { color: #cbd5e1; }
+        .dash-idtxt { font-variant-numeric: tabular-nums; }
+        .dash-logout { align-self: start; display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e5e7eb; color: #475569; padding: 9px 14px; border-radius: 10px; font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all .15s; }
+        .dash-logout:hover { border-color: #fecaca; color: #dc2626; background: #fef2f2; }
+        .dash-linkbar { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; border-top: 1px solid #f1f5f9; margin: 0 -24px; padding: 14px 24px 16px; background: #f8fafc; border-radius: 0 0 16px 16px; }
+        .dash-linklabel { font-size: 0.8rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .06em; }
+        .dash-url { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86rem; color: #0f172a; text-decoration: none; background: #fff; border: 1px solid #e5e7eb; padding: 6px 10px; border-radius: 8px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .dash-url:hover { border-color: var(--primary); color: var(--primary); }
+        .dash-actions { display: flex; gap: 8px; }
+        .dash-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #e5e7eb; color: #1e293b; padding: 7px 12px; border-radius: 8px; font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all .15s; }
+        .dash-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .dash-tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5e7eb; margin: 0 0 24px; overflow-x: auto; }
+        .dash-tabs .admin-tab { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 12px 14px; margin-bottom: -1px; color: #64748b; font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: none; }
+        .dash-tabs .admin-tab:hover { color: #0f172a; }
+        .dash-tabs .admin-tab.active { color: var(--primary); border-bottom-color: var(--primary); background: none; box-shadow: none; }
+        @media (max-width: 640px) {
+            .dash-head { grid-template-columns: 1fr; padding: 18px 16px 0; }
+            .dash-logout { justify-self: start; }
+            .dash-linkbar { margin: 0 -16px; padding: 12px 16px 14px; }
+            .dash-url { flex-basis: 100%; }
+            .dash-name { font-size: 1.2rem; white-space: normal; }
+        }
     </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -838,21 +872,33 @@
                     <div id="billing-text" style="font-weight:600; margin-bottom:12px;"></div>
                     <div id="billing-plans" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
                 </div>
-                <div class="admin-header-row">
-                    <div>
-                        <h2 style="font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;" data-i18n-key="reservations">Κρατήσεις</h2>
-                        <div class="shop-badge">🏪 <span id="shop-title"></span></div>
-                        <div style="margin-top:8px; font-size:0.85rem; color:#64748b;"><span data-i18n-key="booking_link">Link κρατήσεων:</span> <a id="booking-link" href="#" target="_blank" rel="noopener"></a> <button type="button" id="btn-copy-link" class="btn-link" style="font-size:0.85rem; padding:0 4px;" data-i18n-key="copy">Αντιγραφή</button></div>
+                <div class="dash-head">
+                    <div class="dash-id">
+                        <div class="dash-logo" id="dash-logo"><span id="dash-initial">·</span></div>
+                        <div class="dash-meta">
+                            <h1 class="dash-name" id="dash-name"></h1>
+                            <div class="dash-sub">
+                                <span class="dash-live"><i></i><span data-i18n-key="dash_live">Online κρατήσεις</span></span>
+                                <span class="dash-sep">·</span>
+                                <span class="dash-idtxt">ID <span id="shop-title"></span></span>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn-outline" id="btn-logout" data-i18n-key="logout">Αποσύνδεση</button>
+                    <button class="dash-logout" id="btn-logout"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span data-i18n-key="logout">Αποσύνδεση</span></button>
+                    <div class="dash-linkbar">
+                        <span class="dash-linklabel" data-i18n-key="booking_link">Link κρατήσεων:</span>
+                        <a id="booking-link" class="dash-url" href="#" target="_blank" rel="noopener"></a>
+                        <div class="dash-actions">
+                            <button type="button" id="btn-copy-link" class="dash-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-i18n-key="copy">Αντιγραφή</span></button>
+                            <a id="dash-open" class="dash-btn" href="#" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg><span data-i18n-key="open_page">Άνοιγμα σελίδας</span></a>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="admin-tabs">
-                    <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')">📅 <span data-i18n-key="reservations">Κρατήσεις</span></button>
-                    <button class="admin-tab" id="atab-analytics" onclick="switchAdminTab('analytics')">📊 <span data-i18n-key="analytics_tab">Analytics</span></button>
-                    <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')">🖼️ <span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
-                </div>
-
+                <nav class="dash-tabs" aria-label="Sections">
+                    <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-i18n-key="reservations">Κρατήσεις</span></button>
+                    <button class="admin-tab" id="atab-analytics" onclick="switchAdminTab('analytics')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n-key="analytics_tab">Analytics</span></button>
+                    <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg><span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
+                </nav>
                 <!-- Reservations Section -->
                 <div id="asec-reservations" class="admin-section active">
                     <div class="stats-grid">
@@ -1140,7 +1186,7 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", party_label: "Μέγιστος αριθμός ατόμων ανά κράτηση", party_hint: "Πόσα άτομα μπορεί να επιλέξει ο πελάτης σε μία κράτηση. Για μεγαλύτερες ομάδες θα επικοινωνεί μαζί σας.", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", dash_live: "Online κρατήσεις", open_page: "Άνοιγμα σελίδας", party_label: "Μέγιστος αριθμός ατόμων ανά κράτηση", party_hint: "Πόσα άτομα μπορεί να επιλέξει ο πελάτης σε μία κράτηση. Για μεγαλύτερες ομάδες θα επικοινωνεί μαζί σας.", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
                 wh_copy: "Αντιγραφή της Δευτέρας σε όλες τις ημέρες", wh_hint: "Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.",
                 cap_label: "Μέγιστος αριθμός ατόμων ανά ώρα κράτησης", cap_hint: "Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.", g_title: "Κρατήσεις από το Google Maps",
                 g_desc: "Προσθέστε το link κρατήσεών σας στο προφίλ του καταστήματος στη Google. Όποιος σας βρίσκει στο Google Maps ή στην αναζήτηση θα μπορεί να κλείσει τραπέζι με ένα κλικ. Είναι δωρεάν και δεν χρειάζεται καμία έγκριση.",
@@ -1225,7 +1271,7 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", party_label: "Maximum guests per booking", party_hint: "How many guests a customer can choose in one booking. Larger groups will contact you directly.", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
+                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", dash_live: "Online bookings", open_page: "Open page", party_label: "Maximum guests per booking", party_hint: "How many guests a customer can choose in one booking. Larger groups will contact you directly.", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
                 wh_copy: "Copy Monday to all days", wh_hint: "Guests only see booking times when you are open. The last booking time is 30 minutes before closing.",
                 cap_label: "Maximum guests per booking time", cap_hint: "When a time slot is full, it shows as \"Full\" and takes no more bookings. Leave empty for no limit.", g_title: "Bookings from Google Maps",
                 g_desc: "Add your booking link to your restaurant's Google profile. Anyone who finds you on Google Maps or in search can book a table in one click. It's free and needs no approval.",
@@ -1417,6 +1463,9 @@
             document.getElementById('shop-title').innerText = myShop;
             const url = `https://tablereserve.gr/?shop=${myShop}`;
             const a = document.getElementById('booking-link'); a.href = url; a.textContent = url.replace('https://','');
+            document.getElementById('dash-open').href = url;
+            document.getElementById('dash-name').textContent = myShop;
+            document.getElementById('dash-initial').textContent = (myShop || '·').charAt(0).toUpperCase();
             currentAdminShop = myShop;
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-from').value = today;
@@ -1851,9 +1900,11 @@
             if (!img || !src) return;
             img.src = src; img.style.display = 'block'; img.style.borderRadius = '8px'; img.style.background = '#fff'; img.style.objectFit = 'contain';
             if (ini) ini.style.display = 'none';
+            const box = document.getElementById('dash-logo');
+            if (box) box.innerHTML = '<img alt="" src="' + src.replace(/"/g, '&quot;') + '">';
         }
         async function setChipShopName(shopId) {
-            try { const n = (await get(ref(db, `shop_details/${shopId}/displayName`))).val(); if (n) document.getElementById('user-name').textContent = n; } catch (e) {}
+            try { const n = (await get(ref(db, `shop_details/${shopId}/displayName`))).val(); if (n) { document.getElementById('user-name').textContent = n; document.getElementById('dash-name').textContent = n; const di = document.getElementById('dash-initial'); if (di) di.textContent = n.charAt(0).toUpperCase(); } } catch (e) {}
         }
 
         function loadShopProfile(shopId) {
