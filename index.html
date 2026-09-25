@@ -1126,6 +1126,37 @@
         const timeSelect    = document.getElementById('time-select');
 
         // Load shop profile for client page
+
+        // ======= ΔΟΜΗΜΕΝΑ ΔΕΔΟΜΕΝΑ (schema.org) για τη Google =======
+        function trSetSchema(d) {
+            try {
+                const url = 'https://tablereserve.gr/?shop=' + encodeURIComponent(d.shopId);
+                const imgs = [d.logo, d.cover].filter(u => typeof u === 'string' && /^https?:\/\//.test(u));
+                const data = {
+                    '@context': 'https://schema.org',
+                    '@type': 'Restaurant',
+                    name: d.name,
+                    url,
+                    acceptsReservations: true,
+                    potentialAction: { '@type': 'ReserveAction', target: { '@type': 'EntryPoint', urlTemplate: url, actionPlatform: ['http://schema.org/DesktopWebPlatform', 'http://schema.org/MobileWebPlatform'] }, result: { '@type': 'FoodEstablishmentReservation', name: 'Table reservation' } }
+                };
+                if (d.description) data.description = String(d.description).slice(0, 500);
+                if (d.address) data.address = { '@type': 'PostalAddress', streetAddress: String(d.address) };
+                if (d.phone) data.telephone = String(d.phone);
+                if (imgs.length) data.image = imgs;
+                let el = document.getElementById('tr-schema');
+                if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'tr-schema'; document.head.appendChild(el); }
+                el.textContent = JSON.stringify(data);
+                document.title = d.name + ' · Online reservations | TableReserve';
+                let md = document.querySelector('meta[name="description"]');
+                if (!md) { md = document.createElement('meta'); md.name = 'description'; document.head.appendChild(md); }
+                md.content = (d.tagline || d.description || ('Book a table at ' + d.name + ' online.')).toString().slice(0, 160);
+                if (d.canonical !== false) { let cl = document.querySelector('link[rel="canonical"]');
+                if (!cl) { cl = document.createElement('link'); cl.rel = 'canonical'; document.head.appendChild(cl); }
+                cl.href = url; }
+            } catch (e) {}
+        }
+        
         function loadClientShopProfile(shopId) {
             // Διαβάζουμε μόνο τα δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
             const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
@@ -1133,6 +1164,7 @@
             .then(([coverPhoto, gallery, logoPhoto, address, description, hours, phone, tagline]) => {
                 const full = { coverPhoto, gallery, logoPhoto };
                 const info = { address, description, hours, phone, tagline };
+                get(ref(db, `shop_details/${shopId}/displayName`)).then(n => trSetSchema({ shopId, name: n.val() || shopId, description, address, phone, hours, tagline, logo: logoPhoto, cover: coverPhoto })).catch(() => {});
 
                 get(ref(db, `shop_details/${shopId}/displayName`)).then(nameSnap => {
                     document.getElementById('shop-display').innerText = nameSnap.val() || shopId;
