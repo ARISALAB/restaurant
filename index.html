@@ -235,6 +235,9 @@
             user-select: none;
         }
         .time-slot:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+        .time-slot.full { opacity: 0.45; cursor: not-allowed; text-decoration: line-through; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .time-slot.full small { font-size: 0.68rem; text-decoration: none; margin-top: 2px; }
+        .time-slot.full:hover { border-color: #e2e8f0; color: inherit; background: inherit; }
         .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
 
         .selected-time-badge {
@@ -941,6 +944,7 @@
                 no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
                 confirm_booking: "✅ Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
+                slot_full: "Πλήρες", slot_too_many: "Δεν υπάρχουν αρκετές θέσεις για τόσα άτομα σε αυτή την ώρα", pick_date: "Επιλέξτε ημερομηνία για να δείτε τις διαθέσιμες ώρες.", day_closed: "Το κατάστημα είναι κλειστό αυτή την ημέρα. Επιλέξτε άλλη ημερομηνία.", day_full: "Όλες οι ώρες αυτής της ημέρας είναι πλήρεις. Δοκιμάστε άλλη ημερομηνία ή λιγότερα άτομα.", day_over: "Δεν υπάρχουν άλλες διαθέσιμες ώρες για σήμερα. Επιλέξτε άλλη ημερομηνία.", slot_taken_alert: "Δυστυχώς αυτή η ώρα μόλις γέμισε. Επιλέξτε άλλη ώρα.",
                 shop_not_active: "Οι online κρατήσεις για αυτό το κατάστημα δεν έχουν ενεργοποιηθεί ακόμα.",
                 privacy_note: "Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href=\"/privacy?lang=el\" target=\"_blank\" rel=\"noopener\">Πολιτική Απορρήτου</a>",
                 alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
@@ -1014,6 +1018,7 @@
                 no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary",
                 requests: "Additional Requests", requests_ph: "Any special order...",
                 confirm_booking: "✅ Confirm Reservation", cancel: "Cancel",
+                slot_full: "Full", slot_too_many: "Not enough seats left for this many guests at this time", pick_date: "Choose a date to see available times.", day_closed: "The restaurant is closed on this day. Please choose another date.", day_full: "All times on this day are fully booked. Try another date or fewer guests.", day_over: "There are no more available times today. Please choose another date.", slot_taken_alert: "Sorry, this time has just filled up. Please choose another time.",
                 shop_not_active: "Online reservations for this restaurant are not active yet.",
                 privacy_note: "Your details are used only for this reservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>",
                 alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
@@ -1197,7 +1202,7 @@
                     link.innerText = info.phone; link.href = 'tel:' + info.phone;
                     el.style.display = 'inline-flex';
                 }
-                if (info.hours) {
+                if (info.hours && !shopHoursWeek) {
                     const el = document.getElementById('client-hours');
                     el.querySelector('span').innerText = info.hours; el.style.display = 'inline-flex';
                 }
@@ -1239,11 +1244,16 @@
         loadClientShopProfile(shopID);
 
         // Dynamic time slots and guests from Firebase
-        Promise.all(['openHour', 'closeHour', 'maxGuests'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()).catch(() => null))).then(([openHour_, closeHour_, maxGuests_]) => {
-            const det       = { openHour: openHour_, closeHour: closeHour_, maxGuests: maxGuests_ };
-            const openHour  = typeof det.openHour  === 'number' ? det.openHour  : 8;
-            const closeHour = typeof det.closeHour === 'number' ? det.closeHour : 23;
-            const maxGuests = typeof det.maxGuests === 'number' ? det.maxGuests : 8;
+        Promise.all([
+            ...['openHour', 'closeHour', 'maxGuests'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()).catch(() => null)),
+            get(ref(db, `shop_profile/${shopID}/info/hoursWeek`)).then(x => x.val()).catch(() => null),
+            get(ref(db, `shop_profile/${shopID}/info/capacity`)).then(x => x.val()).catch(() => null)
+        ]).then(([openHour_, closeHour_, maxGuests_, hoursWeek_, capacity_]) => {
+            if (typeof openHour_ === 'number') fallbackOpen = openHour_;
+            if (typeof closeHour_ === 'number') fallbackClose = closeHour_;
+            const maxGuests = typeof maxGuests_ === 'number' ? maxGuests_ : 8;
+            shopHoursWeek = hoursWeek_ ? whNormalize(hoursWeek_) : null;
+            shopCapacity = typeof capacity_ === 'number' && capacity_ > 0 ? capacity_ : null;
 
             const guestSelect = document.getElementById('cust-guests');
             guestSelect.innerHTML = '';
@@ -1254,22 +1264,116 @@
                 if (i === 2) opt.selected = true;
                 guestSelect.appendChild(opt);
             }
+            guestSelect.addEventListener('change', renderSlots);
 
-            timeContainer.innerHTML = '';
-            timeSelect.innerHTML = `<option value="">${t('select_opt')}</option>`;
-            for (let h = openHour; h < closeHour; h++) {
-                const hs = h < 10 ? '0' + h : '' + h;
-                [`${hs}:00`, `${hs}:30`].forEach(time => {
-                    const opt = document.createElement('option');
-                    opt.value = time; opt.innerText = time;
-                    timeSelect.appendChild(opt);
-                    const div = document.createElement('div');
-                    div.className = 'time-slot'; div.innerText = time; div.dataset.time = time;
-                    div.onclick = () => updateSelection(time);
-                    timeContainer.appendChild(div);
-                });
+            const dateInput = document.getElementById('cust-date-only');
+            dateInput.min = todayStr();
+            if (!dateInput.value) dateInput.value = todayStr();
+            dateInput.addEventListener('change', renderSlots);
+            renderSlots();
+            if (shopHoursWeek) {
+                const el = document.getElementById('client-hours');
+                if (el) { el.querySelector('span').innerText = whText(shopHoursWeek, currentLang); el.style.display = 'inline-flex'; }
+                // Ωράριο στα δομημένα δεδομένα για τη Google
+                setTimeout(() => {
+                    try {
+                        const sc = document.getElementById('tr-schema'); if (!sc) return;
+                        const data = JSON.parse(sc.textContent);
+                        data.openingHoursSpecification = [];
+                        WH_DAYS.forEach((d, i) => { if (shopHoursWeek[d] !== 'closed') shopHoursWeek[d].forEach(r => data.openingHoursSpecification.push({ '@type': 'OpeningHoursSpecification', dayOfWeek: 'https://schema.org/' + SCHEMA_DAYS[i], opens: r.o, closes: r.c })); });
+                        sc.textContent = JSON.stringify(data);
+                    } catch (e) {}
+                }, 1500);
             }
         });
+
+
+        // ======= ΩΡΑΡΙΟ & ΔΙΑΘΕΣΙΜΟΤΗΤΑ =======
+        const WH_DAYS = ['mon','tue','wed','thu','fri','sat','sun'];
+        const WH_SHORT = { el: ['Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ','Κυρ'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] };
+        const SCHEMA_DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+        let shopHoursWeek = null, shopCapacity = null, fallbackOpen = 8, fallbackClose = 23, takenByTime = {};
+        function whNormalize(w) {
+            const out = {};
+            WH_DAYS.forEach(d => {
+                const v = w && w[d];
+                if (v === 'closed' || !v) out[d] = 'closed';
+                else out[d] = (Array.isArray(v) ? v : Object.values(v)).filter(r => r && r.o && r.c).map(r => ({ o: r.o, c: r.c }));
+                if (Array.isArray(out[d]) && !out[d].length) out[d] = 'closed';
+            });
+            return out;
+        }
+        function whText(w, lang) {
+            const L = lang === 'en' ? 'en' : 'el';
+            const key = d => w[d] === 'closed' ? 'closed' : w[d].map(r => r.o + '–' + r.c).join(', ');
+            const parts = []; let i = 0;
+            while (i < 7) {
+                let j = i; while (j + 1 < 7 && key(WH_DAYS[j + 1]) === key(WH_DAYS[i])) j++;
+                const days = i === j ? WH_SHORT[L][i] : WH_SHORT[L][i] + '–' + WH_SHORT[L][j];
+                const k = key(WH_DAYS[i]);
+                parts.push(days + ' ' + (k === 'closed' ? (L === 'en' ? 'closed' : 'κλειστά') : k));
+                i = j + 1;
+            }
+            return parts.join(' · ');
+        }
+        const toMin = tm => { const [h, m] = tm.split(':').map(Number); return h * 60 + m; };
+        const fromMin = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+        function slotsForDate(dateStr) {
+            if (!shopHoursWeek) {
+                const out = []; for (let m = fallbackOpen * 60; m < fallbackClose * 60; m += 30) out.push(fromMin(m)); return out;
+            }
+            const js = new Date(dateStr + 'T12:00:00').getDay();          // 0 = Κυριακή
+            const day = WH_DAYS[(js + 6) % 7];
+            const ranges = shopHoursWeek[day];
+            if (ranges === 'closed') return null;
+            const set = new Set();
+            ranges.forEach(r => {
+                const o = toMin(r.o); let c = toMin(r.c); if (c <= o) c = 24 * 60;  // κλείνει μετά τα μεσάνυχτα
+                for (let m = o; m <= c - 30 && m < 24 * 60; m += 30) set.add(fromMin(m));
+            });
+            return [...set].sort();
+        }
+        function todayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+        async function fetchTaken(dateStr) {
+            try {
+                const r = await fetch(`${API}/availability?shop=${encodeURIComponent(shopID)}&date=${dateStr}`, { cache: 'no-store' });
+                const d = await r.json(); return (d && d.taken) || {};
+            } catch (e) { return {}; }
+        }
+        function slotMessage(key) {
+            timeContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:18px 8px; color:#64748b; font-size:0.95rem;">${t(key)}</div>`;
+        }
+        async function renderSlots() {
+            const dateStr = document.getElementById('cust-date-only').value;
+            selectedTime = null;
+            document.getElementById('open-modal').style.display = 'none';
+            document.getElementById('time-badge').classList.remove('show');
+            timeSelect.innerHTML = `<option value="">${t('select_opt')}</option>`;
+            if (!dateStr) { slotMessage('pick_date'); return; }
+            const slots = slotsForDate(dateStr);
+            if (slots === null) { slotMessage('day_closed'); return; }
+            takenByTime = shopCapacity ? await fetchTaken(dateStr) : {};
+            const guests = parseInt(document.getElementById('cust-guests').value, 10) || 1;
+            const now = new Date(), isToday = dateStr === todayStr(), nowMin = now.getHours() * 60 + now.getMinutes();
+            timeContainer.innerHTML = '';
+            let available = 0;
+            slots.forEach(time => {
+                if (isToday && toMin(time) <= nowMin) return;                 // ώρες που πέρασαν
+                const left = shopCapacity ? shopCapacity - (takenByTime[time] || 0) : Infinity;
+                const full = left <= 0, tooMany = !full && left < guests;
+                const div = document.createElement('div');
+                div.className = 'time-slot' + (full || tooMany ? ' full' : '');
+                div.dataset.time = time;
+                div.innerHTML = full ? `${time}<small>${t('slot_full')}</small>` : time;
+                if (tooMany) div.title = t('slot_too_many');
+                const opt = document.createElement('option'); opt.value = time; opt.innerText = full ? `${time} (${t('slot_full')})` : time;
+                if (full || tooMany) opt.disabled = true; else { div.onclick = () => updateSelection(time); available++; }
+                timeSelect.appendChild(opt);
+                timeContainer.appendChild(div);
+            });
+            if (!timeContainer.children.length) { slotMessage(isToday ? 'day_over' : 'day_closed'); return; }
+            if (!available) slotMessage('day_full');
+        }
 
         function updateSelection(time) {
             selectedTime = time;
@@ -1313,7 +1417,7 @@
         }
 
         // ======= BOOKING SAVE — με cancelToken + email πελάτη =======
-        document.getElementById('btn-save').onclick = () => {
+        document.getElementById('btn-save').onclick = async () => {
             const name           = document.getElementById('cust-name').value.trim();
             const phone          = document.getElementById('cust-phone').value.trim();
             const email          = document.getElementById('cust-email').value.trim();
@@ -1330,6 +1434,15 @@
             // Δημιουργία μοναδικού cancelToken
             const cancelToken = Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
 
+            if (shopCapacity) {
+                const fresh = await fetchTaken(date);
+                if (shopCapacity - (fresh[selectedTime] || 0) < (parseInt(guests, 10) || 1)) {
+                    alert(t('slot_taken_alert'));
+                    modal.classList.remove('open');
+                    renderSlots();
+                    return;
+                }
+            }
             const bookingData = {
                 name, phone, email, date,
                 time:      selectedTime,

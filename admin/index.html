@@ -729,6 +729,19 @@
         @keyframes splashPop { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
         @keyframes splashFadeUp { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes dotPulse { 0%, 100% { background: rgba(255,255,255,0.3); transform: scale(1); } 50% { background: rgba(255,255,255,0.9); transform: scale(1.3); } }
+
+        .week-hours { display: flex; flex-direction: column; gap: 8px; }
+        .wh-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; }
+        .wh-day { width: 92px; font-weight: 600; color: #1e293b; font-size: 0.9rem; }
+        .wh-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #475569; cursor: pointer; min-width: 92px; }
+        .wh-toggle input { width: 18px; height: 18px; accent-color: #2563eb; margin: 0; }
+        .wh-ranges { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .wh-range { display: flex; align-items: center; gap: 6px; }
+        .wh-range select { padding: 7px 8px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; font-size: 0.88rem; background: #fff; }
+        .wh-closed { color: #94a3b8; font-size: 0.88rem; flex: 1; }
+        .wh-add, .wh-del { background: none; border: none; color: #2563eb; font-weight: 600; font-size: 0.82rem; cursor: pointer; padding: 4px; }
+        .wh-del { color: #dc2626; }
+        @media (max-width: 600px) { .wh-day { width: 100%; } }
     </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -938,7 +951,15 @@
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
-                            <input type="text" id="prof-hours" maxlength="100" placeholder="π.χ. Δευ-Σαβ 08:00-23:00, Κυρ 10:00-22:00">
+                            <input type="hidden" id="prof-hours">
+                            <div id="week-hours" class="week-hours"></div>
+                            <button type="button" id="btn-copy-mon" class="btn-link" style="margin-top:8px; font-weight:600;" data-i18n-key="wh_copy">Αντιγραφή της Δευτέρας σε όλες τις ημέρες</button>
+                            <small style="display:block; color:#64748b; font-size:0.8rem; margin-top:6px;" data-i18n-key="wh_hint">Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.</small>
+                        </div>
+                        <div class="input-group">
+                            <label data-i18n-key="cap_label">Μέγιστος αριθμός ατόμων ανά ώρα κράτησης</label>
+                            <input type="number" id="prof-capacity" min="1" max="999" step="1" placeholder="π.χ. 30">
+                            <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="cap_hint">Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.</small>
                         </div>
                         <div class="input-group">
                             <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
@@ -1114,7 +1135,9 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", g_title: "Κρατήσεις από το Google Maps",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
+                wh_copy: "Αντιγραφή της Δευτέρας σε όλες τις ημέρες", wh_hint: "Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.",
+                cap_label: "Μέγιστος αριθμός ατόμων ανά ώρα κράτησης", cap_hint: "Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.", g_title: "Κρατήσεις από το Google Maps",
                 g_desc: "Προσθέστε το link κρατήσεών σας στο προφίλ του καταστήματος στη Google. Όποιος σας βρίσκει στο Google Maps ή στην αναζήτηση θα μπορεί να κλείσει τραπέζι με ένα κλικ. Είναι δωρεάν και δεν χρειάζεται καμία έγκριση.",
                 g_s1: "Πατήστε «Άνοιγμα Google Business Profile» και συνδεθείτε με τον λογαριασμό Google του καταστήματος.", g_s2: "Επιλέξτε το κατάστημά σας και πατήστε «Επεξεργασία προφίλ».",
                 g_s3: "Βρείτε την ενότητα με τους συνδέσμους κρατήσεων (μπορεί να λέγεται «Κρατήσεις» ή «Σύνδεσμοι κρατήσεων»).", g_s4: "Επικολλήστε το link σας, αποθηκεύστε, και αν σας ρωτήσει, ορίστε το ως προτιμώμενο.",
@@ -1197,7 +1220,9 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", g_title: "Bookings from Google Maps",
+                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
+                wh_copy: "Copy Monday to all days", wh_hint: "Guests only see booking times when you are open. The last booking time is 30 minutes before closing.",
+                cap_label: "Maximum guests per booking time", cap_hint: "When a time slot is full, it shows as \"Full\" and takes no more bookings. Leave empty for no limit.", g_title: "Bookings from Google Maps",
                 g_desc: "Add your booking link to your restaurant's Google profile. Anyone who finds you on Google Maps or in search can book a table in one click. It's free and needs no approval.",
                 g_s1: "Click \"Open Google Business Profile\" and sign in with your restaurant's Google account.", g_s2: "Select your restaurant and click \"Edit profile\".",
                 g_s3: "Find the section for booking links (it may be called \"Reservations\" or \"Booking links\").", g_s4: "Paste your link, save, and if asked, set it as preferred.",
@@ -1250,7 +1275,7 @@
             document.documentElement.lang = lang;
             try { localStorage.setItem('tr_admin_lang', lang); } catch (e) {}
             applyTranslations();
-            if (currentAdminShop) { renderBilling(currentAdminShop, auth.currentUser).catch(() => {}); renderEmbedCode(); }
+            if (currentAdminShop) { renderBilling(currentAdminShop, auth.currentUser).catch(() => {}); renderEmbedCode(); renderWeekHours(); }
         };
 
         function applyTranslations() {
@@ -1396,6 +1421,7 @@
             renderBilling(myShop, auth.currentUser).catch(() => {});
             renderEmbedCode();
             renderGoogleCard();
+            setChipShopName(myShop);
         }
 
         async function activateIfVerified(user, myShop) {
@@ -1735,9 +1761,99 @@
         let pendingCoverBase64 = null;
         let pendingLogoBase64  = null;
 
+
+        // ======= ΕΒΔΟΜΑΔΙΑΙΟ ΩΡΑΡΙΟ =======
+        const WH_DAYS = ['mon','tue','wed','thu','fri','sat','sun'];
+        const WH_NAMES = { el: ['Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο','Κυριακή'], en: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] };
+        const WH_SHORT = { el: ['Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ','Κυρ'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] };
+        const WH_TIMES = []; for (let m = 0; m < 24 * 60; m += 30) WH_TIMES.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'));
+        let weekHours = null;
+
+        function whDefault() { const w = {}; WH_DAYS.forEach(d => w[d] = [{ o: '12:00', c: '23:00' }]); return w; }
+        function whNormalize(w) {
+            const out = {};
+            WH_DAYS.forEach(d => {
+                const v = w && w[d];
+                if (v === 'closed' || !v) out[d] = 'closed';
+                else out[d] = (Array.isArray(v) ? v : Object.values(v)).filter(r => r && r.o && r.c).map(r => ({ o: r.o, c: r.c }));
+                if (Array.isArray(out[d]) && !out[d].length) out[d] = 'closed';
+            });
+            return out;
+        }
+        function whText(w, lang) {
+            const L = lang === 'en' ? 'en' : 'el';
+            const key = d => w[d] === 'closed' ? 'closed' : w[d].map(r => r.o + '–' + r.c).join(', ');
+            const parts = []; let i = 0;
+            while (i < 7) {
+                let j = i; while (j + 1 < 7 && key(WH_DAYS[j + 1]) === key(WH_DAYS[i])) j++;
+                const days = i === j ? WH_SHORT[L][i] : WH_SHORT[L][i] + '–' + WH_SHORT[L][j];
+                const k = key(WH_DAYS[i]);
+                parts.push(days + ' ' + (k === 'closed' ? (L === 'en' ? 'closed' : 'κλειστά') : k));
+                i = j + 1;
+            }
+            return parts.join(' · ');
+        }
+        function timeSelect(value, onChange) {
+            const sel = document.createElement('select');
+            WH_TIMES.forEach(tm => { const o = document.createElement('option'); o.value = tm; o.textContent = tm; if (tm === value) o.selected = true; sel.appendChild(o); });
+            sel.onchange = () => onChange(sel.value);
+            return sel;
+        }
+        function renderWeekHours() {
+            const box = document.getElementById('week-hours');
+            if (!box || !weekHours) return;
+            const L = currentLang === 'en' ? 'en' : 'el';
+            box.innerHTML = '';
+            WH_DAYS.forEach((d, idx) => {
+                const row = document.createElement('div'); row.className = 'wh-row';
+                const name = document.createElement('div'); name.className = 'wh-day'; name.textContent = WH_NAMES[L][idx];
+                const isOpen = weekHours[d] !== 'closed';
+                const tg = document.createElement('label'); tg.className = 'wh-toggle';
+                const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = isOpen;
+                cb.onchange = () => { weekHours[d] = cb.checked ? [{ o: '12:00', c: '23:00' }] : 'closed'; renderWeekHours(); };
+                tg.append(cb, document.createTextNode(isOpen ? t('wh_open') : t('wh_closed')));
+                row.append(name, tg);
+                if (!isOpen) {
+                    const c = document.createElement('div'); c.className = 'wh-closed'; c.textContent = t('wh_closed_day'); row.appendChild(c);
+                } else {
+                    const ranges = document.createElement('div'); ranges.className = 'wh-ranges';
+                    weekHours[d].forEach((r, ri) => {
+                        const line = document.createElement('div'); line.className = 'wh-range';
+                        line.append(timeSelect(r.o, v => { r.o = v; }), document.createTextNode('–'), timeSelect(r.c, v => { r.c = v; }));
+                        if (ri > 0) { const del = document.createElement('button'); del.type = 'button'; del.className = 'wh-del'; del.textContent = '✕'; del.onclick = () => { weekHours[d].splice(ri, 1); renderWeekHours(); }; line.appendChild(del); }
+                        ranges.appendChild(line);
+                    });
+                    if (weekHours[d].length < 3) {
+                        const add = document.createElement('button'); add.type = 'button'; add.className = 'wh-add'; add.textContent = t('wh_add');
+                        add.onclick = () => { weekHours[d].push({ o: '19:00', c: '23:00' }); renderWeekHours(); };
+                        ranges.appendChild(add);
+                    }
+                    row.appendChild(ranges);
+                }
+                box.appendChild(row);
+            });
+        }
+        document.getElementById('btn-copy-mon').onclick = () => {
+            if (!weekHours) return;
+            const mon = weekHours.mon;
+            WH_DAYS.forEach(d => { weekHours[d] = mon === 'closed' ? 'closed' : mon.map(r => ({ o: r.o, c: r.c })); });
+            renderWeekHours();
+        };
+
+
+        function setChipLogo(src) {
+            const img = document.getElementById('user-photo'), ini = document.getElementById('user-initial');
+            if (!img || !src) return;
+            img.src = src; img.style.display = 'block'; img.style.borderRadius = '8px'; img.style.background = '#fff'; img.style.objectFit = 'contain';
+            if (ini) ini.style.display = 'none';
+        }
+        async function setChipShopName(shopId) {
+            try { const n = (await get(ref(db, `shop_details/${shopId}/displayName`))).val(); if (n) document.getElementById('user-name').textContent = n; } catch (e) {}
+        }
+
         function loadShopProfile(shopId) {
             get(ref(db, `shop_profile/${shopId}`)).then(snap => {
-                if (!snap.exists()) return;
+                if (!snap.exists()) { weekHours = whDefault(); renderWeekHours(); return; }
                 const full = snap.val();
                 const p    = full.info || {};
                 const setVal = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val || ''; };
@@ -1747,6 +1863,10 @@
                 setVal('prof-phone',              p.phone);
                 setVal('prof-notification-email', p.notificationEmail || '');
                 setVal('prof-hours',              p.hours);
+                weekHours = p.hoursWeek ? whNormalize(p.hoursWeek) : whDefault();
+                renderWeekHours();
+                setVal('prof-capacity', p.capacity ? String(p.capacity) : '');
+                if (full.logoPhoto) setChipLogo(full.logoPhoto);
                 ['prof-tagline','prof-description'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.dispatchEvent(new Event('input'));
@@ -1766,10 +1886,14 @@
                 description:       document.getElementById('prof-description').value.trim(),
                 address:           document.getElementById('prof-address').value.trim(),
                 phone:             document.getElementById('prof-phone').value.trim(),
-                hours:             document.getElementById('prof-hours').value.trim(),
+                hours:             weekHours ? whText(weekHours, 'el') : document.getElementById('prof-hours').value.trim(),
+                hoursEn:           weekHours ? whText(weekHours, 'en') : '',
+                hoursWeek:         weekHours || null,
+                capacity:          (() => { const n = parseInt(document.getElementById('prof-capacity').value, 10); return n > 0 ? Math.min(n, 999) : null; })(),
                 notificationEmail: document.getElementById('prof-notification-email').value.trim(),
                 updatedAt:         Date.now()
             };
+            Object.keys(data).forEach(k => { if (data[k] === null || data[k] === '') { if (k !== 'notificationEmail') delete data[k]; } });
             try {
                 await set(ref(db, `shop_profile/${currentAdminShop}/info`), data);
                 showToast(t('toast_profile_saved'), 'success');
@@ -1812,6 +1936,7 @@
             if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
             try {
                 await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), pendingLogoBase64);
+                setChipLogo(pendingLogoBase64);
                 showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
                 pendingLogoBase64 = null;
             } catch(e) {
