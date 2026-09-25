@@ -1247,11 +1247,12 @@
         Promise.all([
             ...['openHour', 'closeHour', 'maxGuests'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()).catch(() => null)),
             get(ref(db, `shop_profile/${shopID}/info/hoursWeek`)).then(x => x.val()).catch(() => null),
-            get(ref(db, `shop_profile/${shopID}/info/capacity`)).then(x => x.val()).catch(() => null)
-        ]).then(([openHour_, closeHour_, maxGuests_, hoursWeek_, capacity_]) => {
+            get(ref(db, `shop_profile/${shopID}/info/capacity`)).then(x => x.val()).catch(() => null),
+            get(ref(db, `shop_profile/${shopID}/info/maxParty`)).then(x => x.val()).catch(() => null)
+        ]).then(([openHour_, closeHour_, maxGuests_, hoursWeek_, capacity_, maxParty_]) => {
             if (typeof openHour_ === 'number') fallbackOpen = openHour_;
             if (typeof closeHour_ === 'number') fallbackClose = closeHour_;
-            const maxGuests = typeof maxGuests_ === 'number' ? maxGuests_ : 8;
+            const maxGuests = (typeof maxParty_ === 'number' && maxParty_ > 0) ? Math.min(maxParty_, 50) : (typeof maxGuests_ === 'number' ? maxGuests_ : 8);
             shopHoursWeek = hoursWeek_ ? whNormalize(hoursWeek_) : null;
             shopCapacity = typeof capacity_ === 'number' && capacity_ > 0 ? capacity_ : null;
 

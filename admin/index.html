@@ -957,6 +957,11 @@
                             <small style="display:block; color:#64748b; font-size:0.8rem; margin-top:6px;" data-i18n-key="wh_hint">Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.</small>
                         </div>
                         <div class="input-group">
+                            <label data-i18n-key="party_label">Μέγιστος αριθμός ατόμων ανά κράτηση</label>
+                            <input type="number" id="prof-maxparty" min="1" max="50" step="1" placeholder="8">
+                            <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="party_hint">Πόσα άτομα μπορεί να επιλέξει ο πελάτης σε μία κράτηση. Για μεγαλύτερες ομάδες θα επικοινωνεί μαζί σας.</small>
+                        </div>
+                        <div class="input-group">
                             <label data-i18n-key="cap_label">Μέγιστος αριθμός ατόμων ανά ώρα κράτησης</label>
                             <input type="number" id="prof-capacity" min="1" max="999" step="1" placeholder="π.χ. 30">
                             <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="cap_hint">Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.</small>
@@ -1135,7 +1140,7 @@
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
                 toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
-                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
+                alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", party_label: "Μέγιστος αριθμός ατόμων ανά κράτηση", party_hint: "Πόσα άτομα μπορεί να επιλέξει ο πελάτης σε μία κράτηση. Για μεγαλύτερες ομάδες θα επικοινωνεί μαζί σας.", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
                 wh_copy: "Αντιγραφή της Δευτέρας σε όλες τις ημέρες", wh_hint: "Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.",
                 cap_label: "Μέγιστος αριθμός ατόμων ανά ώρα κράτησης", cap_hint: "Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.", g_title: "Κρατήσεις από το Google Maps",
                 g_desc: "Προσθέστε το link κρατήσεών σας στο προφίλ του καταστήματος στη Google. Όποιος σας βρίσκει στο Google Maps ή στην αναζήτηση θα μπορεί να κλείσει τραπέζι με ένα κλικ. Είναι δωρεάν και δεν χρειάζεται καμία έγκριση.",
@@ -1220,7 +1225,7 @@
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
                 toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
-                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
+                alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", party_label: "Maximum guests per booking", party_hint: "How many guests a customer can choose in one booking. Larger groups will contact you directly.", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
                 wh_copy: "Copy Monday to all days", wh_hint: "Guests only see booking times when you are open. The last booking time is 30 minutes before closing.",
                 cap_label: "Maximum guests per booking time", cap_hint: "When a time slot is full, it shows as \"Full\" and takes no more bookings. Leave empty for no limit.", g_title: "Bookings from Google Maps",
                 g_desc: "Add your booking link to your restaurant's Google profile. Anyone who finds you on Google Maps or in search can book a table in one click. It's free and needs no approval.",
@@ -1866,6 +1871,7 @@
                 weekHours = p.hoursWeek ? whNormalize(p.hoursWeek) : whDefault();
                 renderWeekHours();
                 setVal('prof-capacity', p.capacity ? String(p.capacity) : '');
+                setVal('prof-maxparty', p.maxParty ? String(p.maxParty) : '');
                 if (full.logoPhoto) setChipLogo(full.logoPhoto);
                 ['prof-tagline','prof-description'].forEach(id => {
                     const el = document.getElementById(id);
@@ -1890,6 +1896,7 @@
                 hoursEn:           weekHours ? whText(weekHours, 'en') : '',
                 hoursWeek:         weekHours || null,
                 capacity:          (() => { const n = parseInt(document.getElementById('prof-capacity').value, 10); return n > 0 ? Math.min(n, 999) : null; })(),
+                maxParty:          (() => { const n = parseInt(document.getElementById('prof-maxparty').value, 10); return n > 0 ? Math.min(n, 50) : null; })(),
                 notificationEmail: document.getElementById('prof-notification-email').value.trim(),
                 updatedAt:         Date.now()
             };
