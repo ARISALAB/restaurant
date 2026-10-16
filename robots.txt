@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /superadmin/
+Disallow: /api/
+Disallow: /__/
+Disallow: /cancel.html
+
+Sitemap: https://tablereserve.gr/sitemap.xml
