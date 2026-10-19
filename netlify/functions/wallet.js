@@ -80,11 +80,11 @@ exports.handler = async (event) => {
     if (!b || b.cancelToken !== token) return text(404, en ? 'Reservation not found' : 'Η κράτηση δεν βρέθηκε');
     if (b.status === 'cancelled') return text(410, en ? 'This reservation was cancelled' : 'Η κράτηση έχει ακυρωθεί');
 
-    const [shopName, info, logo, cover] = await Promise.all([
+    const [shopName, info, logo, gallery] = await Promise.all([
       db.ref(`shop_details/${shop}/displayName`).get().then(s => s.val() || shop),
       db.ref(`shop_profile/${shop}/info`).get().then(s => s.val() || {}),
       db.ref(`shop_profile/${shop}/logoPhoto`).get().then(s => s.val()),
-      db.ref(`shop_profile/${shop}/coverPhoto`).get().then(s => s.val()),
+      db.ref(`shop_profile/${shop}/gallery`).get().then(s => s.val()),
     ]);
     const start = athensToMs(b.date, b.time);
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${lang}`;
@@ -117,7 +117,10 @@ exports.handler = async (event) => {
       // Η κάρτα «λήγει» 3 ώρες μετά την κράτηση και φεύγει από τις ενεργές
       validTimeInterval: { end: { date: new Date(start + 3 * 3600000).toISOString() } },
     };
-    const hero = cover ? png(cover, 'w_1032,h_336').replace('c_fill,', 'c_pad,b_auto,') : null;
+    // Μεγάλη εικόνα: η πρώτη φωτογραφία της γκαλερί (χώρος/φαγητό), κομμένη έξυπνα στο κέντρο ενδιαφέροντος.
+    // Χωρίς γκαλερί, η κάρτα μένει καθαρή, χωρίς εικόνα (το εξώφυλλο συχνά είναι λογότυπο).
+    const firstPhoto = Object.keys(gallery || {}).sort().map(k => gallery[k] && gallery[k].data).find(u => png(u, 'w_1'));
+    const hero = firstPhoto ? png(firstPhoto, 'w_1032,h_336').replace('c_fill,', 'c_fill,g_auto,') : null;
     if (hero) obj.heroImage = { sourceUri: { uri: hero }, contentDescription: L(shopName, lang) };
 
     await upsertObject(obj);
