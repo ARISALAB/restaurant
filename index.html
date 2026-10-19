@@ -1226,6 +1226,12 @@
             } catch (e) {}
         }
         
+        // Εικόνες Cloudinary: μικρότερη, συμπιεσμένη εκδοχή ανάλογα με το πού εμφανίζεται
+        function trImg(u, w) {
+            if (typeof u !== 'string' || u.indexOf('res.cloudinary.com/') < 0 || u.indexOf('/upload/') < 0) return u;
+            return u.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`);
+        }
+
         function loadClientShopProfile(shopId) {
             // Διαβάζουμε μόνο τα δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
             const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
@@ -1240,12 +1246,12 @@
                 }).catch(() => {});
 
                 if (full.coverPhoto) {
-                    document.getElementById('client-cover-img').src = full.coverPhoto;
+                    document.getElementById('client-cover-img').src = trImg(full.coverPhoto, 1600);
                     document.getElementById('client-cover-wrap').style.display = 'block';
                     document.getElementById('client-cover-placeholder').style.display = 'none';
                 }
                 if (full.logoPhoto) {
-                    document.getElementById('client-logo-img').src = full.logoPhoto;
+                    document.getElementById('client-logo-img').src = trImg(full.logoPhoto, 240);
                     document.getElementById('client-logo-wrap').style.display = 'block';
                 }
                 if (info.tagline) {
@@ -1277,11 +1283,11 @@
                         strip.innerHTML = '';
                         photos.forEach(p => {
                             const img = document.createElement('img');
-                            img.src = p.data; img.alt = p.name || '';
+                            img.src = trImg(p.data, 480); img.alt = p.name || ''; img.loading = 'lazy';
                             img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
                             img.onmouseover = () => img.style.transform = 'scale(1.03)';
                             img.onmouseout  = () => img.style.transform = '';
-                            img.onclick = () => openLightbox(p.data, p.name);
+                            img.onclick = () => openLightbox(trImg(p.data, 1600), p.name);
                             strip.appendChild(img);
                         });
                         document.getElementById('client-gallery-wrap').style.display = 'block';

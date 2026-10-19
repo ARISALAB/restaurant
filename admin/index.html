@@ -1070,7 +1070,7 @@
                                     <input type="file" id="logo-input" accept="image/*" onchange="handleLogoUpload(event)">
                                     <div class="upload-zone-icon" style="font-size:1.4rem; margin-bottom:4px;">🏷️</div>
                                     <div class="upload-zone-text" style="font-size:0.82rem;">Κλικ ή σύρτε λογότυπο</div>
-                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 1MB</div>
+                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 2MB</div>
                                 </div>
                             </div>
                         </div>
@@ -1088,7 +1088,7 @@
                             <input type="file" id="cover-input" accept="image/*" onchange="handleCoverUpload(event)">
                             <div class="upload-zone-icon">📷</div>
                             <div class="upload-zone-text" data-i18n-key="upload_cover">Κλικ ή σύρτε φωτογραφία εξωφύλλου</div>
-                            <div class="upload-zone-sub" data-i18n-key="upload_hint">JPG, PNG, WEBP · μέγιστο 2MB</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_hint">JPG, PNG, WEBP · μέγιστο 8MB</div>
                         </div>
                         <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
                             <button class="profile-save-btn" onclick="saveCoverPhoto()">💾 <span data-i18n-key="save_cover">Αποθήκευση Εξωφύλλου</span></button>
@@ -1107,7 +1107,7 @@
                             <input type="file" id="gallery-input" accept="image/*" multiple onchange="handleGalleryUpload(event)">
                             <div class="upload-zone-icon">🗂️</div>
                             <div class="upload-zone-text" data-i18n-key="upload_gallery">Κλικ ή σύρτε φωτογραφίες γκαλερί</div>
-                            <div class="upload-zone-sub" data-i18n-key="upload_gallery_hint">Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία</div>
+                            <div class="upload-zone-sub" data-i18n-key="upload_gallery_hint">Πολλαπλές φωτογραφίες · μέγιστο 8MB ανά φωτογραφία</div>
                         </div>
                         <div id="gallery-grid" class="photo-gallery"></div>
                     </div>
@@ -1255,13 +1255,13 @@
                 shop_phone_pub: "Τηλέφωνο Επικοινωνίας", shop_hours: "Ωράριο Λειτουργίας",
                 save_profile: "Αποθήκευση Πληροφοριών", cover_photo: "Εξώφυλλο",
                 no_cover: "Δεν έχει οριστεί εξώφυλλο", upload_cover: "Κλικ ή σύρτε φωτογραφία εξωφύλλου",
-                upload_hint: "JPG, PNG, WEBP · μέγιστο 2MB", save_cover: "Αποθήκευση Εξωφύλλου",
+                upload_hint: "JPG, PNG, WEBP · μέγιστο 8MB", save_cover: "Αποθήκευση Εξωφύλλου",
                 delete_cover: "Διαγραφή", photo_gallery: "Γκαλερί Φωτογραφιών",
                 upload_gallery: "Κλικ ή σύρτε φωτογραφίες γκαλερί",
-                upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία",
+                upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 8MB ανά φωτογραφία",
                 toast_profile_saved: "✅ Πληροφορίες αποθηκεύτηκαν!", toast_cover_saved: "✅ Εξώφυλλο αποθηκεύτηκε!",
                 toast_cover_deleted: "🗑️ Εξώφυλλο διαγράφηκε.", toast_photo_saved: "✅ Φωτογραφία προστέθηκε!",
-                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.", toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 2MB!",
+                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.", toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 8MB!", toast_upload_failed: "⚠️ Η φωτογραφία δεν ανέβηκε. Δοκιμάστε ξανά.",
                 toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
@@ -1340,13 +1340,13 @@
                 shop_phone_pub: "Contact Phone", shop_hours: "Opening Hours",
                 save_profile: "Save Information", cover_photo: "Cover Photo",
                 no_cover: "No cover photo set", upload_cover: "Click or drag a cover photo",
-                upload_hint: "JPG, PNG, WEBP · max 2MB", save_cover: "Save Cover Photo",
+                upload_hint: "JPG, PNG, WEBP · max 8MB", save_cover: "Save Cover Photo",
                 delete_cover: "Delete", photo_gallery: "Photo Gallery",
                 upload_gallery: "Click or drag gallery photos",
-                upload_gallery_hint: "Multiple photos · max 2MB per photo",
+                upload_gallery_hint: "Multiple photos · max 8MB per photo",
                 toast_profile_saved: "✅ Information saved!", toast_cover_saved: "✅ Cover photo saved!",
                 toast_cover_deleted: "🗑️ Cover photo deleted.", toast_photo_saved: "✅ Photo added!",
-                toast_photo_deleted: "🗑️ Photo deleted.", toast_img_too_big: "⚠️ Photo exceeds 2MB!",
+                toast_photo_deleted: "🗑️ Photo deleted.", toast_img_too_big: "⚠️ Photo exceeds 8MB!", toast_upload_failed: "⚠️ The photo could not be uploaded. Please try again.",
                 toast_save_error2: "Save error. Please try again.",
             }
         };
@@ -1508,6 +1508,7 @@
             document.getElementById('filter-to').value = today;
             listenToReservations(myShop);
             loadShopProfile(myShop);
+            migrateShopPhotos(myShop);
             renderBilling(myShop, auth.currentUser).catch(() => {});
             renderEmbedCode();
             renderGoogleCard();
@@ -2430,8 +2431,9 @@
         window.handleLogoUpload = (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            if (file.size > 1 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει το 1MB!', 'error'); return; }
+            if (file.size > 2 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει τα 2MB!', 'error'); return; }
             const reader = new FileReader();
+            pendingLogoFile = file;
             reader.onload = (e) => { pendingLogoBase64 = e.target.result; showLogoPreview(pendingLogoBase64); };
             reader.readAsDataURL(file);
         };
@@ -2441,8 +2443,10 @@
             const btn = document.querySelector('[onclick="saveLogoPhoto()"]');
             if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
             try {
-                await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), pendingLogoBase64);
-                setChipLogo(pendingLogoBase64);
+                const logoUrl = await trUploadImage(pendingLogoFile || pendingLogoBase64, 'logo');
+                await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), logoUrl);
+                pendingLogoFile = null;
+                setChipLogo(logoUrl);
                 showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
                 pendingLogoBase64 = null;
             } catch(e) {
@@ -2467,6 +2471,52 @@
             }
         };
 
+        // ======= ΦΩΤΟΓΡΑΦΙΕΣ ΣΤΟ CLOUDINARY =======
+        // Οι φωτογραφίες ανεβαίνουν στο Cloudinary (preset "tablereserve": μόνο εικόνες, έως 1600px).
+        // Στη βάση μένει μόνο το link τους, όχι η ίδια η εικόνα.
+        const CLD_CLOUD = 'djs1rbsbn', CLD_PRESET = 'tablereserve';
+        let pendingLogoFile = null, pendingCoverFile = null;
+        async function trUploadImage(fileOrDataUrl, kind) {
+            const fd = new FormData();
+            fd.append('file', fileOrDataUrl);
+            fd.append('upload_preset', CLD_PRESET);
+            fd.append('tags', ['tablereserve', currentAdminShop, kind].filter(Boolean).join(','));
+            const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`, { method: 'POST', body: fd });
+            const d = await r.json().catch(() => ({}));
+            if (!r.ok || !d.secure_url) {
+                showToast(t('toast_upload_failed'), 'error');
+                throw new Error((d.error && d.error.message) || 'upload_failed');
+            }
+            return d.secure_url;
+        }
+        // Μικρότερη, συμπιεσμένη εκδοχή για εμφάνιση (μόνο για εικόνες Cloudinary)
+        function trImg(u, w) {
+            if (typeof u !== 'string' || u.indexOf('res.cloudinary.com/') < 0 || u.indexOf('/upload/') < 0) return u;
+            return u.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`);
+        }
+        // Μία φορά ανά κατάστημα: παλιές φωτογραφίες που είναι αποθηκευμένες μέσα στη βάση μεταφέρονται στο Cloudinary
+        async function migrateShopPhotos(shopId) {
+            const base = `shop_profile/${shopId}`;
+            try {
+                for (const f of ['logoPhoto', 'coverPhoto']) {
+                    const v = (await get(ref(db, `${base}/${f}`))).val();
+                    if (typeof v === 'string' && v.startsWith('data:')) {
+                        const url = await trUploadImage(v, f === 'logoPhoto' ? 'logo' : 'cover');
+                        if (shopId !== currentAdminShop) return;
+                        await set(ref(db, `${base}/${f}`), url);
+                    }
+                }
+                const gal = (await get(ref(db, `${base}/gallery`))).val() || {};
+                for (const [k, p] of Object.entries(gal)) {
+                    if (p && typeof p.data === 'string' && p.data.startsWith('data:')) {
+                        const url = await trUploadImage(p.data, 'gallery');
+                        if (shopId !== currentAdminShop) return;
+                        await set(ref(db, `${base}/gallery/${k}/data`), url);
+                    }
+                }
+            } catch (e) { console.warn('photo migration', e); }
+        }
+
         // ======= COVER PHOTO =======
         function showCoverPreview(base64) {
             document.getElementById('cover-preview').innerHTML = `<img src="${base64}" alt="cover">`;
@@ -2476,8 +2526,9 @@
         window.handleCoverUpload = (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            if (file.size > 2 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
+            if (file.size > 8 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
             const reader = new FileReader();
+            pendingCoverFile = file;
             reader.onload = (e) => { pendingCoverBase64 = e.target.result; showCoverPreview(pendingCoverBase64); };
             reader.readAsDataURL(file);
         };
@@ -2487,9 +2538,10 @@
             const btn = document.querySelector('[onclick="saveCoverPhoto()"]');
             if (btn) { btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>`; }
             try {
-                await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), pendingCoverBase64);
+                const coverUrl = await trUploadImage(pendingCoverFile || pendingCoverBase64, 'cover');
+                await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), coverUrl);
                 showToast(t('toast_cover_saved'), 'success');
-                pendingCoverBase64 = null;
+                pendingCoverBase64 = null; pendingCoverFile = null;
             } catch(e) {
                 showToast(t('toast_save_error2'), 'error');
             } finally {
@@ -2526,7 +2578,7 @@
                     const thumb = document.createElement('div');
                     thumb.className = 'photo-thumb';
                     thumb.innerHTML = `
-                        <img src="${p.data}" alt="${p.name || ''}">
+                        <img src="${trImg(p.data, 300)}" alt="${p.name || ''}" loading="lazy">
                         <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="Διαγραφή">✕</button>
                         ${p.name ? `<div class="photo-label">${p.name}</div>` : ''}
                     `;
@@ -2539,14 +2591,10 @@
             const files = Array.from(event.target.files);
             if (!currentAdminShop || !files.length) return;
             for (const file of files) {
-                if (file.size > 2 * 1024 * 1024) { showToast(`⚠️ ${file.name}: > 2MB`, 'error'); continue; }
-                const base64 = await new Promise((res, rej) => {
-                    const r = new FileReader();
-                    r.onload = e => res(e.target.result); r.onerror = rej;
-                    r.readAsDataURL(file);
-                });
-                const entry = { data: base64, name: file.name.replace(/\.[^.]+$/, ''), uploadedAt: Date.now() };
+                if (file.size > 8 * 1024 * 1024) { showToast(`⚠️ ${file.name}: > 8MB`, 'error'); continue; }
                 try {
+                    const url = await trUploadImage(file, 'gallery');
+                    const entry = { data: url, name: file.name.replace(/\.[^.]+$/, ''), uploadedAt: Date.now() };
                     await set(ref(db, `shop_profile/${currentAdminShop}/gallery/${Date.now()}_${Math.random().toString(36).slice(2,7)}`), entry);
                     showToast(t('toast_photo_saved'), 'success');
                 } catch(e) {

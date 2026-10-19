@@ -194,6 +194,11 @@ footer a:hover{text-decoration:underline}
 </div>
 
 <script type="module">
+// Εικόνες Cloudinary: μικρότερη, συμπιεσμένη εκδοχή
+function trImg(u, w) {
+    if (typeof u !== 'string' || u.indexOf('res.cloudinary.com/') < 0 || u.indexOf('/upload/') < 0) return u;
+    return u.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`);
+}
 // ======= ΔΟΜΗΜΕΝΑ ΔΕΔΟΜΕΝΑ (schema.org) για τη Google =======
 function trSetSchema(d) {
     try {
@@ -268,7 +273,7 @@ async function init() {
   document.getElementById('nav-name').textContent = name;
   document.getElementById('nav-cta').href = bookingUrl;
   if (full.logoPhoto) {
-    document.getElementById('logo-mark').innerHTML = `<img src="${full.logoPhoto}" alt="${name}">`;
+    document.getElementById('logo-mark').innerHTML = `<img src="${trImg(full.logoPhoto, 240)}" alt="${name}">`;
   } else {
     document.getElementById('logo-mark').textContent = name.charAt(0);
   }
@@ -279,7 +284,7 @@ async function init() {
   document.getElementById('hero-cta').href = bookingUrl;
   document.getElementById('band-cta').href = bookingUrl;
   if (full.coverPhoto) {
-    document.getElementById('hero-photo').innerHTML = `<img src="${full.coverPhoto}" alt="${name}">`;
+    document.getElementById('hero-photo').innerHTML = `<img src="${trImg(full.coverPhoto, 1920)}" alt="${name}">`;
   }
 
   // About
@@ -287,7 +292,7 @@ async function init() {
   document.getElementById('about-description').textContent =
     info.description || `Το ${name} είναι ένα εστιατόριο που θα λατρέψετε — κάντε κράτηση για να το ανακαλύψετε.`;
   if (full.coverPhoto) {
-    document.getElementById('about-photo').innerHTML = `<img src="${full.coverPhoto}" alt="${name}">`;
+    document.getElementById('about-photo').innerHTML = `<img src="${trImg(full.coverPhoto, 1200)}" alt="${name}">`;
   } else {
     document.getElementById('about-photo').textContent = '📷';
   }
@@ -308,7 +313,7 @@ async function init() {
     const grid = document.getElementById('gal-grid');
     grid.innerHTML = gallery.map(g => {
       const src = typeof g === 'string' ? g : (g.data || g.image || g.url || '');
-      return src ? `<div class="gal-item"><img src="${src}" alt="${name}"></div>` : '';
+      return src ? `<div class="gal-item"><img src="${trImg(src, 900)}" alt="${name}" loading="lazy"></div>` : '';
     }).join('');
   }
 
