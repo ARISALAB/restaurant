@@ -66,7 +66,7 @@ async function join(db, b, event) {
   if (dup) await dayRef.child(dup[0]).set(entry);
   else await dayRef.push(entry);
   console.log('[waitlist] join', shop, date, time, guests, dup ? '(updated)' : '(new)');
-  if (!dup) await notifyShopJoin(db, shop, entry, date).catch(e => console.error('[waitlist] shop email', e.message));
+  await notifyShopJoin(db, shop, entry, date, !!dup).catch(e => console.error('[waitlist] shop email', e.message));
   return json(200, { ok: true });
 }
 

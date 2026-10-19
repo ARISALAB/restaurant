@@ -156,9 +156,9 @@ async function scanWaitlists(db, today) {
 }
 
 // Email στο κατάστημα: νέος πελάτης στη λίστα αναμονής
-async function notifyShopJoin(db, shop, e, date) {
+async function notifyShopJoin(db, shop, e, date, updated) {
   const to = (await db.ref(`shop_profile/${shop}/info/notificationEmail`).get()).val();
-  if (!to) return;
+  if (!to) { console.warn('[waitlist] no notificationEmail for', shop); return; }
   const shopName = (await db.ref(`shop_details/${shop}/displayName`).get()).val() || shop;
   const when = e.time === 'any' ? (Array.isArray(e.times) && e.times.length ? e.times.join(', ') : 'οποιαδήποτε ώρα') : e.time;
   const tel = String(e.phone || '').replace(/[^\d+]/g, '');
@@ -172,7 +172,7 @@ async function notifyShopJoin(db, shop, e, date) {
 <div style="max-width:580px;margin:0 auto;">
   <div style="background:#0f172a;border-radius:12px 12px 0 0;padding:24px 32px;text-align:center;">
     <div style="font-size:30px;margin-bottom:6px;">⏳</div>
-    <h1 style="color:#fff;margin:0;font-size:19px;font-weight:700;">Νέο αίτημα στη λίστα αναμονής</h1>
+    <h1 style="color:#fff;margin:0;font-size:19px;font-weight:700;">${updated ? 'Ενημέρωση αιτήματος στη λίστα αναμονής' : 'Νέο αίτημα στη λίστα αναμονής'}</h1>
     <p style="color:rgba(255,255,255,0.75);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
   </div>
   <div style="background:#fff;padding:24px 32px;">
@@ -191,6 +191,7 @@ async function notifyShopJoin(db, shop, e, date) {
   </div>
 </div></body></html>`,
   });
+  console.log('[waitlist] shop email sent', shop, to);
 }
 
 module.exports = { notifyWaitlist, removeBooked, phoneKey, scanWaitlists, notifyShopJoin };
