@@ -20,7 +20,8 @@ exports.handler = async () => {
       [`reservations/${shopId}`]: null,
       [`shop_profile/${shopId}`]: null,
       [`shop_details/${shopId}`]: null,
-      [`slot_holds/${shopId}`]: null
+      [`slot_holds/${shopId}`]: null,
+      [`guests/${shopId}`]: null
     };
     uids.forEach(uid => { upd[`users_to_shops/${uid}`] = null; upd[`signup_meta/${uid}`] = null; });
     await db.ref().update(upd);

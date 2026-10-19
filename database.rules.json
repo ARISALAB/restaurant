@@ -119,6 +119,32 @@
           }
         }
       }
+    },
+    "guests": {
+      "$shop": {
+        ".read": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1')",
+        ".write": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1')",
+        "$guest": {
+          ".validate": "$guest.matches(/^[0-9]{6,15}$/) && newData.hasChildren(['notes', 'updatedAt'])",
+          "name": {
+            ".validate": "newData.isString() && newData.val().length <= 100"
+          },
+          "notes": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "tags": {
+            "$tag": {
+              ".validate": "newData.isBoolean() && $tag.matches(/^(vip|allergy|outdoor|attention)$/)"
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
     }
   }
 }

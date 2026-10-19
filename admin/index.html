@@ -362,7 +362,7 @@
         /* Νέα κράτηση από το admin */
         .res-toolbar { display: flex; justify-content: flex-end; margin: 0 0 14px; }
         .nb-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 16px; }
-        #nb-modal .nb-head h3 { margin: 0; font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: #0f172a; text-transform: none; letter-spacing: -0.01em; }
+        #nb-modal .nb-head h3, #gp-modal .nb-head h3 { margin: 0; font-family: 'Sora', sans-serif; font-size: 1.25rem; font-weight: 700; color: #0f172a; text-transform: none; letter-spacing: -0.01em; }
         .nb-x { background: none; border: none; font-size: 1.6rem; line-height: 1; color: #64748b; cursor: pointer; padding: 4px 8px; }
         .nb-src { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 16px; }
         .nb-src button { border: 1.5px solid var(--border); background: #fff; border-radius: 10px; padding: 10px; font: inherit; font-size: 0.9rem; font-weight: 600; color: #334155; cursor: pointer; }
@@ -386,6 +386,44 @@
         .src-phone  { background: #fff7ed; color: #c2410c; border-color: #ffedd5; }
         .src-walkin { background: #f0f9ff; color: #0369a1; border-color: #e0f2fe; }
         .booking-card.noshow { opacity: .7; }
+        .booking-card.cancelled { opacity: .62; background: #fafafa; }
+        .booking-card.cancelled .time-badge { background: #94a3b8; }
+        .card-acts { display: inline-flex; gap: 6px; }
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: #fff; color: #64748b; cursor: pointer; transition: all .15s; padding: 0; }
+        .icon-btn:hover { color: #0f172a; border-color: #94a3b8; }
+        .icon-btn.danger:hover { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
+        .cancel-badge { font-size: 0.74rem; font-weight: 700; color: #991b1b; background: #fee2e2; border: 1px solid #fecaca; padding: 3px 9px; border-radius: 999px; }
+        .text-btn { font: inherit; font-size: 0.78rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: #fff; color: #334155; cursor: pointer; }
+        .text-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .customer-name.link { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .customer-name.link:hover { color: var(--primary); }
+        .customer-name.link svg { color: #94a3b8; }
+        .g-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: -2px 0 8px; }
+        .g-chip { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .g-chip.vip { background: #fef9c3; color: #854d0e; border-color: #fde68a; }
+        .g-chip.allergy { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+        .g-chip.outdoor { background: #f0fdf4; color: #166534; border-color: #dcfce7; }
+        .g-chip.attention { background: #ffedd5; color: #9a3412; border-color: #fed7aa; }
+        .g-chip.visits { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
+        .g-note { font-size: 0.84rem; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 6px 10px; margin: 0 0 10px; }
+        .show-cancelled { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 0.85rem; color: #475569; text-transform: none; letter-spacing: 0; font-weight: 500; cursor: pointer; }
+        .show-cancelled input { width: auto; }
+        /* Καρτέλα πελάτη */
+        #gp-modal .modal-content { max-width: 520px; }
+        .gp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 0 0 16px; }
+        .gp-stat { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 6px; text-align: center; }
+        .gp-stat b { display: block; font-family: 'Sora', sans-serif; font-size: 1.25rem; color: #0f172a; }
+        .gp-stat span { font-size: 0.7rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+        .gp-contact { font-size: 0.88rem; color: #475569; margin: -8px 0 16px; display: flex; flex-wrap: wrap; gap: 14px; }
+        .gp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+        .gp-tags button { font: inherit; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--border); background: #fff; color: #475569; cursor: pointer; }
+        .gp-tags button.on { border-color: var(--primary); background: rgba(37,99,235,.08); color: var(--primary); }
+        .gp-hist { max-height: 190px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; margin: 0 0 16px; }
+        .gp-hist div { display: flex; justify-content: space-between; gap: 10px; padding: 8px 12px; font-size: 0.84rem; border-bottom: 1px solid #f1f5f9; }
+        .gp-hist div:last-child { border-bottom: none; }
+        .gp-hist em { font-style: normal; font-weight: 600; font-size: 0.76rem; }
+        .gp-hist .ok { color: #15803d; } .gp-hist .bad { color: #b91c1c; } .gp-hist .muted { color: #94a3b8; }
+        @media (max-width: 520px) { .gp-stats { grid-template-columns: repeat(2, 1fr); } }
         .stat-card { border-radius: var(--radius-lg); padding: 20px; text-align: center; }
         .stat-card.blue { background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; }
         .stat-card.dark { background: linear-gradient(135deg, #0f172a, #1e293b); color: white; }
@@ -986,7 +1024,7 @@
                                 <div class="input-group"><label for="nb-email" data-i18n-key="nb_email">Email (προαιρετικό)</label><input type="email" id="nb-email" maxlength="120" autocomplete="off"></div>
                             </div>
                             <div class="input-group"><label for="nb-notes" data-i18n-key="nb_notes">Σημειώσεις</label><textarea id="nb-notes" rows="2" maxlength="1000"></textarea></div>
-                            <label class="nb-check" id="nb-confirm-wrap" style="display:none;"><input type="checkbox" id="nb-confirm" checked> <span data-i18n-key="nb_confirm">Αποστολή email επιβεβαίωσης στον πελάτη</span></label>
+                            <label class="nb-check" id="nb-confirm-wrap" style="display:none;"><input type="checkbox" id="nb-confirm" checked> <span id="nb-confirm-label">Αποστολή email επιβεβαίωσης στον πελάτη</span></label>
                             <button type="button" class="btn-primary" id="nb-save" data-i18n-key="nb_save">Αποθήκευση κράτησης</button>
                         </div>
                     </div>
@@ -999,8 +1037,27 @@
                             <div class="filter-group"><label data-i18n-key="from">Από</label><input type="date" id="filter-from"></div>
                             <div class="filter-group"><label data-i18n-key="to">Έως</label><input type="date" id="filter-to"></div>
                         </div>
+                        <label class="show-cancelled"><input type="checkbox" id="show-cancelled"> <span data-i18n-key="show_cancelled">Εμφάνιση ακυρωμένων</span></label>
                     </div>
                     <div id="reservation-list"><div class="no-data" data-i18n-key="loading">Φόρτωση...</div></div>
+                    <div class="modal" id="gp-modal" role="dialog" aria-modal="true" aria-labelledby="gp-name">
+                        <div class="modal-content card" style="padding:24px;">
+                            <div class="nb-head"><h3 id="gp-name"></h3><button type="button" class="nb-x" id="gp-close" aria-label="Close">×</button></div>
+                            <div class="gp-contact" id="gp-contact"></div>
+                            <div class="gp-stats" id="gp-stats"></div>
+                            <label data-i18n-key="gp_tags">Ετικέτες</label>
+                            <div class="gp-tags" id="gp-tags">
+                                <button type="button" data-tag="vip">VIP</button>
+                                <button type="button" data-tag="allergy" data-i18n-key="gp_allergy">Αλλεργία / διατροφή</button>
+                                <button type="button" data-tag="outdoor" data-i18n-key="gp_outdoor">Προτιμά έξω</button>
+                                <button type="button" data-tag="attention" data-i18n-key="gp_attention">Προσοχή</button>
+                            </div>
+                            <div class="input-group"><label for="gp-notes" data-i18n-key="gp_notes">Σημειώσεις για τον πελάτη</label><textarea id="gp-notes" rows="3" maxlength="1000"></textarea></div>
+                            <label data-i18n-key="gp_history">Ιστορικό κρατήσεων</label>
+                            <div class="gp-hist" id="gp-hist"></div>
+                            <button type="button" class="btn-primary" id="gp-save" data-i18n-key="gp_save">Αποθήκευση</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Analytics Section -->
@@ -1216,7 +1273,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, get, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import {
             getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
             createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup
@@ -1255,7 +1312,7 @@
                 password: "Κωδικός", login: "Σύνδεση", reservations: "Κρατήσεις", logout: "Αποσύνδεση",
                 total_guests: "Σύνολο Ατόμων", from: "Από", to: "Έως", loading: "Φόρτωση...",
                 analytics_tab: "Analytics", an_avg_party: "Μέσος όρος ατόμων", an_cancel_rate: "Ποσοστό ακυρώσεων",
-                an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google", an_noshow: "No-show", an_phone: "Τηλεφωνικά", an_walkin: "Από κοντά (walk-in)", att_arrived: "Ήρθε", att_noshow: "Δεν ήρθε", nb_btn: "Νέα κράτηση", nb_title: "Νέα κράτηση", nb_phone: "Τηλεφωνικά", nb_walkin: "Από κοντά (walk-in)", nb_date: "Ημερομηνία", nb_time: "Ώρα", nb_guests: "Άτομα", nb_location: "Χώρος", nb_name: "Ονοματεπώνυμο", nb_tel: "Τηλέφωνο", nb_email: "Email (προαιρετικό)", nb_notes: "Σημειώσεις", nb_confirm: "Αποστολή email επιβεβαίωσης στον πελάτη", nb_save: "Αποθήκευση κράτησης", nb_saved: "✅ Η κράτηση καταχωρίστηκε.", nb_missing: "Συμπληρώστε ημερομηνία, ώρα, άτομα και όνομα.", nb_error: "⚠️ Η κράτηση δεν αποθηκεύτηκε. Δοκιμάστε ξανά.",
+                an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google", show_cancelled: "Εμφάνιση ακυρωμένων", bk_edit: "Επεξεργασία", bk_cancel: "Ακύρωση κράτησης", bk_cancel_q: "Ακύρωση αυτής της κράτησης; Θα παραμείνει στα στατιστικά ως ακυρωμένη.", bk_cancelled: "Ακυρώθηκε", bk_restore: "Επαναφορά", bk_delete_q: "Οριστική διαγραφή; Η κράτηση θα χαθεί και από τα στατιστικά.", nb_edit_title: "Επεξεργασία κράτησης", nb_update: "Αποθήκευση αλλαγών", nb_resend: "Αποστολή email στον πελάτη με τα νέα στοιχεία", nb_updated: "✅ Η κράτηση ενημερώθηκε.", gp_tags: "Ετικέτες", gp_allergy: "Αλλεργία / διατροφή", gp_outdoor: "Προτιμά έξω", gp_attention: "Προσοχή", gp_notes: "Σημειώσεις για τον πελάτη", gp_history: "Ιστορικό κρατήσεων", gp_save: "Αποθήκευση", gp_saved: "✅ Η καρτέλα πελάτη αποθηκεύτηκε.", gp_visits: "Επισκέψεις", gp_bookings: "Κρατήσεις", gp_noshows: "No-show", gp_cancels: "Ακυρώσεις", gp_visit_n: "η επίσκεψη", gp_first: "Νέος πελάτης", gp_no_phone: "Η καρτέλα πελάτη χρειάζεται τηλέφωνο.", an_noshow: "No-show", an_phone: "Τηλεφωνικά", an_walkin: "Από κοντά (walk-in)", att_arrived: "Ήρθε", att_noshow: "Δεν ήρθε", nb_btn: "Νέα κράτηση", nb_title: "Νέα κράτηση", nb_phone: "Τηλεφωνικά", nb_walkin: "Από κοντά (walk-in)", nb_date: "Ημερομηνία", nb_time: "Ώρα", nb_guests: "Άτομα", nb_location: "Χώρος", nb_name: "Ονοματεπώνυμο", nb_tel: "Τηλέφωνο", nb_email: "Email (προαιρετικό)", nb_notes: "Σημειώσεις", nb_confirm: "Αποστολή email επιβεβαίωσης στον πελάτη", nb_save: "Αποθήκευση κράτησης", nb_saved: "✅ Η κράτηση καταχωρίστηκε.", nb_missing: "Συμπληρώστε ημερομηνία, ώρα, άτομα και όνομα.", nb_error: "⚠️ Η κράτηση δεν αποθηκεύτηκε. Δοκιμάστε ξανά.",
                 an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_findings: "Βασικά ευρήματα", rep_tips: "Προτάσεις", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
                 an_days_title: "Πιο απασχολημένες μέρες", an_source_title: "Πηγή κράτησης",
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
@@ -1340,7 +1397,7 @@
                 password: "Password", login: "Sign In", reservations: "Reservations", logout: "Sign Out",
                 total_guests: "Total Guests", from: "From", to: "To", loading: "Loading...",
                 analytics_tab: "Analytics", an_avg_party: "Avg party size", an_cancel_rate: "Cancellation rate",
-                an_repeat_customers: "Repeat guests", an_google_share: "Via Google", an_noshow: "No-show", an_phone: "By phone", an_walkin: "Walk-in", att_arrived: "Arrived", att_noshow: "No-show", nb_btn: "New booking", nb_title: "New booking", nb_phone: "By phone", nb_walkin: "Walk-in", nb_date: "Date", nb_time: "Time", nb_guests: "Guests", nb_location: "Seating", nb_name: "Full name", nb_tel: "Phone", nb_email: "Email (optional)", nb_notes: "Notes", nb_confirm: "Send a confirmation email to the guest", nb_save: "Save booking", nb_saved: "✅ Booking saved.", nb_missing: "Please fill in date, time, guests and name.", nb_error: "⚠️ The booking was not saved. Please try again.",
+                an_repeat_customers: "Repeat guests", an_google_share: "Via Google", show_cancelled: "Show cancelled", bk_edit: "Edit", bk_cancel: "Cancel booking", bk_cancel_q: "Cancel this booking? It will stay in your statistics as cancelled.", bk_cancelled: "Cancelled", bk_restore: "Restore", bk_delete_q: "Delete permanently? The booking will also disappear from your statistics.", nb_edit_title: "Edit booking", nb_update: "Save changes", nb_resend: "Email the guest the updated details", nb_updated: "✅ Booking updated.", gp_tags: "Tags", gp_allergy: "Allergy / diet", gp_outdoor: "Prefers outdoors", gp_attention: "Attention", gp_notes: "Notes about this guest", gp_history: "Booking history", gp_save: "Save", gp_saved: "✅ Guest profile saved.", gp_visits: "Visits", gp_bookings: "Bookings", gp_noshows: "No-shows", gp_cancels: "Cancellations", gp_visit_n: " visit", gp_first: "New guest", gp_no_phone: "A guest profile needs a phone number.", an_noshow: "No-show", an_phone: "By phone", an_walkin: "Walk-in", att_arrived: "Arrived", att_noshow: "No-show", nb_btn: "New booking", nb_title: "New booking", nb_phone: "By phone", nb_walkin: "Walk-in", nb_date: "Date", nb_time: "Time", nb_guests: "Guests", nb_location: "Seating", nb_name: "Full name", nb_tel: "Phone", nb_email: "Email (optional)", nb_notes: "Notes", nb_confirm: "Send a confirmation email to the guest", nb_save: "Save booking", nb_saved: "✅ Booking saved.", nb_missing: "Please fill in date, time, guests and name.", nb_error: "⚠️ The booking was not saved. Please try again.",
                 an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_findings: "Key findings", rep_tips: "Recommendations", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
                 an_days_title: "Busiest days", an_source_title: "Booking source",
                 an_location_title: "Location", an_occasion_title: "Occasion types",
@@ -1566,6 +1623,7 @@
             document.getElementById('filter-from').value = today;
             document.getElementById('filter-to').value = today;
             listenToReservations(myShop);
+            listenToGuests(myShop);
             loadShopProfile(myShop);
             migrateShopPhotos(myShop);
             renderBilling(myShop, auth.currentUser).catch(() => {});
@@ -1796,6 +1854,24 @@
             } catch (e) { slugMsg(t('slug_error'), 'bad'); }
         };
 
+        // ======= ΚΑΡΤΕΛΕΣ ΠΕΛΑΤΩΝ (guests/{shop}/{τηλέφωνο}) =======
+        let guestsData = {};
+        let guestsUnsub = null;
+        function guestKey(phone) {
+            let d = String(phone || '').replace(/\D/g, '');
+            if (d.startsWith('00')) d = d.slice(2);
+            if (d.length === 12 && d.startsWith('30')) d = d.slice(2);   // +30 Ελλάδα
+            return d.length >= 6 && d.length <= 15 ? d : '';
+        }
+        function listenToGuests(shop) {
+            if (guestsUnsub) guestsUnsub();
+            guestsData = {};
+            guestsUnsub = onValue(ref(db, 'guests/' + shop), snap => {
+                guestsData = snap.val() || {};
+                renderDashboard(shop);
+            }, () => {});
+        }
+
         function listenToReservations(shop) {
             onValue(ref(db, 'reservations/' + shop), (snapshot) => {
                 allReservations = [];
@@ -1818,36 +1894,58 @@
             const fromDate = document.getElementById('filter-from').value;
             const toDate   = document.getElementById('filter-to').value;
             const list     = document.getElementById('reservation-list');
-            let filtered   = allReservations.filter(r => r.date >= fromDate && r.date <= toDate && r.status !== 'cancelled');
-            filtered.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : a.time.localeCompare(b.time));
+            const showCanc = document.getElementById('show-cancelled').checked;
+            const inRange  = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
+            const active   = inRange.filter(r => r.status !== 'cancelled');
+            const shown    = (showCanc ? inRange : active).slice();
+            shown.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : (a.time || '').localeCompare(b.time || ''));
             let totalGuests = 0;
-            filtered.forEach(r => totalGuests += parseInt(r.guests || 0));
-            document.getElementById('stat-count').innerText  = filtered.length;
+            active.forEach(r => totalGuests += parseInt(r.guests || 0));
+            document.getElementById('stat-count').innerText  = active.length;
             document.getElementById('stat-guests').innerText = totalGuests;
             list.innerHTML = '';
-            if (filtered.length === 0) {
+            if (shown.length === 0) {
                 list.innerHTML = `<div class='no-data'>${t('no_reservations')}</div>`;
                 return;
             }
-            filtered.forEach(res => {
+            const today = todayLocal();
+            shown.forEach(res => {
+                const cancelled = res.status === 'cancelled';
                 const div = document.createElement('div');
-                div.className = 'booking-card' + (res.attendance === 'noshow' ? ' noshow' : '');
+                div.className = 'booking-card' + (cancelled ? ' cancelled' : res.attendance === 'noshow' ? ' noshow' : '');
                 const locMap = { 'Εσωτερικός': t('indoor'), 'Εξωτερικός': t('outdoor'), 'Δεν έχω προτίμηση': t('no_pref') };
                 const locationDisplay = locMap[res.location] || res.location || t('location_label_indoor');
                 const srcIcon = SRC_ICONS[res.source];
-                const canMark = res.date <= todayLocal();
+                const canMark = !cancelled && res.date <= today;
+                const key = guestKey(res.phone);
+                const g = key ? (guestsData[key] || {}) : {};
+                // Πόσες φορές έχει έρθει (μη ακυρωμένες κρατήσεις έως αυτή)
+                const nth = key ? allReservations.filter(r => r.status !== 'cancelled' && guestKey(r.phone) === key && (r.date < res.date || (r.date === res.date && (r.time || '') <= (res.time || '')))).length : 0;
+                const chips = [];
+                if (nth > 1) chips.push(`<span class="g-chip visits">${nth}${t('gp_visit_n')}</span>`);
+                ['vip', 'allergy', 'outdoor', 'attention'].forEach(tg => { if (g.tags && g.tags[tg]) chips.push(`<span class="g-chip ${tg}">${tg === 'vip' ? 'VIP' : repEsc(t('gp_' + tg))}</span>`); });
+                const acts = cancelled
+                    ? `<span class="cancel-badge">${t('bk_cancelled')}</span>
+                       <button class="text-btn" onclick="restoreBooking('${shop}','${res.id}')">${t('bk_restore')}</button>
+                       <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>`
+                    : `${canMark ? `<div class="att">
+                            <button class="att-btn${res.attendance === 'arrived' ? ' on ok' : ''}" onclick="setAttendance('${shop}','${res.id}','arrived')">${svgI('<path d="M20 6 9 17l-5-5"/>', 12)} ${t('att_arrived')}</button>
+                            <button class="att-btn${res.attendance === 'noshow' ? ' on bad' : ''}" onclick="setAttendance('${shop}','${res.id}','noshow')">${svgI('<path d="M18 6 6 18M6 6l12 12"/>', 12)} ${t('att_noshow')}</button>
+                        </div>` : ''}
+                        <div class="card-acts">
+                            <button class="icon-btn" title="${t('bk_edit')}" aria-label="${t('bk_edit')}" onclick="editBooking('${res.id}')">${svgI('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>', 14)}</button>
+                            <button class="icon-btn danger" title="${t('bk_cancel')}" aria-label="${t('bk_cancel')}" onclick="cancelBooking('${shop}','${res.id}')">${svgI('<circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/>', 14)}</button>
+                        </div>`;
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${repEsc(res.time)}</div>
                         <div class="date-text">${repEsc(res.date)}</div>
-                        ${canMark ? `<div class="att">
-                            <button class="att-btn${res.attendance === 'arrived' ? ' on ok' : ''}" onclick="setAttendance('${shop}','${res.id}','arrived')">${svgI('<path d="M20 6 9 17l-5-5"/>', 12)} ${t('att_arrived')}</button>
-                            <button class="att-btn${res.attendance === 'noshow' ? ' on bad' : ''}" onclick="setAttendance('${shop}','${res.id}','noshow')">${svgI('<path d="M18 6 6 18M6 6l12 12"/>', 12)} ${t('att_noshow')}</button>
-                        </div>` : ''}
-                        <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>
+                        ${acts}
                     </div>
                     <div class="card-body">
-                        <div class="customer-name">${repEsc(res.name)}</div>
+                        <div class="customer-name${key ? ' link' : ''}" ${key ? `onclick="openGuest('${res.id}')" title="${t('gp_notes')}"` : ''}>${repEsc(res.name)}${key ? svgI('<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>', 14) : ''}</div>
+                        ${chips.length ? `<div class="g-chips">${chips.join('')}</div>` : ''}
+                        ${g.notes ? `<div class="g-note">${repEsc(g.notes)}</div>` : ''}
                         <div class="info-row">
                             <span class="ir">${ICO.users}<strong>${repEsc(res.guests)} ${t('guests_label')}</strong></span>
                             <span class="ir">${ICO.seat}${repEsc(locationDisplay)}</span>
@@ -2002,6 +2100,7 @@
 
         document.getElementById('filter-from').onchange = () => renderAll(document.getElementById('shop-title').innerText);
         document.getElementById('filter-to').onchange   = () => renderAll(document.getElementById('shop-title').innerText);
+        document.getElementById('show-cancelled').onchange = () => renderDashboard(currentAdminShop);
 
         // ======= ΕΞΑΓΩΓΗ ANALYTICS ΣΕ PDF =======
         // Ανοίγει μια σελίδα-αναφορά Α4 και καλεί την εκτύπωση του browser («Αποθήκευση ως PDF»).
@@ -2352,9 +2451,18 @@
 
         // ======= ΝΕΑ ΚΡΑΤΗΣΗ (τηλεφωνική / από κοντά) =======
         let nbSource = 'phone';
+        let nbEditId = null;
         const nbModal = document.getElementById('nb-modal');
         const nbEl = id => document.getElementById(id);
+        function nbSetMode(edit) {
+            nbEditId = edit || null;
+            nbEl('nb-title').textContent = t(edit ? 'nb_edit_title' : 'nb_title');
+            nbEl('nb-save').textContent = t(edit ? 'nb_update' : 'nb_save');
+            nbEl('nb-src').style.display = edit ? 'none' : '';
+            nbEl('nb-confirm-label').textContent = t(edit ? 'nb_resend' : 'nb_confirm');
+        }
         function nbOpen() {
+            nbSetMode(null);
             nbSource = 'phone';
             document.querySelectorAll('#nb-src button').forEach(b => b.classList.toggle('on', b.dataset.src === 'phone'));
             nbEl('nb-date').value = todayLocal();
@@ -2379,7 +2487,24 @@
         });
         nbEl('nb-email').addEventListener('input', () => { nbEl('nb-confirm-wrap').style.display = /\S+@\S+\.\S+/.test(nbEl('nb-email').value) ? 'flex' : 'none'; });
 
+        window.editBooking = (id) => {
+            const r = allReservations.find(x => x.id === id); if (!r) return;
+            nbSetMode(id);
+            nbEl('nb-date').value = r.date || '';
+            nbEl('nb-time').value = r.time || '';
+            nbEl('nb-guests').value = parseInt(r.guests, 10) || 2;
+            nbEl('nb-location').value = ['Εσωτερικός', 'Εξωτερικός', 'Δεν έχω προτίμηση'].includes(r.location) ? r.location : 'Δεν έχω προτίμηση';
+            nbEl('nb-name').value = r.name || '';
+            nbEl('nb-phone').value = r.phone || '';
+            nbEl('nb-email').value = r.email || '';
+            nbEl('nb-notes').value = r.comments || '';
+            nbEl('nb-confirm').checked = false;
+            nbEl('nb-confirm-wrap').style.display = /\S+@\S+\.\S+/.test(r.email || '') ? 'flex' : 'none';
+            nbModal.classList.add('open');
+        };
+
         nbEl('nb-save').onclick = async () => {
+            if (nbEditId) return nbSaveEdit();
             const shop = currentAdminShop;
             const date = nbEl('nb-date').value, time = nbEl('nb-time').value;
             const guests = parseInt(nbEl('nb-guests').value, 10);
@@ -2410,8 +2535,96 @@
             } finally { btn.disabled = false; }
         };
 
+        async function nbSaveEdit() {
+            const shop = currentAdminShop, id = nbEditId;
+            const r = allReservations.find(x => x.id === id); if (!shop || !r) return;
+            const date = nbEl('nb-date').value, time = nbEl('nb-time').value;
+            const guests = parseInt(nbEl('nb-guests').value, 10);
+            const name = nbEl('nb-name').value.trim(), phone = nbEl('nb-phone').value.trim(), email = nbEl('nb-email').value.trim();
+            if (!date || !/^\d{2}:\d{2}$/.test(time) || !(guests >= 1) || !name) { showToast(t('nb_missing'), 'error'); return; }
+            const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const upd = { date, time, guests: String(guests), name, phone, email: validEmail ? email : '',
+                location: nbEl('nb-location').value, comments: nbEl('nb-notes').value.trim() };
+            // Νέα ώρα -> νέα υπενθύμιση
+            if (date !== r.date || time !== r.time) upd.reminderSentAt = null;
+            const btn = nbEl('nb-save'); btn.disabled = true;
+            try {
+                await update(ref(db, `reservations/${shop}/${id}`), upd);
+                if (validEmail && nbEl('nb-confirm').checked && r.cancelToken) {
+                    fetch(`${API}/notify-customer`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ shopId: shop, bookingId: id, cancelToken: r.cancelToken, lang: r.lang || currentLang }) }).catch(() => {});
+                }
+                nbClose();
+                showToast(t('nb_updated'), 'success');
+            } catch (e) { showToast(t('nb_error'), 'error'); }
+            finally { btn.disabled = false; }
+        }
+
+        // ======= ΚΑΡΤΕΛΑ ΠΕΛΑΤΗ =======
+        const gpModal = document.getElementById('gp-modal');
+        let gpKey = null, gpName = '', gpTags = {};
+        window.openGuest = (id) => {
+            const r = allReservations.find(x => x.id === id); if (!r) return;
+            const key = guestKey(r.phone);
+            if (!key) { showToast(t('gp_no_phone'), 'error'); return; }
+            gpKey = key; gpName = r.name || '';
+            const g = guestsData[key] || {};
+            gpTags = Object.assign({}, g.tags || {});
+            const hist = allReservations.filter(x => guestKey(x.phone) === key)
+                .sort((a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || '')));
+            const live = hist.filter(x => x.status !== 'cancelled');
+            const today = todayLocal();
+            const visits = live.filter(x => x.attendance === 'arrived' || (x.date < today && x.attendance !== 'noshow')).length;
+            const ns = live.filter(x => x.attendance === 'noshow').length;
+            const canc = hist.length - live.length;
+            nbEl('gp-name').textContent = gpName || g.name || '';
+            const email = (hist.find(x => x.email) || {}).email;
+            nbEl('gp-contact').innerHTML = `<span>${repEsc(r.phone)}</span>${email ? `<span>${repEsc(email)}</span>` : ''}`;
+            nbEl('gp-stats').innerHTML = [[t('gp_bookings'), live.length], [t('gp_visits'), visits], [t('gp_noshows'), ns], [t('gp_cancels'), canc]]
+                .map(([l, v]) => `<div class="gp-stat"><b>${v}</b><span>${repEsc(l)}</span></div>`).join('');
+            document.querySelectorAll('#gp-tags button').forEach(b => b.classList.toggle('on', !!gpTags[b.dataset.tag]));
+            nbEl('gp-notes').value = g.notes || '';
+            nbEl('gp-hist').innerHTML = hist.map(x => {
+                const st = x.status === 'cancelled' ? `<em class="muted">${t('bk_cancelled')}</em>`
+                    : x.attendance === 'noshow' ? `<em class="bad">${t('att_noshow')}</em>`
+                    : x.attendance === 'arrived' ? `<em class="ok">${t('att_arrived')}</em>`
+                    : x.date >= today ? `<em class="muted">${repEsc(x.time || '')}</em>` : '';
+                return `<div><span>${repEsc(x.date)} · ${repEsc(x.guests)} ${t('guests_label')}</span>${st}</div>`;
+            }).join('');
+            gpModal.classList.add('open');
+        };
+        document.querySelectorAll('#gp-tags button').forEach(b => b.onclick = () => {
+            gpTags[b.dataset.tag] = !gpTags[b.dataset.tag];
+            if (!gpTags[b.dataset.tag]) delete gpTags[b.dataset.tag];
+            b.classList.toggle('on', !!gpTags[b.dataset.tag]);
+        });
+        nbEl('gp-close').onclick = () => gpModal.classList.remove('open');
+        gpModal.addEventListener('click', e => { if (e.target === gpModal) gpModal.classList.remove('open'); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') gpModal.classList.remove('open'); });
+        nbEl('gp-save').onclick = async () => {
+            const shop = currentAdminShop; if (!shop || !gpKey) return;
+            const notes = nbEl('gp-notes').value.trim();
+            const tags = {}; Object.keys(gpTags).forEach(k => { if (gpTags[k]) tags[k] = true; });
+            const btn = nbEl('gp-save'); btn.disabled = true;
+            try {
+                const path = ref(db, `guests/${shop}/${gpKey}`);
+                if (!notes && !Object.keys(tags).length) await remove(path);
+                else await set(path, Object.assign({ name: gpName.slice(0, 100), notes, updatedAt: Date.now() }, Object.keys(tags).length ? { tags } : {}));
+                gpModal.classList.remove('open');
+                showToast(t('gp_saved'), 'success');
+            } catch (e) { showToast(t('nb_error'), 'error'); }
+            finally { btn.disabled = false; }
+        };
+
+        window.cancelBooking = (shop, id) => {
+            if (!confirm(t('bk_cancel_q'))) return;
+            update(ref(db, `reservations/${shop}/${id}`), { status: 'cancelled' }).catch(() => showToast(t('nb_error'), 'error'));
+        };
+        window.restoreBooking = (shop, id) => {
+            update(ref(db, `reservations/${shop}/${id}`), { status: 'confirmed' }).catch(() => showToast(t('nb_error'), 'error'));
+        };
         window.deleteBooking = (shop, id) => {
-            if (confirm(t('delete_confirm'))) remove(ref(db, `reservations/${shop}/${id}`));
+            if (confirm(t('bk_delete_q'))) remove(ref(db, `reservations/${shop}/${id}`));
         };
 
         // ======= ADMIN TABS =======
