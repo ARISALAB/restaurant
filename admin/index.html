@@ -2208,7 +2208,6 @@
   </header>
   <div class="kpis">${kpis.map(([l, v]) => `<div class="kpi"><div class="l">${repEsc(l)}</div><div class="v">${repEsc(v)}</div></div>`).join('')}</div>
   <section class="txt"><h2>${repEsc(t('rep_findings'))}</h2><ul>${ins.findings.map(x => `<li>${repEsc(x)}</li>`).join('')}</ul></section>
-  <section class="txt tips"><h2>${repEsc(t('rep_tips'))}</h2><ol>${ins.tips.map(x => `<li>${repEsc(x)}</li>`).join('')}</ol></section>
   <div class="grid">
     ${charts['chart-trend'] ? `<section class="card wide"><h3>${repEsc(t('an_trend_title'))}</h3><img class="ch" src="${charts['chart-trend']}" alt=""></section>` : ''}
     ${card('chart-hours', 'an_hours_title')}${card('chart-dow', 'an_days_title')}
