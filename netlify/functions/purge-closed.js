@@ -21,7 +21,8 @@ exports.handler = async () => {
       [`shop_profile/${shopId}`]: null,
       [`shop_details/${shopId}`]: null,
       [`slot_holds/${shopId}`]: null,
-      [`guests/${shopId}`]: null
+      [`guests/${shopId}`]: null,
+      [`waitlist/${shopId}`]: null
     };
     uids.forEach(uid => { upd[`users_to_shops/${uid}`] = null; upd[`signup_meta/${uid}`] = null; });
     await db.ref().update(upd);
@@ -36,6 +37,8 @@ async function cleanupBookingHelpers(db, now) {
   const upd = {};
   const holds = (await db.ref('slot_holds').get()).val() || {};
   Object.entries(holds).forEach(([shop, dates]) => Object.keys(dates || {}).forEach(d => { if (d < today) upd[`slot_holds/${shop}/${d}`] = null; }));
+  const wl = (await db.ref('waitlist').get()).val() || {};
+  Object.entries(wl).forEach(([shop, dates]) => Object.keys(dates || {}).forEach(d => { if (d < today) upd[`waitlist/${shop}/${d}`] = null; }));
   const rate = (await db.ref('booking_rate').get()).val() || {};
   Object.entries(rate).forEach(([k, v]) => { if (!v || now - (v.start || 0) > 86400000) upd[`booking_rate/${k}`] = null; });
   if (Object.keys(upd).length) await db.ref().update(upd);

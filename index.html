@@ -238,6 +238,13 @@
         .time-slot.full { opacity: 0.45; cursor: not-allowed; text-decoration: line-through; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .time-slot.full small { font-size: 0.68rem; text-decoration: none; margin-top: 2px; }
         .time-slot.full:hover { border-color: #e2e8f0; color: inherit; background: inherit; }
+        .wl-cta { margin-top: 12px; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px dashed #93c5fd; border-radius: 12px; background: #f8fbff; }
+        .wl-cta p { margin: 0; font-size: 0.86rem; color: var(--text-muted); flex: 1; line-height: 1.4; }
+        .wl-cta p b { display: block; color: var(--text-main); font-size: 0.92rem; }
+        .wl-cta button { flex: none; font: inherit; font-size: 0.85rem; font-weight: 700; padding: 9px 14px; border-radius: 10px; border: none; background: var(--primary); color: #fff; cursor: pointer; }
+        .wl-cta button:hover { background: var(--primary-hover); }
+        .wl-sum { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted); }
+        .wl-sum b { color: var(--text-main); }
         .time-slot.selected { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
 
         .selected-time-badge {
@@ -855,6 +862,10 @@
                     </div>
                     <label style="margin-bottom:8px;" data-i18n-key="or_grid">Ή επιλέξτε από το grid</label>
                     <div id="time-slots-container" class="time-grid"></div>
+                    <div id="wl-cta" class="wl-cta" style="display:none">
+                        <p><b data-i18n-key="wl_cta_t">Δεν βρίσκετε την ώρα που θέλετε;</b><span data-i18n-key="wl_cta_s">Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.</span></p>
+                        <button type="button" id="wl-open" data-i18n-key="wl_cta_btn">Λίστα αναμονής</button>
+                    </div>
                     <div id="time-badge" class="selected-time-badge">
                         <span>🕐</span>
                         <span><span data-i18n-key="selected_time">Επιλεγμένη ώρα:</span> <strong id="badge-time-text"></strong></span>
@@ -900,6 +911,32 @@
             <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
             <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
             <p class="privacy-note" data-i18n-key="privacy_note" style="font-size:0.8rem;color:#64748b;text-align:center;margin:12px 0 0;line-height:1.5;">Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href="/privacy" target="_blank" rel="noopener">Πολιτική Απορρήτου</a></p>
+        </div>
+    </div>
+
+    <!-- ===== ΛΙΣΤΑ ΑΝΑΜΟΝΗΣ ===== -->
+    <div id="wl-modal" class="modal">
+        <div class="modal-content card">
+            <div id="wl-form">
+                <div class="card-title" style="margin-bottom:16px;"><div class="icon">⏳</div> <span data-i18n-key="wl_title">Λίστα αναμονής</span></div>
+                <div class="wl-sum" id="wl-sum"></div>
+                <div class="input-group"><label data-i18n-key="wl_time">Ώρα που θέλετε</label><select id="wl-time"></select></div>
+                <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="wl-name" autocomplete="name"></div>
+                <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="wl-phone" placeholder="69XXXXXXXX" autocomplete="tel"></div>
+                <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="wl-email" placeholder="name@example.com" autocomplete="email"></div>
+                <input type="text" id="wl-website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+                <button class="btn-primary" id="wl-save" data-i18n-key="wl_join">Μπείτε στη λίστα</button>
+                <button class="btn-link" id="wl-close" data-i18n-key="cancel">Ακύρωση</button>
+                <p class="privacy-note" style="font-size:0.8rem;color:#64748b;text-align:center;margin:12px 0 0;line-height:1.5;" data-i18n-key="wl_note">Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.</p>
+            </div>
+            <div id="wl-done" style="display:none">
+                <div class="done-head">
+                    <div class="done-check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                    <h3 data-i18n-key="wl_done_t">Είστε στη λίστα αναμονής</h3>
+                </div>
+                <p class="done-note" data-i18n-key="wl_done_s">Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.</p>
+                <button class="btn-primary" id="wl-done-close" data-i18n-key="done_close">Κλείσιμο</button>
+            </div>
         </div>
     </div>
 
@@ -993,7 +1030,7 @@
                 privacy_note: "Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href=\"/privacy?lang=el\" target=\"_blank\" rel=\"noopener\">Πολιτική Απορρήτου</a>",
                 alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
-                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", wl_cta_t: "Δεν βρίσκετε την ώρα που θέλετε;", wl_cta_s: "Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.", wl_cta_btn: "Λίστα αναμονής", wl_title: "Λίστα αναμονής", wl_time: "Ώρα που θέλετε", wl_any: "Οποιαδήποτε από τις πλήρεις ώρες", wl_join: "Μπείτε στη λίστα", wl_note: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.", wl_done_t: "Είστε στη λίστα αναμονής", wl_done_s: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.", wl_error: "Δεν ήταν δυνατή η εγγραφή στη λίστα. Δοκιμάστε ξανά.", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
@@ -1067,7 +1104,7 @@
                 privacy_note: "Your details are used only for this reservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>",
                 alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
-                toast_saved: "✅ Reservation saved!", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_persons: "guests", toast_save_error: "Save error. Please try again.",
+                toast_saved: "✅ Reservation saved!", wl_cta_t: "Can't find the time you want?", wl_cta_s: "Join the waiting list. If a table opens up, we will email you.", wl_cta_btn: "Waiting list", wl_title: "Waiting list", wl_time: "Preferred time", wl_any: "Any of the full times", wl_join: "Join the list", wl_note: "If a table opens up, we will email you. It goes to whoever books first.", wl_done_t: "You are on the waiting list", wl_done_s: "If a table opens up, we will email you right away with a button to book it.", wl_error: "Could not add you to the list. Please try again.", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_persons: "guests", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
                 no_reservations: "📭 No reservations found for the selected period.",
@@ -1384,7 +1421,16 @@
             dateInput.min = todayStr();
             if (!dateInput.value) dateInput.value = todayStr();
             dateInput.addEventListener('change', renderSlots);
-            renderSlots();
+            // Link από email λίστας αναμονής: ?date=2026-10-23&time=21:00&guests=4
+            const pd = urlParams.get('date'), pt = urlParams.get('time'), pg = parseInt(urlParams.get('guests'), 10);
+            if (pd && /^\d{4}-\d{2}-\d{2}$/.test(pd) && pd >= todayStr()) dateInput.value = pd;
+            if (pg >= 1 && pg <= maxGuests) guestSelect.value = String(pg);
+            renderSlots().then(() => {
+                if (pt && /^\d{2}:\d{2}$/.test(pt)) {
+                    const o = [...timeSelect.options].find(x => x.value === pt && !x.disabled);
+                    if (o) { updateSelection(pt); document.getElementById('time-slots-container').scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+                }
+            });
             if (shopHoursWeek) {
                 const el = document.getElementById('client-hours');
                 if (el) { el.querySelector('span').innerText = whText(shopHoursWeek, currentLang); el.style.display = 'inline-flex'; }
@@ -1457,7 +1503,9 @@
         function slotMessage(key) {
             timeContainer.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:18px 8px; color:#64748b; font-size:0.95rem;">${t(key)}</div>`;
         }
+        let trFullTimes = [];
         async function renderSlots() {
+            document.getElementById('wl-cta').style.display = 'none';
             const dateStr = document.getElementById('cust-date-only').value;
             selectedTime = null;
             document.getElementById('open-modal').style.display = 'none';
@@ -1471,6 +1519,7 @@
             const now = new Date(), isToday = dateStr === todayStr(), nowMin = now.getHours() * 60 + now.getMinutes();
             timeContainer.innerHTML = '';
             let available = 0;
+            trFullTimes = [];
             slots.forEach(time => {
                 if (isToday && toMin(time) <= nowMin) return;                 // ώρες που πέρασαν
                 const left = shopCapacity ? shopCapacity - (takenByTime[time] || 0) : Infinity;
@@ -1481,12 +1530,13 @@
                 div.innerHTML = full ? `${time}<small>${t('slot_full')}</small>` : time;
                 if (tooMany) div.title = t('slot_too_many');
                 const opt = document.createElement('option'); opt.value = time; opt.innerText = full ? `${time} (${t('slot_full')})` : time;
-                if (full || tooMany) opt.disabled = true; else { div.onclick = () => updateSelection(time); available++; }
+                if (full || tooMany) { opt.disabled = true; trFullTimes.push(time); } else { div.onclick = () => updateSelection(time); available++; }
                 timeSelect.appendChild(opt);
                 timeContainer.appendChild(div);
             });
             if (!timeContainer.children.length) { slotMessage(isToday ? 'day_over' : 'day_closed'); return; }
             if (!available) slotMessage('day_full');
+            document.getElementById('wl-cta').style.display = shopCapacity && trFullTimes.length ? '' : 'none';
         }
 
         function updateSelection(time) {
@@ -1525,11 +1575,64 @@
             new ResizeObserver(sendHeight).observe(document.body);
             new MutationObserver(sendHeight).observe(modal, { attributes: true, attributeFilter: ['class'] });
             new MutationObserver(sendHeight).observe(document.getElementById('done-modal'), { attributes: true, attributeFilter: ['class'] });
+            new MutationObserver(sendHeight).observe(document.getElementById('wl-modal'), { attributes: true, attributeFilter: ['class'] });
             modal.addEventListener('transitionend', sendHeight);
             document.getElementById('open-modal').addEventListener('click', () => { setTimeout(() => { sendHeight(); post({ type: 'scrollTop' }); }, 30); });
             trOnLoad(sendHeight);
             setTimeout(sendHeight, 800);
         }
+
+        // ======= ΛΙΣΤΑ ΑΝΑΜΟΝΗΣ =======
+        const wlModal = document.getElementById('wl-modal');
+        document.getElementById('wl-open').onclick = () => {
+            const date = document.getElementById('cust-date-only').value;
+            const guests = document.getElementById('cust-guests').value;
+            if (!date || !trFullTimes.length) return;
+            const sel = document.getElementById('wl-time');
+            sel.innerHTML = '';
+            if (trFullTimes.length > 1) { const o = document.createElement('option'); o.value = 'any'; o.innerText = t('wl_any'); sel.appendChild(o); }
+            trFullTimes.forEach(tm => { const o = document.createElement('option'); o.value = tm; o.innerText = tm; sel.appendChild(o); });
+            const when = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(date + 'T12:00:00Z'));
+            document.getElementById('wl-sum').innerHTML = '';
+            const b = document.createElement('b'); b.innerText = when;
+            document.getElementById('wl-sum').append(b, ' · ' + guests + ' ' + t('done_persons'));
+            ['wl-name', 'wl-phone', 'wl-email'].forEach(id => {
+                const src = document.getElementById(id.replace('wl-', 'cust-'));
+                if (src && src.value && !document.getElementById(id).value) document.getElementById(id).value = src.value;
+            });
+            document.getElementById('wl-form').style.display = '';
+            document.getElementById('wl-done').style.display = 'none';
+            wlModal.classList.add('open');
+        };
+        document.getElementById('wl-close').onclick = () => wlModal.classList.remove('open');
+        document.getElementById('wl-done-close').onclick = () => wlModal.classList.remove('open');
+        wlModal.onclick = (e) => { if (e.target === wlModal) wlModal.classList.remove('open'); };
+        document.getElementById('wl-save').onclick = async () => {
+            const name = document.getElementById('wl-name').value.trim();
+            const phone = document.getElementById('wl-phone').value.trim();
+            const email = document.getElementById('wl-email').value.trim();
+            if (!name || !phone || !email) return alert(t('alert_name_phone_email'));
+            const btn = document.getElementById('wl-save');
+            if (btn.disabled) return;
+            btn.disabled = true; btn.style.opacity = '0.6';
+            let ok = false, err = '';
+            try {
+                const r = await fetch(`${API}/waitlist`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'join', shop: shopID, date: document.getElementById('cust-date-only').value,
+                        time: document.getElementById('wl-time').value, guests: document.getElementById('cust-guests').value,
+                        name, phone, email, lang: currentLang, website: document.getElementById('wl-website').value || ''
+                    })
+                });
+                const d = await r.json().catch(() => ({}));
+                ok = r.ok && d.ok; err = d.error || '';
+            } catch (e) {}
+            btn.disabled = false; btn.style.opacity = '';
+            if (!ok) { alert(err === 'rate_limited' ? t('rate_limited') : t('wl_error')); return; }
+            document.getElementById('wl-form').style.display = 'none';
+            document.getElementById('wl-done').style.display = '';
+        };
 
         // ======= ΕΠΙΒΕΒΑΙΩΣΗ: ημερολόγιο + ειδοποίηση στο κινητό =======
         function trAthensToMs(date, time) {

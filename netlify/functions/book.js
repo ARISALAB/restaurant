@@ -8,6 +8,7 @@ const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const notifyShop = require('./notify');
 const notifyCustomer = require('./notify-customer');
+const { removeBooked } = require('./_shared/waitlist');
 
 const WH_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const HOLD_MS = 2 * 60 * 1000;          // πόσο μετράει μια «κράτηση σε εξέλιξη»
@@ -157,6 +158,9 @@ exports.handler = async (event) => {
       if (capacity) await holdRef.child(bookingId).remove().catch(() => {});
       throw e;
     }
+
+    // Αν ήταν στη λίστα αναμονής για αυτή τη μέρα, δεν χρειάζεται πια
+    await removeBooked(db, shop, date, phone).catch(() => {});
 
     // Emails: ίδια πρότυπα με πριν, καλούνται από εδώ αντί από τον browser
     const call = (mod, body) => mod.handler({ httpMethod: 'POST', body: JSON.stringify(body) });

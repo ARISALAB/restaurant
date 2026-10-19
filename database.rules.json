@@ -166,6 +166,16 @@
           }
         }
       }
+    },
+    "waitlist": {
+      "$shop": {
+        ".read": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1')",
+        "$date": {
+          "$id": {
+            ".write": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1') && !newData.exists()"
+          }
+        }
+      }
     }
   }
 }

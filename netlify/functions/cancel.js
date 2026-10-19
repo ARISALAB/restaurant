@@ -1,6 +1,7 @@
 const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
+const { notifyWaitlist } = require('./_shared/waitlist');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -42,6 +43,9 @@ exports.handler = async (event) => {
       cancelledAt: Date.now(),
       cancelledBy: 'customer',
     });
+
+    // Ελευθερώθηκαν θέσεις: ειδοποίησε τη λίστα αναμονής
+    await notifyWaitlist(db, shopId, booking.date, booking.time).catch(e => console.error('[cancel] waitlist', e.message));
 
     try {
       const emailSnap = await db.ref(`shop_profile/${shopId}/info/notificationEmail`).get();
