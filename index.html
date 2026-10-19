@@ -1140,6 +1140,7 @@
             } catch (e) {}
             return p;
         }
+        const trOnLoad = fn => (document.readyState === 'complete' ? setTimeout(fn, 0) : window.addEventListener('load', fn));
         const shopID = await trResolveShop();
 
         if (trNotFound) {
@@ -1451,7 +1452,7 @@
             new MutationObserver(sendHeight).observe(modal, { attributes: true, attributeFilter: ['class'] });
             modal.addEventListener('transitionend', sendHeight);
             document.getElementById('open-modal').addEventListener('click', () => { setTimeout(() => { sendHeight(); post({ type: 'scrollTop' }); }, 30); });
-            window.addEventListener('load', sendHeight);
+            trOnLoad(sendHeight);
             setTimeout(sendHeight, 800);
         }
 
@@ -1532,7 +1533,7 @@
         })();
 
         // Splash screen
-        window.addEventListener('load', () => {
+        trOnLoad(() => {
             setTimeout(() => {
                 const splash = document.getElementById('splash');
                 if (splash) splash.classList.add('hide');
