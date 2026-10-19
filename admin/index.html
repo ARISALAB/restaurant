@@ -364,6 +364,11 @@
         .stat-value { font-size: 2rem; font-weight: 800; font-family: 'Sora', sans-serif; margin-top: 4px; }
         .repeat-item { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border, #eee); font-size:0.9rem; }
         .repeat-item:last-child { border-bottom:none; }
+        .an-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 16px; }
+        .an-period { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+        .an-period b { color: #0f172a; font-variant-numeric: tabular-nums; }
+        .an-export { display: inline-flex; align-items: center; gap: 8px; background: var(--primary, #2563eb); color: #fff; border: none; padding: 9px 16px; border-radius: 10px; font: inherit; font-size: 0.86rem; font-weight: 600; cursor: pointer; box-shadow: 0 1px 2px rgba(15,23,42,.08); transition: filter .15s; }
+        .an-export:hover { filter: brightness(1.08); }
         .repeat-item .rc-count { background:var(--primary,#2563eb); color:#fff; border-radius:999px; padding:2px 10px; font-size:0.78rem; font-weight:700; }
 
         .filters-row { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -942,6 +947,10 @@
 
                 <!-- Analytics Section -->
                 <div id="asec-analytics" class="admin-section">
+                    <div class="an-toolbar">
+                        <div class="an-period"><span data-i18n-key="rep_period">Περίοδος</span>: <b id="an-period-text"></b></div>
+                        <button type="button" id="btn-export-pdf" class="an-export"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/></svg><span data-i18n-key="an_export_pdf">Εξαγωγή PDF</span></button>
+                    </div>
                     <div class="stats-grid cols-4">
                         <div class="stat-card blue"><div class="stat-label" data-i18n-key="an_avg_party">Μέσος όρος ατόμων</div><div class="stat-value" id="an-avg-party">0</div></div>
                         <div class="stat-card dark"><div class="stat-label" data-i18n-key="an_cancel_rate">Ποσοστό ακυρώσεων</div><div class="stat-value" id="an-cancel-rate">0%</div></div>
@@ -1188,7 +1197,7 @@
                 total_guests: "Σύνολο Ατόμων", from: "Από", to: "Έως", loading: "Φόρτωση...",
                 analytics_tab: "Analytics", an_avg_party: "Μέσος όρος ατόμων", an_cancel_rate: "Ποσοστό ακυρώσεων",
                 an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google",
-                an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
+                an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
                 an_days_title: "Πιο απασχολημένες μέρες", an_source_title: "Πηγή κράτησης",
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
                 an_repeat_title: "Κορυφαίοι επαναλαμβανόμενοι πελάτες", an_no_repeats: "Δεν υπάρχουν ακόμα",
@@ -1273,7 +1282,7 @@
                 total_guests: "Total Guests", from: "From", to: "To", loading: "Loading...",
                 analytics_tab: "Analytics", an_avg_party: "Avg party size", an_cancel_rate: "Cancellation rate",
                 an_repeat_customers: "Repeat guests", an_google_share: "Via Google",
-                an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
+                an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
                 an_days_title: "Busiest days", an_source_title: "Booking source",
                 an_location_title: "Location", an_occasion_title: "Occasion types",
                 an_repeat_title: "Top repeat customers", an_no_repeats: "None yet",
@@ -1821,6 +1830,7 @@
             const inRange  = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
             const active   = inRange.filter(r => r.status !== 'cancelled');
             const cancelled = inRange.filter(r => r.status === 'cancelled');
+            const pt = document.getElementById('an-period-text'); if (pt) pt.textContent = repFmtDate(fromDate) + ' – ' + repFmtDate(toDate);
 
             const totalGuests = active.reduce((s, r) => s + parseInt(r.guests || 0), 0);
             document.getElementById('an-avg-party').innerText = active.length ? (totalGuests / active.length).toFixed(1) : '0';
@@ -1919,6 +1929,136 @@
 
         document.getElementById('filter-from').onchange = () => renderAll(document.getElementById('shop-title').innerText);
         document.getElementById('filter-to').onchange   = () => renderAll(document.getElementById('shop-title').innerText);
+
+        // ======= ΕΞΑΓΩΓΗ ANALYTICS ΣΕ PDF =======
+        // Ανοίγει μια σελίδα-αναφορά Α4 και καλεί την εκτύπωση του browser («Αποθήκευση ως PDF»).
+        function repFmtDate(d) { if (!d) return ''; const [y, m, dd] = d.split('-'); return dd + '/' + m + '/' + y; }
+        function repEsc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+        document.getElementById('btn-export-pdf').onclick = () => {
+            const shop = document.getElementById('shop-title').innerText;
+            renderAnalytics(shop); // φρέσκα δεδομένα για την τρέχουσα περίοδο
+            const win = window.open('', '_blank');
+            if (!win) { alert(t('rep_popup')); return; }
+
+            const fromDate = document.getElementById('filter-from').value;
+            const toDate   = document.getElementById('filter-to').value;
+            const active   = allReservations.filter(r => r.date >= fromDate && r.date <= toDate && r.status !== 'cancelled');
+            const guests   = active.reduce((s, r) => s + parseInt(r.guests || 0), 0);
+            const val = id => (document.getElementById(id) || {}).innerText || '';
+            const name = (document.getElementById('dash-name').textContent || shop).trim();
+            const logoEl = document.querySelector('#dash-logo img');
+            const logo = logoEl && logoEl.src ? logoEl.src : '';
+            const today = repFmtDate(new Date().toISOString().slice(0, 10));
+            const period = repFmtDate(fromDate) + ' – ' + repFmtDate(toDate);
+
+            // Τα γραφήματα ξαναζωγραφίζονται εκτός οθόνης σε υψηλή ανάλυση και μπαίνουν ως εικόνες
+            const charts = {};
+            const holder = document.createElement('div');
+            holder.style.cssText = 'position:fixed; left:-10000px; top:0; pointer-events:none;';
+            document.body.appendChild(holder);
+            ['chart-trend', 'chart-hours', 'chart-dow', 'chart-week-guests', 'chart-month-guests', 'chart-source', 'chart-location', 'chart-occasion'].forEach(id => {
+                const c = chartInstances[id]; if (!c) return;
+                const ds = c.data.datasets[0] || {};
+                const round = c.config.type === 'doughnut';
+                const cv = document.createElement('canvas');
+                cv.width = id === 'chart-trend' ? 700 : 330; cv.height = id === 'chart-trend' ? 200 : 180;
+                holder.appendChild(cv);
+                const ch = new Chart(cv, {
+                    type: c.config.type,
+                    data: { labels: c.data.labels.slice(), datasets: [Object.assign({}, { data: ds.data.slice(), backgroundColor: ds.backgroundColor, borderColor: ds.borderColor, borderWidth: ds.borderWidth, tension: ds.tension, fill: ds.fill, borderRadius: ds.borderRadius }, round ? { borderColor: '#fff', borderWidth: 2 } : {})] },
+                    options: {
+                        animation: false, responsive: false, devicePixelRatio: 3,
+                        plugins: { legend: round ? { position: 'right', labels: { boxWidth: 10, font: { size: 10 }, color: '#334155' } } : { display: false } },
+                        scales: round ? {} : { y: { beginAtZero: true, ticks: { precision: 0, color: '#64748b', font: { size: 10 } }, grid: { color: '#eef2f7' } }, x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } } }
+                    }
+                });
+                charts[id] = ch.toBase64Image('image/png', 1);
+                ch.destroy();
+            });
+            holder.remove();
+            const repeats = Array.from(document.querySelectorAll('#repeat-customer-list .repeat-item')).map(el => {
+                const sp = el.querySelectorAll('span'); return [sp[0] ? sp[0].textContent : '', sp[1] ? sp[1].textContent : ''];
+            });
+
+            const kpis = [
+                [t('rep_total_res'), String(active.length)],
+                [t('rep_total_guests'), String(guests)],
+                [t('an_avg_party'), val('an-avg-party')],
+                [t('an_cancel_rate'), val('an-cancel-rate')],
+                [t('an_repeat_customers'), val('an-repeat-count')],
+                [t('an_google_share'), val('an-google-share')]
+            ];
+            const card = (id, key) => charts[id] ? `<section class="card"><h3>${repEsc(t(key))}</h3><img class="ch" src="${charts[id]}" alt=""></section>` : '';
+            const repeatCard = `<section class="card"><h3>${repEsc(t('an_repeat_title'))}</h3>${repeats.length ? '<ol class="rep">' + repeats.map(([n, c]) => `<li><span>${repEsc(n)}</span><b>${repEsc(c)}</b></li>`).join('') + '</ol>' : `<p class="muted">${repEsc(t('an_no_repeats'))}</p>`}</section>`;
+
+            const html = `<!DOCTYPE html><html lang="${currentLang}"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${repEsc(name)} · ${repEsc(t('rep_title'))} · ${repEsc(fromDate)}_${repEsc(toDate)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 12mm 12mm 14mm; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: Inter, system-ui, sans-serif; color: #0f172a; background: #eef2f7; }
+  .page { width: 186mm; margin: 24px auto; background: #fff; padding: 0; }
+  .bar { position: sticky; top: 0; z-index: 2; display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap; padding: 12px 16px; background: #0f172a; color: #cbd5e1; font-size: 13px; }
+  .bar button { background: #2563eb; color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font: 600 13px Inter, sans-serif; cursor: pointer; }
+  header { display: flex; align-items: center; gap: 16px; padding: 4mm 0 5mm; border-bottom: 2px solid #0f172a; }
+  header img { width: 18mm; height: 18mm; object-fit: contain; border-radius: 3mm; border: 1px solid #e5e7eb; background: #fff; }
+  header .who { flex: 1; min-width: 0; }
+  header h1 { font: 700 20pt/1.15 Sora, Inter, sans-serif; margin: 0 0 1.5mm; letter-spacing: -0.02em; }
+  header .sub { font-size: 9.5pt; color: #475569; }
+  header .sub b { color: #0f172a; }
+  header .brand { text-align: right; font: 700 11pt Sora, sans-serif; color: #0f172a; white-space: nowrap; }
+  header .brand span { color: #2563eb; }
+  header .brand small { display: block; font: 500 8pt Inter, sans-serif; color: #64748b; margin-top: 1mm; }
+  .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3mm; margin: 6mm 0 5mm; }
+  .kpi { border: 1px solid #e5e7eb; border-radius: 3mm; padding: 3.5mm 3mm; }
+  .kpi .l { font-size: 6.6pt; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: #64748b; min-height: 2.2em; overflow-wrap: anywhere; hyphens: auto; }
+  .kpi .v { font: 700 17pt/1 Sora, sans-serif; margin-top: 1.5mm; font-variant-numeric: tabular-nums; }
+  .kpi:first-child { background: #0f172a; border-color: #0f172a; } .kpi:first-child .l { color: #94a3b8; } .kpi:first-child .v { color: #fff; }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4mm; }
+  .ch { display: block; width: 100%; height: auto; }
+  .card { border: 1px solid #e5e7eb; border-radius: 3mm; padding: 4mm 4mm 3mm; break-inside: avoid; page-break-inside: avoid; }
+  .card.wide { grid-column: 1 / -1; }
+  .card h3 { margin: 0 0 3mm; font: 600 9.5pt Inter, sans-serif; color: #0f172a; }
+  .rep { margin: 0; padding: 0; list-style: none; font-size: 9pt; }
+  .rep li { display: flex; justify-content: space-between; padding: 1.6mm 0; border-bottom: 1px solid #f1f5f9; }
+  .rep li:last-child { border-bottom: 0; } .rep b { color: #2563eb; }
+  .muted { color: #64748b; font-size: 9pt; }
+  footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 7.5pt; color: #64748b; }
+  @media screen { .page { padding: 12mm; box-shadow: 0 10px 30px rgba(15,23,42,.12); border-radius: 6px; } }
+  @media screen and (max-width: 800px) { .page { width: auto; margin: 12px; padding: 16px; } .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid { grid-template-columns: minmax(0, 1fr); } }
+  @media print { body { background: #fff; } .bar { display: none; } .page { margin: 0; width: auto; } }
+</style></head><body>
+<div class="bar"><span>${repEsc(t('rep_hint'))}</span><button onclick="window.print()">${repEsc(t('rep_print'))}</button></div>
+<div class="page">
+  <header>
+    ${logo ? `<img src="${repEsc(logo)}" alt="">` : ''}
+    <div class="who"><h1>${repEsc(name)}</h1><div class="sub">${repEsc(t('rep_title'))} · ${repEsc(t('rep_period'))}: <b>${repEsc(period)}</b></div></div>
+    <div class="brand">Table<span>Reserve</span><small>${repEsc(t('rep_issued'))}: ${repEsc(today)}</small></div>
+  </header>
+  <div class="kpis">${kpis.map(([l, v]) => `<div class="kpi"><div class="l">${repEsc(l)}</div><div class="v">${repEsc(v)}</div></div>`).join('')}</div>
+  <div class="grid">
+    ${charts['chart-trend'] ? `<section class="card wide"><h3>${repEsc(t('an_trend_title'))}</h3><img class="ch" src="${charts['chart-trend']}" alt=""></section>` : ''}
+    ${card('chart-hours', 'an_hours_title')}${card('chart-dow', 'an_days_title')}
+    ${card('chart-week-guests', 'an_week_guests_title')}${card('chart-month-guests', 'an_month_guests_title')}
+    ${card('chart-source', 'an_source_title')}${card('chart-location', 'an_location_title')}
+    ${card('chart-occasion', 'an_occasion_title')}${repeatCard}
+  </div>
+  <footer><span>${repEsc(t('rep_footer'))}</span><span>${repEsc(name)} · ${repEsc(period)}</span></footer>
+</div>
+<script>
+  window.addEventListener('load', () => {
+    const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.race([ready, new Promise(r => setTimeout(r, 2500))]).then(() => setTimeout(() => window.print(), 300));
+  });
+<\/script>
+</body></html>`;
+            win.document.open();
+            win.document.write(html);
+            win.document.close();
+        };
 
         document.getElementById('btn-login').onclick = () => {
             const email = document.getElementById('email').value;
