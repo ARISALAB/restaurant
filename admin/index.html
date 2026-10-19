@@ -1197,7 +1197,7 @@
                 total_guests: "Σύνολο Ατόμων", from: "Από", to: "Έως", loading: "Φόρτωση...",
                 analytics_tab: "Analytics", an_avg_party: "Μέσος όρος ατόμων", an_cancel_rate: "Ποσοστό ακυρώσεων",
                 an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google",
-                an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
+                an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_findings: "Βασικά ευρήματα", rep_tips: "Προτάσεις", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
                 an_days_title: "Πιο απασχολημένες μέρες", an_source_title: "Πηγή κράτησης",
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
                 an_repeat_title: "Κορυφαίοι επαναλαμβανόμενοι πελάτες", an_no_repeats: "Δεν υπάρχουν ακόμα",
@@ -1282,7 +1282,7 @@
                 total_guests: "Total Guests", from: "From", to: "To", loading: "Loading...",
                 analytics_tab: "Analytics", an_avg_party: "Avg party size", an_cancel_rate: "Cancellation rate",
                 an_repeat_customers: "Repeat guests", an_google_share: "Via Google",
-                an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
+                an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_findings: "Key findings", rep_tips: "Recommendations", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
                 an_days_title: "Busiest days", an_source_title: "Booking source",
                 an_location_title: "Location", an_occasion_title: "Occasion types",
                 an_repeat_title: "Top repeat customers", an_no_repeats: "None yet",
@@ -1935,6 +1935,160 @@
         function repFmtDate(d) { if (!d) return ''; const [y, m, dd] = d.split('-'); return dd + '/' + m + '/' + y; }
         function repEsc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
+        // Αριθμοί πάνω στα γραφήματα της αναφοράς (τιμές σε μπάρες/σημεία, ποσοστά σε πίτες)
+        const repValueLabels = {
+            id: 'repValueLabels',
+            afterDatasetsDraw(chart) {
+                const ds = chart.data.datasets[0]; if (!ds) return;
+                const meta = chart.getDatasetMeta(0), type = chart.config.type, ctx = chart.ctx;
+                ctx.save();
+                ctx.font = '600 10px Inter, system-ui, sans-serif'; ctx.textAlign = 'center';
+                if (type === 'doughnut') {
+                    const total = ds.data.reduce((a, b) => a + (+b || 0), 0);
+                    ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle';
+                    meta.data.forEach((arc, i) => {
+                        const v = +ds.data[i] || 0; if (!total || v / total < 0.07) return;
+                        const p = arc.tooltipPosition(); ctx.fillText(Math.round(v / total * 100) + '%', p.x, p.y);
+                    });
+                } else if (meta.data.length <= 31) {
+                    ctx.fillStyle = '#0f172a'; ctx.textBaseline = 'bottom';
+                    meta.data.forEach((el, i) => { const v = ds.data[i]; if (v) ctx.fillText(String(v), el.x, el.y - 4); });
+                }
+                ctx.restore();
+            }
+        };
+
+        // Ευρήματα και προτάσεις από τα δεδομένα της περιόδου
+        function repInsights(inRange, active) {
+            const EN = currentLang === 'en';
+            const L = (el, en) => EN ? en : el;
+            const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+            const days = EN ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+            const daysAcc = EN ? days : ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+            const n = active.length, findings = [], tips = [];
+            if (!n) {
+                findings.push(L('Δεν υπάρχουν online κρατήσεις στην επιλεγμένη περίοδο.', 'There are no online reservations in the selected period.'));
+                tips.push(L('Προσθέστε το link κρατήσεων στο Google Business Profile, στο Instagram bio και στο site σας, ώστε οι πελάτες να κλείνουν τραπέζι με ένα κλικ.', 'Add your booking link to your Google Business Profile, Instagram bio and website so guests can book with one click.'));
+                return { findings, tips };
+            }
+            const guests = active.reduce((s, r) => s + (parseInt(r.guests) || 0), 0);
+            const avg = guests / n;
+
+            // Ημέρες
+            const dow = [0,0,0,0,0,0,0], dowG = [0,0,0,0,0,0,0];
+            active.forEach(r => { const d = new Date(r.date + 'T00:00:00'); if (!isNaN(d)) { dow[d.getDay()]++; dowG[d.getDay()] += parseInt(r.guests) || 0; } });
+            const order = [1,2,3,4,5,6,0];
+            const best = order.reduce((b, i) => dow[i] > dow[b] ? i : b, order[0]);
+            const minV = Math.min(...order.map(i => dow[i]));
+            const quiet = order.filter(i => dow[i] === minV);
+            const weekend = dow[5] + dow[6] + dow[0];
+            findings.push(L(
+                `Πιο δυνατή μέρα: ${days[best]} με ${dow[best]} κρατήσεις (${pct(dow[best], n)}% του συνόλου). Παρασκευή έως Κυριακή συγκεντρώνουν το ${pct(weekend, n)}% των κρατήσεων.`,
+                `Strongest day: ${days[best]} with ${dow[best]} bookings (${pct(dow[best], n)}% of the total). Friday to Sunday account for ${pct(weekend, n)}% of bookings.`));
+            if (n >= 5 && quiet.length < 7) {
+                const qn = quiet.map(i => daysAcc[i]).join(EN ? ', ' : ', ');
+                tips.push(L(
+                    quiet.length === 1
+                        ? `Η πιο ήσυχη μέρα είναι η ${qn} (${minV} κρατήσεις). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνη τη μέρα και προβάλετέ τη στα social μαζί με το link κρατήσεων.`
+                        : `Οι πιο ήσυχες μέρες είναι: ${qn} (${minV} κρατήσεις η καθεμία). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνες τις μέρες και προβάλετέ τη στα social μαζί με το link κρατήσεων.`,
+                    quiet.length === 1
+                        ? `Your quietest day is ${qn} (${minV} bookings). Try an offer or a themed evening that day and promote it on social media together with your booking link.`
+                        : `Your quietest days are: ${qn} (${minV} bookings each). Try an offer or a themed evening on those days and promote it on social media together with your booking link.`));
+            }
+
+            // Ώρες
+            const hours = {};
+            active.forEach(r => { const h = (r.time || '').split(':')[0]; if (h) hours[h] = (hours[h] || 0) + 1; });
+            const hk = Object.keys(hours).sort((a, b) => hours[b] - hours[a]);
+            if (hk.length) {
+                const top = hk[0], top2 = hk.slice(0, 2).reduce((s, h) => s + hours[h], 0);
+                findings.push(L(
+                    `Ώρα αιχμής: ${top}:00 με ${hours[top]} κρατήσεις. Οι δύο πιο φορτωμένες ώρες (${hk.slice(0, 2).map(h => h + ':00').join(' και ')}) καλύπτουν το ${pct(top2, n)}% των κρατήσεων.`,
+                    `Peak hour: ${top}:00 with ${hours[top]} bookings. The two busiest hours (${hk.slice(0, 2).map(h => h + ':00').join(' and ')}) cover ${pct(top2, n)}% of bookings.`));
+                if (pct(top2, n) >= 50) tips.push(L(
+                    `Πάνω από τις μισές κρατήσεις πέφτουν σε δύο ώρες. Ενισχύστε το προσωπικό τότε και σκεφτείτε κίνητρο (π.χ. κέρασμα) για όσους κλείνουν σε πιο ήσυχη ώρα, για να μοιράζεται ο φόρτος.`,
+                    `More than half of bookings fall in two hours. Add staff at those times and consider a small incentive (e.g. a complimentary drink) for guests who book at quieter times, to spread the load.`));
+            }
+
+            // Μέγεθος παρέας
+            const big = active.filter(r => (parseInt(r.guests) || 0) >= 6).length;
+            findings.push(L(
+                `Σύνολο ${guests} άτομα σε ${n} κρατήσεις, μέσος όρος ${avg.toFixed(1)} άτομα ανά τραπέζι. Παρέες 6+ ατόμων: ${big} (${pct(big, n)}%).`,
+                `${guests} guests across ${n} bookings, an average of ${avg.toFixed(1)} per table. Groups of 6+: ${big} (${pct(big, n)}%).`));
+            if (pct(big, n) >= 20) tips.push(L(
+                'Οι μεγάλες παρέες είναι σημαντικό κομμάτι της πελατείας. Ένα σταθερό μενού για γκρουπ ή πακέτο για γιορτές διευκολύνει την κουζίνα και ανεβάζει τη μέση απόδειξη.',
+                'Large groups are a significant share of your guests. A set group menu or celebration package makes the kitchen\'s work easier and raises the average bill.'));
+            else if (avg < 2.6) tips.push(L(
+                'Τα περισσότερα τραπέζια είναι για 2. Βεβαιωθείτε ότι η διάταξη έχει αρκετά διθέσια, ώστε να μη «χάνονται» τετραθέσια σε ζευγάρια τις ώρες αιχμής.',
+                'Most tables are for two. Make sure your floor plan has enough two-tops so four-tops aren\'t used by couples at peak times.'));
+
+            // Ακυρώσεις
+            const canc = inRange.filter(r => r.status === 'cancelled').length;
+            const cr = pct(canc, inRange.length);
+            findings.push(L(`Ακυρώσεις: ${canc} από ${inRange.length} (${cr}%).`, `Cancellations: ${canc} of ${inRange.length} (${cr}%).`));
+            if (cr >= 10) tips.push(L(
+                `Το ποσοστό ακυρώσεων (${cr}%) είναι υψηλό. Ένα τηλεφώνημα ή μήνυμα επιβεβαίωσης την προηγούμενη μέρα μειώνει σημαντικά τα «no-show».`,
+                `Your cancellation rate (${cr}%) is high. A confirmation call or message the day before significantly reduces no-shows.`));
+
+            // Πόσο νωρίς κλείνουν
+            const leads = active.filter(r => r.timestamp && r.date).map(r => Math.round((new Date(r.date + 'T12:00:00') - new Date(r.timestamp)) / 86400000)).filter(d => d >= 0).sort((a, b) => a - b);
+            if (leads.length >= 3) {
+                const med = leads[Math.floor(leads.length / 2)];
+                const same = leads.filter(d => d <= 0).length;
+                findings.push(L(
+                    `Οι πελάτες κλείνουν συνήθως ${med === 0 ? 'την ίδια μέρα' : med === 1 ? 'μία μέρα πριν' : med + ' μέρες πριν'}. Κρατήσεις για την ίδια μέρα: ${pct(same, leads.length)}%.`,
+                    `Guests usually book ${med === 0 ? 'on the same day' : med === 1 ? 'one day ahead' : med + ' days ahead'}. Same-day bookings: ${pct(same, leads.length)}%.`));
+                if (med <= 1) tips.push(L(
+                    'Οι κρατήσεις γίνονται κυρίως τελευταία στιγμή. Αναρτήσεις στα social το μεσημέρι της ίδιας μέρας («έχουμε ακόμα τραπέζια απόψε») μπορούν να γεμίσουν κενά.',
+                    'Bookings are mostly last-minute. Same-day social posts around midday ("we still have tables tonight") can fill gaps.'));
+            }
+
+            // Πηγή
+            const g = active.filter(r => r.source === 'google').length;
+            findings.push(L(`Κρατήσεις μέσω Google: ${g} (${pct(g, n)}%).`, `Bookings via Google: ${g} (${pct(g, n)}%).`));
+            if (pct(g, n) < 20) tips.push(L(
+                'Λίγες κρατήσεις έρχονται από το Google. Προσθέστε το link κρατήσεων στο Google Business Profile (οδηγίες στο Προφίλ Μαγαζιού) — είναι δωρεάν και φέρνει πελάτες που σας βρίσκουν στους χάρτες.',
+                'Few bookings come from Google. Add your booking link to your Google Business Profile (instructions in Shop Profile) — it\'s free and brings guests who find you on Maps.'));
+
+            // Χώρος
+            const loc = {};
+            active.forEach(r => { if (r.location) loc[r.location] = (loc[r.location] || 0) + 1; });
+            const lk = Object.keys(loc).sort((a, b) => loc[b] - loc[a]);
+            if (lk.length) {
+                const locName = { 'Εσωτερικός': L('εσωτερικό χώρο', 'indoor seating'), 'Εξωτερικός': L('εξωτερικό χώρο', 'outdoor seating'), 'Δεν έχω προτίμηση': L('χωρίς προτίμηση', 'no preference') };
+                findings.push(L(`Οι περισσότεροι προτιμούν ${locName[lk[0]] || lk[0]} (${pct(loc[lk[0]], n)}%).`, `Most guests prefer ${locName[lk[0]] || lk[0]} (${pct(loc[lk[0]], n)}%).`));
+                if (lk[0] === 'Εξωτερικός' && pct(loc[lk[0]], n) >= 50) tips.push(L(
+                    'Η ζήτηση είναι κυρίως για έξω. Ενημερώστε τους πελάτες εγκαίρως αν ο καιρός αλλάξει και έχετε έτοιμο σχέδιο για μεταφορά μέσα.',
+                    'Demand is mostly for outdoor seating. Let guests know early if the weather changes and have a plan for moving them inside.'));
+            }
+
+            // Επαναλαμβανόμενοι
+            const byPhone = {};
+            active.forEach(r => { const k = (r.phone || '').trim(); if (k) byPhone[k] = (byPhone[k] || 0) + 1; });
+            const reps = Object.values(byPhone).filter(c => c > 1);
+            const repB = reps.reduce((s, c) => s + c, 0);
+            findings.push(L(
+                `Επαναλαμβανόμενοι πελάτες: ${reps.length}, με ${repB} κρατήσεις (${pct(repB, n)}% του συνόλου).`,
+                `Returning guests: ${reps.length}, with ${repB} bookings (${pct(repB, n)}% of the total).`));
+            tips.push(reps.length ? L(
+                'Έχετε πιστούς πελάτες. Ένα μικρό κέρασμα ή ευχαριστήριο μήνυμα στην επόμενη επίσκεψη ενισχύει τη σχέση και τις κριτικές.',
+                'You have loyal guests. A small treat or thank-you message on their next visit strengthens the relationship and your reviews.')
+                : L('Δεν υπάρχουν ακόμα επαναλαμβανόμενοι πελάτες στην περίοδο. Ζητήστε από όσους έμειναν ευχαριστημένοι μια κριτική στο Google — φέρνει νέες κρατήσεις.',
+                    'No returning guests in this period yet. Ask happy guests for a Google review — it brings in new bookings.'));
+
+            // Τάση: πρώτο και δεύτερο μισό της περιόδου
+            const dates = active.map(r => r.date).sort();
+            if (dates.length >= 6 && dates[0] !== dates[dates.length - 1]) {
+                const mid = new Date((new Date(dates[0]).getTime() + new Date(dates[dates.length - 1]).getTime()) / 2).toISOString().slice(0, 10);
+                const a = dates.filter(d => d <= mid).length, b = dates.length - a;
+                const ch = a ? Math.round((b - a) / a * 100) : 0;
+                if (Math.abs(ch) >= 15) findings.push(L(
+                    `Τάση: στο δεύτερο μισό της περιόδου οι κρατήσεις ${ch > 0 ? 'αυξήθηκαν' : 'μειώθηκαν'} κατά ${Math.abs(ch)}% σε σχέση με το πρώτο.`,
+                    `Trend: bookings in the second half of the period ${ch > 0 ? 'rose' : 'fell'} by ${Math.abs(ch)}% compared with the first half.`));
+            }
+            return { findings, tips };
+        }
+
         document.getElementById('btn-export-pdf').onclick = () => {
             const shop = document.getElementById('shop-title').innerText;
             renderAnalytics(shop); // φρέσκα δεδομένα για την τρέχουσα περίοδο
@@ -1967,9 +2121,15 @@
                 const ch = new Chart(cv, {
                     type: c.config.type,
                     data: { labels: c.data.labels.slice(), datasets: [Object.assign({}, { data: ds.data.slice(), backgroundColor: ds.backgroundColor, borderColor: ds.borderColor, borderWidth: ds.borderWidth, tension: ds.tension, fill: ds.fill, borderRadius: ds.borderRadius }, round ? { borderColor: '#fff', borderWidth: 2 } : {})] },
+                    plugins: [repValueLabels],
                     options: {
                         animation: false, responsive: false, devicePixelRatio: 3,
-                        plugins: { legend: round ? { position: 'right', labels: { boxWidth: 10, font: { size: 10 }, color: '#334155' } } : { display: false } },
+                        layout: { padding: { top: round ? 4 : 16 } },
+                        plugins: { legend: round ? { position: 'right', labels: { boxWidth: 10, font: { size: 10 }, color: '#334155',
+                            generateLabels: chart => Chart.overrides.doughnut.plugins.legend.labels.generateLabels(chart).map((l, i) => {
+                                const v = chart.data.datasets[0].data[i];
+                                return Object.assign(l, { text: chart.data.labels[i] === t('an_no_occasion') ? l.text : l.text + ' · ' + v });
+                            }) } } : { display: false } },
                         scales: round ? {} : { y: { beginAtZero: true, ticks: { precision: 0, color: '#64748b', font: { size: 10 } }, grid: { color: '#eef2f7' } }, x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } } }
                     }
                 });
@@ -1977,6 +2137,8 @@
                 ch.destroy();
             });
             holder.remove();
+            const inRangeAll = allReservations.filter(r => r.date >= fromDate && r.date <= toDate);
+            const ins = repInsights(inRangeAll, active);
             const repeats = Array.from(document.querySelectorAll('#repeat-customer-list .repeat-item')).map(el => {
                 const sp = el.querySelectorAll('span'); return [sp[0] ? sp[0].textContent : '', sp[1] ? sp[1].textContent : ''];
             });
@@ -2026,6 +2188,12 @@
   .rep li { display: flex; justify-content: space-between; padding: 1.6mm 0; border-bottom: 1px solid #f1f5f9; }
   .rep li:last-child { border-bottom: 0; } .rep b { color: #2563eb; }
   .muted { color: #64748b; font-size: 9pt; }
+  .txt { margin: 0 0 5mm; padding: 4mm 5mm; border: 1px solid #e5e7eb; border-radius: 3mm; }
+  .txt h2 { margin: 0 0 2.5mm; font: 600 11pt Sora, Inter, sans-serif; }
+  .txt ul, .txt ol { margin: 0; padding-left: 5mm; font-size: 9.3pt; line-height: 1.5; color: #1e293b; }
+  .txt li { margin: 0 0 1.4mm; break-inside: avoid; page-break-inside: avoid; }
+  .tips { background: #f8fafc; border-color: #dbeafe; }
+  .tips h2 { color: #1d4ed8; }
   footer { margin-top: 6mm; padding-top: 3mm; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; font-size: 7.5pt; color: #64748b; }
   @media screen { .page { padding: 12mm; box-shadow: 0 10px 30px rgba(15,23,42,.12); border-radius: 6px; } }
   @media screen and (max-width: 800px) { .page { width: auto; margin: 12px; padding: 16px; } .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .grid { grid-template-columns: minmax(0, 1fr); } }
@@ -2039,6 +2207,8 @@
     <div class="brand">Table<span>Reserve</span><small>${repEsc(t('rep_issued'))}: ${repEsc(today)}</small></div>
   </header>
   <div class="kpis">${kpis.map(([l, v]) => `<div class="kpi"><div class="l">${repEsc(l)}</div><div class="v">${repEsc(v)}</div></div>`).join('')}</div>
+  <section class="txt"><h2>${repEsc(t('rep_findings'))}</h2><ul>${ins.findings.map(x => `<li>${repEsc(x)}</li>`).join('')}</ul></section>
+  <section class="txt tips"><h2>${repEsc(t('rep_tips'))}</h2><ol>${ins.tips.map(x => `<li>${repEsc(x)}</li>`).join('')}</ol></section>
   <div class="grid">
     ${charts['chart-trend'] ? `<section class="card wide"><h3>${repEsc(t('an_trend_title'))}</h3><img class="ch" src="${charts['chart-trend']}" alt=""></section>` : ''}
     ${card('chart-hours', 'an_hours_title')}${card('chart-dow', 'an_days_title')}
