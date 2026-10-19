@@ -148,7 +148,7 @@ exports.handler = async (event) => {
       await resRef.child(bookingId).set({
         name, phone, email, date, time,
         guests: String(guests),
-        location, occasion, comments, source,
+        location, occasion, comments, source, lang,
         timestamp: Date.now(),
         cancelToken,
         status: 'confirmed',
