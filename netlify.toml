@@ -4,8 +4,5 @@
 [[plugins]]
   package = "@netlify/plugin-functions-install-core"
 
-[[edge_functions]]
-  path = "/"
-  function = "root-rewrite"
 [functions."purge-closed"]
   schedule = "@daily"

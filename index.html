@@ -909,7 +909,7 @@
         const translations = {
             el: {
                 tab_reservation: "📅 Κράτηση", tab_admin: "🔧 Admin", new_reservation: "Νέα Κράτηση",
-                loading_shop: "Φόρτωση καταστήματος...", booking_at: "Κράτηση στο: ",
+                loading_shop: "Φόρτωση καταστήματος...", booking_at: "Κράτηση στο: ", shop_not_found: "Δεν βρέθηκε κατάστημα με αυτή τη διεύθυνση. Ελέγξτε ότι το link είναι σωστό.",
                 select_date_time: "Επιλογή Ημ/νίας & Ώρας", date: "Ημερομηνία", persons: "Άτομα",
                 person_1: "1 Άτομο", person_2: "2 Άτομα", person_3: "3 Άτομα", person_4: "4 Άτομα",
                 person_5: "5 Άτομα", person_6: "6 Άτομα", person_8: "8 Άτομα",
@@ -983,7 +983,7 @@
             },
             en: {
                 tab_reservation: "📅 Reservation", tab_admin: "🔧 Admin", new_reservation: "New Reservation",
-                loading_shop: "Loading store...", booking_at: "Booking at: ",
+                loading_shop: "Loading store...", booking_at: "Booking at: ", shop_not_found: "We couldn't find a restaurant at this address. Please check that the link is correct.",
                 select_date_time: "Select Date & Time", date: "Date", persons: "Persons",
                 person_1: "1 Person", person_2: "2 Persons", person_3: "3 Persons", person_4: "4 Persons",
                 person_5: "5 Persons", person_6: "6 Persons", person_8: "8 Persons",
@@ -1113,7 +1113,44 @@
 
         // ======= CLIENT =======
         const urlParams = new URLSearchParams(window.location.search);
-        const shopID = urlParams.get('shop') || "default_store";
+
+        // Το κατάστημα έρχεται είτε από ?shop=ID (παλιά links) είτε από το path: tablereserve.gr/<όνομα>
+        let trSlug = null, trNotFound = false, trSlugReady = Promise.resolve();
+        async function trResolveShop() {
+            const q = urlParams.get('shop');
+            if (q) {
+                // Βρες το καθαρό όνομα για το canonical, χωρίς να καθυστερεί τη σελίδα
+                trSlugReady = fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'current', shop: q }) })
+                    .then(r => r.ok ? r.json() : {}).then(d => { if (d.slug) trSlug = d.slug; }).catch(() => {});
+                return q;
+            }
+            let p = '';
+            try { p = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, ''); } catch (e) {}
+            if (!p || p.includes('/') || p.includes('.')) return 'default_store';
+            try {
+                const r = await fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'resolve', slug: p }) });
+                if (r.ok) {
+                    const d = await r.json();
+                    trSlug = d.slug || p;
+                    // Παλιό όνομα -> δείξε το νέο στη γραμμή διεύθυνσης
+                    if (d.slug && d.slug !== p) history.replaceState(null, '', '/' + d.slug + location.search + location.hash);
+                    return d.shop;
+                }
+                if (r.status === 404) trNotFound = true;
+            } catch (e) {}
+            return p;
+        }
+        const shopID = await trResolveShop();
+
+        if (trNotFound) {
+            const nm = document.createElement('meta'); nm.name = 'robots'; nm.content = 'noindex'; document.head.appendChild(nm);
+            // Μετά την αρχικοποίηση της σελίδας, ώστε ο υπόλοιπος κώδικας να βρει τα στοιχεία της φόρμας
+            setTimeout(() => {
+                const lay = document.querySelector('.client-layout');
+                if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🔍</div><p data-i18n-key="shop_not_found" style="margin:0 0 16px; font-size:1.05rem;">${t('shop_not_found')}</p><a href="/" style="color:var(--primary); font-weight:600;">tablereserve.gr</a></div>`;
+                const sd = document.getElementById('shop-display'); if (sd) { delete sd.dataset.shopId; sd.innerText = ''; }
+            }, 0);
+        }
 
         // Κατάστημα που δεν έχει ενεργοποιηθεί ακόμα: δεν δέχεται κρατήσεις
         Promise.all(['status', 'paidUntil'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()))).then(([status, paidUntil]) => {
@@ -1136,7 +1173,7 @@
         // ======= ΔΟΜΗΜΕΝΑ ΔΕΔΟΜΕΝΑ (schema.org) για τη Google =======
         function trSetSchema(d) {
             try {
-                const url = 'https://tablereserve.gr/?shop=' + encodeURIComponent(d.shopId);
+                const url = trSlug ? 'https://tablereserve.gr/' + trSlug : 'https://tablereserve.gr/?shop=' + encodeURIComponent(d.shopId);
                 const imgs = [d.logo, d.cover].filter(u => typeof u === 'string' && /^https?:\/\//.test(u));
                 const data = {
                     '@context': 'https://schema.org',
@@ -1170,7 +1207,7 @@
             .then(([coverPhoto, gallery, logoPhoto, address, description, hours, phone, tagline]) => {
                 const full = { coverPhoto, gallery, logoPhoto };
                 const info = { address, description, hours, phone, tagline };
-                get(ref(db, `shop_details/${shopId}/displayName`)).then(n => trSetSchema({ shopId, name: n.val() || shopId, description, address, phone, hours, tagline, logo: logoPhoto, cover: coverPhoto })).catch(() => {});
+                Promise.all([get(ref(db, `shop_details/${shopId}/displayName`)), trSlugReady]).then(([n]) => trSetSchema({ shopId, name: n.val() || shopId, description, address, phone, hours, tagline, logo: logoPhoto, cover: coverPhoto })).catch(() => {});
 
                 get(ref(db, `shop_details/${shopId}/displayName`)).then(nameSnap => {
                     document.getElementById('shop-display').innerText = nameSnap.val() || shopId;

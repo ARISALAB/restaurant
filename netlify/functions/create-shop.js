@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
+const { claimInitial } = require('./_shared/slugs');
 const { json, preflightOk } = require('./_shared/respond');
 
 // Ο superadmin αναγνωρίζεται από το UID (ίδιο με τα Database Rules)
@@ -67,5 +68,7 @@ exports.handler = async (event) => {
     return json(500, { error: 'db_write_failed' });
   }
 
-  return json(200, { ok: true, shopId, uid: user.uid, url: `${SHOP_BASE_URL}?shop=${shopId}` });
+  const slug = await claimInitial(db, shopId, displayName);
+
+  return json(200, { ok: true, shopId, uid: user.uid, slug, url: `${SHOP_BASE_URL}${slug || ('?shop=' + shopId)}` });
 };

@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
+const { claimInitial } = require('./_shared/slugs');
 const { json, preflightOk } = require('./_shared/respond');
 const { slugify, sendVerificationEmail, notifyOwner, ADMIN_URL } = require('./_shared/signup');
 const TRIAL_MS = 14 * 24 * 60 * 60 * 1000;
@@ -71,6 +72,9 @@ exports.handler = async (event) => {
     return json(500, { error: 'db_write_failed' });
   }
 
+  // Δημόσιο όνομα για το link (tablereserve.gr/<slug>)
+  const slug = await claimInitial(db, shopId, shopName);
+
   // Email επιβεβαίωσης και ειδοποίηση σε σένα. Αν αποτύχει, ο λογαριασμός μένει
   // και ο χρήστης μπορεί να ζητήσει νέο email από το /admin.
   try {
@@ -80,5 +84,5 @@ exports.handler = async (event) => {
   try { await notifyOwner({ shopId, shopName, email, phone, type, plan }); }
   catch (e) { console.error('owner notify failed', e); }
 
-  return json(200, { ok: true, shopId });
+  return json(200, { ok: true, shopId, slug });
 };

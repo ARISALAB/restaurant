@@ -765,6 +765,21 @@
         .dash-actions { display: flex; gap: 8px; }
         .dash-btn { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #e5e7eb; color: #1e293b; padding: 7px 12px; border-radius: 8px; font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all .15s; }
         .dash-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .dash-btn:disabled { opacity: .5; cursor: not-allowed; border-color: #e5e7eb; color: #1e293b; }
+        .slug-editor { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 4px; }
+        .slug-field { display: flex; align-items: center; flex: 1; min-width: 240px; background: #fff; border: 1px solid #cbd5e1; border-radius: 8px; overflow: hidden; transition: border-color .15s, box-shadow .15s; }
+        .slug-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+        .slug-field.ok { border-color: #22c55e; }
+        .slug-field.bad { border-color: #ef4444; }
+        .slug-prefix { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86rem; color: #94a3b8; padding: 8px 0 8px 10px; white-space: nowrap; user-select: none; }
+        .slug-field input { flex: 1; min-width: 0; border: none; outline: none; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86rem; color: #0f172a; padding: 8px 10px 8px 0; background: transparent; box-shadow: none; margin: 0; }
+        .slug-save { background: var(--primary); border-color: var(--primary); color: #fff; }
+        .slug-save:hover { color: #fff; filter: brightness(1.08); }
+        .slug-save:disabled { background: #fff; color: #1e293b; }
+        .slug-status { flex-basis: 100%; font-size: 0.82rem; font-weight: 600; min-height: 1.2em; color: #64748b; }
+        .slug-status.ok { color: #15803d; }
+        .slug-status.bad { color: #dc2626; }
+        .slug-note { flex-basis: 100%; font-size: 0.78rem; color: #64748b; line-height: 1.5; margin-top: -4px; }
         .dash-tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5e7eb; margin: 0 0 24px; overflow-x: auto; }
         .dash-tabs .admin-tab { display: inline-flex; align-items: center; gap: 8px; background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 12px 14px; margin-bottom: -1px; color: #64748b; font: inherit; font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap; box-shadow: none; }
         .dash-tabs .admin-tab:hover { color: #0f172a; }
@@ -889,8 +904,19 @@
                         <span class="dash-linklabel" data-i18n-key="booking_link">Link κρατήσεων:</span>
                         <a id="booking-link" class="dash-url" href="#" target="_blank" rel="noopener"></a>
                         <div class="dash-actions">
+                            <button type="button" id="btn-edit-slug" class="dash-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span data-i18n-key="slug_edit">Αλλαγή</span></button>
                             <button type="button" id="btn-copy-link" class="dash-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-i18n-key="copy">Αντιγραφή</span></button>
                             <a id="dash-open" class="dash-btn" href="#" target="_blank" rel="noopener"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg><span data-i18n-key="open_page">Άνοιγμα σελίδας</span></a>
+                        </div>
+                        <div id="slug-editor" class="slug-editor" style="display:none;">
+                            <label class="slug-field" id="slug-field">
+                                <span class="slug-prefix">tablereserve.gr/</span>
+                                <input id="slug-input" type="text" maxlength="30" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Link">
+                            </label>
+                            <button type="button" id="btn-slug-save" class="dash-btn slug-save" disabled data-i18n-key="slug_save">Αποθήκευση</button>
+                            <button type="button" id="btn-slug-cancel" class="dash-btn" data-i18n-key="slug_cancel">Άκυρο</button>
+                            <div id="slug-status" class="slug-status" aria-live="polite"></div>
+                            <div class="slug-note" data-i18n-key="slug_note">Μόνο λατινικά πεζά, αριθμοί και παύλα (3–30). Το παλιό link θα συνεχίσει να λειτουργεί. Μπορείτε να το αλλάξετε μία φορά κάθε 30 ημέρες.</div>
                         </div>
                     </div>
                 </div>
@@ -1200,7 +1226,7 @@
                 close_confirm: "Για επιβεβαίωση, γράψτε το ID του καταστήματος: {shop}\n\nΑν έχετε ενεργή συνδρομή, θα ακυρωθεί.", close_mismatch: "Το ID δεν ταιριάζει. Ο λογαριασμός δεν έκλεισε.",
                 close_done: "Ο λογαριασμός έκλεισε. Τα δεδομένα θα διαγραφούν σε 30 ημέρες.", close_reauth: "Για λόγους ασφαλείας, αποσυνδεθείτε, συνδεθείτε ξανά και επαναλάβετε.",
                 closed_title: "Ο λογαριασμός έχει κλείσει", closed_desc: "Τα δεδομένα θα διαγραφούν οριστικά στις", closed_restore: "Για επαναφορά ή αντίγραφο των κρατήσεων γράψτε στο info@tablereserve.gr.", alert_no_shop_linked: "Δεν υπάρχει κατάστημα για αυτόν τον λογαριασμό. Κάντε πρώτα εγγραφή από το tablereserve.gr.", or: "ή", google_login: "Σύνδεση με Google", google_failed: "Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.",
-                verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
+                verify_title: "Επιβεβαιώστε το email σας", verify_desc: "Σας στείλαμε ένα email με σύνδεσμο επιβεβαίωσης. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας.", verify_sent_to: "Στάλθηκε στο:", verify_check: "Το επιβεβαίωσα", verify_resend: "Στείλε ξανά το email", logout_link: "Αποσύνδεση", verify_not_yet: "Δεν έχει επιβεβαιωθεί ακόμα. Ελέγξτε και τα ανεπιθύμητα.", verify_resent: "Το email στάλθηκε ξανά.", verify_too_soon: "Περιμένετε ένα λεπτό πριν ζητήσετε νέο email.", verify_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", booking_link: "Link κρατήσεων:", slug_edit: "Αλλαγή", slug_save: "Αποθήκευση", slug_cancel: "Άκυρο", slug_note: "Μόνο λατινικά πεζά, αριθμοί και παύλα (3–30). Το παλιό link θα συνεχίσει να λειτουργεί. Μπορείτε να το αλλάξετε μία φορά κάθε 30 ημέρες.", slug_checking: "Έλεγχος…", slug_available: "✓ Διαθέσιμο", slug_taken: "✗ Χρησιμοποιείται ήδη", slug_reserved: "✗ Δεσμευμένο όνομα, διαλέξτε άλλο", slug_invalid: "3–30 χαρακτήρες: λατινικά πεζά, αριθμοί και παύλα (όχι στην αρχή ή στο τέλος)", slug_same: "Αυτό είναι το τρέχον link σας", slug_cooldown: "Μπορείτε να το αλλάξετε ξανά από {date}", slug_saved: "Το link άλλαξε!", slug_error: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.", copy: "Αντιγραφή", copied: "Αντιγράφηκε!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
                 guests_label: "άτομα", location_label_indoor: "Εσωτερικός",
@@ -1285,7 +1311,7 @@
                 close_confirm: "To confirm, type your restaurant ID: {shop}\n\nIf you have an active subscription, it will be cancelled.", close_mismatch: "The ID does not match. Your account was not closed.",
                 close_done: "Your account is closed. Your data will be deleted in 30 days.", close_reauth: "For security, please sign out, sign in again and repeat.",
                 closed_title: "This account is closed", closed_desc: "Your data will be permanently deleted on", closed_restore: "To restore it or get a copy of your reservations, write to info@tablereserve.gr.", alert_no_shop_linked: "There is no restaurant for this account. Please sign up first at tablereserve.gr.", or: "or", google_login: "Sign in with Google", google_failed: "Google sign-in did not complete. Please try again.",
-                verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", copy: "Copy", copied: "Copied!",
+                verify_title: "Confirm your email", verify_desc: "We sent you an email with a confirmation link. Click it to activate your restaurant.", verify_sent_to: "Sent to:", verify_check: "I've confirmed it", verify_resend: "Send the email again", logout_link: "Sign out", verify_not_yet: "Not confirmed yet. Please also check your spam folder.", verify_resent: "Email sent again.", verify_too_soon: "Please wait a minute before requesting another email.", verify_error: "Something went wrong. Please try again.", booking_link: "Booking link:", slug_edit: "Edit", slug_save: "Save", slug_cancel: "Cancel", slug_note: "Lowercase letters, numbers and hyphens only (3–30). Your old link will keep working. You can change it once every 30 days.", slug_checking: "Checking…", slug_available: "✓ Available", slug_taken: "✗ Already taken", slug_reserved: "✗ Reserved name, please choose another", slug_invalid: "3–30 characters: lowercase letters, numbers and hyphens (not at the start or end)", slug_same: "This is your current link", slug_cooldown: "You can change it again from {date}", slug_saved: "Link updated!", slug_error: "Something went wrong. Please try again.", copy: "Copy", copied: "Copied!",
                 no_reservations: "📭 No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
                 guests_label: "guests", location_label_indoor: "Indoor",
@@ -1461,12 +1487,13 @@
             } catch (e) {}
             show('dashboard');
             document.getElementById('shop-title').innerText = myShop;
-            const url = `https://tablereserve.gr/?shop=${myShop}`;
-            const a = document.getElementById('booking-link'); a.href = url; a.textContent = url.replace('https://','');
-            document.getElementById('dash-open').href = url;
+            currentAdminShop = myShop;
+            currentSlug = null;
+            closeSlugEditor();
+            setBookingLink();
+            loadSlug(myShop);
             document.getElementById('dash-name').textContent = myShop;
             document.getElementById('dash-initial').textContent = (myShop || '·').charAt(0).toUpperCase();
-            currentAdminShop = myShop;
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-from').value = today;
             document.getElementById('filter-to').value = today;
@@ -1564,7 +1591,7 @@
         function renderGoogleCard() {
             const shop = currentAdminShop;
             if (!shop) return;
-            document.getElementById('g-link').textContent = `https://tablereserve.gr/?shop=${shop}`;
+            document.getElementById('g-link').textContent = publicUrl();
         }
         document.getElementById('btn-copy-g').onclick = async () => {
             try { await navigator.clipboard.writeText(document.getElementById('g-link').textContent); showToast(t('copied'), 'success'); } catch (e) {}
@@ -1577,7 +1604,7 @@
             document.getElementById('embed-code').textContent =
                 `<div data-tablereserve="${shop}"${extra}></div>\n<script src="https://tablereserve.gr/embed.js" async><\/script>`;
             document.getElementById('embed-shop-id').textContent = shop;
-            document.getElementById('g-link').textContent = `https://tablereserve.gr/?shop=${shop}`;
+            document.getElementById('g-link').textContent = publicUrl();
             document.querySelectorAll('.embed-tab').forEach(b => b.style.fontWeight = b.dataset.mode === embedMode ? '700' : '400');
         }
         document.querySelectorAll('.embed-tab').forEach(b => b.onclick = () => { embedMode = b.dataset.mode; renderEmbedCode(); });
@@ -1589,6 +1616,115 @@
         };
         document.getElementById('btn-copy-link').onclick = async () => {
             try { await navigator.clipboard.writeText(document.getElementById('booking-link').href); showToast(t('copied'), 'success'); } catch (e) {}
+        };
+
+        // ======= ΔΗΜΟΣΙΟ LINK (tablereserve.gr/<όνομα>) =======
+        let currentSlug = null;
+        function publicUrl() { return 'https://tablereserve.gr/' + (currentSlug || currentAdminShop || ''); }
+        function setBookingLink() {
+            const url = publicUrl();
+            const a = document.getElementById('booking-link'); a.href = url; a.textContent = url.replace('https://', '');
+            document.getElementById('dash-open').href = url;
+            const g = document.getElementById('g-link'); if (g && currentAdminShop) g.textContent = url;
+        }
+        async function loadSlug(shop) {
+            try {
+                const r = await fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'current', shop }) });
+                const d = await r.json();
+                if (shop === currentAdminShop) { currentSlug = d.slug || null; setBookingLink(); }
+            } catch (e) {}
+        }
+
+        const SLUG_GR = {α:'a',ά:'a',β:'v',γ:'g',δ:'d',ε:'e',έ:'e',ζ:'z',η:'i',ή:'i',θ:'th',ι:'i',ί:'i',ϊ:'i',ΐ:'i',κ:'k',λ:'l',μ:'m',ν:'n',ξ:'x',ο:'o',ό:'o',π:'p',ρ:'r',σ:'s',ς:'s',τ:'t',υ:'y',ύ:'y',ϋ:'y',ΰ:'y',φ:'f',χ:'ch',ψ:'ps',ω:'o',ώ:'o'};
+        // Καθαρίζει ό,τι γράφει ο χρήστης (αφήνει παύλα στο τέλος όσο πληκτρολογεί)
+        function slugTyping(v) {
+            return String(v).toLowerCase()
+                .replace(/ού/g, 'ou').replace(/ου/g, 'ou').replace(/μπ/g, 'b').replace(/ντ/g, 'nt')
+                .replace(/[α-ωάέήίόύώϊϋΐΰς]/g, c => SLUG_GR[c] || '')
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+/, '').slice(0, 30);
+        }
+        function slugValid(s) { return /^[a-z0-9](?:[a-z0-9-]{1,28})[a-z0-9]$/.test(s) && !s.includes('--'); }
+
+        const slugEditor = document.getElementById('slug-editor');
+        const slugInput  = document.getElementById('slug-input');
+        const slugField  = document.getElementById('slug-field');
+        const slugStatus = document.getElementById('slug-status');
+        const slugSave   = document.getElementById('btn-slug-save');
+        let slugTimer = null, slugSeq = 0;
+
+        function slugMsg(text, kind) {
+            slugStatus.textContent = text || '';
+            slugStatus.className = 'slug-status' + (kind ? ' ' + kind : '');
+            slugField.classList.toggle('ok', kind === 'ok');
+            slugField.classList.toggle('bad', kind === 'bad');
+        }
+        function slugCurrentValue() { return currentSlug || currentAdminShop || ''; }
+        function closeSlugEditor() { slugEditor.style.display = 'none'; clearTimeout(slugTimer); slugSeq++; }
+        async function slugApi(action, slug) {
+            const token = await auth.currentUser.getIdToken();
+            const r = await fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ action, slug }) });
+            return { status: r.status, d: await r.json().catch(() => ({})) };
+        }
+        function slugReasonText(reason, until) {
+            if (reason === 'taken') return t('slug_taken');
+            if (reason === 'reserved') return t('slug_reserved');
+            if (reason === 'invalid') return t('slug_invalid');
+            if (reason === 'cooldown') return t('slug_cooldown').replace('{date}', new Date(until).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'el-GR'));
+            return t('slug_error');
+        }
+
+        document.getElementById('btn-edit-slug').onclick = () => {
+            if (slugEditor.style.display !== 'none') { closeSlugEditor(); return; }
+            slugInput.value = slugCurrentValue().replace(/_/g, '-');
+            slugEditor.style.display = 'flex';
+            slugSave.disabled = true;
+            slugMsg('');
+            slugInput.focus(); slugInput.select();
+        };
+        document.getElementById('btn-slug-cancel').onclick = closeSlugEditor;
+
+        slugInput.addEventListener('input', () => {
+            const clean = slugTyping(slugInput.value);
+            if (clean !== slugInput.value) slugInput.value = clean;
+            slugSave.disabled = true;
+            clearTimeout(slugTimer);
+            const seq = ++slugSeq;
+            const v = clean.replace(/-+$/, '');
+            if (v === slugCurrentValue()) { slugMsg(t('slug_same')); return; }
+            if (!slugValid(v)) { slugMsg(v.length < 3 ? '' : t('slug_invalid'), v.length < 3 ? '' : 'bad'); return; }
+            slugMsg(t('slug_checking'));
+            slugTimer = setTimeout(async () => {
+                try {
+                    const { d } = await slugApi('check', v);
+                    if (seq !== slugSeq) return;
+                    if (d.same) { slugMsg(t('slug_same')); return; }
+                    if (d.available) { slugMsg(t('slug_available'), 'ok'); slugSave.disabled = false; }
+                    else slugMsg(slugReasonText(d.reason), 'bad');
+                } catch (e) { if (seq === slugSeq) slugMsg(t('slug_error'), 'bad'); }
+            }, 400);
+        });
+        slugInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !slugSave.disabled) slugSave.click();
+            if (e.key === 'Escape') closeSlugEditor();
+        });
+
+        slugSave.onclick = async () => {
+            const v = slugTyping(slugInput.value).replace(/-+$/, '');
+            if (!slugValid(v)) return;
+            slugSave.disabled = true;
+            slugMsg(t('slug_checking'));
+            try {
+                const { status, d } = await slugApi('set', v);
+                if (status === 200 && d.ok) {
+                    currentSlug = d.slug;
+                    setBookingLink();
+                    closeSlugEditor();
+                    showToast(t('slug_saved'), 'success');
+                } else {
+                    slugMsg(slugReasonText(d.error, d.until), 'bad');
+                }
+            } catch (e) { slugMsg(t('slug_error'), 'bad'); }
         };
 
         function listenToReservations(shop) {
