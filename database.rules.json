@@ -59,6 +59,27 @@
           "reminderSentAt": {
             ".validate": "newData.isNumber()"
           },
+          "push": {
+            ".validate": "newData.hasChildren(['endpoint', 'p256dh', 'auth'])",
+            "endpoint": {
+              ".validate": "newData.isString() && newData.val().length <= 600"
+            },
+            "p256dh": {
+              ".validate": "newData.isString() && newData.val().length <= 200"
+            },
+            "auth": {
+              ".validate": "newData.isString() && newData.val().length <= 100"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "cancelledAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "cancelledBy": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          },
           "$other": {
             ".validate": false
           }

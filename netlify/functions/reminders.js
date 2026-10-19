@@ -1,28 +1,17 @@
-// Υπενθύμιση με email στον πελάτη 2 ώρες πριν την κράτηση.
+// Υπενθύμιση στον πελάτη 2 ώρες πριν την κράτηση: με email και, αν το ζήτησε, με ειδοποίηση στο κινητό.
 // Τρέχει αυτόματα κάθε 15 λεπτά (βλ. netlify.toml).
 const { Resend } = require('resend');
+const webpush = require('web-push');
 const { getDb } = require('./_shared/firebase');
+const { athensToMs, athensDay } = require('./_shared/time');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const TZ = 'Europe/Athens';
+const PUSH_ON = !!(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
+if (PUSH_ON) webpush.setVapidDetails('mailto:info@tablereserve.gr', process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY);
 const BEFORE_MIN = 120;       // πόσα λεπτά πριν στέλνεται
 const WINDOW_MIN = 30;        // περιθώριο, αν καθυστερήσει κάποια εκτέλεση
 const MIN_LEAD_MIN = 150;     // κρατήσεις που έγιναν λιγότερο από 2,5 ώρες πριν δεν χρειάζονται υπενθύμιση
 
-// Ημερομηνία/ώρα Αθήνας -> ms (UTC), με σωστή θερινή/χειμερινή ώρα
-function athensToMs(date, time) {
-  const [y, m, d] = date.split('-').map(Number);
-  const [hh, mm] = time.split(':').map(Number);
-  const guess = Date.UTC(y, m - 1, d, hh, mm);
-  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
-    timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
-  }).formatToParts(new Date(guess)).map(x => [x.type, x.value]));
-  const asAthens = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute);
-  return guess - (asAthens - guess);
-}
-function athensDay(ms) {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ms));
-}
 function esc(v) {
   return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
@@ -75,24 +64,51 @@ function emailHtml({ b, shopName, info, en }) {
 </div></body></html>`;
 }
 
+function pushIcon(logo) {
+  if (typeof logo !== 'string' || logo.indexOf('res.cloudinary.com/') < 0 || logo.indexOf('/upload/') < 0) return undefined;
+  return logo.replace('/upload/', '/upload/f_png,c_fill,w_192,h_192/');
+}
+
+async function sendPush({ db, shop, id, b, shopName, info, logo, en }) {
+  const mapUrl = info.address ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(shopName + ' ' + info.address) : null;
+  const cancelUrl = `https://tablereserve.gr/cancel.html?token=${b.cancelToken}&shop=${shop}&id=${id}&lang=${en ? 'en' : 'el'}`;
+  const payload = JSON.stringify({
+    title: en ? `⏰ ${shopName} at ${b.time}` : `⏰ ${shopName} στις ${b.time}`,
+    body: en ? `Your table for ${b.guests} is waiting for you. Tap for directions.` : `Σας περιμένουμε, τραπέζι για ${b.guests}. Πατήστε για οδηγίες.`,
+    url: mapUrl || cancelUrl,
+    icon: pushIcon(logo),
+    tag: 'tr-' + id,
+  });
+  try {
+    await webpush.sendNotification({ endpoint: b.push.endpoint, keys: { p256dh: b.push.p256dh, auth: b.push.auth } }, payload, { TTL: 3600, urgency: 'high' });
+    return true;
+  } catch (e) {
+    // Ο πελάτης έκλεισε τις ειδοποιήσεις ή άλλαξε συσκευή: σβήνουμε τη συνδρομή
+    if (e.statusCode === 404 || e.statusCode === 410) await db.ref(`reservations/${shop}/${id}/push`).remove().catch(() => {});
+    console.warn('[reminders] push failed', shop, id, e.statusCode || e.message);
+    return false;
+  }
+}
+
 exports.handler = async () => {
   const db = getDb();
   const now = Date.now();
   const days = [...new Set([athensDay(now), athensDay(now + BEFORE_MIN * 60000)])];
   const details = (await db.ref('shop_details').get()).val() || {};
-  let sent = 0, failed = 0;
+  let sent = 0, pushed = 0, failed = 0;
 
   for (const [shop, d] of Object.entries(details)) {
     if (!d || d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < now)) continue;
     const info = (await db.ref(`shop_profile/${shop}/info`).get()).val() || {};
     if (info.remindersOff === true) continue;
+    let logo;
 
     for (const day of days) {
       const snap = await db.ref(`reservations/${shop}`).orderByChild('date').equalTo(day).get();
       const due = [];
       snap.forEach(c => {
         const b = c.val() || {};
-        if (b.status === 'cancelled' || b.reminderSentAt || !b.email || !b.time) return;
+        if (b.status === 'cancelled' || b.reminderSentAt || !b.time || (!b.email && !(PUSH_ON && b.push && b.push.endpoint))) return;
         const at = athensToMs(b.date, b.time);
         const mins = (at - now) / 60000;
         if (mins > BEFORE_MIN || mins <= BEFORE_MIN - WINDOW_MIN) return;
@@ -106,22 +122,28 @@ exports.handler = async () => {
         if (!claim.committed) continue;
         const en = b.lang === 'en';
         const shopName = d.displayName || shop;
-        try {
-          await resend.emails.send({
-            from: 'TableReserve <noreply@tablereserve.gr>',
-            to: b.email,
-            subject: en ? `⏰ Reminder: ${shopName} at ${b.time}` : `⏰ Υπενθύμιση: ${shopName} στις ${b.time}`,
-            html: emailHtml({ b, shopName, info, en })
-          });
-          sent++;
-        } catch (e) {
-          failed++;
-          console.error('[reminders] send failed', shop, id, e.message);
-          await flag.remove().catch(() => {});
+        let ok = false;
+        if (b.email) {
+          try {
+            await resend.emails.send({
+              from: 'TableReserve <noreply@tablereserve.gr>',
+              to: b.email,
+              subject: en ? `⏰ Reminder: ${shopName} at ${b.time}` : `⏰ Υπενθύμιση: ${shopName} στις ${b.time}`,
+              html: emailHtml({ b, shopName, info, en })
+            });
+            sent++; ok = true;
+          } catch (e) {
+            console.error('[reminders] send failed', shop, id, e.message);
+          }
         }
+        if (PUSH_ON && b.push && b.push.endpoint) {
+          if (logo === undefined) logo = (await db.ref(`shop_profile/${shop}/logoPhoto`).get()).val() || null;
+          if (await sendPush({ db, shop, id, b, shopName, info, logo, en })) { pushed++; ok = true; }
+        }
+        if (!ok) { failed++; await flag.remove().catch(() => {}); }
       }
     }
   }
-  console.log(`[reminders] sent ${sent}, failed ${failed}`);
-  return { statusCode: 200, body: JSON.stringify({ sent, failed }) };
+  console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}`);
+  return { statusCode: 200, body: JSON.stringify({ sent, pushed, failed }) };
 };

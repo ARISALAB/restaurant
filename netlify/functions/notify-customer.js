@@ -2,6 +2,7 @@ const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { locationLabel } = require('./_shared/location');
+const { googleCalendarUrl, icsUrl } = require('./_shared/calendar');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -28,6 +29,10 @@ exports.handler = async (event) => {
       ? (shopSnap.val().displayName || shopId)
       : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
 
+    const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
+    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, en: lang === 'en' });
+    const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang });
+
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${lang || 'el'}`;
 
     const isEn = lang === 'en';
@@ -41,6 +46,9 @@ exports.handler = async (event) => {
       occasion_lbl: '🎉 Occasion',
       comments_lbl: '💬 Requests',
       no_pref:      'No preference',
+      cal_title:    '📅 Add it to your calendar so your phone reminds you 2 hours before',
+      cal_google:   'Google Calendar',
+      cal_other:    'iPhone / Outlook',
       cancel_q:     'Would you like to cancel your reservation?',
       cancel_btn:   '❌ Cancel Reservation',
       cancel_note:  'Cancellation is allowed up to 2 hours before the reservation',
@@ -55,6 +63,9 @@ exports.handler = async (event) => {
       occasion_lbl: '🎉 Γεγονός',
       comments_lbl: '💬 Αιτήματα',
       no_pref:      'Δεν έχω προτίμηση',
+      cal_title:    '📅 Προσθέστε το στο ημερολόγιο για να σας θυμίσει το κινητό σας 2 ώρες πριν',
+      cal_google:   'Google Calendar',
+      cal_other:    'iPhone / Outlook',
       cancel_q:     'Θέλετε να ακυρώσετε την κράτησή σας;',
       cancel_btn:   '❌ Ακύρωση Κράτησης',
       cancel_note:  'Η ακύρωση επιτρέπεται έως 2 ώρες πριν την κράτηση',
@@ -103,6 +114,12 @@ exports.handler = async (event) => {
           <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.comments}</td>
         </tr>` : ''}
       </table>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;text-align:center;margin-bottom:16px;">
+        <p style="color:#334155;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cal_title}</p>
+        <a href="${gcalUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_google}</a>
+        <a href="${appleUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_other}</a>
+      </div>
 
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;text-align:center;">
         <p style="color:#991b1b;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cancel_q}</p>

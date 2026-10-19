@@ -646,6 +646,26 @@
         .toast.success { background: var(--success); }
         .toast.error { background: var(--danger); }
 
+        /* ======= ΕΠΙΒΕΒΑΙΩΣΗ ΚΡΑΤΗΣΗΣ ======= */
+        .done-head { text-align: center; margin-bottom: 18px; }
+        .done-check { width: 56px; height: 56px; border-radius: 50%; background: #dcfce7; color: #16a34a; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .done-head h3 { font-family: 'Sora', sans-serif; font-size: 1.3rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+        .done-sum { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 8px; }
+        .done-sum b { display: block; color: #1d4ed8; font-size: 1.25rem; }
+        .done-sum span { color: #3b82f6; font-size: 0.9rem; }
+        .done-note { color: var(--text-muted); font-size: 0.85rem; text-align: center; margin: 0 0 18px; }
+        .done-label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 8px; }
+        .done-btn { width: 100%; display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1px solid var(--border, #e2e8f0); border-radius: 12px; background: #fff; color: inherit; font: inherit; text-align: left; text-decoration: none; cursor: pointer; margin-bottom: 8px; transition: border-color .15s, background .15s; }
+        .done-btn:hover { border-color: #93c5fd; background: #f8fbff; }
+        .done-btn .ic { width: 36px; height: 36px; flex: none; border-radius: 10px; background: #eff6ff; color: #2563eb; display: inline-flex; align-items: center; justify-content: center; }
+        .done-btn b { display: block; font-size: 0.95rem; }
+        .done-btn small { display: block; color: var(--text-muted); font-size: 0.8rem; margin-top: 1px; }
+        .done-btn.on { border-color: #86efac; background: #f0fdf4; cursor: default; }
+        .done-btn.on .ic { background: #dcfce7; color: #16a34a; }
+        .done-btn[disabled] { opacity: .6; cursor: default; }
+        .done-alt { display: block; text-align: center; font-size: 0.82rem; color: var(--text-muted); margin: 2px 0 10px; }
+        .done-alt a { color: #2563eb; font-weight: 600; text-decoration: none; }
+
         /* Loading spinner */
         .spinner {
             display: inline-block; width: 16px; height: 16px;
@@ -883,6 +903,29 @@
         </div>
     </div>
 
+    <!-- ===== ΕΠΙΒΕΒΑΙΩΣΗ ===== -->
+    <div id="done-modal" class="modal">
+        <div class="modal-content card">
+            <div class="done-head">
+                <div class="done-check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <h3 data-i18n-key="done_title">Η κράτηση επιβεβαιώθηκε</h3>
+            </div>
+            <div class="done-sum"><b id="done-when"></b><span id="done-what"></span></div>
+            <p class="done-note" data-i18n-key="done_email">Σας στείλαμε email με όλα τα στοιχεία.</p>
+            <p class="done-label" data-i18n-key="done_remind">Θέλετε υπενθύμιση;</p>
+            <button type="button" class="done-btn" id="done-push" style="display:none">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                <span><b id="done-push-t" data-i18n-key="done_push">Ειδοποίηση στο κινητό</b><small id="done-push-s" data-i18n-key="done_push_s">2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή</small></span>
+            </button>
+            <a class="done-btn" id="done-cal" href="#" target="_blank" rel="noopener">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+                <span><b data-i18n-key="done_cal">Προσθήκη στο ημερολόγιο</b><small data-i18n-key="done_cal_s">Το κινητό σας θα σας θυμίσει μόνο του</small></span>
+            </a>
+            <span class="done-alt"><span data-i18n-key="done_other">ή</span> <a id="done-cal-alt" href="#" target="_blank" rel="noopener"></a></span>
+            <button class="btn-link" id="done-close" data-i18n-key="done_close" style="color:var(--text-main,#0f172a)">Κλείσιμο</button>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -950,7 +993,7 @@
                 privacy_note: "Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href=\"/privacy?lang=el\" target=\"_blank\" rel=\"noopener\">Πολιτική Απορρήτου</a>",
                 alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
-                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
@@ -1024,7 +1067,7 @@
                 privacy_note: "Your details are used only for this reservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>",
                 alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
-                toast_saved: "✅ Reservation saved!", toast_save_error: "Save error. Please try again.",
+                toast_saved: "✅ Reservation saved!", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_persons: "guests", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
                 no_reservations: "📭 No reservations found for the selected period.",
@@ -1471,7 +1514,7 @@
             const post = (msg) => { try { window.parent.postMessage(Object.assign({ source: 'tablereserve', shop: shopID }, msg), '*'); } catch (e) {} };
             let lastH = 0;
             const sendHeight = () => {
-                const mc = document.querySelector('#booking-modal.open .modal-content');
+                const mc = document.querySelector('.modal.open .modal-content');
                 const b = document.body, cs = getComputedStyle(b);
                 const content = Math.ceil(b.getBoundingClientRect().height + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom));
                 const h = Math.max(content, mc ? mc.offsetHeight + 60 : 0);
@@ -1481,11 +1524,92 @@
             };
             new ResizeObserver(sendHeight).observe(document.body);
             new MutationObserver(sendHeight).observe(modal, { attributes: true, attributeFilter: ['class'] });
+            new MutationObserver(sendHeight).observe(document.getElementById('done-modal'), { attributes: true, attributeFilter: ['class'] });
             modal.addEventListener('transitionend', sendHeight);
             document.getElementById('open-modal').addEventListener('click', () => { setTimeout(() => { sendHeight(); post({ type: 'scrollTop' }); }, 30); });
             trOnLoad(sendHeight);
             setTimeout(sendHeight, 800);
         }
+
+        // ======= ΕΠΙΒΕΒΑΙΩΣΗ: ημερολόγιο + ειδοποίηση στο κινητό =======
+        function trAthensToMs(date, time) {
+            const [y, m, d] = date.split('-').map(Number), [hh, mm] = time.split(':').map(Number);
+            const guess = Date.UTC(y, m - 1, d, hh, mm);
+            const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(guess)).map(x => [x.type, x.value]));
+            return guess - (Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute) - guess);
+        }
+        const trStamp = ms => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+        const trIsApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+        const trPushOk = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && !document.documentElement.classList.contains('tr-embed');
+        let trDone = null;
+
+        function trSetPushBtn(state) {
+            const btn = document.getElementById('done-push');
+            const map = { on: ['done_push_on', 'done_push_on_s'], denied: ['done_push_denied', 'done_push_denied_s'], err: ['done_push_err', 'done_push_denied_s'], off: ['done_push', 'done_push_s'] };
+            const [a, b] = map[state] || map.off;
+            document.getElementById('done-push-t').innerText = t(a);
+            document.getElementById('done-push-s').innerText = t(b);
+            btn.classList.toggle('on', state === 'on');
+            btn.disabled = state === 'on' || state === 'denied';
+        }
+
+        function trShowDone(bk) {
+            trDone = bk;
+            const start = trAthensToMs(bk.date, bk.time);
+            const shopName = document.getElementById('shop-display').innerText || shopID;
+            const address = (document.querySelector('#client-address span') || {}).innerText || '';
+            document.getElementById('done-when').innerText = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(bk.date + 'T12:00:00Z')) + ' · ' + bk.time;
+            document.getElementById('done-what').innerText = bk.guests + ' ' + t('done_persons') + ' · ' + shopName;
+
+            const title = (currentLang === 'en' ? 'Reservation: ' : 'Κράτηση: ') + shopName + ' (' + bk.guests + ' ' + t('done_persons') + ')';
+            const g = new URLSearchParams({ action: 'TEMPLATE', text: title, dates: trStamp(start) + '/' + trStamp(start + 7200000), ctz: 'Europe/Athens' });
+            if (address) g.set('location', address);
+            const gcal = 'https://calendar.google.com/calendar/render?' + g.toString();
+            const ics = `${API}/ics?` + new URLSearchParams({ shop: shopID, id: bk.id || '', t: bk.token || '', lang: currentLang }).toString();
+            const main = document.getElementById('done-cal'), alt = document.getElementById('done-cal-alt');
+            const hasIcs = !!(bk.id && bk.token);
+            if (trIsApple && hasIcs) { main.href = ics; main.removeAttribute('target'); alt.href = gcal; alt.target = '_blank'; alt.innerText = t('done_gcal'); }
+            else { main.href = gcal; main.target = '_blank'; alt.href = ics; alt.removeAttribute('target'); alt.innerText = t('done_ics'); }
+            alt.parentElement.style.display = hasIcs ? '' : 'none';
+
+            // Ειδοποίηση μόνο αν η κράτηση απέχει πάνω από 2,5 ώρες (όπως οι υπενθυμίσεις)
+            const pushBtn = document.getElementById('done-push');
+            const showPush = trPushOk && hasIcs && start - Date.now() > 150 * 60000;
+            pushBtn.style.display = showPush ? '' : 'none';
+            if (showPush) trSetPushBtn(Notification.permission === 'denied' ? 'denied' : 'off');
+            document.getElementById('done-modal').classList.add('open');
+        }
+
+        function trB64(k) {
+            const pad = '='.repeat((4 - k.length % 4) % 4), raw = atob((k + pad).replace(/-/g, '+').replace(/_/g, '/'));
+            return Uint8Array.from(raw, c => c.charCodeAt(0));
+        }
+        document.getElementById('done-push').onclick = async () => {
+            const btn = document.getElementById('done-push');
+            if (!trDone || btn.disabled) return;
+            btn.disabled = true;
+            try {
+                const reg = await navigator.serviceWorker.register('/sw.js');
+                const perm = await Notification.requestPermission();
+                if (perm !== 'granted') { trSetPushBtn(perm === 'denied' ? 'denied' : 'off'); return; }
+                await navigator.serviceWorker.ready;
+                let sub = await reg.pushManager.getSubscription();
+                if (!sub) {
+                    const k = await fetch(`${API}/push-subscribe`).then(r => r.json());
+                    if (!k.publicKey) throw new Error('no key');
+                    sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: trB64(k.publicKey) });
+                }
+                const r = await fetch(`${API}/push-subscribe`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ shop: shopID, id: trDone.id, t: trDone.token, sub: sub.toJSON() }) });
+                if (!r.ok) throw new Error('save ' + r.status);
+                trSetPushBtn('on');
+            } catch (e) {
+                console.warn('[push]', e);
+                trSetPushBtn('err'); btn.disabled = false;
+            }
+        };
+        const doneModal = document.getElementById('done-modal');
+        document.getElementById('done-close').onclick = () => doneModal.classList.remove('open');
+        doneModal.onclick = (e) => { if (e.target === doneModal) doneModal.classList.remove('open'); };
 
         // ======= BOOKING SAVE — με cancelToken + email πελάτη =======
         document.getElementById('btn-save').onclick = async () => {
@@ -1537,8 +1661,8 @@
                 return;
             }
 
-            showToast(t('toast_saved'), 'success');
             modal.classList.remove('open');
+            trShowDone({ id: data.bookingId, token: data.cancelToken, date, time: selectedTime, guests });
 
             // Reset form
             ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments']

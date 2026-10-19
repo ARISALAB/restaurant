@@ -1,7 +1,7 @@
 // Νέα κράτηση από τη σελίδα του εστιατορίου. Όλοι οι έλεγχοι γίνονται εδώ, όχι στον browser.
 // POST /.netlify/functions/book
 //   { shop, date:"2026-10-12", time:"20:30", guests, name, phone, email, location, occasion, comments, lang, website }
-// ->  200 { ok:true, bookingId }   |   4xx { error: "slot_full" | "shop_inactive" | "day_closed" | "bad_time" |
+// ->  200 { ok:true, bookingId, cancelToken }   |   4xx { error: "slot_full" | "shop_inactive" | "day_closed" | "bad_time" |
 //                                           "too_many_guests" | "rate_limited" | "bad_request" }
 const crypto = require('crypto');
 const { getDb } = require('./_shared/firebase');
@@ -170,7 +170,7 @@ exports.handler = async (event) => {
       }
     });
 
-    return json(200, { ok: true, bookingId });
+    return json(200, { ok: true, bookingId, cancelToken });
   } catch (err) {
     console.error('[book] error:', err);
     return json(500, { error: 'server_error' });
