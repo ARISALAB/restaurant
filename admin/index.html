@@ -371,11 +371,20 @@
         .nb-check input { width: auto; }
         /* Ήρθε / δεν ήρθε */
         .att { display: inline-flex; gap: 6px; }
-        .att-btn { font: inherit; font-size: 0.76rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: #fff; color: #64748b; cursor: pointer; transition: all .15s; }
+        .att-btn { display: inline-flex; align-items: center; gap: 4px; font: inherit; font-size: 0.76rem; font-weight: 600; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); background: #fff; color: #64748b; cursor: pointer; transition: all .15s; }
         .att-btn:hover { border-color: #94a3b8; color: #0f172a; }
         .att-btn.on.ok { background: #dcfce7; border-color: #86efac; color: #166534; }
         .att-btn.on.bad { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
-        .src-tag { display: inline-flex; align-items: center; gap: 4px; }
+        .info-row .ir { display: inline-flex; align-items: center; gap: 6px; }
+        .info-row .ir svg { color: #94a3b8; flex-shrink: 0; }
+        .src-tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 7px; border-radius: 999px; font-size: 0.74rem; font-weight: 600; letter-spacing: .01em; border: 1px solid transparent; line-height: 1.6; }
+        .src-tag svg { flex-shrink: 0; }
+        .src-google { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
+        .src-site   { background: #f0fdf4; color: #15803d; border-color: #dcfce7; }
+        .src-social { background: #faf5ff; color: #7e22ce; border-color: #f3e8ff; }
+        .src-direct { background: #f8fafc; color: #475569; border-color: #e2e8f0; }
+        .src-phone  { background: #fff7ed; color: #c2410c; border-color: #ffedd5; }
+        .src-walkin { background: #f0f9ff; color: #0369a1; border-color: #e0f2fe; }
         .booking-card.noshow { opacity: .7; }
         .stat-card { border-radius: var(--radius-lg); padding: 20px; text-align: center; }
         .stat-card.blue { background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; }
@@ -959,8 +968,8 @@
                         <div class="modal-content card" style="padding:24px;">
                             <div class="nb-head"><h3 id="nb-title" data-i18n-key="nb_title">Νέα κράτηση</h3><button type="button" class="nb-x" id="nb-close" aria-label="Close">×</button></div>
                             <div class="nb-src" id="nb-src">
-                                <button type="button" data-src="phone" class="on" data-i18n-key="nb_phone">📞 Τηλεφωνικά</button>
-                                <button type="button" data-src="walkin" data-i18n-key="nb_walkin">🚶 Από κοντά</button>
+                                <button type="button" data-src="phone" class="on" data-i18n-key="nb_phone">Τηλεφωνικά</button>
+                                <button type="button" data-src="walkin" data-i18n-key="nb_walkin">Από κοντά (walk-in)</button>
                             </div>
                             <div class="form-row">
                                 <div class="input-group"><label for="nb-date" data-i18n-key="nb_date">Ημερομηνία</label><input type="date" id="nb-date"></div>
@@ -1246,7 +1255,7 @@
                 password: "Κωδικός", login: "Σύνδεση", reservations: "Κρατήσεις", logout: "Αποσύνδεση",
                 total_guests: "Σύνολο Ατόμων", from: "Από", to: "Έως", loading: "Φόρτωση...",
                 analytics_tab: "Analytics", an_avg_party: "Μέσος όρος ατόμων", an_cancel_rate: "Ποσοστό ακυρώσεων",
-                an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google", an_noshow: "No-show", an_phone: "Τηλεφωνικά", an_walkin: "Από κοντά (walk-in)", att_arrived: "Ήρθε", att_noshow: "Δεν ήρθε", nb_btn: "Νέα κράτηση", nb_title: "Νέα κράτηση", nb_phone: "📞 Τηλεφωνικά", nb_walkin: "🚶 Από κοντά", nb_date: "Ημερομηνία", nb_time: "Ώρα", nb_guests: "Άτομα", nb_location: "Χώρος", nb_name: "Ονοματεπώνυμο", nb_tel: "Τηλέφωνο", nb_email: "Email (προαιρετικό)", nb_notes: "Σημειώσεις", nb_confirm: "Αποστολή email επιβεβαίωσης στον πελάτη", nb_save: "Αποθήκευση κράτησης", nb_saved: "✅ Η κράτηση καταχωρίστηκε.", nb_missing: "Συμπληρώστε ημερομηνία, ώρα, άτομα και όνομα.", nb_error: "⚠️ Η κράτηση δεν αποθηκεύτηκε. Δοκιμάστε ξανά.",
+                an_repeat_customers: "Επαναλαμβανόμενοι", an_google_share: "Μέσω Google", an_noshow: "No-show", an_phone: "Τηλεφωνικά", an_walkin: "Από κοντά (walk-in)", att_arrived: "Ήρθε", att_noshow: "Δεν ήρθε", nb_btn: "Νέα κράτηση", nb_title: "Νέα κράτηση", nb_phone: "Τηλεφωνικά", nb_walkin: "Από κοντά (walk-in)", nb_date: "Ημερομηνία", nb_time: "Ώρα", nb_guests: "Άτομα", nb_location: "Χώρος", nb_name: "Ονοματεπώνυμο", nb_tel: "Τηλέφωνο", nb_email: "Email (προαιρετικό)", nb_notes: "Σημειώσεις", nb_confirm: "Αποστολή email επιβεβαίωσης στον πελάτη", nb_save: "Αποθήκευση κράτησης", nb_saved: "✅ Η κράτηση καταχωρίστηκε.", nb_missing: "Συμπληρώστε ημερομηνία, ώρα, άτομα και όνομα.", nb_error: "⚠️ Η κράτηση δεν αποθηκεύτηκε. Δοκιμάστε ξανά.",
                 an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_findings: "Βασικά ευρήματα", rep_tips: "Προτάσεις", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
                 an_days_title: "Πιο απασχολημένες μέρες", an_source_title: "Πηγή κράτησης",
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
@@ -1331,7 +1340,7 @@
                 password: "Password", login: "Sign In", reservations: "Reservations", logout: "Sign Out",
                 total_guests: "Total Guests", from: "From", to: "To", loading: "Loading...",
                 analytics_tab: "Analytics", an_avg_party: "Avg party size", an_cancel_rate: "Cancellation rate",
-                an_repeat_customers: "Repeat guests", an_google_share: "Via Google", an_noshow: "No-show", an_phone: "By phone", an_walkin: "Walk-in", att_arrived: "Arrived", att_noshow: "No-show", nb_btn: "New booking", nb_title: "New booking", nb_phone: "📞 By phone", nb_walkin: "🚶 Walk-in", nb_date: "Date", nb_time: "Time", nb_guests: "Guests", nb_location: "Seating", nb_name: "Full name", nb_tel: "Phone", nb_email: "Email (optional)", nb_notes: "Notes", nb_confirm: "Send a confirmation email to the guest", nb_save: "Save booking", nb_saved: "✅ Booking saved.", nb_missing: "Please fill in date, time, guests and name.", nb_error: "⚠️ The booking was not saved. Please try again.",
+                an_repeat_customers: "Repeat guests", an_google_share: "Via Google", an_noshow: "No-show", an_phone: "By phone", an_walkin: "Walk-in", att_arrived: "Arrived", att_noshow: "No-show", nb_btn: "New booking", nb_title: "New booking", nb_phone: "By phone", nb_walkin: "Walk-in", nb_date: "Date", nb_time: "Time", nb_guests: "Guests", nb_location: "Seating", nb_name: "Full name", nb_tel: "Phone", nb_email: "Email (optional)", nb_notes: "Notes", nb_confirm: "Send a confirmation email to the guest", nb_save: "Save booking", nb_saved: "✅ Booking saved.", nb_missing: "Please fill in date, time, guests and name.", nb_error: "⚠️ The booking was not saved. Please try again.",
                 an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_findings: "Key findings", rep_tips: "Recommendations", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
                 an_days_title: "Busiest days", an_source_title: "Booking source",
                 an_location_title: "Location", an_occasion_title: "Occasion types",
@@ -1825,28 +1834,28 @@
                 div.className = 'booking-card' + (res.attendance === 'noshow' ? ' noshow' : '');
                 const locMap = { 'Εσωτερικός': t('indoor'), 'Εξωτερικός': t('outdoor'), 'Δεν έχω προτίμηση': t('no_pref') };
                 const locationDisplay = locMap[res.location] || res.location || t('location_label_indoor');
-                const srcIcon = { google: '🔵', site: '🌐', social: '💬', direct: '🔗', phone: '📞', walkin: '🚶' }[res.source];
+                const srcIcon = SRC_ICONS[res.source];
                 const canMark = res.date <= todayLocal();
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${repEsc(res.time)}</div>
                         <div class="date-text">${repEsc(res.date)}</div>
                         ${canMark ? `<div class="att">
-                            <button class="att-btn${res.attendance === 'arrived' ? ' on ok' : ''}" onclick="setAttendance('${shop}','${res.id}','arrived')">✓ ${t('att_arrived')}</button>
-                            <button class="att-btn${res.attendance === 'noshow' ? ' on bad' : ''}" onclick="setAttendance('${shop}','${res.id}','noshow')">✗ ${t('att_noshow')}</button>
+                            <button class="att-btn${res.attendance === 'arrived' ? ' on ok' : ''}" onclick="setAttendance('${shop}','${res.id}','arrived')">${svgI('<path d="M20 6 9 17l-5-5"/>', 12)} ${t('att_arrived')}</button>
+                            <button class="att-btn${res.attendance === 'noshow' ? ' on bad' : ''}" onclick="setAttendance('${shop}','${res.id}','noshow')">${svgI('<path d="M18 6 6 18M6 6l12 12"/>', 12)} ${t('att_noshow')}</button>
                         </div>` : ''}
                         <button class="delete-link" onclick="deleteBooking('${shop}','${res.id}')">${t('delete_text')}</button>
                     </div>
                     <div class="card-body">
                         <div class="customer-name">${repEsc(res.name)}</div>
                         <div class="info-row">
-                            <span>👥 <strong>${repEsc(res.guests)} ${t('guests_label')}</strong></span>
-                            <span>📍 ${repEsc(locationDisplay)}</span>
-                            ${srcIcon ? `<span class="src-tag">${srcIcon} ${repEsc(t('an_' + res.source))}</span>` : ''}
+                            <span class="ir">${ICO.users}<strong>${repEsc(res.guests)} ${t('guests_label')}</strong></span>
+                            <span class="ir">${ICO.seat}${repEsc(locationDisplay)}</span>
+                            ${srcIcon ? `<span class="src-tag src-${res.source}">${srcIcon}${repEsc(t('an_' + res.source))}</span>` : ''}
                         </div>
-                        ${res.occasion ? `<div class="occasion-tag">🎉 ${repEsc(res.occasion)}</div>` : ''}
+                        ${res.occasion ? `<div class="occasion-tag">${repEsc(res.occasion)}</div>` : ''}
                         ${res.comments ? `<div class="comments-box">${repEsc(res.comments)}</div>` : ''}
-                        ${res.phone ? `<a href="tel:${repEsc(res.phone)}" class="call-button">📞 ${repEsc(res.phone)}</a>` : ''}
+                        ${res.phone ? `<a href="tel:${repEsc(res.phone)}" class="call-button">${svgI('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>', 14)}${repEsc(res.phone)}</a>` : ''}
                     </div>`;
                 list.appendChild(div);
             });
@@ -2318,6 +2327,21 @@
         };
 
         document.getElementById('btn-logout').onclick = () => signOut(auth);
+
+        // ======= ΕΙΚΟΝΙΔΙΑ ΚΑΡΤΑΣ ΚΡΑΤΗΣΗΣ =======
+        const svgI = (d, sz = 13) => `<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+        const ICO = {
+            users: svgI('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>', 15),
+            seat: svgI('<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>', 15)
+        };
+        const SRC_ICONS = {
+            google: svgI('<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>'),
+            site:   svgI('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
+            social: svgI('<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 1 1 21 11.5z"/>'),
+            direct: svgI('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
+            phone:  svgI('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>'),
+            walkin: svgI('<circle cx="12" cy="5" r="2"/><path d="m10 22 1-6-2-2 1-5 4 2 2 3M8 9l-2 4"/>')
+        };
 
         // ======= ΗΡΘΕ / ΔΕΝ ΗΡΘΕ =======
         function todayLocal() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
