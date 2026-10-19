@@ -1493,7 +1493,7 @@
             setBookingLink();
             loadSlug(myShop);
             document.getElementById('dash-name').textContent = myShop;
-            document.getElementById('dash-initial').textContent = (myShop || '·').charAt(0).toUpperCase();
+            { const di0 = document.getElementById('dash-initial'); if (di0) di0.textContent = (myShop || '·').charAt(0).toUpperCase(); }
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('filter-from').value = today;
             document.getElementById('filter-to').value = today;
