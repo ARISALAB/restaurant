@@ -1121,7 +1121,16 @@
             if (q) {
                 // Βρες το καθαρό όνομα για το canonical, χωρίς να καθυστερεί τη σελίδα
                 trSlugReady = fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'current', shop: q }) })
-                    .then(r => r.ok ? r.json() : {}).then(d => { if (d.slug) trSlug = d.slug; }).catch(() => {});
+                    .then(r => r.ok ? r.json() : {}).then(d => {
+                        if (d.slug) trSlug = d.slug;
+                        // Παλιό link (?shop=ID) -> δείξε το καθαρό link στη γραμμή διεύθυνσης
+                        const nm = trSlug || q;
+                        if (urlParams.get('embed') !== '1' && /^[a-z0-9][a-z0-9_-]{1,39}$/.test(nm)) {
+                            const p = new URLSearchParams(location.search); p.delete('shop');
+                            const qs = p.toString();
+                            history.replaceState(null, '', '/' + nm + (qs ? '?' + qs : '') + location.hash);
+                        }
+                    }).catch(() => {});
                 return q;
             }
             let p = '';
