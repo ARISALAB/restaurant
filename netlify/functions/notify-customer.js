@@ -32,6 +32,9 @@ exports.handler = async (event) => {
     const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
     const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, en: lang === 'en' });
     const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang });
+    const walletUrl = process.env.GOOGLE_WALLET_ISSUER_ID
+      ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: lang === 'en' ? 'en' : 'el' }).toString()
+      : null;
 
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${lang || 'el'}`;
 
@@ -119,6 +122,7 @@ exports.handler = async (event) => {
         <p style="color:#334155;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cal_title}</p>
         <a href="${gcalUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_google}</a>
         <a href="${appleUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_other}</a>
+        ${walletUrl ? `<a href="${walletUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">Google Wallet</a>` : ''}
       </div>
 
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;text-align:center;">

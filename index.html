@@ -959,6 +959,10 @@
                 <span><b data-i18n-key="done_cal">Προσθήκη στο ημερολόγιο</b><small data-i18n-key="done_cal_s">Το κινητό σας θα σας θυμίσει μόνο του</small></span>
             </a>
             <span class="done-alt"><span data-i18n-key="done_other">ή</span> <a id="done-cal-alt" href="#" target="_blank" rel="noopener"></a></span>
+            <a class="done-btn" id="done-wallet" href="#" style="display:none">
+                <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg></span>
+                <span><b data-i18n-key="done_wallet">Προσθήκη στο Google Wallet</b><small data-i18n-key="done_wallet_s">Η κράτηση στο πορτοφόλι του κινητού σας</small></span>
+            </a>
             <button class="btn-link" id="done-close" data-i18n-key="done_close" style="color:var(--text-main,#0f172a)">Κλείσιμο</button>
         </div>
     </div>
@@ -1030,7 +1034,7 @@
                 privacy_note: "Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href=\"/privacy?lang=el\" target=\"_blank\" rel=\"noopener\">Πολιτική Απορρήτου</a>",
                 alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
-                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", wl_cta_t: "Δεν βρίσκετε την ώρα που θέλετε;", wl_cta_s: "Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.", wl_cta_btn: "Λίστα αναμονής", wl_title: "Λίστα αναμονής", wl_time: "Ώρα που θέλετε", wl_any: "Οποιαδήποτε από τις πλήρεις ώρες", wl_join: "Μπείτε στη λίστα", wl_note: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.", wl_done_t: "Είστε στη λίστα αναμονής", wl_done_s: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.", wl_error: "Δεν ήταν δυνατή η εγγραφή στη λίστα. Δοκιμάστε ξανά.", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", wl_cta_t: "Δεν βρίσκετε την ώρα που θέλετε;", wl_cta_s: "Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.", wl_cta_btn: "Λίστα αναμονής", wl_title: "Λίστα αναμονής", wl_time: "Ώρα που θέλετε", wl_any: "Οποιαδήποτε από τις πλήρεις ώρες", wl_join: "Μπείτε στη λίστα", wl_note: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.", wl_done_t: "Είστε στη λίστα αναμονής", wl_done_s: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.", wl_error: "Δεν ήταν δυνατή η εγγραφή στη λίστα. Δοκιμάστε ξανά.", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_wallet: "Προσθήκη στο Google Wallet", done_wallet_s: "Η κράτηση στο πορτοφόλι του κινητού σας", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
                 no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
@@ -1104,7 +1108,7 @@
                 privacy_note: "Your details are used only for this reservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>",
                 alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
-                toast_saved: "✅ Reservation saved!", wl_cta_t: "Can't find the time you want?", wl_cta_s: "Join the waiting list. If a table opens up, we will email you.", wl_cta_btn: "Waiting list", wl_title: "Waiting list", wl_time: "Preferred time", wl_any: "Any of the full times", wl_join: "Join the list", wl_note: "If a table opens up, we will email you. It goes to whoever books first.", wl_done_t: "You are on the waiting list", wl_done_s: "If a table opens up, we will email you right away with a button to book it.", wl_error: "Could not add you to the list. Please try again.", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_persons: "guests", toast_save_error: "Save error. Please try again.",
+                toast_saved: "✅ Reservation saved!", wl_cta_t: "Can't find the time you want?", wl_cta_s: "Join the waiting list. If a table opens up, we will email you.", wl_cta_btn: "Waiting list", wl_title: "Waiting list", wl_time: "Preferred time", wl_any: "Any of the full times", wl_join: "Join the list", wl_note: "If a table opens up, we will email you. It goes to whoever books first.", wl_done_t: "You are on the waiting list", wl_done_s: "If a table opens up, we will email you right away with a button to book it.", wl_error: "Could not add you to the list. Please try again.", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_wallet: "Add to Google Wallet", done_wallet_s: "Keep your reservation in your phone wallet", done_persons: "guests", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
                 no_reservations: "📭 No reservations found for the selected period.",
@@ -1645,6 +1649,8 @@
         const trIsApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
         const trPushOk = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && !document.documentElement.classList.contains('tr-embed');
         let trDone = null;
+        let trWalletProbe = null;
+        const trWalletOn = () => trWalletProbe || (trWalletProbe = fetch(`${API}/wallet?probe=1`).then(r => r.json()).then(d => !!d.enabled).catch(() => false));
 
         function trSetPushBtn(state) {
             const btn = document.getElementById('done-push');
@@ -1674,6 +1680,14 @@
             if (trIsApple && hasIcs) { main.href = ics; main.removeAttribute('target'); alt.href = gcal; alt.target = '_blank'; alt.innerText = t('done_gcal'); }
             else { main.href = gcal; main.target = '_blank'; alt.href = ics; alt.removeAttribute('target'); alt.innerText = t('done_ics'); }
             alt.parentElement.style.display = hasIcs ? '' : 'none';
+
+            // Google Wallet (Android): μόνο αν έχει ρυθμιστεί στον server
+            const wBtn = document.getElementById('done-wallet');
+            wBtn.style.display = 'none';
+            if (!trIsApple && hasIcs) {
+                wBtn.href = `${API}/wallet?` + new URLSearchParams({ shop: shopID, id: bk.id, t: bk.token, lang: currentLang }).toString();
+                trWalletOn().then(on => { if (on) wBtn.style.display = ''; });
+            }
 
             // Ειδοποίηση μόνο αν η κράτηση απέχει πάνω από 2,5 ώρες (όπως οι υπενθυμίσεις)
             const pushBtn = document.getElementById('done-push');
