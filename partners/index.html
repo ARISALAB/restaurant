@@ -80,9 +80,10 @@ h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4.5vw,56px);line-he
 
 /* BENEFITS */
 .benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:70px}
+@media(min-width:900px){.benefits-grid{grid-template-columns:repeat(3,1fr)}}
 .benefit{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:30px 26px;transition:transform .2s,border-color .2s}
 .benefit:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 8px 32px rgba(37,99,235,.15)}
-.b-icon{width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,.08);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.b-icon{width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,.08);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
 .benefit h3{font-size:15px;font-weight:500;margin-bottom:8px}
 .benefit p{font-size:13px;color:var(--muted);line-height:1.7}
 
@@ -143,7 +144,7 @@ footer a:hover{color:var(--accent)}
 .faq-icon::after{width:1.5px;height:14px;transition:transform .25s ease}
 .faq-item.open .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scale(0)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
-.faq-item.open .faq-a{max-height:220px}
+.faq-item.open .faq-a{max-height:420px}
 .faq-a p{color:var(--muted);font-size:14px;line-height:1.7;padding:0 0 24px}
 
 .sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}</style>
@@ -189,7 +190,7 @@ footer a:hover{color:var(--accent)}
   <div class="hero-copy">
     <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
     <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο</em></h1>
-    <p>Δέχεστε κρατήσεις τραπεζιών 24/7, με αυτόματα emails επιβεβαίωσης και σύνδεσμο κράτησης για Instagram, Google Maps και ιστοσελίδα. 14 ημέρες δωρεάν, μετά από €39/τρίμηνο</p>
+    <p>Online και τηλεφωνικές κρατήσεις σε ένα σημείο, υπενθυμίσεις που μειώνουν τα no-show και καρτέλα για κάθε πελάτη. 14 ημέρες δωρεάν, μετά από €39/τρίμηνο</p>
     <div class="hero-ctas">
       <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
       <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
@@ -238,15 +239,18 @@ footer a:hover{color:var(--accent)}
   <div class="reveal">
     <div class="eyebrow">Γιατί TableReserve</div>
     <h2>Όλα όσα έχετε ανάγκη,<br>τίποτα που δεν χρειάζεστε</h2>
-    <p class="section-sub">Σχεδιασμένο για μικρές και μεσαίες επιχειρήσεις εστίασης στην Ελλάδα</p>
+    <p class="section-sub">Σχεδιασμένο από άνθρωπο με 25 χρόνια στην εστίαση, για τα προβλήματα που ζείτε κάθε μέρα</p>
   </div>
   <div class="benefits-grid reveal">
-    <div class="benefit"><div class="b-icon">📧</div><h3>Αυτόματα emails</h3><p>Επιβεβαίωση και ακύρωση στέλνονται αυτόματα — σε Ελληνικά ή Αγγλικά ανάλογα τον πελάτη</p></div>
-    <div class="benefit"><div class="b-icon">📱</div><h3>Admin panel real-time</h3><p>Βλέπετε όλες τις κρατήσεις από το κινητό σε πραγματικό χρόνο, ακόμα κι από την κουζίνα</p></div>
-    <div class="benefit"><div class="b-icon">🌐</div><h3>Δίγλωσσο ΕΛ / EN</h3><p>Αυτόματη γλώσσα για τουρίστες. Κλείνουν τραπέζι στα Αγγλικά, λαμβάνουν email στα Αγγλικά</p></div>
-    <div class="benefit"><div class="b-icon">🔍</div><h3>Σύνδεσμος για Google Maps</h3><p>Προσθέστε τον σύνδεσμο κράτησης στο προφίλ σας στο Google Maps — οι πελάτες κλείνουν τραπέζι με ένα κλικ, μηδέν επιπλέον κόστος</p></div>
-    <div class="benefit"><div class="b-icon">❌</div><h3>Έξυπνες ακυρώσεις</h3><p>Πολιτική 2 ωρών πριν. Ο πελάτης ακυρώνει μόνος του — εσείς ειδοποιείστε αμέσως</p></div>
-    <div class="benefit"><div class="b-icon">📊</div><h3>Στατιστικά κρατήσεων</h3><p>Ποιες ώρες γεμίζει το μαγαζί, πόσες ακυρώσεις έχετε, ποια μέρα είναι πιο δημοφιλής</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Όλες οι κρατήσεις σε ένα βιβλίο</h3><p>Online, τηλεφωνικές και walk-in κρατήσεις μαζί. Οι ώρες εμφανίζονται με τις ελεύθερες θέσεις, ώστε να απαντάτε αμέσως στο τηλέφωνο</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Αναγνωρίζει τον πελάτη σας</h3><p>Γράφετε το τηλέφωνο ή το όνομα και βλέπετε επισκέψεις, VIP, αλλεργίες και σημειώσεις, πριν καν φτάσει στο τραπέζι</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Υπενθύμιση & λιγότερα no-show</h3><p>Αυτόματο email 2 ώρες πριν με διεύθυνση και οδηγίες. Σημειώνετε «Ήρθε / Δεν ήρθε» και βλέπετε το ποσοστό no-show</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Από πού έρχονται οι κρατήσεις</h3><p>Google, site, social, τηλέφωνο ή walk-in: ξέρετε ποιο κανάλι σάς φέρνει πελάτες</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>Αναφορά PDF με ευρήματα</h3><p>Ώρες και μέρες αιχμής, ακυρώσεις, no-show και τακτικοί πελάτες, σε αναφορά έτοιμη για τον συνέταιρο ή τον λογιστή</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Αυτόματα emails, ΕΛ / EN</h3><p>Επιβεβαίωση και υπενθύμιση στη γλώσσα του πελάτη. Οι τουρίστες κλείνουν και ενημερώνονται στα Αγγλικά</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Το δικό σας link κρατήσεων</h3><p>tablereserve.gr/το-μαγαζί-σας για Instagram, site και Google Maps. Οι πελάτες κλείνουν τραπέζι με ένα κλικ</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>Από το κινητό, σε πραγματικό χρόνο</h3><p>Όλες οι κρατήσεις και οι αλλαγές εμφανίζονται αμέσως, στο κινητό, στο tablet ή στον υπολογιστή</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Έξυπνες ακυρώσεις</h3><p>Ο πελάτης ακυρώνει μόνος του έως 2 ώρες πριν και εσείς ειδοποιείστε αμέσως. Οι ακυρώσεις μένουν στα στατιστικά</p></div>
   </div>
 </section>
 
@@ -263,11 +267,12 @@ footer a:hover{color:var(--accent)}
       <div class="plan-price"><sup>€</sup>39<sub>/3μηνο</sub></div>
       <p class="plan-desc">Όλες οι υπηρεσίες, με χρέωση ανά 3 μήνες</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
+        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
+        <li>Καρτέλα πελάτη με σημειώσεις</li>
+        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
+        <li>Στατιστικά &amp; αναφορές PDF</li>
+        <li>Δικό σας link &amp; Google Maps</li>
         <li>Πλήρης support</li>
       </ul>
       <a href="#contact" class="btn-plan btn-plan-g" data-plan="quarter" onclick="setPlan('Τρίμηνο — €39')">Επιλογή τριμήνου</a>
@@ -277,11 +282,12 @@ footer a:hover{color:var(--accent)}
       <div class="plan-price"><sup>€</sup>69<sub>/6μηνο</sub></div>
       <p class="plan-desc">Εξάμηνη συνδρομή με όλες τις υπηρεσίες — εξοικονομείστε €9 vs τρίμηνο</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
+        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
+        <li>Καρτέλα πελάτη με σημειώσεις</li>
+        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
+        <li>Στατιστικά &amp; αναφορές PDF</li>
+        <li>Δικό σας link &amp; Google Maps</li>
         <li>Πλήρης support</li>
       </ul>
       <a href="#contact" class="btn-plan btn-plan-g" data-plan="half" onclick="setPlan('Εξάμηνο — €69')">Επιλογή εξαμήνου</a>
@@ -292,11 +298,12 @@ footer a:hover{color:var(--accent)}
       <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
       <p class="plan-desc">Εξοικονομείστε €57 vs τρίμηνο — μόλις €8.25/μήνα για όλες τις υπηρεσίες</p>
       <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις</li>
-        <li>Email επιβεβαίωσης &amp; ακύρωσης</li>
-        <li>Admin panel real-time</li>
-        <li>Σύνδεσμος κράτησης</li>
-        <li>Στατιστικά &amp; αναφορές</li>
+        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
+        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
+        <li>Καρτέλα πελάτη με σημειώσεις</li>
+        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
+        <li>Στατιστικά &amp; αναφορές PDF</li>
+        <li>Δικό σας link &amp; Google Maps</li>
         <li>Πλήρης support</li>
       </ul>
       <a href="#contact" class="btn-plan btn-plan-s" data-plan="year" onclick="setPlan('Χρονιαίο — €99')">Επιλογή χρονιαίου</a>
@@ -321,6 +328,14 @@ footer a:hover{color:var(--accent)}
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να κάνω αλλαγές μόνος μου αργότερα<span class="faq-icon"></span></button>
       <div class="faq-a"><p>Φυσικά. Μέσα από το admin panel διαχειρίζεστε εύκολα και γρήγορα κάθε αλλαγή — ώρες λειτουργίας, τραπέζια, στοιχεία καταστήματος — χωρίς να χρειάζεται να επικοινωνήσετε μαζί μας</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να περνάω και τις τηλεφωνικές κρατήσεις<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ναι. Με το «Νέα κράτηση» καταχωρίζετε τηλεφωνικές κρατήσεις και walk-in σε λίγα δευτερόλεπτα. Αν ο πελάτης έχει ξαναέρθει, το σύστημα τον αναγνωρίζει από το τηλέφωνο ή το όνομα και συμπληρώνει τα στοιχεία του</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Στέλνει υπενθυμίσεις στους πελάτες<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ναι. Κάθε πελάτης με email λαμβάνει αυτόματα υπενθύμιση 2 ώρες πριν την κράτηση, με διεύθυνση, οδηγίες και το τηλέφωνο του καταστήματος. Έτσι μειώνονται τα no-show, και το βλέπετε στα στατιστικά</p></div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">Χρειάζομαι τεχνικές γνώσεις<span class="faq-icon"></span></button>
