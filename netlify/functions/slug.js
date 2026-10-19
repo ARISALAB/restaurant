@@ -45,11 +45,11 @@ exports.handler = async (event) => {
     if (!/^[a-z0-9_-]{2,40}$/.test(s)) return json(404, { error: 'not_found' });
 
     const owner = (await db.ref(`slugs/${s}`).get()).val();
-    if (owner && owner.shop && (await db.ref(`shop_details/${owner.shop}/displayName`).get()).exists()) {
+    if (owner && owner.shop && (await db.ref(`shop_details/${owner.shop}`).get()).exists()) {
       return json(200, { shop: owner.shop, slug: (await currentSlug(db, owner.shop)) || s });
     }
     // Παλιά καταστήματα: το εσωτερικό ID δουλεύει κι αυτό ως διεύθυνση
-    if ((await db.ref(`shop_details/${s}/displayName`).get()).exists()) {
+    if ((await db.ref(`shop_details/${s}`).get()).exists()) {
       return json(200, { shop: s, slug: (await currentSlug(db, s)) || s });
     }
     return json(404, { error: 'not_found' });

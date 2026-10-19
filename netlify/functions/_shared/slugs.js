@@ -57,7 +57,7 @@ async function unavailableReason(db, slug, shopId) {
   const owner = (await db.ref(`slugs/${slug}`).get()).val();
   if (owner && owner.shop !== shopId) return 'taken';
   // Μην πάρεις το εσωτερικό ID άλλου καταστήματος (τα παλιά links ?shop= και /ID)
-  if (slug !== shopId && (await db.ref(`shop_details/${slug}/displayName`).get()).exists()) return 'taken';
+  if (slug !== shopId && (await db.ref(`shop_details/${slug}`).get()).exists()) return 'taken';
   return null;
 }
 
