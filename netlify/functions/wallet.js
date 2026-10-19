@@ -108,8 +108,8 @@ exports.handler = async (event) => {
       classId: CLASS_ID,
       state: 'ACTIVE',
       cardTitle: L(shopName, lang),
-      subheader: L(en ? 'Table reservation' : 'Κράτηση τραπεζιού', lang),
-      header: L(`${b.time} · ${b.guests} ${en ? 'guests' : 'άτομα'}`, lang),
+      subheader: L(`${en ? 'Table for' : 'Τραπέζι για'} ${b.guests} · ${fmtDate(b.date, en)}`, lang),
+      header: L(b.time, lang),
       hexBackgroundColor: '#2563eb',
       logo: { sourceUri: { uri: png(logo, 'w_660,h_660') || 'https://tablereserve.gr/wallet-logo.png' }, contentDescription: L(shopName, lang) },
       textModulesData: modules,
@@ -117,7 +117,7 @@ exports.handler = async (event) => {
       // Η κάρτα «λήγει» 3 ώρες μετά την κράτηση και φεύγει από τις ενεργές
       validTimeInterval: { end: { date: new Date(start + 3 * 3600000).toISOString() } },
     };
-    const hero = png(cover, 'w_1032,h_336');
+    const hero = cover ? png(cover, 'w_1032,h_336').replace('c_fill,', 'c_pad,b_auto,') : null;
     if (hero) obj.heroImage = { sourceUri: { uri: hero }, contentDescription: L(shopName, lang) };
 
     await upsertObject(obj);
