@@ -1114,6 +1114,22 @@
         // ======= CLIENT =======
         const urlParams = new URLSearchParams(window.location.search);
 
+        // Από πού ήρθε ο πελάτης, για τα στατιστικά του καταστήματος:
+        // ?src=google (link στο Επαγγελματικό προφίλ Google), widget/site εστιατορίου, social, ή απευθείας
+        const trSource = (() => {
+            const p = (urlParams.get('src') || urlParams.get('utm_source') || '').toLowerCase();
+            if (/^(google|gbp|maps|googlemaps)$/.test(p)) return 'google';
+            if (/^(site|website|web)$/.test(p)) return 'site';
+            if (/^(instagram|ig|facebook|fb|social|tiktok)$/.test(p)) return 'social';
+            if (urlParams.get('embed') === '1') return 'site';
+            let host = '';
+            try { host = new URL(document.referrer).hostname.toLowerCase(); } catch (e) {}
+            if (!host || /(^|\.)tablereserve\.gr$/.test(host) || /restableres\.netlify\.app$/.test(host)) return 'direct';
+            if (/(^|\.)google\.[a-z.]+$/.test(host) || host === 'maps.app.goo.gl') return 'google';
+            if (/(instagram|facebook|fb\.|tiktok|twitter|x\.com|t\.co|linkedin|threads)/.test(host)) return 'social';
+            return 'site';
+        })();
+
         // Το κατάστημα έρχεται είτε από ?shop=ID (παλιά links) είτε από το path: tablereserve.gr/<όνομα>
         let trSlug = null, trNotFound = false, trSlugReady = Promise.resolve();
         async function trResolveShop() {
@@ -1491,7 +1507,7 @@
                     body: JSON.stringify({
                         shop: shopID, date, time: selectedTime, guests,
                         name, phone, email, location: locationChoice, occasion, comments,
-                        lang: currentLang,
+                        lang: currentLang, source: trSource,
                         website: (document.getElementById('cust-website') || {}).value || ''
                     })
                 });

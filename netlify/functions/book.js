@@ -71,6 +71,8 @@ exports.handler = async (event) => {
   const name = str(b.name, 100), phone = str(b.phone, 30), email = str(b.email, 120);
   const location = str(b.location, 60), occasion = str(b.occasion, 200), comments = str(b.comments, 1000);
   const lang = b.lang === 'en' ? 'en' : 'el';
+  // Από πού ήρθε ο πελάτης: google (Επαγγελματικό προφίλ), site (site εστιατορίου), social, direct
+  const source = ['google', 'site', 'social', 'direct'].includes(b.source) ? b.source : 'direct';
 
   if (!/^[a-z0-9_]{1,60}$/.test(shop) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time) ||
       !(guests >= 1) || !name || !phone || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -146,7 +148,7 @@ exports.handler = async (event) => {
       await resRef.child(bookingId).set({
         name, phone, email, date, time,
         guests: String(guests),
-        location, occasion, comments,
+        location, occasion, comments, source,
         timestamp: Date.now(),
         cancelToken,
         status: 'confirmed',

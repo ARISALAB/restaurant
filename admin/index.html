@@ -1202,7 +1202,7 @@
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
                 an_repeat_title: "Κορυφαίοι επαναλαμβανόμενοι πελάτες", an_no_repeats: "Δεν υπάρχουν ακόμα",
                 an_week_guests_title: "Άτομα ανά εβδομάδα", an_month_guests_title: "Άτομα ανά μήνα",
-                an_direct: "Απευθείας link", an_google: "Google Reserve", an_indoor: "Εσωτερικός χώρος",
+                an_direct: "Απευθείας link", an_google: "Google (Επαγγελματικό προφίλ)", an_site: "Site εστιατορίου", an_social: "Social media", an_unknown: "Χωρίς στοιχείο (παλαιότερες)", an_indoor: "Εσωτερικός χώρος",
                 an_outdoor: "Εξωτερικός χώρος", an_no_occasion: "Χωρίς γεγονός", an_bookings: "κρατήσεις",
                 sa_login_desc: "Κεντρική διαχείριση όλων των καταστημάτων", sa_email_label: "Email Super Admin",
                 sa_login_btn: "Σύνδεση ως Super Admin", sa_manage: "Διαχείριση καταστημάτων & χρηστών",
@@ -1287,7 +1287,7 @@
                 an_location_title: "Location", an_occasion_title: "Occasion types",
                 an_repeat_title: "Top repeat customers", an_no_repeats: "None yet",
                 an_week_guests_title: "Guests per week", an_month_guests_title: "Guests per month",
-                an_direct: "Direct link", an_google: "Google Reserve", an_indoor: "Indoor",
+                an_direct: "Direct link", an_google: "Google (Business Profile)", an_site: "Restaurant website", an_social: "Social media", an_unknown: "Not recorded (older)", an_indoor: "Indoor",
                 an_outdoor: "Outdoor", an_no_occasion: "No occasion", an_bookings: "bookings",
                 sa_login_desc: "Central management of all stores", sa_email_label: "Super Admin Email",
                 sa_login_btn: "Sign In as Super Admin", sa_manage: "Manage stores & users",
@@ -1600,7 +1600,7 @@
         function renderGoogleCard() {
             const shop = currentAdminShop;
             if (!shop) return;
-            document.getElementById('g-link').textContent = publicUrl();
+            document.getElementById('g-link').textContent = publicUrl() + '?src=google';
         }
         document.getElementById('btn-copy-g').onclick = async () => {
             try { await navigator.clipboard.writeText(document.getElementById('g-link').textContent); showToast(t('copied'), 'success'); } catch (e) {}
@@ -1613,7 +1613,7 @@
             document.getElementById('embed-code').textContent =
                 `<div data-tablereserve="${shop}"${extra}></div>\n<script src="https://tablereserve.gr/embed.js" async><\/script>`;
             document.getElementById('embed-shop-id').textContent = shop;
-            document.getElementById('g-link').textContent = publicUrl();
+            document.getElementById('g-link').textContent = publicUrl() + '?src=google';
             document.querySelectorAll('.embed-tab').forEach(b => b.style.fontWeight = b.dataset.mode === embedMode ? '700' : '400');
         }
         document.querySelectorAll('.embed-tab').forEach(b => b.onclick = () => { embedMode = b.dataset.mode; renderEmbedCode(); });
@@ -1634,7 +1634,7 @@
             const url = publicUrl();
             const a = document.getElementById('booking-link'); a.href = url; a.textContent = url.replace('https://', '');
             document.getElementById('dash-open').href = url;
-            const g = document.getElementById('g-link'); if (g && currentAdminShop) g.textContent = url;
+            const g = document.getElementById('g-link'); if (g && currentAdminShop) g.textContent = url + '?src=google';
         }
         async function loadSlug(shop) {
             try {
@@ -1908,9 +1908,12 @@
             const monthLabels = monthKeys.map(k => { const [y, m] = k.split('-'); return monthNames[parseInt(m, 10) - 1] + ' ' + y; });
             drawChart('chart-month-guests', 'bar', monthLabels, monthKeys.map(k => monthMap[k]), '#0f172a');
 
-            const sourceCounts = { direct: 0, google: 0 };
-            active.forEach(r => { r.source === 'google' ? sourceCounts.google++ : sourceCounts.direct++; });
-            drawDoughnut('chart-source', [t('an_direct'), t('an_google')], [sourceCounts.direct, sourceCounts.google]);
+            // Πηγή: οι κρατήσεις πριν την καταγραφή πηγής δεν έχουν πεδίο source
+            const srcKeys = ['google', 'site', 'social', 'direct', 'unknown'];
+            const srcCounts = { google: 0, site: 0, social: 0, direct: 0, unknown: 0 };
+            active.forEach(r => { srcCounts[srcKeys.includes(r.source) ? r.source : 'unknown']++; });
+            const srcShown = srcKeys.filter(k => srcCounts[k] > 0);
+            drawDoughnut('chart-source', srcShown.length ? srcShown.map(k => t('an_' + k)) : [t('an_direct')], srcShown.length ? srcShown.map(k => srcCounts[k]) : [0]);
 
             const locCounts = {};
             active.forEach(r => {
