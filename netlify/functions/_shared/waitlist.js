@@ -60,6 +60,13 @@ function emailHtml({ e, shopName, date, time, url, en }) {
 </div></body></html>`;
 }
 
+// «any» = οποιαδήποτε από τις ώρες που ήταν πλήρεις όταν μπήκε στη λίστα (times)
+function matchesTime(e, time) {
+  if (e.time === time) return true;
+  if (e.time !== 'any') return false;
+  return !Array.isArray(e.times) || !e.times.length || e.times.includes(time);
+}
+
 // Ελευθερώθηκαν θέσεις στις {date} {time}: ειδοποίησε όσους χωράνε, με σειρά προτεραιότητας
 async function notifyWaitlist(db, shop, date, time) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '') || !/^\d{2}:\d{2}$/.test(time || '')) return 0;
@@ -77,9 +84,10 @@ async function notifyWaitlist(db, shop, date, time) {
   if (left <= 0) return 0;
 
   const cands = Object.entries(wl)
-    .filter(([, e]) => e && e.status === 'waiting' && e.email && (e.time === time || e.time === 'any') && (parseInt(e.guests, 10) || 0) <= left)
+    .filter(([, e]) => e && e.status === 'waiting' && e.email && matchesTime(e, time) && (parseInt(e.guests, 10) || 0) <= left)
     .sort((a, b) => (a[1].createdAt || 0) - (b[1].createdAt || 0))
     .slice(0, MAX_NOTIFY);
+  console.log('[waitlist] freed', shop, date, time, 'left', left, 'candidates', cands.length);
   if (!cands.length) return 0;
 
   const [shopName, link] = await Promise.all([
@@ -90,8 +98,14 @@ async function notifyWaitlist(db, shop, date, time) {
   let sent = 0;
   for (const [id, e] of cands) {
     const ref = db.ref(`waitlist/${shop}/${date}/${id}`);
-    const claim = await ref.child('status').transaction(cur => (cur === 'waiting' ? 'notified' : undefined));
-    if (!claim.committed) continue;
+    // Η πρώτη κλήση μπορεί να έρθει με null (χωρίς τοπικά δεδομένα): επιστρέφουμε null ώστε ο server να την ξανατρέξει με την πραγματική τιμή
+    const claim = await ref.transaction(cur => {
+      if (cur === null) return null;
+      if (!cur || cur.status !== 'waiting') return;
+      return Object.assign({}, cur, { status: 'notified' });
+    });
+    const now = claim.snapshot && claim.snapshot.val();
+    if (!claim.committed || !now || now.status !== 'notified') continue;
     const en = e.lang === 'en';
     const url = `${link.base}${link.sep}date=${date}&time=${encodeURIComponent(time)}&guests=${encodeURIComponent(e.guests)}&lang=${en ? 'en' : 'el'}`;
     try {
@@ -121,4 +135,62 @@ async function removeBooked(db, shop, date, phone) {
   if (Object.keys(upd).length) await db.ref(`waitlist/${shop}/${date}`).update(upd);
 }
 
-module.exports = { notifyWaitlist, removeBooked, phoneKey };
+// Έλεγχος ασφαλείας (από τις προγραμματισμένες υπενθυμίσεις): πιάνει θέσεις που ελευθερώθηκαν με άλλο τρόπο,
+// π.χ. αλλαγή ώρας ή λιγότερα άτομα σε μια κράτηση από το admin
+async function scanWaitlists(db, today) {
+  const all = (await db.ref('waitlist').get()).val() || {};
+  let sent = 0;
+  for (const [shop, dates] of Object.entries(all)) {
+    for (const [date, entries] of Object.entries(dates || {})) {
+      if (date < today) continue;
+      const times = new Set();
+      Object.values(entries || {}).forEach(e => {
+        if (!e || e.status !== 'waiting') return;
+        if (e.time !== 'any') times.add(e.time);
+        else if (Array.isArray(e.times)) e.times.forEach(t => times.add(t));
+      });
+      for (const t of times) sent += await notifyWaitlist(db, shop, date, t).catch(err => { console.error('[waitlist] scan', shop, date, t, err.message); return 0; });
+    }
+  }
+  return sent;
+}
+
+// Email στο κατάστημα: νέος πελάτης στη λίστα αναμονής
+async function notifyShopJoin(db, shop, e, date) {
+  const to = (await db.ref(`shop_profile/${shop}/info/notificationEmail`).get()).val();
+  if (!to) return;
+  const shopName = (await db.ref(`shop_details/${shop}/displayName`).get()).val() || shop;
+  const when = e.time === 'any' ? (Array.isArray(e.times) && e.times.length ? e.times.join(', ') : 'οποιαδήποτε ώρα') : e.time;
+  const tel = String(e.phone || '').replace(/[^\d+]/g, '');
+  const row = (l, v) => `<tr><td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:38%;">${l}</td><td style="padding:10px 12px;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${v}</td></tr>`;
+  await resend.emails.send({
+    from: 'TableReserve <noreply@tablereserve.gr>',
+    to,
+    subject: `⏳ Λίστα αναμονής - ${shopName} | ${date} ${when} | ${e.name}`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
+<body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
+<div style="max-width:580px;margin:0 auto;">
+  <div style="background:#0f172a;border-radius:12px 12px 0 0;padding:24px 32px;text-align:center;">
+    <div style="font-size:30px;margin-bottom:6px;">⏳</div>
+    <h1 style="color:#fff;margin:0;font-size:19px;font-weight:700;">Νέο αίτημα στη λίστα αναμονής</h1>
+    <p style="color:rgba(255,255,255,0.75);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
+  </div>
+  <div style="background:#fff;padding:24px 32px;">
+    <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
+      ${row('Ημερομηνία', esc(fmtDate(date, false)))}
+      ${row('Ώρα', esc(when))}
+      ${row('Άτομα', esc(e.guests))}
+      ${row('Όνομα', esc(e.name))}
+      ${row('Τηλέφωνο', `<a href="tel:${esc(tel)}" style="color:#2563eb;text-decoration:none;">${esc(e.phone)}</a>`)}
+      ${row('Email', esc(e.email))}
+    </table>
+    <p style="color:#64748b;font-size:13px;line-height:1.6;margin:0;">Η ώρα είναι πλήρης. Αν ακυρωθεί κάποια κράτηση, ο πελάτης θα πάρει αυτόματα email για να κλείσει το τραπέζι. Μπορείτε επίσης να τον καλέσετε εσείς, αν βρείτε θέση.</p>
+  </div>
+  <div style="background:#f8fafc;border-radius:0 0 12px 12px;padding:14px;text-align:center;border:1px solid #e2e8f0;border-top:none;">
+    <p style="color:#94a3b8;font-size:12px;margin:0;">TableReserve &bull; noreply@tablereserve.gr</p>
+  </div>
+</div></body></html>`,
+  });
+}
+
+module.exports = { notifyWaitlist, removeBooked, phoneKey, scanWaitlists, notifyShopJoin };

@@ -1621,7 +1621,7 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'join', shop: shopID, date: document.getElementById('cust-date-only').value,
-                        time: document.getElementById('wl-time').value, guests: document.getElementById('cust-guests').value,
+                        time: document.getElementById('wl-time').value, guests: document.getElementById('cust-guests').value, times: trFullTimes.slice(),
                         name, phone, email, lang: currentLang, website: document.getElementById('wl-website').value || ''
                     })
                 });

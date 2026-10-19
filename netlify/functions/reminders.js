@@ -4,6 +4,7 @@ const { Resend } = require('resend');
 const webpush = require('web-push');
 const { getDb } = require('./_shared/firebase');
 const { athensToMs, athensDay } = require('./_shared/time');
+const { scanWaitlists } = require('./_shared/waitlist');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const PUSH_ON = !!(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
@@ -144,6 +145,7 @@ exports.handler = async () => {
       }
     }
   }
-  console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}`);
+  const wl = await scanWaitlists(db, athensDay(now)).catch(e => { console.error('[reminders] waitlist scan', e.message); return 0; });
+  console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}, waitlist ${wl}`);
   return { statusCode: 200, body: JSON.stringify({ sent, pushed, failed }) };
 };

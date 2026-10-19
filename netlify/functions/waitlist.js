@@ -7,7 +7,7 @@ const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { athensDay } = require('./_shared/time');
-const { notifyWaitlist, phoneKey } = require('./_shared/waitlist');
+const { notifyWaitlist, phoneKey, notifyShopJoin } = require('./_shared/waitlist');
 
 const SUPER_UID = 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1';
 const MAX_PER_DAY = 200;
@@ -58,9 +58,15 @@ async function join(db, b, event) {
   // Ίδιος πελάτης την ίδια μέρα: ενημερώνουμε την εγγραφή του αντί για διπλή
   const key = phoneKey(phone);
   const dup = Object.entries(existing).find(([, e]) => e && phoneKey(e.phone) === key);
+  // «Οποιαδήποτε ώρα» = μία από τις ώρες που ήταν πλήρεις τη στιγμή της εγγραφής
+  const times = time === 'any' && Array.isArray(b.times)
+    ? [...new Set(b.times.map(String).filter(x => /^\d{2}:\d{2}$/.test(x)))].slice(0, 48) : null;
   const entry = { name, phone, email, time, guests, lang, status: 'waiting', createdAt: dup ? (dup[1].createdAt || Date.now()) : Date.now() };
+  if (times && times.length) entry.times = times;
   if (dup) await dayRef.child(dup[0]).set(entry);
   else await dayRef.push(entry);
+  console.log('[waitlist] join', shop, date, time, guests, dup ? '(updated)' : '(new)');
+  if (!dup) await notifyShopJoin(db, shop, entry, date).catch(e => console.error('[waitlist] shop email', e.message));
   return json(200, { ok: true });
 }
 
