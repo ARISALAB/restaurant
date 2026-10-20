@@ -60,20 +60,10 @@ function png(url, w) {
   if (typeof url !== 'string' || url.indexOf('res.cloudinary.com/') < 0 || url.indexOf('/upload/') < 0) return null;
   return url.replace('/upload/', `/upload/f_png,c_fill,${w}/`);
 }
-// Διαστάσεις από την Cloudinary (fl_getinfo), χωρίς να κατεβάσουμε την εικόνα
-async function pickLandscape(urls) {
-  const infos = await Promise.all(urls.map(async u => {
-    try {
-      const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 2000);
-      const r = await fetch(u.replace('/upload/', '/upload/fl_getinfo/'), { signal: ctl.signal });
-      clearTimeout(tm);
-      const d = await r.json();
-      const w = d.input && d.input.width, h = d.input && d.input.height;
-      return w && h ? w / h : 0;
-    } catch (e) { return 0; }
-  }));
-  const i = infos.findIndex(r => r >= 1.3);
-  return i >= 0 ? urls[i] : null;
+// Λογότυπο: ολόκληρο, χωρίς κόψιμο, σε λευκό τετράγωνο με περιθώριο ~15% (η Google το κόβει σε κύκλο)
+function logoUrl(u) {
+  if (typeof u !== 'string' || u.indexOf('res.cloudinary.com/') < 0 || u.indexOf('/upload/') < 0) return null;
+  return u.replace('/upload/', '/upload/c_pad,b_white,w_440,h_440/c_pad,b_white,w_660,h_660,f_png/');
 }
 
 function fmtDate(d, en) {
@@ -96,11 +86,10 @@ exports.handler = async (event) => {
     if (!b || b.cancelToken !== token) return text(404, en ? 'Reservation not found' : 'Η κράτηση δεν βρέθηκε');
     if (b.status === 'cancelled') return text(410, en ? 'This reservation was cancelled' : 'Η κράτηση έχει ακυρωθεί');
 
-    const [shopName, info, logo, gallery] = await Promise.all([
+    const [shopName, info, logo] = await Promise.all([
       db.ref(`shop_details/${shop}/displayName`).get().then(s => s.val() || shop),
       db.ref(`shop_profile/${shop}/info`).get().then(s => s.val() || {}),
       db.ref(`shop_profile/${shop}/logoPhoto`).get().then(s => s.val()),
-      db.ref(`shop_profile/${shop}/gallery`).get().then(s => s.val()),
     ]);
     const start = athensToMs(b.date, b.time);
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${lang}`;
@@ -127,18 +116,12 @@ exports.handler = async (event) => {
       subheader: L(`${en ? 'Table for' : 'Τραπέζι για'} ${b.guests} · ${fmtDate(b.date, en)}`, lang),
       header: L(b.time, lang),
       hexBackgroundColor: '#1e3a8a',
-      logo: { sourceUri: { uri: png(logo, 'w_660,h_660') || 'https://tablereserve.gr/wallet-logo.png' }, contentDescription: L(shopName, lang) },
+      logo: { sourceUri: { uri: logoUrl(logo) || 'https://tablereserve.gr/wallet-logo.png' }, contentDescription: L(shopName, lang) },
       textModulesData: modules,
       linksModuleData: { uris: links },
       // Η κάρτα «λήγει» 3 ώρες μετά την κράτηση και φεύγει από τις ενεργές
       validTimeInterval: { end: { date: new Date(start + 3 * 3600000).toISOString() } },
     };
-    // Μεγάλη εικόνα: η πρώτη ΟΡΙΖΟΝΤΙΑ φωτογραφία της γκαλερί. Οι κάθετες κόβονται άσχημα στη στενή λωρίδα της κάρτας.
-    // Αν δεν υπάρχει κατάλληλη, η κάρτα μένει καθαρή, χωρίς εικόνα.
-    const photos = Object.keys(gallery || {}).sort().map(k => gallery[k] && gallery[k].data).filter(u => png(u, 'w_1')).slice(0, 8);
-    const firstPhoto = await pickLandscape(photos);
-    const hero = firstPhoto ? png(firstPhoto, 'w_1032,h_336').replace('c_fill,', 'c_fill,g_auto,') : null;
-    if (hero) obj.heroImage = { sourceUri: { uri: hero }, contentDescription: L(shopName, lang) };
 
     await upsertObject(obj);
     // Το link περιέχει μόνο το id: η κάρτα έχει ήδη αποθηκευτεί στη Google (μικρό URL, δουλεύει παντού)
