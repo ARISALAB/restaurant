@@ -3,6 +3,7 @@ const { getDb } = require('./_shared/firebase');
 const { claimInitial } = require('./_shared/slugs');
 const { json, preflightOk } = require('./_shared/respond');
 const { slugify, sendVerificationEmail, notifyOwner, ADMIN_URL } = require('./_shared/signup');
+const { termsFields, logTerms } = require('./_shared/terms');
 const TRIAL_MS = 14 * 24 * 60 * 60 * 1000;
 
 
@@ -55,13 +56,15 @@ exports.handler = async (event) => {
 
   // Εγγραφή στη βάση. Το κατάστημα μένει "pending" μέχρι να επιβεβαιωθεί το email.
   const now = Date.now();
+  const terms = termsFields(event, user.uid, 'signup', now);
   try {
     await db.ref().update({
       [`users_to_shops/${user.uid}`]: shopId,
       [`shop_details/${shopId}`]: {
         displayName: shopName, email, status: 'pending', source: 'signup',
-        createdAt: now, termsAcceptedAt: now, lang, phone, type, plan,
-        paidUntil: now + TRIAL_MS, billingStatus: 'trial'
+        createdAt: now, lang, phone, type, plan,
+        paidUntil: now + TRIAL_MS, billingStatus: 'trial',
+        ...terms
       },
       [`shop_profile/${shopId}/info/notificationEmail`]: email,
       [`signup_meta/${user.uid}/lastVerifySent`]: now
@@ -71,6 +74,8 @@ exports.handler = async (event) => {
     await admin.auth().deleteUser(user.uid).catch(() => {});
     return json(500, { error: 'db_write_failed' });
   }
+
+  await logTerms(db, shopId, terms).catch(e => console.error('terms log failed', e));
 
   // Δημόσιο όνομα για το link (tablereserve.gr/<slug>)
   const slug = await claimInitial(db, shopId, shopName);

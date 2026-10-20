@@ -1303,6 +1303,22 @@
         </div>
     </div>
 
+    <style>#terms-accept:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}</style>
+    <!-- Αποδοχή Όρων Χρήσης (δεν κλείνει χωρίς αποδοχή) -->
+    <div class="modal" id="terms-modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+        <div class="modal-content card" style="padding:26px;max-width:500px;">
+            <h3 id="terms-title" style="font-size:1.15rem;margin-bottom:12px;"></h3>
+            <p id="terms-text" style="font-size:.93rem;line-height:1.65;color:#334155;margin-bottom:12px;"></p>
+            <p style="font-size:.9rem;margin-bottom:16px;"><a id="terms-read" href="/terms" target="_blank" rel="noopener" style="color:#2563eb;font-weight:600;"></a></p>
+            <label for="terms-check" style="display:flex;gap:10px;align-items:flex-start;font-size:.9rem;line-height:1.5;cursor:pointer;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px;margin-bottom:16px;text-transform:none;letter-spacing:0;font-weight:500;color:#0f172a;">
+                <input type="checkbox" id="terms-check" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:#2563eb;">
+                <span id="terms-check-label"></span>
+            </label>
+            <button type="button" class="btn-primary" id="terms-accept" disabled></button>
+            <p style="text-align:center;margin-top:12px;"><a href="#" id="terms-logout" style="color:#64748b;font-size:.85rem;"></a></p>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, get, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -1663,6 +1679,52 @@
             renderEmbedCode();
             renderGoogleCard();
             setChipShopName(myShop);
+            checkTerms(myShop);
+        }
+
+        // ======= ΟΡΟΙ ΧΡΗΣΗΣ =======
+        const TERMS_VERSION = '2026-10-20';   // ίδια με netlify/functions/_shared/terms.js
+        async function checkTerms(shop) {
+            let v = null, prevAt = null;
+            try {
+                v = (await get(ref(db, `shop_details/${shop}/termsVersion`))).val();
+                if (!(typeof v === 'string' && v >= TERMS_VERSION)) prevAt = (await get(ref(db, `shop_details/${shop}/termsAcceptedAt`))).val();
+            } catch (e) { return; }
+            if (typeof v === 'string' && v >= TERMS_VERSION) return;
+            const en = currentLang === 'en';
+            const first = !v && !prevAt;   // δεν έχει αποδεχτεί ποτέ (π.χ. λογαριασμός από το superadmin)
+            const $ = id => document.getElementById(id);
+            $('terms-title').textContent = first
+                ? (en ? 'Terms of Service' : 'Όροι Χρήσης')
+                : (en ? 'We have updated our Terms of Service' : 'Ενημερώσαμε τους Όρους Χρήσης');
+            $('terms-text').textContent = (first
+                ? (en ? 'Before you continue, please read and accept the Terms of Service. Among other things, ' : 'Πριν συνεχίσετε, διαβάστε και αποδεχτείτε τους Όρους Χρήσης. Μεταξύ άλλων, ')
+                : (en ? 'The main change: ' : 'Η βασική αλλαγή: '))
+                + (en ? 'we may list your restaurant on Google Maps and Google Search, so guests see a “Reserve” button that leads to your TableReserve booking page. We do not share your guests’ details with Google.'
+                      : 'μπορούμε να δηλώνουμε το κατάστημά σας στο Google Maps και στην Αναζήτηση Google, ώστε οι πελάτες να βλέπουν κουμπί «Κράτηση» που οδηγεί στη σελίδα κρατήσεών σας στο TableReserve. Δεν κοινοποιούμε στη Google στοιχεία των πελατών σας.');
+            $('terms-read').textContent = en ? 'Read the Terms of Service ↗' : 'Διαβάστε τους Όρους Χρήσης ↗';
+            $('terms-read').href = '/terms?lang=' + (en ? 'en' : 'el');
+            $('terms-check-label').textContent = en ? 'I have read and accept the Terms of Service on behalf of the business.' : 'Διάβασα και αποδέχομαι τους Όρους Χρήσης εκ μέρους της επιχείρησης.';
+            $('terms-accept').textContent = en ? 'Accept and continue' : 'Αποδοχή και συνέχεια';
+            $('terms-logout').textContent = en ? 'Log out' : 'Αποσύνδεση';
+            $('terms-check').checked = false;
+            $('terms-accept').disabled = true;
+            $('terms-check').onchange = () => { $('terms-accept').disabled = !$('terms-check').checked; };
+            $('terms-logout').onclick = e => { e.preventDefault(); $('terms-modal').classList.remove('open'); signOut(auth); };
+            $('terms-accept').onclick = async () => {
+                const btn = $('terms-accept'); btn.disabled = true;
+                try {
+                    const token = await auth.currentUser.getIdToken();
+                    const res = await fetch(`${API}/accept-terms`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ version: TERMS_VERSION }) });
+                    if (res.ok) { $('terms-modal').classList.remove('open'); showToast(en ? 'Thank you, terms accepted' : 'Ευχαριστούμε, οι όροι έγιναν αποδεκτοί', 'success'); return; }
+                    if (res.status === 409) { alert(en ? 'The terms were just updated. The page will reload.' : 'Οι όροι μόλις ενημερώθηκαν. Η σελίδα θα ανανεωθεί.'); location.reload(); return; }
+                    throw new Error(res.status);
+                } catch (e) {
+                    showToast(en ? 'Something went wrong, please try again' : 'Κάτι πήγε στραβά, δοκιμάστε ξανά', 'error');
+                    btn.disabled = !$('terms-check').checked;
+                }
+            };
+            $('terms-modal').classList.add('open');
         }
 
         async function activateIfVerified(user, myShop) {

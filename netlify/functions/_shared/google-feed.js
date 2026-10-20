@@ -8,9 +8,12 @@
 //
 // Στο feed μπαίνουν μόνο μαγαζιά που:
 //   - είναι ενεργά (όχι pending/closed, συνδρομή σε ισχύ)
+//   - έχουν αποδεχτεί τους όρους (έκδοση με τη ρήτρα για Google)
 //   - έχουν πλήρη στοιχεία Google και τα έχει επαληθεύσει ο superadmin
 //
 // Μορφή: Actions Center Merchants feed (JSON), ενιαίο αρχείο (PROCESS_AS_COMPLETE).
+
+const { hasGoogleTerms } = require('./terms');
 
 const BASE_URL = 'https://tablereserve.gr/';
 
@@ -53,6 +56,7 @@ function missingFor(details, now = Date.now()) {
   const missing = [];
   if (!isActive(details, now)) missing.push('Ανενεργό κατάστημα');
   if (!details || !details.displayName) missing.push('Όνομα');
+  if (!hasGoogleTerms(details)) missing.push('Αποδοχή όρων');
   REQUIRED.forEach(([k, label]) => {
     const v = g[k];
     if (v === undefined || v === null || v === '') missing.push(label);

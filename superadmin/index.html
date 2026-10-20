@@ -674,7 +674,7 @@
                                 <div class="shop-email">${who}${who && uids.length > 1 ? ' · ' : ''}${accounts}</div>
                                 <div class="shop-url">${shopUrl}</div>
                                 <div id="paid-${shopId}" style="font-size:12px;margin-top:4px;">${paidLabel(info)}</div>
-                                <div id="g-${shopId}">${googleBadge(info)}</div>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;"><span id="g-${shopId}">${googleBadge(info)}</span>${termsBadge(info)}</div>
                             </div>
                             <div class="shop-actions">
                                 <button class="btn-icon goog" title="Στοιχεία Google Maps" onclick="openGoogle('${shopId}')">G</button>
@@ -775,6 +775,17 @@
                 showToast('Σφάλμα κατά τη διαγραφή.', 'error');
             }
         };
+
+        // ── Όροι Χρήσης ──
+        const TERMS_VERSION = '2026-10-20';   // ίδια με netlify/functions/_shared/terms.js
+        function termsBadge(info) {
+            const v = info.termsVersion;
+            if (v && v >= TERMS_VERSION) {
+                const d = info.termsAcceptedAt ? new Date(info.termsAcceptedAt).toLocaleDateString('el-GR') : '';
+                return `<span class="g-badge ok" title="Έκδοση ${v}${info.termsAcceptedVia ? ' · ' + info.termsAcceptedVia : ''}">✓ Όροι ${d}</span>`;
+            }
+            return `<span class="g-badge warn" title="${v ? 'Αποδεκτή έκδοση: ' + v : 'Δεν υπάρχει καταγεγραμμένη αποδοχή'}">Όροι: εκκρεμεί</span>`;
+        }
 
         // ── Google (Reserve with Google / Business Link) ──
         const G_FIELDS = [['placeId','Place ID'],['street','Οδός'],['postalCode','ΤΚ'],['city','Πόλη'],['lat','Πλάτος'],['lng','Μήκος']];

@@ -3,6 +3,7 @@ const { getDb } = require('./_shared/firebase');
 const { claimInitial } = require('./_shared/slugs');
 const { json, preflightOk } = require('./_shared/respond');
 const { slugify, notifyOwner } = require('./_shared/signup');
+const { termsFields, logTerms } = require('./_shared/terms');
 const TRIAL_MS = 14 * 24 * 60 * 60 * 1000;
 
 
@@ -47,13 +48,15 @@ exports.handler = async (event) => {
   if (!shopId) return json(409, { error: 'shop_exists' });
 
   const now = Date.now();
+  const terms = termsFields(event, caller.uid, 'google-signup', now);
   try {
     await db.ref().update({
       [`users_to_shops/${caller.uid}`]: shopId,
       [`shop_details/${shopId}`]: {
         displayName: shopName, email, status: 'active', source: 'google',
-        createdAt: now, activatedAt: now, termsAcceptedAt: now, lang, phone, type, plan,
-        paidUntil: now + TRIAL_MS, billingStatus: 'trial'
+        createdAt: now, activatedAt: now, lang, phone, type, plan,
+        paidUntil: now + TRIAL_MS, billingStatus: 'trial',
+        ...terms
       },
       [`shop_profile/${shopId}/info/notificationEmail`]: email
     });
@@ -61,6 +64,8 @@ exports.handler = async (event) => {
     console.error('db write failed', e);
     return json(500, { error: 'db_write_failed' });
   }
+
+  await logTerms(db, shopId, terms).catch(e => console.error('terms log failed', e));
 
   // Δημόσιο όνομα για το link (tablereserve.gr/<slug>)
   const slug = await claimInitial(db, shopId, shopName);
