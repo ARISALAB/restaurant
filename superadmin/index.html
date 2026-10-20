@@ -230,7 +230,7 @@
             align-items: start;
         }
         @media (max-width: 750px) {
-            .superadmin-layout { grid-template-columns: 1fr; }
+            .superadmin-layout { grid-template-columns: minmax(0, 1fr); }
         }
 
         .form-row {
@@ -335,6 +335,51 @@
             .card { padding: 22px 18px; }
             .super-header { padding: 20px; }
         }
+
+        /* ── Google (Reserve) ── */
+        .btn-icon.goog { background: #eef2ff; color: #3730a3; font-weight: 800; font-family: 'Sora', sans-serif; }
+        .btn-icon.goog:hover { background: #3730a3; color: white; }
+        .g-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; padding: 2px 9px; border-radius: 20px; margin-top: 5px; }
+        .g-badge.ok { background: #dcfce7; color: #166534; }
+        .g-badge.warn { background: #fef3c7; color: #92400e; }
+        .g-badge.none { background: #f1f5f9; color: #64748b; }
+        .g-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 900; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
+        .g-overlay.open { display: flex; }
+        .g-modal { background: var(--white); border-radius: var(--radius-xl); width: 100%; max-width: 620px; padding: 28px 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+        .g-modal h3 { font-family: 'Sora', sans-serif; font-size: 1.15rem; margin-bottom: 4px; }
+        .g-sub { font-size: .85rem; color: var(--text-muted); margin-bottom: 18px; }
+        .g-ref { background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; font-size: .85rem; margin-bottom: 18px; line-height: 1.6; }
+        .g-ref b { color: var(--text-main); }
+        .g-step { font-size: .78rem; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: .05em; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+        .g-step span { width: 20px; height: 20px; border-radius: 50%; background: var(--purple); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
+        .g-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+        .g-grid3 { display: grid; grid-template-columns: 1fr 1fr 80px; gap: 12px; }
+        .g-modal .input-group { margin-bottom: 12px; }
+        .g-modal input { padding: 10px 13px; font-size: .9rem; }
+        .g-row { display: flex; gap: 8px; align-items: flex-start; }
+        .g-row .input-group { flex: 1; }
+        .g-mini { padding: 10px 14px; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: #fff; font-weight: 600; font-size: .85rem; cursor: pointer; white-space: nowrap; margin-top: 22px; color: var(--text-main); }
+        .g-mini:hover { border-color: var(--purple); color: var(--purple); }
+        .g-link { color: var(--purple); font-weight: 600; text-decoration: none; }
+        .g-link:hover { text-decoration: underline; }
+        .g-verify { display: flex; gap: 10px; align-items: flex-start; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: var(--radius-md); padding: 12px 14px; font-size: .88rem; line-height: 1.5; cursor: pointer; }
+        .g-verify input { width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; accent-color: var(--purple); }
+        .g-actions { display: flex; gap: 10px; margin-top: 22px; }
+        .g-actions .btn-purple { flex: 1; }
+        .g-cancel { padding: 14px 20px; border-radius: var(--radius-md); border: 1.5px solid var(--border); background: #fff; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .g-missing { font-size: .8rem; color: #92400e; margin-top: 12px; min-height: 1em; }
+        .gf-sum { display: flex; gap: 10px; margin: 14px 0 10px; flex-wrap: wrap; }
+        .gf-sum div { flex: 1; min-width: 110px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; font-size: .78rem; color: var(--text-muted); }
+        .gf-sum b { display: block; font-family: 'Sora', sans-serif; font-size: 1.4rem; color: var(--text-main); }
+        .gf-list { font-size: .82rem; line-height: 1.55; margin-bottom: 10px; }
+        .gf-list li { list-style: none; padding: 6px 0; border-bottom: 1px solid var(--border); }
+        .gf-list li:last-child { border-bottom: none; }
+        .gf-list small { color: #92400e; }
+        .gf-json { background: #0f172a; color: #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px; font-size: 11.5px; line-height: 1.5; max-height: 320px; overflow: auto; white-space: pre; margin-top: 8px; }
+        .gf-btns { display: flex; gap: 8px; margin-top: 10px; }
+        .gf-btns .g-mini { margin-top: 0; flex: 1; }
+        @media (max-width: 560px) { .g-grid, .g-grid3 { grid-template-columns: 1fr; } .g-modal { padding: 22px 18px; } }
+        @media (max-width: 560px) { .shop-item { flex-wrap: wrap; } .shop-info { flex-basis: calc(100% - 60px); } .shop-actions { width: 100%; justify-content: flex-end; } }
     </style>
 </head>
 <body>
@@ -421,6 +466,13 @@
                             <button onclick="copyResultUrl()" style="margin-top:10px; width:100%; padding:8px; background:#166534; color:white; border:none; border-radius:6px; font-weight:700; cursor:pointer; font-size:0.85rem;">🔗 Αντιγραφή URL</button>
                         </div>
                     </div>
+
+                    <div class="card" style="margin-top:18px;">
+                        <div class="card-title"><div class="icon">🌐</div> Google feed</div>
+                        <div class="hint" style="margin-top:-6px;margin-bottom:12px;font-size:.82rem;">Ποια καταστήματα είναι έτοιμα να εμφανιστούν με κουμπί «Κράτηση» στο Google Maps. Τα στοιχεία συμπληρώνονται από το κουμπί <b>G</b> σε κάθε κατάστημα.</div>
+                        <button class="btn-purple" id="gf-btn" onclick="previewFeed()">🔍 Προεπισκόπηση feed</button>
+                        <div id="gf-out"></div>
+                    </div>
                 </div>
 
                 <!-- RIGHT: Λίστα Καταστημάτων -->
@@ -436,6 +488,63 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Google στοιχεία καταστήματος -->
+    <div class="g-overlay" id="g-overlay" onclick="if(event.target===this)closeGoogle()">
+        <div class="g-modal" role="dialog" aria-modal="true" aria-labelledby="g-title">
+            <h3 id="g-title">Google Maps</h3>
+            <div class="g-sub" id="g-shopid"></div>
+            <div class="g-ref" id="g-ref"></div>
+
+            <div class="g-step"><span>1</span> Place ID</div>
+            <div class="g-row">
+                <div class="input-group">
+                    <label for="g-placeId">Place ID</label>
+                    <input type="text" id="g-placeId" placeholder="ChIJ..." autocomplete="off" spellcheck="false" style="font-family:monospace;">
+                </div>
+                <a class="g-mini" href="https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder" target="_blank" rel="noopener" style="text-decoration:none;">Place ID Finder ↗</a>
+            </div>
+            <div class="hint" style="margin-top:-6px;">Στο Place ID Finder γράψε το όνομα του μαγαζιού, διάλεξέ το και αντέγραψε το Place ID.</div>
+
+            <div class="g-step"><span>2</span> Συντεταγμένες</div>
+            <div class="g-row">
+                <div class="input-group">
+                    <label for="g-mapsUrl">Link από Google Maps (προαιρετικό)</label>
+                    <input type="url" id="g-mapsUrl" placeholder="https://www.google.com/maps/place/..." autocomplete="off">
+                </div>
+                <button type="button" class="g-mini" onclick="parseMapsUrl()">Ανάγνωση</button>
+            </div>
+            <div class="g-grid">
+                <div class="input-group"><label for="g-lat">Γεωγρ. πλάτος</label><input type="text" id="g-lat" inputmode="decimal" placeholder="37.9753"></div>
+                <div class="input-group"><label for="g-lng">Γεωγρ. μήκος</label><input type="text" id="g-lng" inputmode="decimal" placeholder="23.7275"></div>
+            </div>
+            <div class="hint" style="margin-top:-6px;">Κόλλησε το πλήρες link της σελίδας του μαγαζιού στο Maps και πάτα «Ανάγνωση». Τα σύντομα links (maps.app.goo.gl) δεν έχουν συντεταγμένες: άνοιξέ τα πρώτα και αντέγραψε τη διεύθυνση από τον browser.</div>
+
+            <div class="g-step"><span>3</span> Διεύθυνση όπως στο Google</div>
+            <div class="g-grid">
+                <div class="input-group"><label for="g-street">Οδός &amp; αριθμός</label><input type="text" id="g-street" placeholder="Καλογριώνη 8"></div>
+                <div class="input-group"><label for="g-postalCode">ΤΚ</label><input type="text" id="g-postalCode" placeholder="105 56"></div>
+            </div>
+            <div class="g-grid3">
+                <div class="input-group"><label for="g-city">Πόλη</label><input type="text" id="g-city" placeholder="Αθήνα"></div>
+                <div class="input-group" style="align-self:end;"><button type="button" class="g-mini" style="margin-top:0;width:100%;" onclick="fillFromProfile()">Από το προφίλ</button></div>
+                <div class="input-group"><label for="g-country">Χώρα</label><input type="text" id="g-country" maxlength="2" value="GR" style="text-transform:uppercase;"></div>
+            </div>
+
+            <div class="g-step"><span>4</span> Επαλήθευση</div>
+            <p style="font-size:.85rem;margin-bottom:10px;"><a class="g-link" id="g-check" href="#" target="_blank" rel="noopener">Άνοιγμα του Place ID στο Google Maps ↗</a></p>
+            <label class="g-verify" style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--text-main);">
+                <input type="checkbox" id="g-verified">
+                <span>Το Place ID ανοίγει <b>αυτό</b> το κατάστημα και η διεύθυνση συμφωνεί με το Google.</span>
+            </label>
+            <div class="g-missing" id="g-missing"></div>
+
+            <div class="g-actions">
+                <button type="button" class="g-cancel" onclick="closeGoogle()">Άκυρο</button>
+                <button type="button" class="btn-purple" id="g-save" onclick="saveGoogle()">💾 Αποθήκευση</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
@@ -543,6 +652,7 @@
 
                 get(ref(db, 'shop_details')).then(detailsSnap => {
                     const details = detailsSnap.exists() ? detailsSnap.val() : {};
+                    window._shopDetails = details;
                     list.innerHTML = '';
                     entries.forEach(([uid, shopId]) => {
                         const info = details[shopId] || {};
@@ -556,8 +666,10 @@
                                 <div class="shop-email">${info.email || uid}</div>
                                 <div class="shop-url">${shopUrl}</div>
                                 <div id="paid-${shopId}" style="font-size:12px;margin-top:4px;">${paidLabel(info)}</div>
+                                <div id="g-${shopId}">${googleBadge(info)}</div>
                             </div>
                             <div class="shop-actions">
+                                <button class="btn-icon goog" title="Στοιχεία Google Maps" onclick="openGoogle('${shopId}')">G</button>
                                 <button class="btn-icon copy" title="Επέκταση συνδρομής" onclick="extendShop('${shopId}')">⏱</button>
                                 <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyUrl('${shopUrl}')">🔗</button>
                                 <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
@@ -653,6 +765,188 @@
             } catch(e) {
                 showToast('Σφάλμα κατά τη διαγραφή.', 'error');
             }
+        };
+
+        // ── Google (Reserve with Google / Business Link) ──
+        const G_FIELDS = [['placeId','Place ID'],['street','Οδός'],['postalCode','ΤΚ'],['city','Πόλη'],['lat','Πλάτος'],['lng','Μήκος']];
+        const gEsc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        const gEl = id => document.getElementById(id);
+
+        function googleMissing(g) {
+            g = g || {};
+            return G_FIELDS.filter(([k]) => g[k] === undefined || g[k] === null || g[k] === '').map(([, l]) => l);
+        }
+        function googleBadge(info) {
+            const g = info.google;
+            if (!g) return '<span class="g-badge none">Google: χωρίς στοιχεία</span>';
+            const miss = googleMissing(g);
+            if (miss.length) return `<span class="g-badge warn">Google: λείπει ${gEsc(miss.join(', '))}</span>`;
+            if (!g.verified) return '<span class="g-badge warn">Google: χωρίς επαλήθευση</span>';
+            return '<span class="g-badge ok">✓ Google: έτοιμο</span>';
+        }
+        window.googleBadge = googleBadge;
+
+        let gShop = null, gProfile = {};
+        function gCheckLink() {
+            const id = gEl('g-placeId').value.trim();
+            const name = (window._shopDetails?.[gShop]?.displayName) || gShop;
+            const a = gEl('g-check');
+            if (id) {
+                a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(name) + '&query_place_id=' + encodeURIComponent(id);
+                a.style.opacity = 1; a.style.pointerEvents = 'auto';
+            } else { a.href = '#'; a.style.opacity = .4; a.style.pointerEvents = 'none'; }
+        }
+        function gMissingLine() {
+            const g = gRead();
+            const miss = googleMissing(g);
+            if (!g.verified) miss.push('επαλήθευση');
+            gEl('g-missing').textContent = miss.length ? 'Για το feed λείπει: ' + miss.join(', ') : '✓ Πλήρη στοιχεία, έτοιμο για το feed (αν το κατάστημα είναι ενεργό)';
+            gEl('g-missing').style.color = miss.length ? '#92400e' : '#166534';
+        }
+        function gNum(v) {
+            const n = parseFloat(String(v).replace(',', '.').trim());
+            return Number.isFinite(n) ? Math.round(n * 1e7) / 1e7 : '';
+        }
+        function gRead() {
+            return {
+                placeId: gEl('g-placeId').value.trim(),
+                street: gEl('g-street').value.trim(),
+                postalCode: gEl('g-postalCode').value.trim(),
+                city: gEl('g-city').value.trim(),
+                country: (gEl('g-country').value.trim() || 'GR').toUpperCase(),
+                lat: gNum(gEl('g-lat').value),
+                lng: gNum(gEl('g-lng').value),
+                mapsUrl: gEl('g-mapsUrl').value.trim().slice(0, 1500),
+                verified: gEl('g-verified').checked,
+            };
+        }
+
+        window.openGoogle = async (shopId) => {
+            gShop = shopId;
+            const d = (window._shopDetails && window._shopDetails[shopId]) || {};
+            const g = d.google || {};
+            gEl('g-title').textContent = 'Google Maps · ' + (d.displayName || shopId);
+            gEl('g-shopid').textContent = 'ID: ' + shopId + (d.slug ? ' · tablereserve.gr/' + d.slug : '');
+            gEl('g-placeId').value = g.placeId || '';
+            gEl('g-mapsUrl').value = g.mapsUrl || '';
+            gEl('g-lat').value = g.lat ?? '';
+            gEl('g-lng').value = g.lng ?? '';
+            gEl('g-street').value = g.street || '';
+            gEl('g-postalCode').value = g.postalCode || '';
+            gEl('g-city').value = g.city || '';
+            gEl('g-country').value = g.country || 'GR';
+            gEl('g-verified').checked = !!g.verified;
+            gEl('g-ref').innerHTML = 'Φόρτωση προφίλ...';
+            gEl('g-overlay').classList.add('open');
+            gCheckLink(); gMissingLine();
+            try {
+                gProfile = (await get(ref(db, `shop_profile/${shopId}/info`))).val() || {};
+            } catch (e) { gProfile = {}; }
+            gEl('g-ref').innerHTML = `Στο προφίλ του καταστήματος:<br><b>Διεύθυνση:</b> ${gEsc(gProfile.address || '—')}<br><b>Τηλέφωνο:</b> ${gEsc(gProfile.phone || '—')}`;
+        };
+        window.closeGoogle = () => { gEl('g-overlay').classList.remove('open'); gShop = null; };
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && gShop) closeGoogle(); });
+
+        // Αν αλλάξει το Place ID, η επαλήθευση ξαναγίνεται
+        let gPrevPlace = '';
+        gEl('g-placeId').addEventListener('focus', () => { gPrevPlace = gEl('g-placeId').value.trim(); });
+        gEl('g-placeId').addEventListener('input', () => {
+            if (gEl('g-placeId').value.trim() !== gPrevPlace) gEl('g-verified').checked = false;
+            gCheckLink(); gMissingLine();
+        });
+        ['g-street','g-postalCode','g-city','g-lat','g-lng','g-verified'].forEach(id => gEl(id).addEventListener('input', gMissingLine));
+        gEl('g-verified').addEventListener('change', gMissingLine);
+
+        window.parseMapsUrl = () => {
+            let u = gEl('g-mapsUrl').value.trim();
+            try { u = decodeURIComponent(u); } catch (e) {}
+            if (!u) return showToast('Κόλλησε πρώτα ένα link από το Google Maps', 'error');
+            if (/maps\.app\.goo\.gl|goo\.gl\/maps/.test(u)) return showToast('Σύντομο link: άνοιξέ το και αντέγραψε το πλήρες link', 'error');
+            // Η θέση του pin (!3d..!4d..) είναι πιο ακριβής από το κέντρο του χάρτη (@lat,lng)
+            const m = u.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/) || u.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/) ||
+                      u.match(/[?&](?:q|query|ll)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+            const pid = u.match(/(?:place_id[:=]|query_place_id=)([A-Za-z0-9_-]{20,})/);
+            let found = [];
+            if (m) { gEl('g-lat').value = gNum(m[1]); gEl('g-lng').value = gNum(m[2]); found.push('συντεταγμένες'); }
+            if (pid && !gEl('g-placeId').value.trim()) { gEl('g-placeId').value = pid[1]; gEl('g-verified').checked = false; gCheckLink(); found.push('Place ID'); }
+            gMissingLine();
+            showToast(found.length ? '✅ Βρέθηκαν: ' + found.join(', ') : 'Δεν βρέθηκαν συντεταγμένες σε αυτό το link', found.length ? 'success' : 'error');
+        };
+
+        // «Καλογριώνη 8, Αθήνα 105 56» -> οδός / πόλη / ΤΚ (πρόταση, ελέγχεται με το μάτι)
+        window.fillFromProfile = () => {
+            const a = String(gProfile.address || '').trim();
+            if (!a) return showToast('Το προφίλ δεν έχει διεύθυνση', 'error');
+            const parts = a.split(',').map(x => x.trim()).filter(Boolean);
+            const pc = a.match(/\b(\d{3})\s?(\d{2})\b/);
+            if (parts[0] && !gEl('g-street').value.trim()) gEl('g-street').value = parts[0];
+            if (pc && !gEl('g-postalCode').value.trim()) gEl('g-postalCode').value = pc[1] + ' ' + pc[2];
+            const rest = parts.slice(1).join(' ').replace(/\b\d{3}\s?\d{2}\b/, '').replace(/\b(Ελλάδα|Greece)\b/i, '').replace(/\s+/g, ' ').trim();
+            if (rest && !gEl('g-city').value.trim()) gEl('g-city').value = rest;
+            gMissingLine();
+            showToast('Έλεγξε ότι ταιριάζουν με τη διεύθυνση στο Google', 'success');
+        };
+
+        window.saveGoogle = async () => {
+            if (!gShop) return;
+            const g = gRead();
+            if (g.placeId && !/^[A-Za-z0-9_-]{20,}$/.test(g.placeId)) return showToast('Το Place ID δεν φαίνεται σωστό (π.χ. ChIJ...)', 'error');
+            if (g.lat !== '' && (g.lat < -90 || g.lat > 90)) return showToast('Λάθος γεωγρ. πλάτος', 'error');
+            if (g.lng !== '' && (g.lng < -180 || g.lng > 180)) return showToast('Λάθος γεωγρ. μήκος', 'error');
+            if (g.verified && googleMissing(g).length) return showToast('Συμπλήρωσε όλα τα πεδία πριν την επαλήθευση', 'error');
+            if (!/^[A-Z]{2}$/.test(g.country)) return showToast('Χώρα: 2 γράμματα (π.χ. GR)', 'error');
+            const data = {};
+            Object.entries(g).forEach(([k, v]) => { if (v !== '' && v !== null) data[k] = v; });
+            data.verified = !!g.verified;
+            data.updatedAt = Date.now();
+            const btn = gEl('g-save'); btn.disabled = true;
+            try {
+                await set(ref(db, `shop_details/${gShop}/google`), data);
+                if (window._shopDetails) { window._shopDetails[gShop] = Object.assign({}, window._shopDetails[gShop], { google: data }); }
+                const badge = gEl('g-' + gShop);
+                if (badge) badge.innerHTML = googleBadge({ google: data });
+                showToast('✅ Αποθηκεύτηκε', 'success');
+                closeGoogle();
+            } catch (e) {
+                showToast('Σφάλμα αποθήκευσης', 'error');
+            } finally { btn.disabled = false; }
+        };
+
+        // Προεπισκόπηση feed
+        let gfLast = null;
+        window.previewFeed = async () => {
+            const btn = gEl('gf-btn'), out = gEl('gf-out');
+            btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Έλεγχος...';
+            try {
+                const token = await auth.currentUser.getIdToken();
+                const res = await fetch('/.netlify/functions/google-feed', { headers: { Authorization: 'Bearer ' + token } });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || res.status);
+                gfLast = data;
+                const ready = data.ready.map(r => `<li>✅ <b>${gEsc(r.name)}</b>${r.warnings.length ? '<br><small>' + gEsc(r.warnings.join(', ')) + '</small>' : ''}</li>`).join('');
+                const skipped = data.skipped.map(r => `<li>⏸ <b>${gEsc(r.name)}</b><br><small>Λείπει: ${gEsc(r.missing.join(', '))}</small></li>`).join('');
+                out.innerHTML = `
+                    <div class="gf-sum"><div><b>${data.ready.length}</b>στο feed</div><div><b>${data.skipped.length}</b>εκτός feed</div></div>
+                    ${ready ? '<ul class="gf-list">' + ready + '</ul>' : ''}
+                    ${skipped ? '<ul class="gf-list">' + skipped + '</ul>' : ''}
+                    <div class="gf-btns">
+                        <button class="g-mini" onclick="toggleFeedJson()">{ } Feed JSON</button>
+                        <button class="g-mini" onclick="downloadFeed()">⬇ Λήψη</button>
+                    </div>
+                    <pre class="gf-json" id="gf-json" style="display:none;"></pre>`;
+                gEl('gf-json').textContent = JSON.stringify(data.feed, null, 2);
+            } catch (e) {
+                out.innerHTML = '<div class="g-missing" style="margin-top:14px;">Σφάλμα: ' + gEsc(e.message) + '</div>';
+            } finally { btn.disabled = false; btn.innerHTML = '🔍 Προεπισκόπηση feed'; }
+        };
+        window.toggleFeedJson = () => { const p = gEl('gf-json'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; };
+        window.downloadFeed = () => {
+            if (!gfLast) return;
+            const blob = new Blob([JSON.stringify(gfLast.feed, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'merchants-feed-' + new Date(gfLast.generatedAt).toISOString().slice(0, 10) + '.json';
+            a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
         };
 
     </script>
