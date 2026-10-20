@@ -122,7 +122,7 @@ exports.handler = async (event) => {
         <p style="color:#334155;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cal_title}</p>
         <a href="${gcalUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_google}</a>
         <a href="${appleUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_other}</a>
-        ${walletUrl ? `<a href="${walletUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">Google Wallet</a>` : ''}
+        ${walletUrl ? `<div style="margin-top:10px;"><a href="${walletUrl}" style="display:inline-block;padding:8px;"><img src="https://tablereserve.gr/wallet/${isEn ? 'add-en.png' : 'add-el.png'}" alt="${isEn ? 'Add to Google Wallet' : 'Προσθήκη στο Πορτοφόλι Google'}" height="48" style="height:48px;width:auto;border:0;display:block;"></a></div>` : ''}
       </div>
 
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;text-align:center;">

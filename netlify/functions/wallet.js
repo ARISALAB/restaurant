@@ -60,6 +60,22 @@ function png(url, w) {
   if (typeof url !== 'string' || url.indexOf('res.cloudinary.com/') < 0 || url.indexOf('/upload/') < 0) return null;
   return url.replace('/upload/', `/upload/f_png,c_fill,${w}/`);
 }
+// Διαστάσεις από την Cloudinary (fl_getinfo), χωρίς να κατεβάσουμε την εικόνα
+async function pickLandscape(urls) {
+  const infos = await Promise.all(urls.map(async u => {
+    try {
+      const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), 2000);
+      const r = await fetch(u.replace('/upload/', '/upload/fl_getinfo/'), { signal: ctl.signal });
+      clearTimeout(tm);
+      const d = await r.json();
+      const w = d.input && d.input.width, h = d.input && d.input.height;
+      return w && h ? w / h : 0;
+    } catch (e) { return 0; }
+  }));
+  const i = infos.findIndex(r => r >= 1.3);
+  return i >= 0 ? urls[i] : null;
+}
+
 function fmtDate(d, en) {
   const [y, m, dd] = d.split('-').map(Number);
   return new Intl.DateTimeFormat(en ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, dd)));
@@ -110,16 +126,17 @@ exports.handler = async (event) => {
       cardTitle: L(shopName, lang),
       subheader: L(`${en ? 'Table for' : 'Τραπέζι για'} ${b.guests} · ${fmtDate(b.date, en)}`, lang),
       header: L(b.time, lang),
-      hexBackgroundColor: '#2563eb',
+      hexBackgroundColor: '#1e3a8a',
       logo: { sourceUri: { uri: png(logo, 'w_660,h_660') || 'https://tablereserve.gr/wallet-logo.png' }, contentDescription: L(shopName, lang) },
       textModulesData: modules,
       linksModuleData: { uris: links },
       // Η κάρτα «λήγει» 3 ώρες μετά την κράτηση και φεύγει από τις ενεργές
       validTimeInterval: { end: { date: new Date(start + 3 * 3600000).toISOString() } },
     };
-    // Μεγάλη εικόνα: η πρώτη φωτογραφία της γκαλερί (χώρος/φαγητό), κομμένη έξυπνα στο κέντρο ενδιαφέροντος.
-    // Χωρίς γκαλερί, η κάρτα μένει καθαρή, χωρίς εικόνα (το εξώφυλλο συχνά είναι λογότυπο).
-    const firstPhoto = Object.keys(gallery || {}).sort().map(k => gallery[k] && gallery[k].data).find(u => png(u, 'w_1'));
+    // Μεγάλη εικόνα: η πρώτη ΟΡΙΖΟΝΤΙΑ φωτογραφία της γκαλερί. Οι κάθετες κόβονται άσχημα στη στενή λωρίδα της κάρτας.
+    // Αν δεν υπάρχει κατάλληλη, η κάρτα μένει καθαρή, χωρίς εικόνα.
+    const photos = Object.keys(gallery || {}).sort().map(k => gallery[k] && gallery[k].data).filter(u => png(u, 'w_1')).slice(0, 8);
+    const firstPhoto = await pickLandscape(photos);
     const hero = firstPhoto ? png(firstPhoto, 'w_1032,h_336').replace('c_fill,', 'c_fill,g_auto,') : null;
     if (hero) obj.heroImage = { sourceUri: { uri: hero }, contentDescription: L(shopName, lang) };
 
