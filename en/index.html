@@ -143,7 +143,35 @@ footer a:hover{color:var(--accent)}
 .faq-item.open .faq-a{max-height:420px}
 .faq-a p{color:var(--muted);font-size:14px;line-height:1.7;padding:0 0 24px}
 
-.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}</style>
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}
+/* NEW BADGE + COST */
+.benefit{position:relative}
+.b-new{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
+.cost{border-top:0.5px solid var(--border2)}
+.cost-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:70px;align-items:stretch}
+@media(max-width:860px){.cost-wrap{grid-template-columns:1fr}}
+.cost-calc,.cost-points{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:34px 30px}
+.cost-calc h3,.cost-points h3{font-size:15px;font-weight:500;margin-bottom:22px}
+.cc-row{margin-bottom:22px}
+.cc-row label{text-transform:none;letter-spacing:0;font-weight:300;display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);margin-bottom:10px}
+.cc-row label b{color:var(--text);font-weight:500;white-space:nowrap}
+.cc-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+.cc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.cc-box{border-radius:14px;padding:18px 16px;border:0.5px solid var(--border2);background:var(--bg3)}
+.cc-box.us{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
+.cc-box small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;line-height:1.4}
+.cc-box strong{font-family:'Playfair Display',serif;font-size:32px;font-weight:400;line-height:1}
+.cc-box.us strong{color:var(--accent)}
+.cc-box span{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.cc-save{margin-top:16px;font-size:14px;color:var(--text);line-height:1.6}
+.cc-save b{color:var(--accent);font-weight:600}
+.cc-note{margin-top:14px;font-size:11.5px;color:var(--muted);opacity:.75;line-height:1.6}
+.cost-points ul{list-style:none}
+.cost-points li{display:flex;gap:14px;padding:14px 0;border-bottom:0.5px solid rgba(255,255,255,.05);font-size:13.5px;color:var(--muted);line-height:1.65}
+.cost-points li:last-child{border-bottom:none}
+.cost-points li b{display:block;color:var(--text);font-weight:500;margin-bottom:2px}
+.cost-points li i{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;margin-top:2px}
+</style>
 <link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
 <link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
 <link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
@@ -177,7 +205,7 @@ footer a:hover{color:var(--accent)}
   <div class="hero-copy">
     <div class="hero-label">For restaurants &amp; cafés</div>
     <h1>Online reservations<br>for your restaurant,<br><em>without the hassle</em></h1>
-    <p>Online and phone bookings in one place, reminders that cut no-shows, and a profile for every guest. Free for 14 days, then from €39 a quarter</p>
+    <p>Online and phone bookings in one place, reminders that cut no-shows, a waitlist, and a profile for every guest. Free for 14 days, then from €39 a quarter</p>
     <div class="hero-ctas">
       <a href="#contact" class="btn-main">Get started →</a>
       <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">See the live demo ↗</a>
@@ -231,7 +259,10 @@ footer a:hover{color:var(--accent)}
   <div class="benefits-grid reveal">
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Every booking in one book</h3><p>Online, phone and walk-in bookings together. Times show free seats, so you can answer on the phone right away</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Recognises your guests</h3><p>Type a phone number or name and see visits, VIP status, allergies and notes before they reach the table</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Reminders & fewer no-shows</h3><p>Automatic email 2 hours before, with address and directions. Mark “Arrived / No-show” and track your no-show rate</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Reminders & fewer no-shows</h3><p>Automatic email 2 hours before, with address and directions, plus a notification on the guest’s phone. Mark “Arrived / No-show” and track your no-show rate</p></div>
+    <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Waitlist</h3><p>When a time slot fills up, guests join the waitlist instead of leaving. If a booking is cancelled, they automatically get a “Table available” email</p></div>
+    <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><path d="M16 14h.01"/></svg></div><h3>Bookings in Google Wallet</h3><p>One tap saves the booking to the guest’s phone, with your logo, time, party size and address</p></div>
+    <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></div><h3>Notifications & calendar</h3><p>Push notification on the guest’s phone and add-to-calendar for Google, Apple or Outlook. No SMS, no extra cost</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Know where bookings come from</h3><p>Google, website, social, phone or walk-in: see which channel brings you guests</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>PDF report with findings</h3><p>Peak hours and days, cancellations, no-shows and regulars, in a report ready for your partner or accountant</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Automatic emails, EN / EL</h3><p>Confirmation and reminder in the guest’s language. Visitors book and get updates in English</p></div>
@@ -240,6 +271,47 @@ footer a:hover{color:var(--accent)}
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Smart cancellations</h3><p>Guests cancel on their own up to 2 hours before and you are notified instantly. Cancellations stay in your statistics</p></div>
   </div>
 </section>
+
+<section class="cost" id="cost">
+  <div class="reveal">
+    <div class="eyebrow">Cost</div>
+    <h2>A flat price,<br>not a fee per guest</h2>
+    <p class="section-sub">Many booking platforms charge for every guest who comes through them. The better your restaurant does, the more you pay. Work out the difference</p>
+  </div>
+  <div class="cost-wrap reveal">
+    <div class="cost-calc">
+      <h3>Cost calculator</h3>
+      <div class="cc-row"><label for="ccGuests">Guests from online bookings per month <b id="ccGuestsV">300</b></label><input type="range" id="ccGuests" min="50" max="2000" step="50" value="300"></div>
+      <div class="cc-row"><label for="ccFee">Per-guest fee on a commission platform <b id="ccFeeV">€2,00</b></label><input type="range" id="ccFee" min="0.5" max="4" step="0.25" value="2"></div>
+      <div class="cc-out">
+        <div class="cc-box"><small>With a per-guest fee</small><strong id="ccThem">—</strong><span>per year</span></div>
+        <div class="cc-box us"><small>TableReserve, annual</small><strong>€99</strong><span>per year</span></div>
+      </div>
+      <p class="cc-save">Difference: <b id="ccDiff">—</b> a year that stays with your restaurant</p>
+      <p class="cc-note">Figures are illustrative, for comparison. Check the price list of the platform you use</p>
+    </div>
+    <div class="cost-points">
+      <h3>What the price includes</h3>
+      <ul><li><i>✓</i><div><b>No commission</b>Not per booking, not per guest. From 10 to 10,000 bookings, the price stays the same</div></li><li><i>✓</i><div><b>Your guests stay yours</b>Your booking page shows only your restaurant, never suggestions for other places</div></li><li><i>✓</i><div><b>No SMS charges</b>Reminders by email, push and calendar, with no per-message fee</div></li><li><i>✓</i><div><b>No lock-in</b>14 days free, then pick a period and cancel whenever you like</div></li></ul>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var g=document.getElementById('ccGuests'),f=document.getElementById('ccFee');
+  if(!g||!f)return;
+  var eur=function(n,d){return '€'+n.toLocaleString('en-IE',{minimumFractionDigits:d,maximumFractionDigits:d})};
+  function upd(){
+    var gv=+g.value,fv=+f.value,y=Math.round(gv*fv*12);
+    document.getElementById('ccGuestsV').textContent=gv.toLocaleString('en-IE');
+    document.getElementById('ccFeeV').textContent=eur(fv,2);
+    document.getElementById('ccThem').textContent=eur(y,0);
+    document.getElementById('ccDiff').textContent=eur(Math.max(0,y-99),0);
+  }
+  g.addEventListener('input',upd);f.addEventListener('input',upd);upd();
+})();
+</script>
 
 <section class="pricing" id="pricing">
   <div class="reveal">
@@ -257,6 +329,8 @@ footer a:hover{color:var(--accent)}
         <li>Unlimited bookings, online &amp; by phone</li>
         <li>Confirmation &amp; reminder emails</li>
         <li>Guest profiles with notes</li>
+        <li>Waitlist with automatic alerts</li>
+        <li>Google Wallet, push &amp; calendar</li>
         <li>No-show &amp; booking-source tracking</li>
         <li>Analytics &amp; PDF reports</li>
         <li>Your own link &amp; Google Maps</li>
@@ -272,6 +346,8 @@ footer a:hover{color:var(--accent)}
         <li>Unlimited bookings, online &amp; by phone</li>
         <li>Confirmation &amp; reminder emails</li>
         <li>Guest profiles with notes</li>
+        <li>Waitlist with automatic alerts</li>
+        <li>Google Wallet, push &amp; calendar</li>
         <li>No-show &amp; booking-source tracking</li>
         <li>Analytics &amp; PDF reports</li>
         <li>Your own link &amp; Google Maps</li>
@@ -288,6 +364,8 @@ footer a:hover{color:var(--accent)}
         <li>Unlimited bookings, online &amp; by phone</li>
         <li>Confirmation &amp; reminder emails</li>
         <li>Guest profiles with notes</li>
+        <li>Waitlist with automatic alerts</li>
+        <li>Google Wallet, push &amp; calendar</li>
         <li>No-show &amp; booking-source tracking</li>
         <li>Analytics &amp; PDF reports</li>
         <li>Your own link &amp; Google Maps</li>
@@ -322,7 +400,15 @@ footer a:hover{color:var(--accent)}
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">Does it send reminders to guests<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Yes. Every guest with an email automatically gets a reminder 2 hours before the booking, with the address, directions and your phone number. That cuts no-shows, and you can see it in your statistics</p></div>
+      <div class="faq-a"><p>Yes. Every guest with an email automatically gets a reminder 2 hours before the booking, with the address, directions and your phone number. Guests who allow it also get a notification on their phone, and can add the booking to their calendar or Google Wallet. That cuts no-shows, and you can see it in your statistics</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">What happens when a time slot is full<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>You don’t lose the guest: they join the waitlist for the time they want and you get an email. If a booking is cancelled, the system automatically emails them that a table is free, and the whole list is visible in your admin panel</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Can guests keep the booking on their phone<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Yes. After booking they see buttons for Google Wallet and add-to-calendar (Google, Apple, Outlook). The Wallet card shows your logo, the time, party size and address, with no setup on your side</p></div>
     </div>
     <div class="faq-item">
       <button class="faq-q" onclick="toggleFaq(this)">Do I need technical skills<span class="faq-icon"></span></button>
