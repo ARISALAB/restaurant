@@ -6,6 +6,12 @@
     <title>TableReserve</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app">
+    <link rel="preconnect" href="https://res.cloudinary.com">
+    <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js">
+    <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -971,10 +977,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, onValue, get, push, set, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-        import {
-            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            createUserWithEmailAndPassword
-        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
@@ -988,7 +990,6 @@
 
         const app  = initializeApp(firebaseConfig);
         const db   = getDatabase(app);
-        const auth = getAuth(app);
 
         // ======= TRANSLATIONS =======
         const translations = {
@@ -1422,7 +1423,8 @@
         // Load display name
         get(ref(db, `shop_details/${shopID}/displayName`)).then(nameSnap => {
             if (nameSnap.exists()) document.getElementById('shop-display').innerText = nameSnap.val() || shopID;
-        }).catch(() => {});
+            trHideSplash();
+        }).catch(() => trHideSplash());
 
         loadClientShopProfile(shopID);
 
@@ -1837,14 +1839,20 @@
             setLang(lang);
         })();
 
-        // Splash screen
-        trOnLoad(() => {
+        // Splash screen: φεύγει μόλις φανεί το όνομα του μαγαζιού (ελάχιστο ~0,4″ για να μην αναβοσβήνει),
+        // αλλιώς το αργότερο 3″ μετά το άνοιγμα της σελίδας
+        function trHideSplash() {
+            const splash = document.getElementById('splash');
+            if (!splash || splash.dataset.hiding) return;
+            splash.dataset.hiding = '1';
+            const wait = Math.max(0, 400 - performance.now());
             setTimeout(() => {
-                const splash = document.getElementById('splash');
-                if (splash) splash.classList.add('hide');
-                setTimeout(() => { if (splash) splash.remove(); }, 500);
-            }, 2000);
-        });
+                splash.classList.add('hide');
+                setTimeout(() => splash.remove(), 500);
+            }, wait);
+        }
+        if (trNotFound) trHideSplash();
+        setTimeout(trHideSplash, Math.max(0, 3000 - performance.now()));
 
     </script>
 </body>
