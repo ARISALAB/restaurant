@@ -1199,9 +1199,37 @@
         // ======= CLIENT =======
         const urlParams = new URLSearchParams(window.location.search);
 
+        // ── Reserve with Google: conversion tracking ──
+        // Η Google προσθέτει ?rwg_token=... όταν ο πελάτης πατά «Κράτηση» στο Google Maps.
+        // Το κρατάμε ΜΟΝΟ στη μνήμη της σελίδας (καμία αποθήκευση στον browser) και, αν
+        // ολοκληρωθεί κράτηση σε αυτή την επίσκεψη, το στέλνουμε πίσω στη Google χωρίς στοιχεία του πελάτη.
+        // Ενεργοποίηση: βάζουμε το partner ID που θα δώσει η Google στο RWG_PARTNER_ID.
+        const RWG_PARTNER_ID = '';
+        const RWG_ENDPOINT = 'https://www.google.com/maps/conversion/collect';   // δοκιμές: .../maps/conversion/debug/collect
+        const trRwgToken = (urlParams.get('rwg_token') || '').slice(0, 2000);
+        if (trRwgToken) {
+            // Βγάζουμε τον κωδικό από τη γραμμή διεύθυνσης, για να μη μοιράζεται αν κάποιος αντιγράψει το link
+            try {
+                const p = new URLSearchParams(location.search); p.delete('rwg_token');
+                const qs = p.toString();
+                history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+            } catch (e) {}
+        }
+        function trRwgConversion() {
+            if (!trRwgToken || !RWG_PARTNER_ID) return;
+            try {
+                // text/plain: έτσι το ζητά η Google (χωρίς CORS preflight)
+                fetch(RWG_ENDPOINT, {
+                    method: 'POST', mode: 'no-cors', keepalive: true,
+                    body: JSON.stringify({ conversion_partner_id: RWG_PARTNER_ID, rwg_token: trRwgToken, merchant_changed: '2' })
+                }).catch(() => {});
+            } catch (e) {}
+        }
+
         // Από πού ήρθε ο πελάτης, για τα στατιστικά του καταστήματος:
         // ?src=google (link στο Επαγγελματικό προφίλ Google), widget/site εστιατορίου, social, ή απευθείας
         const trSource = (() => {
+            if (trRwgToken) return 'google';
             const p = (urlParams.get('src') || urlParams.get('utm_source') || '').toLowerCase();
             if (/^(google|gbp|maps|googlemaps)$/.test(p)) return 'google';
             if (/^(site|website|web)$/.test(p)) return 'site';
@@ -1783,6 +1811,7 @@
             }
 
             modal.classList.remove('open');
+            trRwgConversion();
             trShowDone({ id: data.bookingId, token: data.cancelToken, date, time: selectedTime, guests });
 
             // Reset form
