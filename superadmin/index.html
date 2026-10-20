@@ -647,23 +647,31 @@
                 }
 
                 const data = snapshot.val();
-                const entries = Object.entries(data);
+                // Ένα κατάστημα μπορεί να έχει περισσότερους από έναν λογαριασμούς σύνδεσης
+                const byShop = {};
+                Object.entries(data).forEach(([uid, sid]) => { (byShop[sid] = byShop[sid] || []).push(uid); });
+                window._shopUids = byShop;
+                const entries = Object.entries(byShop);
                 document.getElementById('sa-shop-count').innerText = entries.length;
 
                 get(ref(db, 'shop_details')).then(detailsSnap => {
                     const details = detailsSnap.exists() ? detailsSnap.val() : {};
                     window._shopDetails = details;
                     list.innerHTML = '';
-                    entries.forEach(([uid, shopId]) => {
+                    entries.forEach(([shopId, uids]) => {
                         const info = details[shopId] || {};
-                        const shopUrl = `${SHOP_BASE_URL}?shop=${shopId}`;
+                        const shopUrl = info.slug ? SHOP_BASE_URL + info.slug : `${SHOP_BASE_URL}?shop=${shopId}`;
+                        const who = info.email ? gEsc(info.email) : '';
+                        const accounts = uids.length > 1
+                            ? `<span title="${gEsc(uids.join('\n'))}" style="color:#92400e;font-weight:600;">${uids.length} λογαριασμοί σύνδεσης</span>`
+                            : `<span title="${gEsc(uids[0])}">${who ? '' : 'ID: ' + gEsc(shopId)}</span>`;
                         const div = document.createElement('div');
                         div.className = 'shop-item';
                         div.innerHTML = `
                             <div class="shop-icon">🏪</div>
                             <div class="shop-info">
                                 <div class="shop-name">${info.displayName || shopId}</div>
-                                <div class="shop-email">${info.email || uid}</div>
+                                <div class="shop-email">${who}${who && uids.length > 1 ? ' · ' : ''}${accounts}</div>
                                 <div class="shop-url">${shopUrl}</div>
                                 <div id="paid-${shopId}" style="font-size:12px;margin-top:4px;">${paidLabel(info)}</div>
                                 <div id="g-${shopId}">${googleBadge(info)}</div>
@@ -672,7 +680,7 @@
                                 <button class="btn-icon goog" title="Στοιχεία Google Maps" onclick="openGoogle('${shopId}')">G</button>
                                 <button class="btn-icon copy" title="Επέκταση συνδρομής" onclick="extendShop('${shopId}')">⏱</button>
                                 <button class="btn-icon copy" title="Αντιγραφή URL" onclick="copyUrl('${shopUrl}')">🔗</button>
-                                <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${uid}', '${shopId}')">🗑️</button>
+                                <button class="btn-icon del" title="Διαγραφή" onclick="deleteShop('${shopId}')">🗑️</button>
                             </div>`;
                         list.appendChild(div);
                     });
@@ -756,10 +764,11 @@
         };
 
         // Delete shop
-        window.deleteShop = async (uid, shopId) => {
-            if (!confirm(`Διαγραφή καταστήματος "${shopId}";\nΑυτό θα διαγράψει και τα δεδομένα στη Firebase.`)) return;
+        window.deleteShop = async (shopId) => {
+            const uids = (window._shopUids && window._shopUids[shopId]) || [];
+            if (!confirm(`Διαγραφή καταστήματος "${shopId}";\nΑυτό θα διαγράψει και τα δεδομένα στη Firebase` + (uids.length > 1 ? ` και τους ${uids.length} λογαριασμούς σύνδεσης.` : '.'))) return;
             try {
-                await remove(ref(db, `users_to_shops/${uid}`));
+                for (const uid of uids) await remove(ref(db, `users_to_shops/${uid}`));
                 await remove(ref(db, `shop_details/${shopId}`));
                 showToast(`🗑️ Κατάστημα "${shopId}" διαγράφηκε.`, 'success');
             } catch(e) {
@@ -902,10 +911,20 @@
             const btn = gEl('g-save'); btn.disabled = true;
             try {
                 await set(ref(db, `shop_details/${gShop}/google`), data);
+                // Αν το προφίλ δεν έχει διεύθυνση, παίρνει αυτή του Google (μόνο το πεδίο address, ποτέ αντικατάσταση)
+                let filled = false;
+                if (data.street && data.city) {
+                    const cur = (await get(ref(db, `shop_profile/${gShop}/info/address`))).val();
+                    if (!cur || !String(cur).trim()) {
+                        const addr = data.street + ', ' + (data.postalCode ? data.postalCode + ' ' : '') + data.city;
+                        await set(ref(db, `shop_profile/${gShop}/info/address`), addr);
+                        filled = true;
+                    }
+                }
                 if (window._shopDetails) { window._shopDetails[gShop] = Object.assign({}, window._shopDetails[gShop], { google: data }); }
                 const badge = gEl('g-' + gShop);
                 if (badge) badge.innerHTML = googleBadge({ google: data });
-                showToast('✅ Αποθηκεύτηκε', 'success');
+                showToast(filled ? '✅ Αποθηκεύτηκε, και μπήκε η διεύθυνση στο προφίλ' : '✅ Αποθηκεύτηκε', 'success');
                 closeGoogle();
             } catch (e) {
                 showToast('Σφάλμα αποθήκευσης', 'error');
