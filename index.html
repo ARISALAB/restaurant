@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TableReserve</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://res.cloudinary.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js">
     <link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
     <style>
         :root {
             --primary: #2563eb;
@@ -137,6 +138,7 @@
         .page { display: none; }
         .page.active { display: block; }
 
+        .tr-loading .container { visibility: hidden; }
         .container {
             max-width: 960px;
             margin: 0 auto;
@@ -780,7 +782,7 @@
 .tr-embed .modal-content { max-height: none !important; }
 </style>
 </head>
-<body>
+<body class="tr-loading">
 
     <!-- Splash Screen -->
     <div id="splash">
@@ -1266,6 +1268,19 @@
             let p = '';
             try { p = decodeURIComponent(location.pathname).replace(/^\/+|\/+$/g, ''); } catch (e) {}
             if (!p || p.includes('/') || p.includes('.')) return 'default_store';
+            const pre = window.__TR;
+            if (pre && pre.shop && pre.name === p.toLowerCase()) {
+                if (pre.slug) { trSlug = pre.slug; return pre.shop; }
+                // Διεύθυνση με το εσωτερικό ID: το καθαρό όνομα βρίσκεται στο παρασκήνιο
+                trSlugReady = fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'current', shop: pre.shop }) })
+                    .then(r => r.ok ? r.json() : {}).then(d => {
+                        if (d.slug) {
+                            trSlug = d.slug;
+                            if (d.slug !== p && urlParams.get('embed') !== '1') history.replaceState(null, '', '/' + d.slug + location.search + location.hash);
+                        }
+                    }).catch(() => {});
+                return pre.shop;
+            }
             try {
                 const r = await fetch(`${API}/slug`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'resolve', slug: p }) });
                 if (r.ok) {
@@ -1297,6 +1312,7 @@
             const d = { status, paidUntil };
             const inactive = d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < Date.now());
             if (!inactive) return;
+            trHideSplash();
             const lay = document.querySelector('.client-layout');
             if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🕐</div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;
         }).catch(() => {});
@@ -1341,6 +1357,11 @@
         }
         
         // Εικόνες Cloudinary: μικρότερη, συμπιεσμένη εκδοχή ανάλογα με το πού εμφανίζεται
+        // Πλάτος εικόνας για την οθόνη της συσκευής (στρογγυλεμένο, για καλό cache στο Cloudinary)
+        function trW(max) {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            return Math.min(max, Math.max(200, Math.ceil(Math.min(window.innerWidth || max, 960) * dpr / 200) * 200));
+        }
         function trImg(u, w) {
             if (typeof u !== 'string' || u.indexOf('res.cloudinary.com/') < 0 || u.indexOf('/upload/') < 0) return u;
             return u.replace('/upload/', `/upload/f_auto,q_auto,c_limit,w_${w}/`);
@@ -1360,12 +1381,12 @@
                 }).catch(() => {});
 
                 if (full.coverPhoto) {
-                    document.getElementById('client-cover-img').src = trImg(full.coverPhoto, 1600);
+                    document.getElementById('client-cover-img').src = trImg(full.coverPhoto, trW(1600));
                     document.getElementById('client-cover-wrap').style.display = 'block';
                     document.getElementById('client-cover-placeholder').style.display = 'none';
                 }
                 if (full.logoPhoto) {
-                    document.getElementById('client-logo-img').src = trImg(full.logoPhoto, 240);
+                    document.getElementById('client-logo-img').src = trImg(full.logoPhoto, 160);
                     document.getElementById('client-logo-wrap').style.display = 'block';
                 }
                 if (info.tagline) {
@@ -1397,7 +1418,7 @@
                         strip.innerHTML = '';
                         photos.forEach(p => {
                             const img = document.createElement('img');
-                            img.src = trImg(p.data, 480); img.alt = p.name || ''; img.loading = 'lazy';
+                            img.src = trImg(p.data, 320); img.alt = p.name || ''; img.loading = 'lazy'; img.width = 160; img.height = 110;
                             img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
                             img.onmouseover = () => img.style.transform = 'scale(1.03)';
                             img.onmouseout  = () => img.style.transform = '';
@@ -1407,6 +1428,14 @@
                         document.getElementById('client-gallery-wrap').style.display = 'block';
                     }
                 }
+                // Η σελίδα εμφανίζεται όταν φορτώσει και το εξώφυλλο (το πολύ +1,5″), ώστε να μη μετακινηθεί τίποτα μετά
+                const coverImg = document.getElementById('client-cover-img');
+                new Promise(res => {
+                    if (!full.coverPhoto || (coverImg.complete && coverImg.naturalWidth)) return res();
+                    coverImg.addEventListener('load', res, { once: true });
+                    coverImg.addEventListener('error', res, { once: true });
+                    setTimeout(res, 1500);
+                }).then(trHideSplash);
             });
         }
 
@@ -1423,8 +1452,7 @@
         // Load display name
         get(ref(db, `shop_details/${shopID}/displayName`)).then(nameSnap => {
             if (nameSnap.exists()) document.getElementById('shop-display').innerText = nameSnap.val() || shopID;
-            trHideSplash();
-        }).catch(() => trHideSplash());
+        }).catch(() => {});
 
         loadClientShopProfile(shopID);
 
@@ -1843,10 +1871,12 @@
         // αλλιώς το αργότερο 3″ μετά το άνοιγμα της σελίδας
         function trHideSplash() {
             const splash = document.getElementById('splash');
-            if (!splash || splash.dataset.hiding) return;
+            if (!splash) { document.body.classList.remove('tr-loading'); return; }
+            if (splash.dataset.hiding) return;
             splash.dataset.hiding = '1';
             const wait = Math.max(0, 400 - performance.now());
             setTimeout(() => {
+                document.body.classList.remove('tr-loading');
                 splash.classList.add('hide');
                 setTimeout(() => splash.remove(), 500);
             }, wait);
