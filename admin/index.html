@@ -1720,7 +1720,7 @@
                     if (res.status === 409) { alert(en ? 'The terms were just updated. The page will reload.' : 'Οι όροι μόλις ενημερώθηκαν. Η σελίδα θα ανανεωθεί.'); location.reload(); return; }
                     throw new Error(res.status);
                 } catch (e) {
-                    showToast(en ? 'Something went wrong, please try again' : 'Κάτι πήγε στραβά, δοκιμάστε ξανά', 'error');
+                    console.error('[accept-terms]', e); showToast((en ? 'Something went wrong, please try again' : 'Κάτι πήγε στραβά, δοκιμάστε ξανά') + ' (' + ((e && (e.code || e.message)) || e) + ')', 'error');
                     btn.disabled = !$('terms-check').checked;
                 }
             };
