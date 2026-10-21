@@ -397,6 +397,8 @@
         .info-row .ir svg { color: #94a3b8; flex-shrink: 0; }
         .src-tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 7px; border-radius: 999px; font-size: 0.74rem; font-weight: 600; letter-spacing: .01em; border: 1px solid transparent; line-height: 1.6; }
         .src-tag svg { flex-shrink: 0; }
+        .booked-at { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; color: var(--text-muted); }
+        .new-badge { font-size: 0.68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
         .src-google { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
         .src-site   { background: #f0fdf4; color: #15803d; border-color: #dcfce7; }
         .src-social { background: #faf5ff; color: #7e22ce; border-color: #f3e8ff; }
@@ -1150,6 +1152,12 @@
                             <canvas id="chart-occasion" height="180"></canvas>
                         </div>
                         <div class="card" style="padding:20px 24px;">
+                            <div class="card-title"><div class="icon">⏱️</div> <span data-i18n-key="an_lead_title">Πόσο νωρίτερα κλείνουν</span></div>
+                            <canvas id="chart-lead" height="180"></canvas>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+                        <div class="card" style="padding:20px 24px;">
                             <div class="card-title"><div class="icon">🔁</div> <span data-i18n-key="an_repeat_title">Κορυφαίοι επαναλαμβανόμενοι πελάτες</span></div>
                             <div id="repeat-customer-list"><div class="no-data" data-i18n-key="an_no_repeats">Δεν υπάρχουν ακόμα</div></div>
                         </div>
@@ -1364,7 +1372,7 @@
                 an_export_pdf: "Εξαγωγή PDF", rep_period: "Περίοδος", rep_title: "Αναφορά κρατήσεων", rep_findings: "Βασικά ευρήματα", rep_tips: "Προτάσεις", rep_issued: "Έκδοση", rep_total_res: "Κρατήσεις", rep_total_guests: "Άτομα", rep_footer: "Δημιουργήθηκε με TableReserve · tablereserve.gr", rep_popup: "Ο browser μπλόκαρε το νέο παράθυρο. Επιτρέψτε τα αναδυόμενα παράθυρα για το tablereserve.gr και δοκιμάστε ξανά.", rep_hint: "Στο παράθυρο εκτύπωσης επιλέξτε «Αποθήκευση ως PDF».", rep_print: "Αποθήκευση ως PDF / Εκτύπωση", an_trend_title: "Κρατήσεις ανά ημέρα", an_hours_title: "Πιο απασχολημένες ώρες",
                 an_days_title: "Πιο απασχολημένες μέρες", an_source_title: "Πηγή κράτησης",
                 an_location_title: "Τοποθεσία", an_occasion_title: "Τύποι γεγονότων",
-                an_repeat_title: "Κορυφαίοι επαναλαμβανόμενοι πελάτες", an_no_repeats: "Δεν υπάρχουν ακόμα",
+                an_repeat_title: "Κορυφαίοι επαναλαμβανόμενοι πελάτες", bk_booked_at: "Κλείστηκε", bk_new: "Νέα", an_lead_title: "Πόσο νωρίτερα κλείνουν", an_lead_0: "Ίδια μέρα", an_lead_1: "1–3 μέρες", an_lead_4: "4–14 μέρες", an_lead_15: "15+ μέρες", an_no_repeats: "Δεν υπάρχουν ακόμα",
                 an_week_guests_title: "Άτομα ανά εβδομάδα", an_month_guests_title: "Άτομα ανά μήνα",
                 an_direct: "Απευθείας link", an_google: "Google (Επαγγελματικό προφίλ)", an_site: "Site εστιατορίου", an_social: "Social media", an_unknown: "Χωρίς στοιχείο (παλαιότερες)", an_indoor: "Εσωτερικός χώρος",
                 an_outdoor: "Εξωτερικός χώρος", an_no_occasion: "Χωρίς γεγονός", an_bookings: "κρατήσεις",
@@ -1449,7 +1457,7 @@
                 an_export_pdf: "Export PDF", rep_period: "Period", rep_title: "Reservations report", rep_findings: "Key findings", rep_tips: "Recommendations", rep_issued: "Issued", rep_total_res: "Reservations", rep_total_guests: "Guests", rep_footer: "Created with TableReserve · tablereserve.gr", rep_popup: "Your browser blocked the new window. Please allow pop-ups for tablereserve.gr and try again.", rep_hint: "In the print dialog, choose “Save as PDF”.", rep_print: "Save as PDF / Print", an_trend_title: "Bookings per day", an_hours_title: "Busiest hours",
                 an_days_title: "Busiest days", an_source_title: "Booking source",
                 an_location_title: "Location", an_occasion_title: "Occasion types",
-                an_repeat_title: "Top repeat customers", an_no_repeats: "None yet",
+                an_repeat_title: "Top repeat customers", bk_booked_at: "Booked", bk_new: "New", an_lead_title: "How far ahead guests book", an_lead_0: "Same day", an_lead_1: "1–3 days", an_lead_4: "4–14 days", an_lead_15: "15+ days", an_no_repeats: "None yet",
                 an_week_guests_title: "Guests per week", an_month_guests_title: "Guests per month",
                 an_direct: "Direct link", an_google: "Google (Business Profile)", an_site: "Restaurant website", an_social: "Social media", an_unknown: "Not recorded (older)", an_indoor: "Indoor",
                 an_outdoor: "Outdoor", an_no_occasion: "No occasion", an_bookings: "bookings",
@@ -2061,6 +2069,8 @@
                 const locationDisplay = locMap[res.location] || res.location || t('location_label_indoor');
                 const srcIcon = SRC_ICONS[res.source];
                 const canMark = !cancelled && res.date <= today;
+                const showBooked = res.timestamp && isOnline(res);
+                const isNew = showBooked && !cancelled && Date.now() - res.timestamp < 86400000;
                 const key = guestKey(res.phone);
                 const g = key ? (guestsData[key] || {}) : {};
                 // Πόσες φορές έχει έρθει (μη ακυρωμένες κρατήσεις έως αυτή)
@@ -2083,7 +2093,7 @@
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${repEsc(res.time)}</div>
-                        <div class="date-text">${repEsc(res.date)}</div>
+                        <div class="date-text">${repEsc(res.date)}${isNew ? ` <span class="new-badge">${t('bk_new')}</span>` : ''}</div>
                         ${acts}
                     </div>
                     <div class="card-body">
@@ -2094,6 +2104,7 @@
                             <span class="ir">${ICO.users}<strong>${repEsc(res.guests)} ${t('guests_label')}</strong></span>
                             <span class="ir">${ICO.seat}${repEsc(locationDisplay)}</span>
                             ${srcIcon ? `<span class="src-tag src-${res.source}">${srcIcon}${repEsc(t('an_' + res.source))}</span>` : ''}
+                            ${showBooked ? `<span class="booked-at">${svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', 13)}${t('bk_booked_at')} ${fmtBookedAt(res.timestamp)}</span>` : ''}
                         </div>
                         ${res.occasion ? `<div class="occasion-tag">${repEsc(res.occasion)}</div>` : ''}
                         ${res.comments ? `<div class="comments-box">${repEsc(res.comments)}</div>` : ''}
@@ -2239,6 +2250,11 @@
             const occLabels = Object.keys(occCounts).length ? Object.keys(occCounts) : [t('an_no_occasion')];
             const occData   = Object.keys(occCounts).length ? Object.values(occCounts) : [1];
             drawDoughnut('chart-occasion', occLabels, occData);
+
+            // Πόσο νωρίτερα κλείνουν (online κρατήσεις)
+            const leadB = [0, 0, 0, 0];
+            active.filter(isOnline).forEach(r => { const d = leadDays(r); if (d === null) return; leadB[d === 0 ? 0 : d <= 3 ? 1 : d <= 14 ? 2 : 3]++; });
+            drawChart('chart-lead', 'bar', ['an_lead_0', 'an_lead_1', 'an_lead_4', 'an_lead_15'].map(k => t(k)), leadB, '#2563eb');
         }
 
 
@@ -2347,7 +2363,7 @@
                 `Your cancellation rate (${cr}%) is high. A confirmation call or message the day before significantly reduces no-shows.`));
 
             // Πόσο νωρίς κλείνουν
-            const leads = active.filter(r => r.timestamp && r.date).map(r => Math.round((new Date(r.date + 'T12:00:00') - new Date(r.timestamp)) / 86400000)).filter(d => d >= 0).sort((a, b) => a - b);
+            const leads = active.filter(isOnline).map(leadDays).filter(d => d !== null).sort((a, b) => a - b);
             if (leads.length >= 3) {
                 const med = leads[Math.floor(leads.length / 2)];
                 const same = leads.filter(d => d <= 0).length;
@@ -2444,7 +2460,7 @@
             const holder = document.createElement('div');
             holder.style.cssText = 'position:fixed; left:-10000px; top:0; pointer-events:none;';
             document.body.appendChild(holder);
-            ['chart-trend', 'chart-hours', 'chart-dow', 'chart-week-guests', 'chart-month-guests', 'chart-source', 'chart-location', 'chart-occasion'].forEach(id => {
+            ['chart-trend', 'chart-hours', 'chart-dow', 'chart-week-guests', 'chart-month-guests', 'chart-source', 'chart-location', 'chart-occasion', 'chart-lead'].forEach(id => {
                 const c = chartInstances[id]; if (!c) return;
                 const ds = c.data.datasets[0] || {};
                 const round = c.config.type === 'doughnut';
@@ -2547,7 +2563,8 @@
     ${card('chart-hours', 'an_hours_title')}${card('chart-dow', 'an_days_title')}
     ${card('chart-week-guests', 'an_week_guests_title')}${card('chart-month-guests', 'an_month_guests_title')}
     ${card('chart-source', 'an_source_title')}${card('chart-location', 'an_location_title')}
-    ${card('chart-occasion', 'an_occasion_title')}${repeatCard}
+    ${card('chart-occasion', 'an_occasion_title')}${card('chart-lead', 'an_lead_title')}
+    ${repeatCard}
   </div>
   <footer><span>${repEsc(t('rep_footer'))}</span><span>${repEsc(name)} · ${repEsc(period)}</span></footer>
 </div>
@@ -2587,6 +2604,15 @@
         };
 
         // ======= ΗΡΘΕ / ΔΕΝ ΗΡΘΕ =======
+        // Πότε έγινε η κράτηση και πόσες μέρες πριν το τραπέζι (μόνο online: τηλεφωνικές/walk-in τις περνάει το κατάστημα)
+        const isOnline = r => r.source !== 'phone' && r.source !== 'walkin';
+        function fmtBookedAt(ts) { const d = new Date(ts); return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear() + ', ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+        function leadDays(r) {
+            if (!r.timestamp || !r.date) return null;
+            const b = new Date(r.timestamp); const made = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+            const d = Math.round((new Date(r.date + 'T00:00:00') - made) / 86400000);
+            return d >= 0 ? d : null;
+        }
         function todayLocal() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
         window.setAttendance = (shop, id, val) => {
             const cur = (allReservations.find(r => r.id === id) || {}).attendance;
