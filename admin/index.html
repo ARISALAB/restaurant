@@ -1748,12 +1748,16 @@
 
         onAuthStateChanged(auth, async (user) => {
             renderUserChip(user);
-            if (!user) { currentAdminShop = null; show('login-section'); return; }
+            // Αποσύνδεση αφού είχε ανοίξει κατάστημα: καθαρή σελίδα, για να μη μείνουν
+            // φωτογραφίες ή στοιχεία του προηγούμενου καταστήματος στη φόρμα
+            if (!user) { if (currentAdminShop) { location.reload(); return; } show('login-section'); return; }
             if (user.uid === SUPERADMIN_UID) { window.location.href = '/superadmin'; return; }
 
             const snapshot = await get(ref(db, 'users_to_shops/' + user.uid));
             if (!snapshot.exists()) { alert(t('alert_no_shop_linked')); signOut(auth); return; }
             const myShop = snapshot.val();
+            // Άλλο κατάστημα στην ίδια καρτέλα (π.χ. σύνδεση με άλλο λογαριασμό χωρίς ανανέωση)
+            if (currentAdminShop && currentAdminShop !== myShop) { location.reload(); return; }
 
             const status = (await get(ref(db, `shop_details/${myShop}/status`))).val();
             if (status === 'closed') {
