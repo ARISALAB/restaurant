@@ -497,6 +497,9 @@
             <div class="g-sub" id="g-shopid"></div>
             <div class="g-ref" id="g-ref"></div>
 
+            <div class="input-group"><label for="g-name">Όνομα καταστήματος (όπως στο Google)</label><input type="text" id="g-name" maxlength="100" autocomplete="off"></div>
+            <div class="hint" style="margin-top:-6px;margin-bottom:6px;">Εμφανίζεται στη σελίδα κράτησης, στα emails και στο feed. Γράψ' το ακριβώς όπως στο Google Maps.</div>
+
             <div class="g-step"><span>1</span> Place ID</div>
             <div class="g-row">
                 <div class="input-group">
@@ -855,6 +858,7 @@
             const g = d.google || {};
             gEl('g-title').textContent = 'Google Maps · ' + (d.displayName || shopId);
             gEl('g-shopid').textContent = 'ID: ' + shopId + (d.slug ? ' · tablereserve.gr/' + d.slug : '');
+            gEl('g-name').value = d.displayName || '';
             gEl('g-placeId').value = g.placeId || '';
             gEl('g-mapsUrl').value = g.mapsUrl || '';
             gEl('g-lat').value = g.lat ?? '';
@@ -932,9 +936,18 @@
             Object.entries(g).forEach(([k, v]) => { if (v !== '' && v !== null) data[k] = v; });
             data.verified = !!g.verified;
             data.updatedAt = Date.now();
+            const newName = gEl('g-name').value.trim().slice(0, 100);
+            if (!newName) return showToast('Το όνομα δεν μπορεί να είναι κενό', 'error');
             const btn = gEl('g-save'); btn.disabled = true;
             try {
                 await set(ref(db, `shop_details/${gShop}/google`), data);
+                const oldName = (window._shopDetails && window._shopDetails[gShop] && window._shopDetails[gShop].displayName) || '';
+                if (newName !== oldName) {
+                    await set(ref(db, `shop_details/${gShop}/displayName`), newName);
+                    if (window._shopDetails && window._shopDetails[gShop]) window._shopDetails[gShop].displayName = newName;
+                    const row = gEl('g-' + gShop) && gEl('g-' + gShop).closest('.shop-item');
+                    const nm = row && row.querySelector('.shop-name'); if (nm) nm.textContent = newName;
+                }
                 // Αν το προφίλ δεν έχει διεύθυνση, παίρνει αυτή του Google (μόνο το πεδίο address, ποτέ αντικατάσταση)
                 let filled = false;
                 if (data.street && data.city) {
