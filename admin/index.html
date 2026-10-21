@@ -1533,7 +1533,7 @@
             document.documentElement.lang = lang;
             try { localStorage.setItem('tr_admin_lang', lang); } catch (e) {}
             applyTranslations();
-            if (currentAdminShop) { renderBilling(currentAdminShop, auth.currentUser).catch(() => {}); renderEmbedCode(); renderWeekHours(); }
+            if (currentAdminShop) { renderBilling(currentAdminShop, auth.currentUser).catch(() => {}); renderEmbedCode(); renderWeekHours(); renderAll(currentAdminShop); }
         };
 
         function applyTranslations() {
