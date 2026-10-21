@@ -95,14 +95,7 @@ function merchantFor(shopId, details, info) {
     matching_hints: { place_id: g.placeId },
     action_link: [
       {
-        url: bookingUrl(shopId, details, { src: 'google', lang: 'el' }),
-        language: 'el',
-        platform: 'ACTION_PLATFORM_WEB_APPLICATION',
-        action_link_type: 'ACTION_LINK_TYPE_MAKE_DINING_RESERVATION',
-      },
-      {
-        url: bookingUrl(shopId, details, { src: 'google', lang: 'en' }),
-        language: 'en',
+        url: bookingUrl(shopId, details, { src: 'google' }),
         platform: 'ACTION_PLATFORM_WEB_APPLICATION',
         action_link_type: 'ACTION_LINK_TYPE_MAKE_DINING_RESERVATION',
       },
