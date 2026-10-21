@@ -532,6 +532,8 @@
                 <div class="input-group"><label for="g-country">Χώρα</label><input type="text" id="g-country" maxlength="2" value="GR" style="text-transform:uppercase;"></div>
             </div>
 
+            <div class="input-group" style="margin-top:4px;"><label for="g-website">Site του εστιατορίου (αν έχει)</label><input type="url" id="g-website" placeholder="https://..." autocomplete="off"></div>
+
             <div class="g-step"><span>4</span> Επαλήθευση</div>
             <p style="font-size:.85rem;margin-bottom:10px;"><a class="g-link" id="g-check" href="#" target="_blank" rel="noopener">Άνοιγμα του Place ID στο Google Maps ↗</a></p>
             <label class="g-verify" style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--text-main);">
@@ -837,6 +839,7 @@
                 lat: gNum(gEl('g-lat').value),
                 lng: gNum(gEl('g-lng').value),
                 mapsUrl: gEl('g-mapsUrl').value.trim().slice(0, 1500),
+                website: gEl('g-website').value.trim().slice(0, 300),
                 verified: gEl('g-verified').checked,
             };
         }
@@ -855,6 +858,7 @@
             gEl('g-postalCode').value = g.postalCode || '';
             gEl('g-city').value = g.city || '';
             gEl('g-country').value = g.country || 'GR';
+            gEl('g-website').value = g.website || '';
             gEl('g-verified').checked = !!g.verified;
             gEl('g-ref').innerHTML = 'Φόρτωση προφίλ...';
             gEl('g-overlay').classList.add('open');
@@ -915,6 +919,7 @@
             if (g.lng !== '' && (g.lng < -180 || g.lng > 180)) return showToast('Λάθος γεωγρ. μήκος', 'error');
             if (g.verified && googleMissing(g).length) return showToast('Συμπλήρωσε όλα τα πεδία πριν την επαλήθευση', 'error');
             if (!/^[A-Z]{2}$/.test(g.country)) return showToast('Χώρα: 2 γράμματα (π.χ. GR)', 'error');
+            if (g.website && !/^https?:\/\/[^\s]+$/i.test(g.website)) return showToast('Το site πρέπει να ξεκινά με https://', 'error');
             const data = {};
             Object.entries(g).forEach(([k, v]) => { if (v !== '' && v !== null) data[k] = v; });
             data.verified = !!g.verified;

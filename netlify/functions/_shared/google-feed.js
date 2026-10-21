@@ -37,10 +37,18 @@ function intlPhone(p) {
   return d;
 }
 
+// Καθαρό link: το δημόσιο όνομα, αλλιώς το ID ως διεύθυνση (το edge αναγνωρίζει και τα δύο)
 function bookingUrl(shopId, details, params) {
-  const base = details.slug ? BASE_URL + details.slug : BASE_URL + '?shop=' + encodeURIComponent(shopId);
+  const path = details.slug || (/^[A-Za-z0-9][A-Za-z0-9_-]{1,39}$/.test(shopId) ? shopId.toLowerCase() : null);
+  const base = path ? BASE_URL + path : BASE_URL + '?shop=' + encodeURIComponent(shopId);
   const q = new URLSearchParams(params).toString();
   return base + (base.includes('?') ? '&' : '?') + q;
+}
+
+// Ελληνικός ΤΚ με κενό: 10556 -> 105 56
+function postal(code, country) {
+  const c = String(code).replace(/\s+/g, '').trim();
+  return (country === 'GR' && /^\d{5}$/.test(c)) ? c.slice(0, 3) + ' ' + c.slice(3) : String(code).replace(/\s+/g, ' ').trim();
 }
 
 function isActive(details, now) {
@@ -51,7 +59,7 @@ function isActive(details, now) {
 }
 
 // Τι λείπει για να μπει ένα μαγαζί στο feed (κενή λίστα = έτοιμο)
-function missingFor(details, now = Date.now()) {
+function missingFor(details, now = Date.now(), info = null) {
   const g = (details && details.google) || {};
   const missing = [];
   if (!isActive(details, now)) missing.push('Ανενεργό κατάστημα');
@@ -64,6 +72,7 @@ function missingFor(details, now = Date.now()) {
   if (typeof g.lat === 'number' && (g.lat < -90 || g.lat > 90)) missing.push('Σωστό γεωγρ. πλάτος');
   if (typeof g.lng === 'number' && (g.lng < -180 || g.lng > 180)) missing.push('Σωστό γεωγρ. μήκος');
   if (!g.verified) missing.push('Επαλήθευση στο Maps');
+  if (info && !intlPhone(info.phone)) missing.push('Τηλέφωνο στο προφίλ');
   return missing;
 }
 
@@ -72,7 +81,6 @@ function merchantFor(shopId, details, info) {
   const m = {
     merchant_id: shopId,
     name: details.displayName,
-    url: bookingUrl(shopId, details, { src: 'google' }),
     category: 'restaurant',
     geo: {
       latitude: Number(g.lat),
@@ -80,7 +88,7 @@ function merchantFor(shopId, details, info) {
       address: {
         country: (g.country || 'GR').toUpperCase(),
         locality: g.city,
-        postal_code: String(g.postalCode).replace(/\s+/g, ' ').trim(),
+        postal_code: postal(g.postalCode, (g.country || 'GR').toUpperCase()),
         street_address: g.street,
       },
     },
@@ -102,6 +110,8 @@ function merchantFor(shopId, details, info) {
   };
   const tel = intlPhone(info && info.phone);
   if (tel) m.telephone = tel;
+  // url = το δικό του site του εστιατορίου (αν έχει). Το link κράτησης πάει στα action_link.
+  if (g.website && /^https?:\/\/[^\s]+$/i.test(g.website)) m.url = g.website;
   return m;
 }
 
@@ -113,13 +123,13 @@ async function buildFeed(db) {
   for (const [shopId, details] of Object.entries(all)) {
     if (!details || typeof details !== 'object') continue;
     const name = details.displayName || shopId;
-    const missing = missingFor(details, now);
+    const info = (await db.ref(`shop_profile/${shopId}/info`).get()).val() || {};
+    const missing = missingFor(details, now, info);
     if (missing.length) { skipped.push({ shop: shopId, name, missing }); continue; }
 
-    const info = (await db.ref(`shop_profile/${shopId}/info`).get()).val() || {};
     const m = merchantFor(shopId, details, info);
     merchants.push(m);
-    ready.push({ shop: shopId, name, url: m.url, warnings: m.telephone ? [] : ['Χωρίς τηλέφωνο (προτείνεται)'] });
+    ready.push({ shop: shopId, name, url: m.action_link[0].url, warnings: m.url ? [] : ['Χωρίς site εστιατορίου (προαιρετικό)'] });
   }
 
   const feed = {
@@ -128,7 +138,7 @@ async function buildFeed(db) {
       shard_number: 0,
       total_shards: 1,
       nonce: String(now),
-      generation_timestamp: Math.floor(now / 1000),
+      generation_timestamp: String(Math.floor(now / 1000)),
     },
     merchant: merchants,
   };
