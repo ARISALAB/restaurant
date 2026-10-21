@@ -532,7 +532,11 @@
                 <div class="input-group"><label for="g-country">Χώρα</label><input type="text" id="g-country" maxlength="2" value="GR" style="text-transform:uppercase;"></div>
             </div>
 
-            <div class="input-group" style="margin-top:4px;"><label for="g-website">Site του εστιατορίου (αν έχει)</label><input type="url" id="g-website" placeholder="https://..." autocomplete="off"></div>
+            <div class="g-grid">
+                <div class="input-group" style="margin-top:4px;"><label for="g-website">Site του εστιατορίου (αν έχει)</label><input type="url" id="g-website" placeholder="https://..." autocomplete="off"></div>
+                <div class="input-group" style="margin-top:4px;"><label for="g-phone">Τηλέφωνο</label><input type="tel" id="g-phone" maxlength="20" placeholder="210 1234567" autocomplete="off"></div>
+            </div>
+            <div class="hint" style="margin-top:-6px;">Το τηλέφωνο είναι το ίδιο με του προφίλ του καταστήματος: αν το αλλάξεις εδώ, αλλάζει και εκεί. Βάλε το ίδιο με το Google.</div>
 
             <div class="g-step"><span>4</span> Επαλήθευση</div>
             <p style="font-size:.85rem;margin-bottom:10px;"><a class="g-link" id="g-check" href="#" target="_blank" rel="noopener">Άνοιγμα του Place ID στο Google Maps ↗</a></p>
@@ -662,7 +666,7 @@
                     list.innerHTML = '';
                     entries.forEach(([shopId, uids]) => {
                         const info = details[shopId] || {};
-                        const shopUrl = info.slug ? SHOP_BASE_URL + info.slug : `${SHOP_BASE_URL}?shop=${shopId}`;
+                        const shopUrl = info.slug ? SHOP_BASE_URL + info.slug : (/^[A-Za-z0-9][A-Za-z0-9_-]{1,39}$/.test(shopId) ? SHOP_BASE_URL + shopId.toLowerCase() : `${SHOP_BASE_URL}?shop=${shopId}`);
                         const who = info.email ? gEsc(info.email) : '';
                         const accounts = uids.length > 1
                             ? `<span title="${gEsc(uids.join('\n'))}" style="color:#92400e;font-weight:600;">${uids.length} λογαριασμοί σύνδεσης</span>`
@@ -821,6 +825,7 @@
         function gMissingLine() {
             const g = gRead();
             const miss = googleMissing(g);
+            if (!gEl('g-phone').value.replace(/[^\d]/g, '')) miss.push('Τηλέφωνο');
             if (!g.verified) miss.push('επαλήθευση');
             gEl('g-missing').textContent = miss.length ? 'Για το feed λείπει: ' + miss.join(', ') : '✓ Πλήρη στοιχεία, έτοιμο για το feed (αν το κατάστημα είναι ενεργό)';
             gEl('g-missing').style.color = miss.length ? '#92400e' : '#166534';
@@ -859,6 +864,7 @@
             gEl('g-city').value = g.city || '';
             gEl('g-country').value = g.country || 'GR';
             gEl('g-website').value = g.website || '';
+            gEl('g-phone').value = '';
             gEl('g-verified').checked = !!g.verified;
             gEl('g-ref').innerHTML = 'Φόρτωση προφίλ...';
             gEl('g-overlay').classList.add('open');
@@ -867,6 +873,8 @@
                 gProfile = (await get(ref(db, `shop_profile/${shopId}/info`))).val() || {};
             } catch (e) { gProfile = {}; }
             gEl('g-ref').innerHTML = `Στο προφίλ του καταστήματος:<br><b>Διεύθυνση:</b> ${gEsc(gProfile.address || '—')}<br><b>Τηλέφωνο:</b> ${gEsc(gProfile.phone || '—')}`;
+            gEl('g-phone').value = gProfile.phone || '';
+            gMissingLine();
         };
         window.closeGoogle = () => { gEl('g-overlay').classList.remove('open'); gShop = null; };
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && gShop) closeGoogle(); });
@@ -878,7 +886,7 @@
             if (gEl('g-placeId').value.trim() !== gPrevPlace) gEl('g-verified').checked = false;
             gCheckLink(); gMissingLine();
         });
-        ['g-street','g-postalCode','g-city','g-lat','g-lng','g-verified'].forEach(id => gEl(id).addEventListener('input', gMissingLine));
+        ['g-street','g-postalCode','g-city','g-lat','g-lng','g-verified','g-phone'].forEach(id => gEl(id).addEventListener('input', gMissingLine));
         gEl('g-verified').addEventListener('change', gMissingLine);
 
         window.parseMapsUrl = () => {
@@ -936,6 +944,12 @@
                         await set(ref(db, `shop_profile/${gShop}/info/address`), addr);
                         filled = true;
                     }
+                }
+                // Τηλέφωνο: ένα πεδίο, κοινό με το Προφίλ του καταστήματος
+                const phone = gEl('g-phone').value.trim().slice(0, 20);
+                if (phone !== String(gProfile.phone || '').trim()) {
+                    await set(ref(db, `shop_profile/${gShop}/info/phone`), phone || null);
+                    gProfile.phone = phone;
                 }
                 if (window._shopDetails) { window._shopDetails[gShop] = Object.assign({}, window._shopDetails[gShop], { google: data }); }
                 const badge = gEl('g-' + gShop);
