@@ -3,6 +3,7 @@ const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { locationLabel } = require('./_shared/location');
 const { googleCalendarUrl, icsUrl } = require('./_shared/calendar');
+const { shopTz } = require('./_shared/time');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -30,7 +31,8 @@ exports.handler = async (event) => {
       : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
 
     const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
-    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, en: lang === 'en' });
+    const tz = await shopTz(db, shopId);
+    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, en: lang === 'en', tz });
     const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang });
     const walletUrl = process.env.GOOGLE_WALLET_ISSUER_ID
       ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: lang === 'en' ? 'en' : 'el' }).toString()

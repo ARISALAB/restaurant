@@ -3,7 +3,7 @@
 const { Resend } = require('resend');
 const webpush = require('web-push');
 const { getDb } = require('./_shared/firebase');
-const { athensToMs, athensDay } = require('./_shared/time');
+const { localToMs, localDay, tzOr } = require('./_shared/time');
 const { scanWaitlists } = require('./_shared/waitlist');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -94,7 +94,6 @@ async function sendPush({ db, shop, id, b, shopName, info, logo, en }) {
 exports.handler = async () => {
   const db = getDb();
   const now = Date.now();
-  const days = [...new Set([athensDay(now), athensDay(now + BEFORE_MIN * 60000)])];
   const details = (await db.ref('shop_details').get()).val() || {};
   let sent = 0, pushed = 0, failed = 0;
 
@@ -102,6 +101,8 @@ exports.handler = async () => {
     if (!d || d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < now)) continue;
     const info = (await db.ref(`shop_profile/${shop}/info`).get()).val() || {};
     if (info.remindersOff === true) continue;
+    const tz = tzOr(info.tz);
+    const days = [...new Set([localDay(now, tz), localDay(now + BEFORE_MIN * 60000, tz)])];
     let logo;
 
     for (const day of days) {
@@ -110,7 +111,7 @@ exports.handler = async () => {
       snap.forEach(c => {
         const b = c.val() || {};
         if (b.status === 'cancelled' || b.reminderSentAt || !b.time || (!b.email && !(PUSH_ON && b.push && b.push.endpoint))) return;
-        const at = athensToMs(b.date, b.time);
+        const at = localToMs(b.date, b.time, tz);
         const mins = (at - now) / 60000;
         if (mins > BEFORE_MIN || mins <= BEFORE_MIN - WINDOW_MIN) return;
         if (b.timestamp && (at - b.timestamp) / 60000 < MIN_LEAD_MIN) return;
@@ -145,7 +146,7 @@ exports.handler = async () => {
       }
     }
   }
-  const wl = await scanWaitlists(db, athensDay(now)).catch(e => { console.error('[reminders] waitlist scan', e.message); return 0; });
+  const wl = await scanWaitlists(db).catch(e => { console.error('[reminders] waitlist scan', e.message); return 0; });
   console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}, waitlist ${wl}`);
   return { statusCode: 200, body: JSON.stringify({ sent, pushed, failed }) };
 };

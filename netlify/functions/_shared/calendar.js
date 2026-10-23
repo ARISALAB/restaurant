@@ -1,5 +1,5 @@
 // Σύνδεσμοι «Προσθήκη στο ημερολόγιο» για μια κράτηση
-const { athensToMs, icsStamp } = require('./time');
+const { localToMs, tzOr, icsStamp } = require('./time');
 
 const DURATION_MS = 2 * 3600 * 1000;
 
@@ -10,15 +10,15 @@ function calendarText(b, shopName, en) {
   };
 }
 
-function googleCalendarUrl({ b, shopName, address, en }) {
-  const start = athensToMs(b.date, b.time);
+function googleCalendarUrl({ b, shopName, address, en, tz }) {
+  const start = localToMs(b.date, b.time, tz);
   const { title, details } = calendarText(b, shopName, en);
   const q = new URLSearchParams({
     action: 'TEMPLATE',
     text: title,
     dates: `${icsStamp(start)}/${icsStamp(start + DURATION_MS)}`,
     details,
-    ctz: 'Europe/Athens',
+    ctz: tzOr(tz),
   });
   if (address) q.set('location', address);
   return 'https://calendar.google.com/calendar/render?' + q.toString();

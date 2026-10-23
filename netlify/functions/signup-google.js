@@ -1,3 +1,4 @@
+const { validTz, TZ } = require('./_shared/time');
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { claimInitial } = require('./_shared/slugs');
@@ -29,6 +30,7 @@ exports.handler = async (event) => {
   const type     = String(b.type || '').trim().slice(0, 40);
   const plan     = String(b.plan || '').trim().slice(0, 60);
   const lang     = b.lang === 'en' ? 'en' : 'el';
+  const tz       = validTz(b.tz) ? b.tz : TZ;   // ζώνη ώρας από τον browser του ιδιοκτήτη
   const email    = caller.email.toLowerCase();
 
   if (!shopName)             return json(400, { error: 'missing_fields' });
@@ -58,7 +60,8 @@ exports.handler = async (event) => {
         paidUntil: now + TRIAL_MS, billingStatus: 'trial',
         ...terms
       },
-      [`shop_profile/${shopId}/info/notificationEmail`]: email
+      [`shop_profile/${shopId}/info/notificationEmail`]: email,
+      [`shop_profile/${shopId}/info/tz`]: tz
     });
   } catch (e) {
     console.error('db write failed', e);

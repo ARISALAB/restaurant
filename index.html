@@ -1461,8 +1461,10 @@
             ...['openHour', 'closeHour', 'maxGuests'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()).catch(() => null)),
             get(ref(db, `shop_profile/${shopID}/info/hoursWeek`)).then(x => x.val()).catch(() => null),
             get(ref(db, `shop_profile/${shopID}/info/capacity`)).then(x => x.val()).catch(() => null),
-            get(ref(db, `shop_profile/${shopID}/info/maxParty`)).then(x => x.val()).catch(() => null)
-        ]).then(([openHour_, closeHour_, maxGuests_, hoursWeek_, capacity_, maxParty_]) => {
+            get(ref(db, `shop_profile/${shopID}/info/maxParty`)).then(x => x.val()).catch(() => null),
+            get(ref(db, `shop_profile/${shopID}/info/tz`)).then(x => x.val()).catch(() => null)
+        ]).then(([openHour_, closeHour_, maxGuests_, hoursWeek_, capacity_, maxParty_, tz_]) => {
+            if (typeof tz_ === 'string' && tz_) { try { new Intl.DateTimeFormat('en-US', { timeZone: tz_ }); shopTz = tz_; } catch (e) {} }
             if (typeof openHour_ === 'number') fallbackOpen = openHour_;
             if (typeof closeHour_ === 'number') fallbackClose = closeHour_;
             const maxGuests = (typeof maxParty_ === 'number' && maxParty_ > 0) ? Math.min(maxParty_, 50) : (typeof maxGuests_ === 'number' ? maxGuests_ : 8);
@@ -1516,6 +1518,8 @@
         const WH_SHORT = { el: ['Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ','Κυρ'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] };
         const SCHEMA_DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
         let shopHoursWeek = null, shopCapacity = null, fallbackOpen = 8, fallbackClose = 23, takenByTime = {};
+        // Ζώνη ώρας του καταστήματος: «σήμερα» και οι ώρες που πέρασαν μετράνε με την ώρα του εστιατορίου, όχι του επισκέπτη
+        let shopTz = 'Europe/Athens';
         function whNormalize(w) {
             const out = {};
             WH_DAYS.forEach(d => {
@@ -1556,7 +1560,12 @@
             });
             return [...set].sort();
         }
-        function todayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+        // Ημερομηνία και λεπτά της ημέρας τώρα, στην ώρα του καταστήματος
+        function shopNow() {
+            const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: shopTz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map(x => [x.type, x.value]));
+            return { day: `${p.year}-${p.month}-${p.day}`, min: +p.hour * 60 + +p.minute };
+        }
+        function todayStr() { return shopNow().day; }
         async function fetchTaken(dateStr) {
             try {
                 const r = await fetch(`${API}/availability?shop=${encodeURIComponent(shopID)}&date=${dateStr}`, { cache: 'no-store' });
@@ -1579,7 +1588,7 @@
             if (slots === null) { slotMessage('day_closed'); return; }
             takenByTime = shopCapacity ? await fetchTaken(dateStr) : {};
             const guests = parseInt(document.getElementById('cust-guests').value, 10) || 1;
-            const now = new Date(), isToday = dateStr === todayStr(), nowMin = now.getHours() * 60 + now.getMinutes();
+            const sn = shopNow(), isToday = dateStr === sn.day, nowMin = sn.min;
             timeContainer.innerHTML = '';
             let available = 0;
             trFullTimes = [];
@@ -1698,11 +1707,12 @@
         };
 
         // ======= ΕΠΙΒΕΒΑΙΩΣΗ: ημερολόγιο + ειδοποίηση στο κινητό =======
-        function trAthensToMs(date, time) {
+        function trShopToMs(date, time) {
             const [y, m, d] = date.split('-').map(Number), [hh, mm] = time.split(':').map(Number);
-            const guess = Date.UTC(y, m - 1, d, hh, mm);
-            const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Athens', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(guess)).map(x => [x.type, x.value]));
-            return guess - (Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute) - guess);
+            const want = Date.UTC(y, m - 1, d, hh, mm);
+            const at = ms => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: shopTz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(ms)).map(x => [x.type, x.value])); return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute); };
+            let ms = want - (at(want) - want);
+            return ms + (want - at(ms));
         }
         const trStamp = ms => new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
         const trIsApple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
@@ -1723,14 +1733,14 @@
 
         function trShowDone(bk) {
             trDone = bk;
-            const start = trAthensToMs(bk.date, bk.time);
+            const start = trShopToMs(bk.date, bk.time);
             const shopName = document.getElementById('shop-display').innerText || shopID;
             const address = (document.querySelector('#client-address span') || {}).innerText || '';
             document.getElementById('done-when').innerText = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(bk.date + 'T12:00:00Z')) + ' · ' + bk.time;
             document.getElementById('done-what').innerText = bk.guests + ' ' + t('done_persons') + ' · ' + shopName;
 
             const title = (currentLang === 'en' ? 'Reservation: ' : 'Κράτηση: ') + shopName + ' (' + bk.guests + ' ' + t('done_persons') + ')';
-            const g = new URLSearchParams({ action: 'TEMPLATE', text: title, dates: trStamp(start) + '/' + trStamp(start + 7200000), ctz: 'Europe/Athens' });
+            const g = new URLSearchParams({ action: 'TEMPLATE', text: title, dates: trStamp(start) + '/' + trStamp(start + 7200000), ctz: shopTz });
             if (address) g.set('location', address);
             const gcal = 'https://calendar.google.com/calendar/render?' + g.toString();
             const ics = `${API}/ics?` + new URLSearchParams({ shop: shopID, id: bk.id || '', t: bk.token || '', lang: currentLang }).toString();

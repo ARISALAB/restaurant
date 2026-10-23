@@ -1204,6 +1204,12 @@
                             <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="cap_hint">Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.</small>
                         </div>
                         <div class="input-group">
+                            <label data-i18n-key="tz_label">Ζώνη ώρας καταστήματος</label>
+                            <select id="prof-tz"></select>
+                            <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="tz_hint">Με αυτή την ώρα υπολογίζονται οι διαθέσιμες ώρες κράτησης, οι υπενθυμίσεις και οι κρατήσεις στο ημερολόγιο των πελατών.</small>
+                            <small id="prof-tz-warn" style="display:none; color:#b45309; font-size:0.8rem; margin-top:4px;"></small>
+                        </div>
+                        <div class="input-group">
                             <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
                             <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr">
                             <small style="color:#64748b;font-size:0.8rem;">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
@@ -1395,7 +1401,7 @@
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", nav_home: "← Αρχική", dash_live: "Online κρατήσεις", open_page: "Άνοιγμα σελίδας", party_label: "Μέγιστος αριθμός ατόμων ανά κράτηση", party_hint: "Πόσα άτομα μπορεί να επιλέξει ο πελάτης σε μία κράτηση. Για μεγαλύτερες ομάδες θα επικοινωνεί μαζί σας.", wh_open: "Ανοιχτά", wh_closed: "Κλειστά", wh_closed_day: "Κλειστά όλη την ημέρα", wh_add: "+ διάλειμμα / 2ο ωράριο",
                 wh_copy: "Αντιγραφή της Δευτέρας σε όλες τις ημέρες", wh_hint: "Οι πελάτες βλέπουν ώρες κράτησης μόνο όταν είστε ανοιχτά. Η τελευταία ώρα κράτησης είναι μισή ώρα πριν το κλείσιμο.",
-                cap_label: "Μέγιστος αριθμός ατόμων ανά ώρα κράτησης", cap_hint: "Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.", g_title: "Κρατήσεις από το Google Maps",
+                cap_label: "Μέγιστος αριθμός ατόμων ανά ώρα κράτησης", cap_hint: "Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.", tz_label: "Ζώνη ώρας καταστήματος", tz_hint: "Με αυτή την ώρα υπολογίζονται οι διαθέσιμες ώρες κράτησης, οι υπενθυμίσεις και οι κρατήσεις στο ημερολόγιο των πελατών.", tz_warn: "Η συσκευή σας είναι σε άλλη ζώνη ώρας ({tz}). Αν το κατάστημα βρίσκεται εκεί, αλλάξτε την και πατήστε Αποθήκευση.", g_title: "Κρατήσεις από το Google Maps",
                 g_desc: "Προσθέστε το link κρατήσεών σας στο προφίλ του καταστήματος στη Google. Όποιος σας βρίσκει στο Google Maps ή στην αναζήτηση θα μπορεί να κλείσει τραπέζι με ένα κλικ. Είναι δωρεάν και δεν χρειάζεται καμία έγκριση.",
                 g_s1: "Πατήστε «Άνοιγμα Google Business Profile» και συνδεθείτε με τον λογαριασμό Google του καταστήματος.", g_s2: "Επιλέξτε το κατάστημά σας και πατήστε «Επεξεργασία προφίλ».",
                 g_s3: "Βρείτε την ενότητα με τους συνδέσμους κρατήσεων (μπορεί να λέγεται «Κρατήσεις» ή «Σύνδεσμοι κρατήσεων»).", g_s4: "Επικολλήστε το link σας, αποθηκεύστε, και αν σας ρωτήσει, ορίστε το ως προτιμώμενο.",
@@ -1480,7 +1486,7 @@
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", nav_home: "← Home", dash_live: "Online bookings", open_page: "Open page", party_label: "Maximum guests per booking", party_hint: "How many guests a customer can choose in one booking. Larger groups will contact you directly.", wh_open: "Open", wh_closed: "Closed", wh_closed_day: "Closed all day", wh_add: "+ break / second shift",
                 wh_copy: "Copy Monday to all days", wh_hint: "Guests only see booking times when you are open. The last booking time is 30 minutes before closing.",
-                cap_label: "Maximum guests per booking time", cap_hint: "When a time slot is full, it shows as \"Full\" and takes no more bookings. Leave empty for no limit.", g_title: "Bookings from Google Maps",
+                cap_label: "Maximum guests per booking time", cap_hint: "When a time slot is full, it shows as \"Full\" and takes no more bookings. Leave empty for no limit.", tz_label: "Restaurant time zone", tz_hint: "Available booking times, reminders and guests' calendar entries all use this time zone.", tz_warn: "Your device is in a different time zone ({tz}). If the restaurant is there, change it and press Save.", g_title: "Bookings from Google Maps",
                 g_desc: "Add your booking link to your restaurant's Google profile. Anyone who finds you on Google Maps or in search can book a table in one click. It's free and needs no approval.",
                 g_s1: "Click \"Open Google Business Profile\" and sign in with your restaurant's Google account.", g_s2: "Select your restaurant and click \"Edit profile\".",
                 g_s3: "Find the section for booking links (it may be called \"Reservations\" or \"Booking links\").", g_s4: "Paste your link, save, and if asked, set it as preferred.",
@@ -3074,9 +3080,39 @@
             try { const n = (await get(ref(db, `shop_details/${shopId}/displayName`))).val(); if (n) { document.getElementById('user-name').textContent = n; document.getElementById('dash-name').textContent = n; const di = document.getElementById('dash-initial'); if (di) di.textContent = n.charAt(0).toUpperCase(); } } catch (e) {}
         }
 
+        // ======= ΖΩΝΗ ΩΡΑΣ =======
+        const TR_DEFAULT_TZ = 'Europe/Athens';
+        const trValidTz = z => { if (typeof z !== 'string' || !z) return false; try { new Intl.DateTimeFormat('en-US', { timeZone: z }); return true; } catch (e) { return false; } };
+        const trDeviceTz = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } };
+        function trTzOffset(z) {
+            try {
+                const n = new Intl.DateTimeFormat('en-US', { timeZone: z, timeZoneName: 'shortOffset' }).formatToParts(new Date()).find(x => x.type === 'timeZoneName');
+                return n ? n.value.replace('GMT', 'UTC') : '';
+            } catch (e) { return ''; }
+        }
+        function fillTzSelect(saved) {
+            const sel = document.getElementById('prof-tz');
+            if (!sel) return;
+            const cur = trValidTz(saved) ? saved : TR_DEFAULT_TZ;
+            let zones = [];
+            try { zones = Intl.supportedValuesOf('timeZone'); } catch (e) {}
+            zones = [...new Set([cur, TR_DEFAULT_TZ, trDeviceTz(), ...zones].filter(trValidTz))].sort();
+            sel.innerHTML = zones.map(z => `<option value="${z}">${z.replace(/_/g, ' ')} (${trTzOffset(z) || 'UTC'})</option>`).join('');
+            sel.value = cur;
+            const warn = document.getElementById('prof-tz-warn');
+            const dev = trDeviceTz();
+            const showWarn = () => {
+                const differs = dev && trValidTz(dev) && sel.value !== dev && trTzOffset(sel.value) !== trTzOffset(dev);
+                warn.textContent = differs ? t('tz_warn').replace('{tz}', dev.replace(/_/g, ' ')) : '';
+                warn.style.display = differs ? 'block' : 'none';
+            };
+            sel.onchange = showWarn;
+            showWarn();
+        }
+
         function loadShopProfile(shopId) {
             get(ref(db, `shop_profile/${shopId}`)).then(snap => {
-                if (!snap.exists()) { weekHours = whDefault(); renderWeekHours(); return; }
+                if (!snap.exists()) { weekHours = whDefault(); renderWeekHours(); fillTzSelect(null); return; }
                 const full = snap.val();
                 const p    = full.info || {};
                 const setVal = (id, val) => { if (val !== undefined && document.getElementById(id)) document.getElementById(id).value = val || ''; };
@@ -3090,6 +3126,7 @@
                 renderWeekHours();
                 setVal('prof-capacity', p.capacity ? String(p.capacity) : '');
                 setVal('prof-maxparty', p.maxParty ? String(p.maxParty) : '');
+                fillTzSelect(p.tz);
                 if (full.logoPhoto) setChipLogo(full.logoPhoto);
                 ['prof-tagline','prof-description'].forEach(id => {
                     const el = document.getElementById(id);
@@ -3115,6 +3152,7 @@
                 hoursWeek:         weekHours || null,
                 capacity:          (() => { const n = parseInt(document.getElementById('prof-capacity').value, 10); return n > 0 ? Math.min(n, 999) : null; })(),
                 maxParty:          (() => { const n = parseInt(document.getElementById('prof-maxparty').value, 10); return n > 0 ? Math.min(n, 50) : null; })(),
+                tz:                (() => { const z = (document.getElementById('prof-tz') || {}).value; return trValidTz(z) ? z : TR_DEFAULT_TZ; })(),
                 notificationEmail: document.getElementById('prof-notification-email').value.trim(),
                 updatedAt:         Date.now()
             };

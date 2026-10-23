@@ -1,7 +1,7 @@
 // Αρχείο ημερολογίου (.ics) για μια κράτηση, με ειδοποίηση 2 ώρες πριν.
 // GET /.netlify/functions/ics?shop=<id>&id=<bookingId>&t=<cancelToken>&lang=el|en
 const { getDb } = require('./_shared/firebase');
-const { athensToMs, icsStamp } = require('./_shared/time');
+const { localToMs, shopTz, icsStamp } = require('./_shared/time');
 const { DURATION_MS, calendarText } = require('./_shared/calendar');
 
 const esc = s => String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
@@ -32,11 +32,12 @@ exports.handler = async (event) => {
     if (!b || b.cancelToken !== token) return text(404, en ? 'Reservation not found' : 'Η κράτηση δεν βρέθηκε');
     if (b.status === 'cancelled') return text(410, en ? 'This reservation was cancelled' : 'Η κράτηση έχει ακυρωθεί');
 
-    const [shopName, address] = await Promise.all([
+    const [shopName, address, tz] = await Promise.all([
       db.ref(`shop_details/${shop}/displayName`).get().then(s => s.val() || shop),
       db.ref(`shop_profile/${shop}/info/address`).get().then(s => s.val() || ''),
+      shopTz(db, shop),
     ]);
-    const start = athensToMs(b.date, b.time);
+    const start = localToMs(b.date, b.time, tz);
     const { title, details } = calendarText(b, shopName, en);
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${en ? 'en' : 'el'}`;
     const desc = details + '\n\n' + (en ? 'Cancel: ' : 'Ακύρωση: ') + cancelUrl;

@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
-const { athensDay } = require('./_shared/time');
+const { localDay, shopTz } = require('./_shared/time');
 const { notifyWaitlist, phoneKey, notifyShopJoin } = require('./_shared/waitlist');
 
 const SUPER_UID = 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1';
@@ -38,8 +38,9 @@ async function join(db, b, event) {
       !(guests >= 1 && guests <= 50) || !name || !phone || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json(400, { error: 'bad_request' });
   }
-  const today = athensDay(Date.now());
-  if (date < today || date > athensDay(Date.now() + 400 * 86400000)) return json(400, { error: 'bad_time' });
+  const tz = await shopTz(db, shop);
+  const today = localDay(Date.now(), tz);
+  if (date < today || date > localDay(Date.now() + 400 * 86400000, tz)) return json(400, { error: 'bad_time' });
 
   const [details, capacity] = await Promise.all([
     db.ref(`shop_details/${shop}`).get().then(s => s.val()),

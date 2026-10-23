@@ -2,6 +2,7 @@ const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { notifyWaitlist } = require('./_shared/waitlist');
+const { localToMs, shopTz } = require('./_shared/time');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -29,9 +30,9 @@ exports.handler = async (event) => {
     if (booking.status === 'cancelled')
       return json(200, { alreadyCancelled: true, message: 'Η κράτηση είναι ήδη ακυρωμένη' });
 
-    const bookingDateTime = new Date(`${booking.date}T${booking.time}:00`);
-    const now = new Date();
-    const diffHours = (bookingDateTime - now) / (1000 * 60 * 60);
+    // Η ώρα της κράτησης είναι ώρα καταστήματος (ο server τρέχει σε UTC)
+    const bookingMs = localToMs(booking.date, booking.time, await shopTz(db, shopId));
+    const diffHours = (bookingMs - Date.now()) / (1000 * 60 * 60);
     if (diffHours < 2)
       return json(400, {
         error: 'too_late',

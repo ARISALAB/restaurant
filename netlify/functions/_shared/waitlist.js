@@ -1,7 +1,7 @@
 // Λίστα αναμονής: όταν ελευθερώνονται θέσεις σε μια ώρα, ειδοποιούμε με email όσους περιμένουν.
 // Δομή: waitlist/{shop}/{date}/{id} = { name, phone, email, time ("20:30" ή "any"), guests, lang, createdAt, status, notifiedAt }
 const { Resend } = require('resend');
-const { athensToMs } = require('./time');
+const { localToMs, localDay, shopTz } = require('./time');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const MAX_NOTIFY = 3;            // πόσους ειδοποιούμε κάθε φορά που ελευθερώνεται τραπέζι
@@ -70,7 +70,8 @@ function matchesTime(e, time) {
 // Ελευθερώθηκαν θέσεις στις {date} {time}: ειδοποίησε όσους χωράνε, με σειρά προτεραιότητας
 async function notifyWaitlist(db, shop, date, time) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '') || !/^\d{2}:\d{2}$/.test(time || '')) return 0;
-  if ((athensToMs(date, time) - Date.now()) / 60000 < MIN_AHEAD_MIN) return 0;
+  const tz = await shopTz(db, shop);
+  if ((localToMs(date, time, tz) - Date.now()) / 60000 < MIN_AHEAD_MIN) return 0;
   const capacity = (await db.ref(`shop_profile/${shop}/info/capacity`).get()).val();
   if (typeof capacity !== 'number' || capacity <= 0) return 0;
 
@@ -137,10 +138,11 @@ async function removeBooked(db, shop, date, phone) {
 
 // Έλεγχος ασφαλείας (από τις προγραμματισμένες υπενθυμίσεις): πιάνει θέσεις που ελευθερώθηκαν με άλλο τρόπο,
 // π.χ. αλλαγή ώρας ή λιγότερα άτομα σε μια κράτηση από το admin
-async function scanWaitlists(db, today) {
+async function scanWaitlists(db) {
   const all = (await db.ref('waitlist').get()).val() || {};
   let sent = 0;
   for (const [shop, dates] of Object.entries(all)) {
+    const today = localDay(Date.now(), await shopTz(db, shop));
     for (const [date, entries] of Object.entries(dates || {})) {
       if (date < today) continue;
       const times = new Set();

@@ -531,6 +531,8 @@ document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
 
 
 <script>
+function trBrowserTz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } }
+
 function toggleFaq(btn) {
   const item = btn.parentElement;
   const wasOpen = item.classList.contains('open');
@@ -591,7 +593,7 @@ document.getElementById('partnerForm').addEventListener('submit', async function
   };
   try {
     const res = await fetch('/.netlify/functions/signup', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, tz: trBrowserTz() })
     });
     const out = await res.json().catch(() => ({}));
     if (res.ok) {
@@ -676,7 +678,7 @@ btn.addEventListener('click', async () => {
     const res = await fetch('/.netlify/functions/signup-google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'en' })
+      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'en', tz: trBrowserTz() })
     });
     const out = await res.json().catch(() => ({}));
     if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin'; return; }

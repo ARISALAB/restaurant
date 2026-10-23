@@ -5,7 +5,7 @@
 // που πρέπει να έχει προστεθεί ως Developer στο Google Pay & Wallet Console.
 const crypto = require('crypto');
 const { getDb } = require('./_shared/firebase');
-const { athensToMs } = require('./_shared/time');
+const { localToMs } = require('./_shared/time');
 
 const ISSUER = process.env.GOOGLE_WALLET_ISSUER_ID || '';
 const SA_EMAIL = process.env.FIREBASE_CLIENT_EMAIL || '';
@@ -91,7 +91,7 @@ exports.handler = async (event) => {
       db.ref(`shop_profile/${shop}/info`).get().then(s => s.val() || {}),
       db.ref(`shop_profile/${shop}/logoPhoto`).get().then(s => s.val()),
     ]);
-    const start = athensToMs(b.date, b.time);
+    const start = localToMs(b.date, b.time, info.tz);
     const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${lang}`;
     const mapUrl = info.address ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(shopName + ' ' + info.address) : null;
     const tel = info.phone ? String(info.phone).replace(/[^\d+]/g, '') : '';
