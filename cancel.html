@@ -163,10 +163,9 @@
     const token     = params.get('token');
     const shopId    = params.get('shop');
     const bookingId = params.get('id');
-    const lang      = params.get('lang') || 'el';
     const card      = document.getElementById('card');
-    const isEn      = lang === 'en';
-    const txt = isEn ? {
+    const TXT = {
+      en: {
       invalid_title:   'Invalid Link',
       invalid_desc:    'The cancellation link is invalid or has expired.',
       back_home:       '← Home',
@@ -189,7 +188,9 @@
       invalid_token_d: 'The cancellation link is not valid.',
       error_generic:   'Something went wrong. Please try again.',
       conn_error:      'Connection error. Please check your internet and try again.',
-    } : {
+      loading:         'Loading...', wait: 'Please wait.'
+    },
+      el: {
       invalid_title:   'Μη έγκυρος σύνδεσμος',
       invalid_desc:    'Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος ή έχει λήξει.',
       back_home:       '← Αρχική Σελίδα',
@@ -212,7 +213,163 @@
       invalid_token_d: 'Ο σύνδεσμος ακύρωσης δεν είναι έγκυρος.',
       error_generic:   'Κάτι πήγε στραβά. Δοκιμάστε ξανά.',
       conn_error:      'Σφάλμα σύνδεσης. Ελέγξτε το internet και δοκιμάστε ξανά.',
+      loading:         'Φόρτωση...', wait: 'Παρακαλώ περιμένετε.'
+    },
+      de: {
+      invalid_title:   'Ungültiger Link',
+      invalid_desc:    'Der Stornierungslink ist ungültig oder abgelaufen.',
+      back_home:       '← Startseite',
+      title:           'Reservierung stornieren',
+      confirm_q:       'Möchten Sie Ihre Reservierung wirklich stornieren?',
+      warn:            '⚠️ Eine Stornierung ist nur bis <strong>2 Stunden</strong> vor der Reservierung möglich. Danach wenden Sie sich bitte direkt an das Restaurant.',
+      btn_cancel:      '❌ Ja, Reservierung stornieren',
+      btn_back:        '← Zurück zum Restaurant',
+      cancelling:      'Wird storniert...',
+      success_title:   'Reservierung storniert',
+      success_desc:    'Ihre Reservierung wurde erfolgreich storniert.<br>Danke für Ihre Nachricht – wir hoffen, Sie bald zu sehen!',
+      new_booking:     '📅 Neue Reservierung',
+      already_title:   'Bereits storniert',
+      already_desc:    'Diese Reservierung wurde bereits storniert.',
+      too_late_title:  'Stornierung nicht möglich',
+      too_late_desc:   'Innerhalb von <strong>2 Stunden</strong> vor der Reservierung ist keine Stornierung möglich.',
+      too_late_desc2:  'Bitte wenden Sie sich direkt an das Restaurant.',
+      back:            '← Zurück',
+      invalid_token_t: 'Ungültiger Link',
+      invalid_token_d: 'Der Stornierungslink ist ungültig.',
+      error_generic:   'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
+      conn_error:      'Verbindungsfehler. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.',
+      loading:         'Wird geladen...', wait: 'Bitte warten.'
+    },
+      fr: {
+      invalid_title:   'Lien invalide',
+      invalid_desc:    "Le lien d'annulation n'est pas valide ou a expiré.",
+      back_home:       '← Accueil',
+      title:           'Annuler la réservation',
+      confirm_q:       'Voulez-vous vraiment annuler votre réservation ?',
+      warn:            "⚠️ L'annulation n'est possible que jusqu'à <strong>2 heures</strong> avant la réservation. Ensuite, veuillez contacter directement le restaurant.",
+      btn_cancel:      '❌ Oui, annuler la réservation',
+      btn_back:        '← Retour au restaurant',
+      cancelling:      'Annulation...',
+      success_title:   'Réservation annulée',
+      success_desc:    'Votre réservation a bien été annulée.<br>Merci de nous avoir prévenus, à bientôt nous l’espérons !',
+      new_booking:     '📅 Nouvelle réservation',
+      already_title:   'Déjà annulée',
+      already_desc:    'Cette réservation a déjà été annulée.',
+      too_late_title:  'Annulation impossible',
+      too_late_desc:   "L'annulation n'est pas possible dans les <strong>2 heures</strong> précédant la réservation.",
+      too_late_desc2:  'Veuillez contacter directement le restaurant.',
+      back:            '← Retour',
+      invalid_token_t: 'Lien invalide',
+      invalid_token_d: "Le lien d'annulation n'est pas valide.",
+      error_generic:   'Une erreur est survenue. Veuillez réessayer.',
+      conn_error:      'Erreur de connexion. Vérifiez votre connexion internet et réessayez.',
+      loading:         'Chargement...', wait: 'Veuillez patienter.'
+    },
+      it: {
+      invalid_title:   'Link non valido',
+      invalid_desc:    'Il link di annullamento non è valido o è scaduto.',
+      back_home:       '← Home',
+      title:           'Annulla la prenotazione',
+      confirm_q:       'Vuoi davvero annullare la tua prenotazione?',
+      warn:            "⚠️ L'annullamento è possibile solo fino a <strong>2 ore</strong> prima della prenotazione. Dopo, contatta direttamente il ristorante.",
+      btn_cancel:      '❌ Sì, annulla la prenotazione',
+      btn_back:        '← Torna al ristorante',
+      cancelling:      'Annullamento...',
+      success_title:   'Prenotazione annullata',
+      success_desc:    'La tua prenotazione è stata annullata.<br>Grazie per averci avvisato, speriamo di vederti presto!',
+      new_booking:     '📅 Nuova prenotazione',
+      already_title:   'Già annullata',
+      already_desc:    'Questa prenotazione è già stata annullata.',
+      too_late_title:  'Annullamento non consentito',
+      too_late_desc:   "Non è possibile annullare nelle <strong>2 ore</strong> prima della prenotazione.",
+      too_late_desc2:  'Contatta direttamente il ristorante.',
+      back:            '← Indietro',
+      invalid_token_t: 'Link non valido',
+      invalid_token_d: 'Il link di annullamento non è valido.',
+      error_generic:   'Qualcosa è andato storto. Riprova.',
+      conn_error:      'Errore di connessione. Controlla internet e riprova.',
+      loading:         'Caricamento...', wait: 'Attendi un momento.'
+    },
+      es: {
+      invalid_title:   'Enlace no válido',
+      invalid_desc:    'El enlace de cancelación no es válido o ha caducado.',
+      back_home:       '← Inicio',
+      title:           'Cancelar reserva',
+      confirm_q:       '¿Seguro que quieres cancelar tu reserva?',
+      warn:            '⚠️ Solo puedes cancelar hasta <strong>2 horas</strong> antes de la reserva. Después, ponte en contacto directamente con el restaurante.',
+      btn_cancel:      '❌ Sí, cancelar reserva',
+      btn_back:        '← Volver al restaurante',
+      cancelling:      'Cancelando...',
+      success_title:   'Reserva cancelada',
+      success_desc:    'Tu reserva se ha cancelado correctamente.<br>Gracias por avisarnos, ¡esperamos verte pronto!',
+      new_booking:     '📅 Nueva reserva',
+      already_title:   'Ya cancelada',
+      already_desc:    'Esta reserva ya se había cancelado.',
+      too_late_title:  'No se puede cancelar',
+      too_late_desc:   'No es posible cancelar en las <strong>2 horas</strong> anteriores a la reserva.',
+      too_late_desc2:  'Ponte en contacto directamente con el restaurante.',
+      back:            '← Volver',
+      invalid_token_t: 'Enlace no válido',
+      invalid_token_d: 'El enlace de cancelación no es válido.',
+      error_generic:   'Algo ha salido mal. Inténtalo de nuevo.',
+      conn_error:      'Error de conexión. Comprueba tu internet e inténtalo de nuevo.',
+      loading:         'Cargando...', wait: 'Espera un momento.'
+    },
+      tr: {
+      invalid_title:   'Geçersiz bağlantı',
+      invalid_desc:    'İptal bağlantısı geçersiz ya da süresi dolmuş.',
+      back_home:       '← Ana sayfa',
+      title:           'Rezervasyonu iptal et',
+      confirm_q:       'Rezervasyonunuzu iptal etmek istediğinizden emin misiniz?',
+      warn:            '⚠️ İptal yalnızca rezervasyondan <strong>2 saat</strong> öncesine kadar mümkündür. Sonrasında lütfen doğrudan restoranla iletişime geçin.',
+      btn_cancel:      '❌ Evet, rezervasyonu iptal et',
+      btn_back:        '← Restorana dön',
+      cancelling:      'İptal ediliyor...',
+      success_title:   'Rezervasyon iptal edildi',
+      success_desc:    'Rezervasyonunuz başarıyla iptal edildi.<br>Haber verdiğiniz için teşekkürler, sizi yakında görmeyi umuyoruz!',
+      new_booking:     '📅 Yeni rezervasyon',
+      already_title:   'Zaten iptal edilmiş',
+      already_desc:    'Bu rezervasyon zaten iptal edilmiş.',
+      too_late_title:  'İptal edilemiyor',
+      too_late_desc:   'Rezervasyon saatine <strong>2 saatten</strong> az kala iptal mümkün değildir.',
+      too_late_desc2:  'Lütfen doğrudan restoranla iletişime geçin.',
+      back:            '← Geri',
+      invalid_token_t: 'Geçersiz bağlantı',
+      invalid_token_d: 'İptal bağlantısı geçersiz.',
+      error_generic:   'Bir şeyler ters gitti. Lütfen tekrar deneyin.',
+      conn_error:      'Bağlantı hatası. İnternetinizi kontrol edip tekrar deneyin.',
+      loading:         'Yükleniyor...', wait: 'Lütfen bekleyin.'
+    },
+      pt: {
+      invalid_title:   'Link inválido',
+      invalid_desc:    'O link de cancelamento não é válido ou expirou.',
+      back_home:       '← Início',
+      title:           'Cancelar reserva',
+      confirm_q:       'Tem a certeza de que quer cancelar a sua reserva?',
+      warn:            '⚠️ Só pode cancelar até <strong>2 horas</strong> antes da reserva. Depois disso, contacte diretamente o restaurante.',
+      btn_cancel:      '❌ Sim, cancelar reserva',
+      btn_back:        '← Voltar ao restaurante',
+      cancelling:      'A cancelar...',
+      success_title:   'Reserva cancelada',
+      success_desc:    'A sua reserva foi cancelada com sucesso.<br>Obrigado por nos avisar, esperamos vê-lo em breve!',
+      new_booking:     '📅 Nova reserva',
+      already_title:   'Já cancelada',
+      already_desc:    'Esta reserva já tinha sido cancelada.',
+      too_late_title:  'Não é possível cancelar',
+      too_late_desc:   'Não é possível cancelar nas <strong>2 horas</strong> anteriores à reserva.',
+      too_late_desc2:  'Contacte diretamente o restaurante.',
+      back:            '← Voltar',
+      invalid_token_t: 'Link inválido',
+      invalid_token_d: 'O link de cancelamento não é válido.',
+      error_generic:   'Algo correu mal. Tente novamente.',
+      conn_error:      'Erro de ligação. Verifique a internet e tente novamente.',
+      loading:         'A carregar...', wait: 'Aguarde um momento.'
+    }
     };
+    const lang = TXT[params.get('lang')] ? params.get('lang') : 'el';
+    const txt = TXT[lang];
+    document.documentElement.lang = lang;
+    document.title = txt.title + ' - TableReserve';
     const shopName = shopId ? shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g,' ') : '';
 
     if (!token || !shopId || !bookingId) {
@@ -232,7 +389,7 @@
         </div>
         <div class="warn-box">${txt.warn}</div>
         <button class="btn btn-red" id="btn-cancel">${txt.btn_cancel}</button>
-        <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray">${txt.btn_back}</a>
+        <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray">${txt.btn_back}</a>
       `;
 
       document.getElementById('btn-cancel').onclick = async () => {
@@ -253,26 +410,26 @@
               <div class="icon">✅</div>
               <h1>${txt.success_title}</h1>
               <p>${txt.success_desc}</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
+              <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.alreadyCancelled) {
             card.innerHTML = `
               <div class="icon">ℹ️</div>
               <h1>${txt.already_title}</h1>
               <p>${txt.already_desc}</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
+              <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.error === 'too_late') {
             card.innerHTML = `
               <div class="icon">⏰</div>
               <h1>${txt.too_late_title}</h1>
               <p>${txt.too_late_desc}</p>
               <p style="margin-top:10px;">${txt.too_late_desc2}</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
+              <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
           } else if (data.error === 'Μη έγκυρο token ακύρωσης' || data.error === 'Κράτηση δεν βρέθηκε') {
             card.innerHTML = `
               <div class="icon">🔒</div>
               <h1>${txt.invalid_token_t}</h1>
               <p>${txt.invalid_token_d}</p>
-              <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
+              <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
           } else {
             btn.disabled = false;
             btn.innerHTML = txt.btn_cancel;

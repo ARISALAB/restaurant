@@ -1,18 +1,18 @@
 // Σύνδεσμοι «Προσθήκη στο ημερολόγιο» για μια κράτηση
 const { localToMs, tzOr, icsStamp } = require('./time');
+const { msg, normLang } = require('./i18n');
 
 const DURATION_MS = 2 * 3600 * 1000;
 
-function calendarText(b, shopName, en) {
-  return {
-    title: en ? `Reservation: ${shopName} (${b.guests} guests)` : `Κράτηση: ${shopName} (${b.guests} άτομα)`,
-    details: en ? `Table for ${b.guests} at ${b.time}. Booked via TableReserve.` : `Τραπέζι για ${b.guests} στις ${b.time}. Κράτηση μέσω TableReserve.`,
-  };
+// lang: 'el' | 'en' | 'de' | ... (παλιές κλήσεις με true/false = en/el)
+function calendarText(b, shopName, lang) {
+  const m = msg(lang === true ? 'en' : lang === false ? 'el' : lang);
+  return { title: m.k_title(shopName, b.guests), details: m.k_details(b.guests, b.time) };
 }
 
-function googleCalendarUrl({ b, shopName, address, en, tz }) {
+function googleCalendarUrl({ b, shopName, address, lang, en, tz }) {
   const start = localToMs(b.date, b.time, tz);
-  const { title, details } = calendarText(b, shopName, en);
+  const { title, details } = calendarText(b, shopName, lang || (en ? 'en' : 'el'));
   const q = new URLSearchParams({
     action: 'TEMPLATE',
     text: title,
@@ -25,7 +25,7 @@ function googleCalendarUrl({ b, shopName, address, en, tz }) {
 }
 
 function icsUrl({ shopId, bookingId, cancelToken, lang }) {
-  const q = new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: lang === 'en' ? 'en' : 'el' });
+  const q = new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: normLang(lang) });
   return 'https://tablereserve.gr/.netlify/functions/ics?' + q.toString();
 }
 

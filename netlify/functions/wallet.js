@@ -1,11 +1,12 @@
 // «Προσθήκη στο Google Wallet»: η κράτηση γίνεται κάρτα στο πορτοφόλι του πελάτη.
-// GET /.netlify/functions/wallet?shop=<id>&id=<bookingId>&t=<cancelToken>&lang=el|en  -> 302 στη σελίδα της Google
+// GET /.netlify/functions/wallet?shop=<id>&id=<bookingId>&t=<cancelToken>&lang=el|en|de|fr|it|es|tr|pt  -> 302 στη σελίδα της Google
 // GET /.netlify/functions/wallet?probe=1                                              -> { enabled }
 // Υπογράφουμε με τον λογαριασμό υπηρεσίας του Firebase (FIREBASE_CLIENT_EMAIL / FIREBASE_PRIVATE_KEY),
 // που πρέπει να έχει προστεθεί ως Developer στο Google Pay & Wallet Console.
 const crypto = require('crypto');
 const { getDb } = require('./_shared/firebase');
 const { localToMs } = require('./_shared/time');
+const { normLang, msg, fmtDate } = require('./_shared/i18n');
 
 const ISSUER = process.env.GOOGLE_WALLET_ISSUER_ID || '';
 const SA_EMAIL = process.env.FIREBASE_CLIENT_EMAIL || '';
@@ -66,25 +67,20 @@ function logoUrl(u) {
   return u.replace('/upload/', '/upload/c_pad,b_white,w_440,h_440/c_pad,b_white,w_660,h_660,f_png/');
 }
 
-function fmtDate(d, en) {
-  const [y, m, dd] = d.split('-').map(Number);
-  return new Intl.DateTimeFormat(en ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, dd)));
-}
-
 exports.handler = async (event) => {
   const q = event.queryStringParameters || {};
   if (q.probe) return { statusCode: 200, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'max-age=300' }, body: JSON.stringify({ enabled: ENABLED }) };
   if (!ENABLED) return text(503, 'Google Wallet is not configured');
 
   const shop = String(q.shop || ''), id = String(q.id || ''), token = String(q.t || '');
-  const en = q.lang === 'en', lang = en ? 'en' : 'el';
+  const lang = normLang(q.lang), m = msg(lang);
   if (!/^[a-z0-9_]{1,60}$/.test(shop) || !/^[A-Za-z0-9_-]{1,40}$/.test(id) || !token) return text(400, 'Bad request');
 
   try {
     const db = getDb();
     const b = (await db.ref(`reservations/${shop}/${id}`).get()).val();
-    if (!b || b.cancelToken !== token) return text(404, en ? 'Reservation not found' : 'Η κράτηση δεν βρέθηκε');
-    if (b.status === 'cancelled') return text(410, en ? 'This reservation was cancelled' : 'Η κράτηση έχει ακυρωθεί');
+    if (!b || b.cancelToken !== token) return text(404, m.e_not_found);
+    if (b.status === 'cancelled') return text(410, m.e_cancelled);
 
     const [shopName, info, logo] = await Promise.all([
       db.ref(`shop_details/${shop}/displayName`).get().then(s => s.val() || shop),
@@ -97,23 +93,23 @@ exports.handler = async (event) => {
     const tel = info.phone ? String(info.phone).replace(/[^\d+]/g, '') : '';
 
     const links = [];
-    if (mapUrl) links.push({ id: 'map', uri: mapUrl, description: en ? 'Directions' : 'Οδηγίες' });
-    if (tel) links.push({ id: 'tel', uri: 'tel:' + tel, description: (en ? 'Call ' : 'Τηλέφωνο ') + info.phone });
-    links.push({ id: 'cancel', uri: cancelUrl, description: en ? 'Cancel reservation' : 'Ακύρωση κράτησης' });
+    if (mapUrl) links.push({ id: 'map', uri: mapUrl, description: m.g_directions });
+    if (tel) links.push({ id: 'tel', uri: 'tel:' + tel, description: m.g_call + info.phone });
+    links.push({ id: 'cancel', uri: cancelUrl, description: m.g_cancel });
 
     const modules = [
-      { id: 'date', header: en ? 'Date' : 'Ημερομηνία', body: fmtDate(b.date, en) },
-      { id: 'guests', header: en ? 'Guests' : 'Άτομα', body: String(b.guests) },
-      { id: 'name', header: en ? 'Name' : 'Όνομα', body: String(b.name || '') },
+      { id: 'date', header: m.g_date, body: fmtDate(b.date, lang) },
+      { id: 'guests', header: m.g_guests, body: String(b.guests) },
+      { id: 'name', header: m.g_name, body: String(b.name || '') },
     ];
-    if (info.address) modules.push({ id: 'address', header: en ? 'Address' : 'Διεύθυνση', body: String(info.address) });
+    if (info.address) modules.push({ id: 'address', header: m.g_address, body: String(info.address) });
 
     const obj = {
       id: `${ISSUER}.${shop}_${id}`.replace(/[^A-Za-z0-9._-]/g, '_'),
       classId: CLASS_ID,
       state: 'ACTIVE',
       cardTitle: L(shopName, lang),
-      subheader: L(`${en ? 'Table for' : 'Τραπέζι για'} ${b.guests} · ${fmtDate(b.date, en)}`, lang),
+      subheader: L(`${m.g_table_for(b.guests)} · ${fmtDate(b.date, lang)}`, lang),
       header: L(b.time, lang),
       hexBackgroundColor: '#1e3a8a',
       logo: { sourceUri: { uri: logoUrl(logo) || 'https://tablereserve.gr/wallet-logo.png' }, contentDescription: L(shopName, lang) },

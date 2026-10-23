@@ -130,6 +130,15 @@
             color: var(--primary);
             box-shadow: var(--shadow-sm);
         }
+        .lang-select {
+            appearance: none; -webkit-appearance: none;
+            padding: 5px 26px 5px 10px;
+            border-radius: 7px; border: none;
+            background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2364748b' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 9px center;
+            color: var(--primary); box-shadow: var(--shadow-sm);
+            font: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; cursor: pointer;
+        }
+        .lang-select:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
 
         /* Super admin tab hidden by default */
         #tab-superadmin { display: none; }
@@ -705,6 +714,7 @@
             .nav-tab { padding: 6px 8px; font-size: 0.72rem; flex: 1; text-align: center; white-space: nowrap; }
             .lang-switcher { padding: 2px; flex-shrink: 0; }
             .lang-btn { padding: 4px 8px; font-size: 0.72rem; }
+            .lang-select { padding: 4px 22px 4px 8px; font-size: 0.72rem; background-position: right 7px center; }
             .container { padding: 16px 12px; }
             .card { padding: 18px 16px; border-radius: var(--radius-lg); }
             .page-header { margin-bottom: 16px; }
@@ -800,7 +810,7 @@
         </div>
         <div class="splash-title">Table<span>Reserve</span></div>
         <div class="splash-sub" id="splash-sub">Online κρατήσεις</div>
-        <script>try{var p=new URLSearchParams(location.search).get('lang');var l=(p==='el'||p==='en')?p:(localStorage.getItem('tr_guest_lang')||((navigator.language||'').toLowerCase().indexOf('el')===0?'el':'en'));if(l==='en')document.getElementById('splash-sub').textContent='Online reservations';}catch(e){}</script>
+        <script>try{var S={en:'Online reservations',de:'Online-Reservierungen',fr:'Réservations en ligne',it:'Prenotazioni online',es:'Reservas online',tr:'Online rezervasyon',pt:'Reservas online'};var p=new URLSearchParams(location.search).get('lang'),l=null,ok=function(x){return x==='el'||!!S[x]};if(ok(p))l=p;if(!l){var sv=localStorage.getItem('tr_guest_lang');if(ok(sv))l=sv;}if(!l){var ns=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<ns.length&&!l;i++){var c=String(ns[i]).toLowerCase().slice(0,2);if(ok(c))l=c;}}if(!l)l='en';if(S[l])document.getElementById('splash-sub').textContent=S[l];}catch(e){}</script>
         <div class="splash-dots">
             <div class="splash-dot"></div>
             <div class="splash-dot"></div>
@@ -816,8 +826,16 @@
         <div class="logo">Table<span>Reserve</span></div>
         <div class="nav-right">
             <div class="lang-switcher">
-                <button class="lang-btn" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
-                <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+                <select class="lang-select" id="lang-select" aria-label="Language" onchange="setLang(this.value)">
+                    <option value="el">🇬🇷 ΕΛ</option>
+                    <option value="en" selected>🇬🇧 EN</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="tr">🇹🇷 TR</option>
+                    <option value="pt">🇵🇹 PT</option>
+                </select>
             </div>
         </div>
     </nav>
@@ -996,6 +1014,7 @@
         // ======= TRANSLATIONS =======
         const translations = {
             el: {
+                persons_n: "Άτομα", lb_close: "Κλικ οπουδήποτε για κλείσιμο", closed: "κλειστά", cal_prefix: "Κράτηση: ", splash: "Online κρατήσεις", wallet_alt: "Προσθήκη στο Πορτοφόλι Google",
                 tab_reservation: "📅 Κράτηση", tab_admin: "🔧 Admin", new_reservation: "Νέα Κράτηση",
                 loading_shop: "Φόρτωση καταστήματος...", booking_at: "Κράτηση στο: ", shop_not_found: "Δεν βρέθηκε κατάστημα με αυτή τη διεύθυνση. Ελέγξτε ότι το link είναι σωστό.",
                 select_date_time: "Επιλογή Ημ/νίας & Ώρας", date: "Ημερομηνία", persons: "Άτομα",
@@ -1070,6 +1089,7 @@
                 toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
+                persons_n: "Persons", lb_close: "Tap anywhere to close", closed: "closed", cal_prefix: "Reservation: ", splash: "Online reservations", wallet_alt: "Add to Google Wallet",
                 tab_reservation: "📅 Reservation", tab_admin: "🔧 Admin", new_reservation: "New Reservation",
                 loading_shop: "Loading store...", booking_at: "Booking at: ", shop_not_found: "We couldn't find a restaurant at this address. Please check that the link is correct.",
                 select_date_time: "Select Date & Time", date: "Date", persons: "Persons",
@@ -1142,16 +1162,537 @@
                 toast_cover_deleted: "🗑️ Cover photo deleted.", toast_photo_saved: "✅ Photo added!",
                 toast_photo_deleted: "🗑️ Photo deleted.", toast_img_too_big: "⚠️ Photo exceeds 2MB!",
                 toast_save_error2: "Save error. Please try again.",
+            },
+            de: {
+                "loading_shop": "Restaurant wird geladen...",
+                "booking_at": "Reservierung bei: ",
+                "shop_not_found": "Unter dieser Adresse wurde kein Restaurant gefunden. Bitte prüfen Sie, ob der Link korrekt ist.",
+                "select_date_time": "Datum & Uhrzeit wählen",
+                "date": "Datum",
+                "persons": "Personen",
+                "person_1": "1 Person",
+                "persons_n": "Personen",
+                "quick_time": "Schnellauswahl Uhrzeit",
+                "select_opt": "-- Auswählen --",
+                "or_grid": "Oder aus der Übersicht wählen",
+                "selected_time": "Gewählte Uhrzeit:",
+                "continue": "Weiter →",
+                "instructions": "So funktioniert's",
+                "step1": "Wählen Sie ein <strong>Datum</strong>",
+                "step2": "Wählen Sie die <strong>Anzahl der Personen</strong>",
+                "step3": "Wählen Sie eine <strong>Uhrzeit</strong>",
+                "step4": "Klicken Sie auf <strong>„Weiter“</strong>",
+                "step5": "Geben Sie Ihre Daten ein",
+                "instant_confirm": "Sofortige Bestätigung",
+                "instant_confirm_desc": "Ihre Reservierung wird sofort gespeichert und das Restaurant automatisch benachrichtigt.",
+                "booking_details": "Reservierungsdaten",
+                "fullname": "Vor- und Nachname *",
+                "fullname_ph": "z. B. Anna Müller",
+                "phone": "Telefon *",
+                "email_required": "E-Mail *",
+                "location_pref": "Sitzplatzwunsch",
+                "indoor": "Innen",
+                "outdoor": "Draußen",
+                "no_pref": "Keine Präferenz",
+                "occasion": "Besonderer Anlass",
+                "occasion_ph": "z. B. Geburtstag, Jahrestag",
+                "requests": "Weitere Wünsche",
+                "requests_ph": "Besondere Wünsche...",
+                "confirm_booking": "✅ Reservierung bestätigen",
+                "cancel": "Abbrechen",
+                "slot_full": "Ausgebucht",
+                "slot_too_many": "Zu dieser Uhrzeit sind nicht mehr genug Plätze für so viele Personen frei",
+                "pick_date": "Wählen Sie ein Datum, um die freien Uhrzeiten zu sehen.",
+                "day_closed": "Das Restaurant hat an diesem Tag geschlossen. Bitte wählen Sie ein anderes Datum.",
+                "day_full": "An diesem Tag ist alles ausgebucht. Versuchen Sie ein anderes Datum oder weniger Personen.",
+                "day_over": "Für heute sind keine Uhrzeiten mehr frei. Bitte wählen Sie ein anderes Datum.",
+                "slot_taken_alert": "Diese Uhrzeit ist leider gerade ausgebucht. Bitte wählen Sie eine andere.",
+                "rate_limited": "Zu viele Reservierungen von dieser Verbindung. Bitte versuchen Sie es in ein paar Minuten erneut oder rufen Sie das Restaurant an.",
+                "shop_not_active": "Online-Reservierungen sind für dieses Restaurant noch nicht aktiv.",
+                "privacy_note": "Ihre Daten werden nur für diese Reservierung verwendet. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Datenschutzerklärung</a>",
+                "alert_select_date": "Bitte wählen Sie zuerst ein Datum!",
+                "alert_name_phone_email": "Name, Telefon und E-Mail sind Pflichtfelder!",
+                "alert_select_time": "Bitte wählen Sie eine Uhrzeit!",
+                "alert_select_date2": "Bitte wählen Sie ein Datum!",
+                "wl_cta_t": "Ihre Wunschzeit ist nicht frei?",
+                "wl_cta_s": "Tragen Sie sich in die Warteliste ein. Wird ein Tisch frei, schicken wir Ihnen eine E-Mail.",
+                "wl_cta_btn": "Warteliste",
+                "wl_title": "Warteliste",
+                "wl_time": "Gewünschte Uhrzeit",
+                "wl_any": "Eine der ausgebuchten Uhrzeiten",
+                "wl_join": "Eintragen",
+                "wl_note": "Wird ein Tisch frei, schicken wir Ihnen eine E-Mail. Wer zuerst bucht, bekommt ihn.",
+                "wl_done_t": "Sie stehen auf der Warteliste",
+                "wl_done_s": "Wird ein Tisch frei, erhalten Sie sofort eine E-Mail mit einem Button zum Reservieren.",
+                "wl_error": "Eintragen fehlgeschlagen. Bitte versuchen Sie es erneut.",
+                "done_title": "Ihr Tisch ist reserviert",
+                "done_email": "Alle Details haben wir Ihnen per E-Mail geschickt.",
+                "done_remind": "Möchten Sie eine Erinnerung?",
+                "done_push": "Benachrichtigung aufs Handy",
+                "done_push_s": "2 Stunden vorher, ohne App",
+                "done_push_on": "Sie erhalten eine Benachrichtigung",
+                "done_push_on_s": "2 Stunden vor Ihrer Reservierung",
+                "done_push_denied": "Benachrichtigungen sind blockiert",
+                "done_push_denied_s": "Aktivieren Sie sie in den Browser-Einstellungen",
+                "done_push_err": "Benachrichtigungen konnten nicht aktiviert werden",
+                "done_cal": "Zum Kalender hinzufügen",
+                "done_cal_s": "Ihr Handy erinnert Sie daran",
+                "done_other": "oder",
+                "done_gcal": "Google Kalender",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Schließen",
+                "done_persons": "Personen",
+                "toast_save_error": "Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.",
+                "lb_close": "Zum Schließen irgendwo tippen",
+                "closed": "geschlossen",
+                "cal_prefix": "Reservierung: ",
+                "splash": "Online-Reservierungen",
+                "wallet_alt": "Zu Google Wallet hinzufügen"
+            },
+            fr: {
+                "loading_shop": "Chargement du restaurant...",
+                "booking_at": "Réservation chez : ",
+                "shop_not_found": "Aucun restaurant trouvé à cette adresse. Vérifiez que le lien est correct.",
+                "select_date_time": "Choisissez la date et l'heure",
+                "date": "Date",
+                "persons": "Personnes",
+                "person_1": "1 personne",
+                "persons_n": "personnes",
+                "quick_time": "Choix rapide de l'heure",
+                "select_opt": "-- Choisir --",
+                "or_grid": "Ou choisissez dans la grille",
+                "selected_time": "Heure choisie :",
+                "continue": "Continuer →",
+                "instructions": "Comment réserver",
+                "step1": "Choisissez une <strong>date</strong>",
+                "step2": "Choisissez le <strong>nombre de personnes</strong>",
+                "step3": "Choisissez une <strong>heure</strong>",
+                "step4": "Appuyez sur <strong>« Continuer »</strong>",
+                "step5": "Saisissez vos coordonnées",
+                "instant_confirm": "Confirmation immédiate",
+                "instant_confirm_desc": "Votre réservation est enregistrée immédiatement et le restaurant est prévenu automatiquement.",
+                "booking_details": "Détails de la réservation",
+                "fullname": "Nom et prénom *",
+                "fullname_ph": "ex. Marie Dupont",
+                "phone": "Téléphone *",
+                "email_required": "E-mail *",
+                "location_pref": "Préférence de placement",
+                "indoor": "En salle",
+                "outdoor": "En terrasse",
+                "no_pref": "Pas de préférence",
+                "occasion": "Occasion spéciale",
+                "occasion_ph": "ex. Anniversaire, anniversaire de mariage",
+                "requests": "Demandes particulières",
+                "requests_ph": "Une demande spéciale...",
+                "confirm_booking": "✅ Confirmer la réservation",
+                "cancel": "Annuler",
+                "slot_full": "Complet",
+                "slot_too_many": "Il ne reste plus assez de places pour autant de personnes à cette heure",
+                "pick_date": "Choisissez une date pour voir les horaires disponibles.",
+                "day_closed": "Le restaurant est fermé ce jour-là. Veuillez choisir une autre date.",
+                "day_full": "Toutes les heures sont complètes ce jour-là. Essayez une autre date ou moins de personnes.",
+                "day_over": "Il n'y a plus d'horaires disponibles aujourd'hui. Veuillez choisir une autre date.",
+                "slot_taken_alert": "Désolé, cette heure vient d'être complète. Veuillez en choisir une autre.",
+                "rate_limited": "Trop de réservations depuis cette connexion. Réessayez dans quelques minutes ou appelez le restaurant.",
+                "shop_not_active": "Les réservations en ligne ne sont pas encore actives pour ce restaurant.",
+                "privacy_note": "Vos données sont utilisées uniquement pour cette réservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Politique de confidentialité</a>",
+                "alert_select_date": "Veuillez d'abord choisir une date !",
+                "alert_name_phone_email": "Le nom, le téléphone et l'e-mail sont obligatoires !",
+                "alert_select_time": "Veuillez choisir une heure !",
+                "alert_select_date2": "Veuillez choisir une date !",
+                "wl_cta_t": "Vous ne trouvez pas l'heure souhaitée ?",
+                "wl_cta_s": "Inscrivez-vous sur la liste d'attente. Si une table se libère, nous vous envoyons un e-mail.",
+                "wl_cta_btn": "Liste d'attente",
+                "wl_title": "Liste d'attente",
+                "wl_time": "Heure souhaitée",
+                "wl_any": "N'importe quelle heure complète",
+                "wl_join": "M'inscrire",
+                "wl_note": "Si une table se libère, nous vous envoyons un e-mail. Elle revient au premier qui réserve.",
+                "wl_done_t": "Vous êtes sur la liste d'attente",
+                "wl_done_s": "Si une table se libère, vous recevrez aussitôt un e-mail avec un bouton pour la réserver.",
+                "wl_error": "Impossible de vous inscrire. Veuillez réessayer.",
+                "done_title": "Votre table est réservée",
+                "done_email": "Nous vous avons envoyé tous les détails par e-mail.",
+                "done_remind": "Voulez-vous un rappel ?",
+                "done_push": "Notification sur votre téléphone",
+                "done_push_s": "2 heures avant, sans application",
+                "done_push_on": "Vous recevrez une notification",
+                "done_push_on_s": "2 heures avant votre réservation",
+                "done_push_denied": "Les notifications sont bloquées",
+                "done_push_denied_s": "Activez-les dans les réglages de votre navigateur",
+                "done_push_err": "Impossible d'activer les notifications",
+                "done_cal": "Ajouter au calendrier",
+                "done_cal_s": "Votre téléphone vous le rappellera",
+                "done_other": "ou",
+                "done_gcal": "Google Agenda",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Fermer",
+                "done_persons": "personnes",
+                "toast_save_error": "Erreur d'enregistrement. Veuillez réessayer.",
+                "lb_close": "Touchez n'importe où pour fermer",
+                "closed": "fermé",
+                "cal_prefix": "Réservation : ",
+                "splash": "Réservations en ligne",
+                "wallet_alt": "Ajouter à Google Wallet"
+            },
+            it: {
+                "loading_shop": "Caricamento del ristorante...",
+                "booking_at": "Prenotazione presso: ",
+                "shop_not_found": "Nessun ristorante trovato a questo indirizzo. Verifica che il link sia corretto.",
+                "select_date_time": "Scegli data e ora",
+                "date": "Data",
+                "persons": "Persone",
+                "person_1": "1 persona",
+                "persons_n": "persone",
+                "quick_time": "Scelta rapida dell'ora",
+                "select_opt": "-- Seleziona --",
+                "or_grid": "Oppure scegli dalla griglia",
+                "selected_time": "Ora scelta:",
+                "continue": "Continua →",
+                "instructions": "Come prenotare",
+                "step1": "Scegli una <strong>data</strong>",
+                "step2": "Scegli il <strong>numero di persone</strong>",
+                "step3": "Scegli un'<strong>ora</strong>",
+                "step4": "Premi <strong>«Continua»</strong>",
+                "step5": "Inserisci i tuoi dati",
+                "instant_confirm": "Conferma immediata",
+                "instant_confirm_desc": "La tua prenotazione viene salvata subito e il ristorante viene avvisato automaticamente.",
+                "booking_details": "Dettagli della prenotazione",
+                "fullname": "Nome e cognome *",
+                "fullname_ph": "es. Marco Rossi",
+                "phone": "Telefono *",
+                "email_required": "Email *",
+                "location_pref": "Preferenza del tavolo",
+                "indoor": "All'interno",
+                "outdoor": "All'aperto",
+                "no_pref": "Nessuna preferenza",
+                "occasion": "Occasione speciale",
+                "occasion_ph": "es. Compleanno, anniversario",
+                "requests": "Altre richieste",
+                "requests_ph": "Qualche richiesta particolare...",
+                "confirm_booking": "✅ Conferma la prenotazione",
+                "cancel": "Annulla",
+                "slot_full": "Completo",
+                "slot_too_many": "A quest'ora non ci sono più abbastanza posti per così tante persone",
+                "pick_date": "Scegli una data per vedere gli orari disponibili.",
+                "day_closed": "Il ristorante è chiuso in questo giorno. Scegli un'altra data.",
+                "day_full": "In questo giorno è tutto completo. Prova un'altra data o meno persone.",
+                "day_over": "Oggi non ci sono più orari disponibili. Scegli un'altra data.",
+                "slot_taken_alert": "Spiacenti, quest'ora si è appena riempita. Scegline un'altra.",
+                "rate_limited": "Troppe prenotazioni da questa connessione. Riprova tra qualche minuto o chiama il ristorante.",
+                "shop_not_active": "Le prenotazioni online per questo ristorante non sono ancora attive.",
+                "privacy_note": "I tuoi dati vengono usati solo per questa prenotazione. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Informativa sulla privacy</a>",
+                "alert_select_date": "Scegli prima una data!",
+                "alert_name_phone_email": "Nome, telefono ed email sono obbligatori!",
+                "alert_select_time": "Scegli un'ora!",
+                "alert_select_date2": "Scegli una data!",
+                "wl_cta_t": "Non trovi l'ora che vuoi?",
+                "wl_cta_s": "Iscriviti alla lista d'attesa. Se si libera un tavolo, ti mandiamo un'email.",
+                "wl_cta_btn": "Lista d'attesa",
+                "wl_title": "Lista d'attesa",
+                "wl_time": "Ora preferita",
+                "wl_any": "Una qualsiasi delle ore complete",
+                "wl_join": "Iscriviti",
+                "wl_note": "Se si libera un tavolo, ti mandiamo un'email. Va a chi prenota per primo.",
+                "wl_done_t": "Sei in lista d'attesa",
+                "wl_done_s": "Se si libera un tavolo, riceverai subito un'email con un pulsante per prenotarlo.",
+                "wl_error": "Impossibile aggiungerti alla lista. Riprova.",
+                "done_title": "Il tuo tavolo è prenotato",
+                "done_email": "Ti abbiamo inviato tutti i dettagli via email.",
+                "done_remind": "Vuoi un promemoria?",
+                "done_push": "Notifica sul telefono",
+                "done_push_s": "2 ore prima, senza app",
+                "done_push_on": "Riceverai una notifica",
+                "done_push_on_s": "2 ore prima della prenotazione",
+                "done_push_denied": "Le notifiche sono bloccate",
+                "done_push_denied_s": "Attivale nelle impostazioni del browser",
+                "done_push_err": "Impossibile attivare le notifiche",
+                "done_cal": "Aggiungi al calendario",
+                "done_cal_s": "Il telefono te lo ricorderà",
+                "done_other": "oppure",
+                "done_gcal": "Google Calendar",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Chiudi",
+                "done_persons": "persone",
+                "toast_save_error": "Errore di salvataggio. Riprova.",
+                "lb_close": "Tocca un punto qualsiasi per chiudere",
+                "closed": "chiuso",
+                "cal_prefix": "Prenotazione: ",
+                "splash": "Prenotazioni online",
+                "wallet_alt": "Aggiungi a Google Wallet"
+            },
+            es: {
+                "loading_shop": "Cargando el restaurante...",
+                "booking_at": "Reserva en: ",
+                "shop_not_found": "No hemos encontrado ningún restaurante en esta dirección. Comprueba que el enlace sea correcto.",
+                "select_date_time": "Elige fecha y hora",
+                "date": "Fecha",
+                "persons": "Personas",
+                "person_1": "1 persona",
+                "persons_n": "personas",
+                "quick_time": "Selección rápida de hora",
+                "select_opt": "-- Elegir --",
+                "or_grid": "O elige en la cuadrícula",
+                "selected_time": "Hora elegida:",
+                "continue": "Continuar →",
+                "instructions": "Cómo reservar",
+                "step1": "Elige una <strong>fecha</strong>",
+                "step2": "Elige el <strong>número de personas</strong>",
+                "step3": "Elige una <strong>hora</strong>",
+                "step4": "Pulsa <strong>«Continuar»</strong>",
+                "step5": "Rellena tus datos",
+                "instant_confirm": "Confirmación inmediata",
+                "instant_confirm_desc": "Tu reserva se guarda al momento y el restaurante recibe un aviso automático.",
+                "booking_details": "Datos de la reserva",
+                "fullname": "Nombre y apellidos *",
+                "fullname_ph": "p. ej. Lucía García",
+                "phone": "Teléfono *",
+                "email_required": "Email *",
+                "location_pref": "Preferencia de mesa",
+                "indoor": "Interior",
+                "outdoor": "Terraza",
+                "no_pref": "Sin preferencia",
+                "occasion": "Ocasión especial",
+                "occasion_ph": "p. ej. Cumpleaños, aniversario",
+                "requests": "Otras peticiones",
+                "requests_ph": "Alguna petición especial...",
+                "confirm_booking": "✅ Confirmar reserva",
+                "cancel": "Cancelar",
+                "slot_full": "Completo",
+                "slot_too_many": "A esta hora ya no quedan plazas suficientes para tantas personas",
+                "pick_date": "Elige una fecha para ver las horas disponibles.",
+                "day_closed": "El restaurante cierra este día. Elige otra fecha.",
+                "day_full": "Todas las horas de este día están completas. Prueba otra fecha o menos personas.",
+                "day_over": "Hoy ya no quedan horas disponibles. Elige otra fecha.",
+                "slot_taken_alert": "Lo sentimos, esta hora acaba de completarse. Elige otra.",
+                "rate_limited": "Demasiadas reservas desde esta conexión. Inténtalo de nuevo en unos minutos o llama al restaurante.",
+                "shop_not_active": "Las reservas online de este restaurante aún no están activas.",
+                "privacy_note": "Tus datos se usan solo para esta reserva. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Política de privacidad</a>",
+                "alert_select_date": "¡Elige primero una fecha!",
+                "alert_name_phone_email": "¡El nombre, el teléfono y el email son obligatorios!",
+                "alert_select_time": "¡Elige una hora!",
+                "alert_select_date2": "¡Elige una fecha!",
+                "wl_cta_t": "¿No encuentras la hora que quieres?",
+                "wl_cta_s": "Apúntate a la lista de espera. Si queda una mesa libre, te enviamos un email.",
+                "wl_cta_btn": "Lista de espera",
+                "wl_title": "Lista de espera",
+                "wl_time": "Hora preferida",
+                "wl_any": "Cualquiera de las horas completas",
+                "wl_join": "Apuntarme",
+                "wl_note": "Si queda una mesa libre, te enviamos un email. Será para quien reserve primero.",
+                "wl_done_t": "Estás en la lista de espera",
+                "wl_done_s": "Si queda una mesa libre, recibirás al momento un email con un botón para reservarla.",
+                "wl_error": "No hemos podido apuntarte. Inténtalo de nuevo.",
+                "done_title": "Tu mesa está reservada",
+                "done_email": "Te hemos enviado todos los detalles por email.",
+                "done_remind": "¿Quieres un recordatorio?",
+                "done_push": "Notificación en tu móvil",
+                "done_push_s": "2 horas antes, sin app",
+                "done_push_on": "Recibirás una notificación",
+                "done_push_on_s": "2 horas antes de tu reserva",
+                "done_push_denied": "Las notificaciones están bloqueadas",
+                "done_push_denied_s": "Actívalas en los ajustes del navegador",
+                "done_push_err": "No se han podido activar las notificaciones",
+                "done_cal": "Añadir al calendario",
+                "done_cal_s": "Tu móvil te lo recordará",
+                "done_other": "o",
+                "done_gcal": "Google Calendar",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Cerrar",
+                "done_persons": "personas",
+                "toast_save_error": "Error al guardar. Inténtalo de nuevo.",
+                "lb_close": "Toca en cualquier sitio para cerrar",
+                "closed": "cerrado",
+                "cal_prefix": "Reserva: ",
+                "splash": "Reservas online",
+                "wallet_alt": "Añadir a Google Wallet"
+            },
+            tr: {
+                "loading_shop": "Restoran yükleniyor...",
+                "booking_at": "Rezervasyon: ",
+                "shop_not_found": "Bu adreste bir restoran bulunamadı. Lütfen bağlantının doğru olduğunu kontrol edin.",
+                "select_date_time": "Tarih ve saat seçin",
+                "date": "Tarih",
+                "persons": "Kişi sayısı",
+                "person_1": "1 kişi",
+                "persons_n": "kişi",
+                "quick_time": "Hızlı saat seçimi",
+                "select_opt": "-- Seçin --",
+                "or_grid": "Ya da tablodan seçin",
+                "selected_time": "Seçilen saat:",
+                "continue": "Devam →",
+                "instructions": "Nasıl rezervasyon yapılır",
+                "step1": "Bir <strong>tarih</strong> seçin",
+                "step2": "<strong>Kişi sayısını</strong> seçin",
+                "step3": "Bir <strong>saat</strong> seçin",
+                "step4": "<strong>“Devam”</strong> düğmesine basın",
+                "step5": "Bilgilerinizi girin",
+                "instant_confirm": "Anında onay",
+                "instant_confirm_desc": "Rezervasyonunuz hemen kaydedilir ve restorana otomatik olarak bildirilir.",
+                "booking_details": "Rezervasyon bilgileri",
+                "fullname": "Ad soyad *",
+                "fullname_ph": "örn. Ayşe Yılmaz",
+                "phone": "Telefon *",
+                "email_required": "E-posta *",
+                "location_pref": "Oturma tercihi",
+                "indoor": "İç mekân",
+                "outdoor": "Dış mekân",
+                "no_pref": "Fark etmez",
+                "occasion": "Özel gün",
+                "occasion_ph": "örn. Doğum günü, yıldönümü",
+                "requests": "Ek istekler",
+                "requests_ph": "Özel bir isteğiniz...",
+                "confirm_booking": "✅ Rezervasyonu onayla",
+                "cancel": "Vazgeç",
+                "slot_full": "Dolu",
+                "slot_too_many": "Bu saatte bu kadar kişi için yeterli yer kalmadı",
+                "pick_date": "Uygun saatleri görmek için bir tarih seçin.",
+                "day_closed": "Restoran bu gün kapalı. Lütfen başka bir tarih seçin.",
+                "day_full": "Bu günün tüm saatleri dolu. Başka bir tarih ya da daha az kişi deneyin.",
+                "day_over": "Bugün için uygun saat kalmadı. Lütfen başka bir tarih seçin.",
+                "slot_taken_alert": "Üzgünüz, bu saat az önce doldu. Lütfen başka bir saat seçin.",
+                "rate_limited": "Bu bağlantıdan çok fazla rezervasyon yapıldı. Lütfen birkaç dakika sonra tekrar deneyin ya da restoranı arayın.",
+                "shop_not_active": "Bu restoran için online rezervasyon henüz aktif değil.",
+                "privacy_note": "Bilgileriniz yalnızca bu rezervasyon için kullanılır. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Gizlilik Politikası</a>",
+                "alert_select_date": "Lütfen önce bir tarih seçin!",
+                "alert_name_phone_email": "Ad, telefon ve e-posta zorunludur!",
+                "alert_select_time": "Lütfen bir saat seçin!",
+                "alert_select_date2": "Lütfen bir tarih seçin!",
+                "wl_cta_t": "İstediğiniz saati bulamadınız mı?",
+                "wl_cta_s": "Bekleme listesine katılın. Bir masa boşalırsa size e-posta göndeririz.",
+                "wl_cta_btn": "Bekleme listesi",
+                "wl_title": "Bekleme listesi",
+                "wl_time": "Tercih edilen saat",
+                "wl_any": "Dolu saatlerden herhangi biri",
+                "wl_join": "Listeye katıl",
+                "wl_note": "Bir masa boşalırsa size e-posta göndeririz. Masa, ilk rezervasyon yapana verilir.",
+                "wl_done_t": "Bekleme listesindesiniz",
+                "wl_done_s": "Bir masa boşalırsa, rezervasyon düğmesiyle birlikte hemen bir e-posta alırsınız.",
+                "wl_error": "Listeye eklenemediniz. Lütfen tekrar deneyin.",
+                "done_title": "Masanız ayrıldı",
+                "done_email": "Tüm ayrıntıları size e-postayla gönderdik.",
+                "done_remind": "Hatırlatma ister misiniz?",
+                "done_push": "Telefonunuza bildirim",
+                "done_push_s": "2 saat önce, uygulama gerekmez",
+                "done_push_on": "Bildirim alacaksınız",
+                "done_push_on_s": "Rezervasyonunuzdan 2 saat önce",
+                "done_push_denied": "Bildirimler engellendi",
+                "done_push_denied_s": "Tarayıcı ayarlarından açabilirsiniz",
+                "done_push_err": "Bildirimler açılamadı",
+                "done_cal": "Takvime ekle",
+                "done_cal_s": "Telefonunuz size hatırlatır",
+                "done_other": "ya da",
+                "done_gcal": "Google Takvim",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Kapat",
+                "done_persons": "kişi",
+                "toast_save_error": "Kaydedilemedi. Lütfen tekrar deneyin.",
+                "lb_close": "Kapatmak için herhangi bir yere dokunun",
+                "closed": "kapalı",
+                "cal_prefix": "Rezervasyon: ",
+                "splash": "Online rezervasyon",
+                "wallet_alt": "Google Cüzdan'a ekle"
+            },
+            pt: {
+                "loading_shop": "A carregar o restaurante...",
+                "booking_at": "Reserva em: ",
+                "shop_not_found": "Não encontrámos nenhum restaurante neste endereço. Verifique se o link está correto.",
+                "select_date_time": "Escolha a data e a hora",
+                "date": "Data",
+                "persons": "Pessoas",
+                "person_1": "1 pessoa",
+                "persons_n": "pessoas",
+                "quick_time": "Escolha rápida da hora",
+                "select_opt": "-- Escolher --",
+                "or_grid": "Ou escolha na grelha",
+                "selected_time": "Hora escolhida:",
+                "continue": "Continuar →",
+                "instructions": "Como reservar",
+                "step1": "Escolha uma <strong>data</strong>",
+                "step2": "Escolha o <strong>número de pessoas</strong>",
+                "step3": "Escolha uma <strong>hora</strong>",
+                "step4": "Carregue em <strong>«Continuar»</strong>",
+                "step5": "Preencha os seus dados",
+                "instant_confirm": "Confirmação imediata",
+                "instant_confirm_desc": "A sua reserva fica guardada de imediato e o restaurante é avisado automaticamente.",
+                "booking_details": "Dados da reserva",
+                "fullname": "Nome completo *",
+                "fullname_ph": "ex. Ana Silva",
+                "phone": "Telefone *",
+                "email_required": "Email *",
+                "location_pref": "Preferência de mesa",
+                "indoor": "Interior",
+                "outdoor": "Esplanada",
+                "no_pref": "Sem preferência",
+                "occasion": "Ocasião especial",
+                "occasion_ph": "ex. Aniversário, aniversário de casamento",
+                "requests": "Outros pedidos",
+                "requests_ph": "Algum pedido especial...",
+                "confirm_booking": "✅ Confirmar reserva",
+                "cancel": "Cancelar",
+                "slot_full": "Esgotado",
+                "slot_too_many": "A esta hora já não há lugares suficientes para tantas pessoas",
+                "pick_date": "Escolha uma data para ver as horas disponíveis.",
+                "day_closed": "O restaurante está fechado neste dia. Escolha outra data.",
+                "day_full": "Todas as horas deste dia estão esgotadas. Experimente outra data ou menos pessoas.",
+                "day_over": "Já não há horas disponíveis hoje. Escolha outra data.",
+                "slot_taken_alert": "Lamentamos, esta hora acabou de esgotar. Escolha outra.",
+                "rate_limited": "Demasiadas reservas a partir desta ligação. Tente novamente dentro de alguns minutos ou ligue para o restaurante.",
+                "shop_not_active": "As reservas online deste restaurante ainda não estão ativas.",
+                "privacy_note": "Os seus dados são usados apenas para esta reserva. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Política de Privacidade</a>",
+                "alert_select_date": "Escolha primeiro uma data!",
+                "alert_name_phone_email": "O nome, o telefone e o email são obrigatórios!",
+                "alert_select_time": "Escolha uma hora!",
+                "alert_select_date2": "Escolha uma data!",
+                "wl_cta_t": "Não encontra a hora que quer?",
+                "wl_cta_s": "Entre na lista de espera. Se vagar uma mesa, enviamos-lhe um email.",
+                "wl_cta_btn": "Lista de espera",
+                "wl_title": "Lista de espera",
+                "wl_time": "Hora preferida",
+                "wl_any": "Qualquer uma das horas esgotadas",
+                "wl_join": "Entrar na lista",
+                "wl_note": "Se vagar uma mesa, enviamos-lhe um email. Fica para quem reservar primeiro.",
+                "wl_done_t": "Está na lista de espera",
+                "wl_done_s": "Se vagar uma mesa, recebe de imediato um email com um botão para a reservar.",
+                "wl_error": "Não foi possível juntá-lo à lista. Tente novamente.",
+                "done_title": "A sua mesa está reservada",
+                "done_email": "Enviámos-lhe todos os detalhes por email.",
+                "done_remind": "Quer um lembrete?",
+                "done_push": "Notificação no telemóvel",
+                "done_push_s": "2 horas antes, sem app",
+                "done_push_on": "Vai receber uma notificação",
+                "done_push_on_s": "2 horas antes da sua reserva",
+                "done_push_denied": "As notificações estão bloqueadas",
+                "done_push_denied_s": "Ative-as nas definições do navegador",
+                "done_push_err": "Não foi possível ativar as notificações",
+                "done_cal": "Adicionar ao calendário",
+                "done_cal_s": "O seu telemóvel vai lembrá-lo",
+                "done_other": "ou",
+                "done_gcal": "Google Calendar",
+                "done_ics": "iPhone / Outlook",
+                "done_close": "Fechar",
+                "done_persons": "pessoas",
+                "toast_save_error": "Erro ao guardar. Tente novamente.",
+                "lb_close": "Toque em qualquer lado para fechar",
+                "closed": "fechado",
+                "cal_prefix": "Reserva: ",
+                "splash": "Reservas online",
+                "wallet_alt": "Adicionar ao Google Wallet"
             }
         };
 
         let currentLang = 'en';
-        function t(key) { return translations[currentLang][key] || translations['el'][key] || key; }
+        // Γλώσσες της σελίδας κράτησης (ο πελάτης βλέπει και τα email στη γλώσσα που διάλεξε)
+        const TR_LANGS = ['el', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt'];
+        const TR_LOCALE = { el: 'el-GR', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', es: 'es-ES', tr: 'tr-TR', pt: 'pt-PT' };
+        const trLocale = () => TR_LOCALE[currentLang] || 'en-GB';
+        function t(key) { const d = translations[currentLang] || translations.en; return d[key] !== undefined ? d[key] : (currentLang === 'el' ? translations.el[key] : translations.en[key]) || translations.el[key] || key; }
 
         window.setLang = function(lang) {
             currentLang = lang;
-            document.getElementById('lang-el').classList.toggle('active', lang === 'el');
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            if (!TR_LANGS.includes(lang)) lang = 'en';
+            currentLang = lang;
+            const ls = document.getElementById('lang-select'); if (ls) ls.value = lang;
             document.documentElement.lang = lang;
             try { localStorage.setItem('tr_guest_lang', lang); } catch (e) {}
             applyTranslations();
@@ -1183,11 +1724,15 @@
                 for (let i = 0; i < guestSelect.options.length; i++) {
                     const val = parseInt(guestSelect.options[i].value);
                     if (val === 1) guestSelect.options[i].text = t('person_1');
-                    else guestSelect.options[i].text = val + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
+                    else guestSelect.options[i].text = val + ' ' + t('persons_n');
                 }
             }
             const tSelect = document.getElementById('time-select');
             if (tSelect && tSelect.options.length > 0) tSelect.options[0].text = t('select_opt');
+            try {
+                const ch = document.getElementById('client-hours');
+                if (shopHoursWeek && ch && ch.style.display !== 'none') ch.querySelector('span').innerText = whText(shopHoursWeek, currentLang);
+            } catch (e) {}
         }
 
         // ======= TOAST =======
@@ -1444,7 +1989,7 @@
             lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;';
             lb.innerHTML = `<img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
                 ${caption ? `<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">${caption}</div>` : ''}
-                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">${currentLang === 'en' ? 'Tap anywhere to close' : 'Κλικ οπουδήποτε για κλείσιμο'}</div>`;
+                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">${t('lb_close')}</div>`;
             lb.onclick = () => document.body.removeChild(lb);
             document.body.appendChild(lb);
         }
@@ -1476,7 +2021,7 @@
             for (let i = 1; i <= maxGuests; i++) {
                 const opt = document.createElement('option');
                 opt.value = i;
-                opt.innerText = i === 1 ? t('person_1') : i + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
+                opt.innerText = i === 1 ? t('person_1') : i + ' ' + t('persons_n');
                 if (i === 2) opt.selected = true;
                 guestSelect.appendChild(opt);
             }
@@ -1515,7 +2060,7 @@
 
         // ======= ΩΡΑΡΙΟ & ΔΙΑΘΕΣΙΜΟΤΗΤΑ =======
         const WH_DAYS = ['mon','tue','wed','thu','fri','sat','sun'];
-        const WH_SHORT = { el: ['Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ','Κυρ'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] };
+        const WH_SHORT = { el: ['Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ','Κυρ'], en: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], pt: ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'] };
         const SCHEMA_DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
         let shopHoursWeek = null, shopCapacity = null, fallbackOpen = 8, fallbackClose = 23, takenByTime = {};
         // Ζώνη ώρας του καταστήματος: «σήμερα» και οι ώρες που πέρασαν μετράνε με την ώρα του εστιατορίου, όχι του επισκέπτη
@@ -1530,15 +2075,24 @@
             });
             return out;
         }
+        // Σύντομα ονόματα ημερών (Δευτέρα πρώτη) για κάθε γλώσσα, από τον browser
+        function whShort(lang) {
+            if (WH_SHORT[lang]) return WH_SHORT[lang];
+            try {
+                const f = new Intl.DateTimeFormat(TR_LOCALE[lang] || 'en-GB', { weekday: 'short', timeZone: 'UTC' });
+                return WH_SHORT[lang] = [0, 1, 2, 3, 4, 5, 6].map(i => { const x = f.format(new Date(Date.UTC(2024, 0, 1 + i))); return x.charAt(0).toLocaleUpperCase(TR_LOCALE[lang]) + x.slice(1); });
+            } catch (e) { return WH_SHORT.en; }
+        }
         function whText(w, lang) {
-            const L = lang === 'en' ? 'en' : 'el';
+            const L = TR_LANGS.includes(lang) ? lang : 'en';
+            const SH = whShort(L);
             const key = d => w[d] === 'closed' ? 'closed' : w[d].map(r => r.o + '–' + r.c).join(', ');
             const parts = []; let i = 0;
             while (i < 7) {
                 let j = i; while (j + 1 < 7 && key(WH_DAYS[j + 1]) === key(WH_DAYS[i])) j++;
-                const days = i === j ? WH_SHORT[L][i] : WH_SHORT[L][i] + '–' + WH_SHORT[L][j];
+                const days = i === j ? SH[i] : SH[i] + '–' + SH[j];
                 const k = key(WH_DAYS[i]);
-                parts.push(days + ' ' + (k === 'closed' ? (L === 'en' ? 'closed' : 'κλειστά') : k));
+                parts.push(days + ' ' + (k === 'closed' ? ((translations[L] || translations.en).closed || 'closed') : k));
                 i = j + 1;
             }
             return parts.join(' · ');
@@ -1664,7 +2218,7 @@
             sel.innerHTML = '';
             if (trFullTimes.length > 1) { const o = document.createElement('option'); o.value = 'any'; o.innerText = t('wl_any'); sel.appendChild(o); }
             trFullTimes.forEach(tm => { const o = document.createElement('option'); o.value = tm; o.innerText = tm; sel.appendChild(o); });
-            const when = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(date + 'T12:00:00Z'));
+            const when = new Intl.DateTimeFormat(trLocale(), { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(date + 'T12:00:00Z'));
             document.getElementById('wl-sum').innerHTML = '';
             const b = document.createElement('b'); b.innerText = when;
             document.getElementById('wl-sum').append(b, ' · ' + guests + ' ' + t('done_persons'));
@@ -1736,10 +2290,10 @@
             const start = trShopToMs(bk.date, bk.time);
             const shopName = document.getElementById('shop-display').innerText || shopID;
             const address = (document.querySelector('#client-address span') || {}).innerText || '';
-            document.getElementById('done-when').innerText = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(bk.date + 'T12:00:00Z')) + ' · ' + bk.time;
+            document.getElementById('done-when').innerText = new Intl.DateTimeFormat(trLocale(), { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(bk.date + 'T12:00:00Z')) + ' · ' + bk.time;
             document.getElementById('done-what').innerText = bk.guests + ' ' + t('done_persons') + ' · ' + shopName;
 
-            const title = (currentLang === 'en' ? 'Reservation: ' : 'Κράτηση: ') + shopName + ' (' + bk.guests + ' ' + t('done_persons') + ')';
+            const title = t('cal_prefix') + shopName + ' (' + bk.guests + ' ' + t('done_persons') + ')';
             const g = new URLSearchParams({ action: 'TEMPLATE', text: title, dates: trStamp(start) + '/' + trStamp(start + 7200000), ctz: shopTz });
             if (address) g.set('location', address);
             const gcal = 'https://calendar.google.com/calendar/render?' + g.toString();
@@ -1756,8 +2310,8 @@
             if (!trIsApple && hasIcs) {
                 wBtn.href = `${API}/wallet?` + new URLSearchParams({ shop: shopID, id: bk.id, t: bk.token, lang: currentLang }).toString();
                 const wImg = document.getElementById('done-wallet-img');
-                wImg.src = currentLang === 'en' ? '/wallet/add-en.svg' : '/wallet/add-el.svg';
-                wImg.alt = currentLang === 'en' ? 'Add to Google Wallet' : 'Προσθήκη στο Πορτοφόλι Google';
+                wImg.src = currentLang === 'el' ? '/wallet/add-el.svg' : '/wallet/add-en.svg';
+                wImg.alt = t('wallet_alt');
                 trWalletOn().then(on => { if (on) wBtn.style.display = 'flex'; });
             }
 
@@ -1870,10 +2424,13 @@
             let lang = null;
             try {
                 const p = new URLSearchParams(location.search).get('lang');
-                if (p === 'el' || p === 'en') lang = p;
-                if (!lang) { const saved = localStorage.getItem('tr_guest_lang'); if (saved === 'el' || saved === 'en') lang = saved; }
+                if (TR_LANGS.includes(p)) lang = p;
+                if (!lang) { const saved = localStorage.getItem('tr_guest_lang'); if (TR_LANGS.includes(saved)) lang = saved; }
             } catch (e) {}
-            if (!lang) lang = (navigator.language || '').toLowerCase().startsWith('el') ? 'el' : 'en';
+            if (!lang) {
+                const prefs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(x => String(x).toLowerCase().slice(0, 2));
+                lang = prefs.find(x => TR_LANGS.includes(x)) || 'en';
+            }
             setLang(lang);
         })();
 

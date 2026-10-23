@@ -8,7 +8,7 @@
  * Button that opens the form in a popup:
  *   <div data-tablereserve="your-shop-id" data-mode="button" data-label="Book a table"></div>
  *
- * Optional: data-lang="en" | "el", data-color="#2563eb"
+ * Optional: data-lang="el" | "en" | "de" | "fr" | "it" | "es" | "tr" | "pt", data-color="#2563eb"
  */
 (function () {
   'use strict';
@@ -19,7 +19,7 @@
 
   function src(shop, lang) {
     var u = ORIGIN + '/?shop=' + encodeURIComponent(shop) + '&embed=1';
-    if (lang === 'el' || lang === 'en') u += '&lang=' + lang;
+    if (/^(el|en|de|fr|it|es|tr|pt)$/.test(lang || '')) u += '&lang=' + lang;
     return u;
   }
 

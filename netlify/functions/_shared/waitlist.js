@@ -2,6 +2,7 @@
 // Δομή: waitlist/{shop}/{date}/{id} = { name, phone, email, time ("20:30" ή "any"), guests, lang, createdAt, status, notifiedAt }
 const { Resend } = require('resend');
 const { localToMs, localDay, shopTz } = require('./time');
+const { normLang, msg, fmtDate } = require('./i18n');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const MAX_NOTIFY = 3;            // πόσους ειδοποιούμε κάθε φορά που ελευθερώνεται τραπέζι
@@ -19,21 +20,9 @@ async function shopLink(db, shop) {
   return { base: `https://tablereserve.gr/index.html?shop=${encodeURIComponent(shop)}`, sep: '&' };
 }
 
-function fmtDate(d, en) {
-  const [y, m, dd] = d.split('-').map(Number);
-  return new Intl.DateTimeFormat(en ? 'en-GB' : 'el-GR', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, dd)));
-}
-
-function emailHtml({ e, shopName, date, time, url, en }) {
-  const t = en ? {
-    head: 'A table just opened up!', hi: `Dear <strong>${esc(e.name)}</strong>,`,
-    line: `A table became available at the time you were waiting for. It goes to whoever books first, so don't wait too long.`,
-    persons: 'guests', btn: 'Book this table', note: 'If you no longer need it, simply ignore this email.'
-  } : {
-    head: 'Ελευθερώθηκε τραπέζι!', hi: `Αγαπητέ/ή <strong>${esc(e.name)}</strong>,`,
-    line: 'Ελευθερώθηκε τραπέζι στην ώρα που περιμένατε. Θα το πάρει όποιος κλείσει πρώτος, οπότε μην αργήσετε.',
-    persons: 'άτομα', btn: 'Κλείστε το τραπέζι', note: 'Αν δεν το χρειάζεστε πια, απλώς αγνοήστε αυτό το email.'
-  };
+function emailHtml({ e, shopName, date, time, url, lang }) {
+  const m = msg(lang);
+  const t = { head: m.w_head, hi: m.dear(esc(e.name)), line: m.w_line, persons: m.persons, btn: m.w_btn, note: m.w_note };
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
 <div style="max-width:580px;margin:0 auto;">
@@ -47,7 +36,7 @@ function emailHtml({ e, shopName, date, time, url, en }) {
     <p style="color:#64748b;font-size:14px;margin:0 0 24px;line-height:1.5;">${t.line}</p>
     <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-bottom:24px;text-align:center;">
       <p style="margin:0;color:#166534;font-size:22px;font-weight:700;">${esc(time)}</p>
-      <p style="margin:4px 0 0;color:#15803d;font-size:14px;">${esc(fmtDate(date, en))} &bull; ${esc(e.guests)} ${t.persons}</p>
+      <p style="margin:4px 0 0;color:#15803d;font-size:14px;">${esc(fmtDate(date, lang))} &bull; ${esc(e.guests)} ${t.persons}</p>
     </div>
     <div style="text-align:center;margin-bottom:20px;">
       <a href="${url}" style="display:inline-block;background:#16a34a;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:700;">${t.btn}</a>
@@ -107,14 +96,14 @@ async function notifyWaitlist(db, shop, date, time) {
     });
     const now = claim.snapshot && claim.snapshot.val();
     if (!claim.committed || !now || now.status !== 'notified') continue;
-    const en = e.lang === 'en';
-    const url = `${link.base}${link.sep}date=${date}&time=${encodeURIComponent(time)}&guests=${encodeURIComponent(e.guests)}&lang=${en ? 'en' : 'el'}`;
+    const lang = normLang(e.lang);
+    const url = `${link.base}${link.sep}date=${date}&time=${encodeURIComponent(time)}&guests=${encodeURIComponent(e.guests)}&lang=${lang}`;
     try {
       await resend.emails.send({
         from: 'TableReserve <noreply@tablereserve.gr>',
         to: e.email,
-        subject: en ? `🎉 A table opened up: ${shopName}, ${time}` : `🎉 Ελευθερώθηκε τραπέζι: ${shopName}, ${time}`,
-        html: emailHtml({ e, shopName, date, time, url, en }),
+        subject: msg(lang).w_subject(shopName, time),
+        html: emailHtml({ e, shopName, date, time, url, lang }),
       });
       await ref.update({ notifiedAt: Date.now(), notifiedTime: time });
       sent++;
@@ -190,7 +179,7 @@ async function notifyShopJoin(db, shop, e, date, updated) {
   </div>
   <div style="background:#fff;padding:24px 32px;">
     <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
-      ${row(L.date, esc(fmtDate(date, en)))}
+      ${row(L.date, esc(fmtDate(date, en ? 'en' : 'el')))}
       ${row(L.time, esc(when))}
       ${row(L.guests, esc(e.guests))}
       ${row(L.name, esc(e.name))}

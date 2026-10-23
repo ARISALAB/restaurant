@@ -4,6 +4,8 @@ const { json, preflightOk } = require('./_shared/respond');
 const { locationLabel } = require('./_shared/location');
 const { googleCalendarUrl, icsUrl } = require('./_shared/calendar');
 const { shopTz } = require('./_shared/time');
+const { normLang, msg, fmtDate } = require('./_shared/i18n');
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -32,48 +34,32 @@ exports.handler = async (event) => {
 
     const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
     const tz = await shopTz(db, shopId);
-    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, en: lang === 'en', tz });
-    const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang });
+    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, lang: normLang(lang), tz });
+    const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang: normLang(lang) });
     const walletUrl = process.env.GOOGLE_WALLET_ISSUER_ID
-      ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: lang === 'en' ? 'en' : 'el' }).toString()
+      ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: normLang(lang) }).toString()
       : null;
 
-    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${lang || 'el'}`;
+    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${normLang(lang)}`;
 
-    const isEn = lang === 'en';
-    const txt = isEn ? {
-      subject:      `✅ Booking Confirmation - ${shopName} | ${booking.date} ${booking.time}`,
-      header:       'Booking Confirmation',
-      greeting:     `Dear <strong>${booking.name}</strong>,`,
-      confirmed:    'Your reservation has been confirmed!',
-      persons:      'persons',
-      location_lbl: '📍 Seating',
-      occasion_lbl: '🎉 Occasion',
-      comments_lbl: '💬 Requests',
-      no_pref:      'No preference',
-      cal_title:    '📅 Add it to your calendar so your phone reminds you 2 hours before',
-      cal_google:   'Google Calendar',
-      cal_other:    'iPhone / Outlook',
-      cancel_q:     'Would you like to cancel your reservation?',
-      cancel_btn:   '❌ Cancel Reservation',
-      cancel_note:  'Cancellation is allowed up to 2 hours before the reservation',
-      footer:       'TableReserve &bull; noreply@tablereserve.gr',
-    } : {
-      subject:      `✅ Επιβεβαίωση Κράτησης - ${shopName} | ${booking.date} ${booking.time}`,
-      header:       'Επιβεβαίωση Κράτησης',
-      greeting:     `Αγαπητέ/ή <strong>${booking.name}</strong>,`,
-      confirmed:    'Η κράτησή σας επιβεβαιώθηκε με επιτυχία!',
-      persons:      'άτομα',
-      location_lbl: '📍 Χώρος',
-      occasion_lbl: '🎉 Γεγονός',
-      comments_lbl: '💬 Αιτήματα',
-      no_pref:      'Δεν έχω προτίμηση',
-      cal_title:    '📅 Προσθέστε το στο ημερολόγιο για να σας θυμίσει το κινητό σας 2 ώρες πριν',
-      cal_google:   'Google Calendar',
-      cal_other:    'iPhone / Outlook',
-      cancel_q:     'Θέλετε να ακυρώσετε την κράτησή σας;',
-      cancel_btn:   '❌ Ακύρωση Κράτησης',
-      cancel_note:  'Η ακύρωση επιτρέπεται έως 2 ώρες πριν την κράτηση',
+    const L = normLang(lang);
+    const m = msg(L);
+    const txt = {
+      subject:      `✅ ${m.c_subject} - ${shopName} | ${booking.date} ${booking.time}`,
+      header:       m.c_header,
+      greeting:     m.dear(esc(booking.name)),
+      confirmed:    m.c_confirmed,
+      persons:      m.persons,
+      location_lbl: m.c_location,
+      occasion_lbl: m.c_occasion,
+      comments_lbl: m.c_comments,
+      no_pref:      m.no_pref,
+      cal_title:    m.c_cal,
+      cal_google:   m.c_cal_google,
+      cal_other:    m.c_cal_other,
+      cancel_q:     m.c_cancel_q,
+      cancel_btn:   m.c_cancel_btn,
+      cancel_note:  m.c_cancel_note,
       footer:       'TableReserve &bull; noreply@tablereserve.gr',
     };
 
@@ -91,7 +77,7 @@ exports.handler = async (event) => {
     <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
       <div style="font-size:32px;margin-bottom:8px;">🍽️</div>
       <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${txt.header}</h1>
-      <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${shopName}</p>
+      <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
     </div>
 
     <div style="background:#fff;padding:28px 32px;">
@@ -99,24 +85,24 @@ exports.handler = async (event) => {
       <p style="color:#64748b;font-size:14px;margin-bottom:24px;">${txt.confirmed}</p>
 
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
-        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${booking.date} &bull; ${booking.time}</p>
-        <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${booking.guests} ${txt.persons} &bull; ${shopName}</p>
+        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${esc(fmtDate(booking.date, L))} &bull; ${esc(booking.time)}</p>
+        <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests)} ${txt.persons} &bull; ${esc(shopName)}</p>
       </div>
 
       <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:40%;">${txt.location_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${locationLabel(booking.location, lang) || txt.no_pref}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(locationLabel(booking.location, L)) || txt.no_pref}</td>
         </tr>
         ${booking.occasion ? `
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${txt.occasion_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.occasion}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.occasion)}</td>
         </tr>` : ''}
         ${booking.comments ? `
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${txt.comments_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.comments}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.comments)}</td>
         </tr>` : ''}
       </table>
 
@@ -124,7 +110,7 @@ exports.handler = async (event) => {
         <p style="color:#334155;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cal_title}</p>
         <a href="${gcalUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_google}</a>
         <a href="${appleUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_other}</a>
-        ${walletUrl ? `<div style="margin-top:10px;"><a href="${walletUrl}" style="display:inline-block;padding:8px;"><img src="https://tablereserve.gr/wallet/${isEn ? 'add-en.png' : 'add-el.png'}" alt="${isEn ? 'Add to Google Wallet' : 'Προσθήκη στο Πορτοφόλι Google'}" height="48" style="height:48px;width:auto;border:0;display:block;"></a></div>` : ''}
+        ${walletUrl ? `<div style="margin-top:10px;"><a href="${walletUrl}" style="display:inline-block;padding:8px;"><img src="https://tablereserve.gr/wallet/${L === 'el' ? 'add-el.png' : 'add-en.png'}" alt="${m.wallet_alt}" height="48" style="height:48px;width:auto;border:0;display:block;"></a></div>` : ''}
       </div>
 
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;text-align:center;">

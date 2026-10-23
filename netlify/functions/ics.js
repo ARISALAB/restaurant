@@ -1,8 +1,9 @@
 // Αρχείο ημερολογίου (.ics) για μια κράτηση, με ειδοποίηση 2 ώρες πριν.
-// GET /.netlify/functions/ics?shop=<id>&id=<bookingId>&t=<cancelToken>&lang=el|en
+// GET /.netlify/functions/ics?shop=<id>&id=<bookingId>&t=<cancelToken>&lang=el|en|de|fr|it|es|tr|pt
 const { getDb } = require('./_shared/firebase');
 const { localToMs, shopTz, icsStamp } = require('./_shared/time');
 const { DURATION_MS, calendarText } = require('./_shared/calendar');
+const { normLang, msg } = require('./_shared/i18n');
 
 const esc = s => String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
 
@@ -23,14 +24,14 @@ const text = (code, body) => ({ statusCode: code, headers: { 'Content-Type': 'te
 exports.handler = async (event) => {
   const q = event.queryStringParameters || {};
   const shop = String(q.shop || ''), id = String(q.id || ''), token = String(q.t || '');
-  const en = q.lang === 'en';
+  const lang = normLang(q.lang), m = msg(lang);
   if (!/^[a-z0-9_]{1,60}$/.test(shop) || !/^[A-Za-z0-9_-]{1,40}$/.test(id) || !token) return text(400, 'Bad request');
 
   try {
     const db = getDb();
     const b = (await db.ref(`reservations/${shop}/${id}`).get()).val();
-    if (!b || b.cancelToken !== token) return text(404, en ? 'Reservation not found' : 'Η κράτηση δεν βρέθηκε');
-    if (b.status === 'cancelled') return text(410, en ? 'This reservation was cancelled' : 'Η κράτηση έχει ακυρωθεί');
+    if (!b || b.cancelToken !== token) return text(404, m.e_not_found);
+    if (b.status === 'cancelled') return text(410, m.e_cancelled);
 
     const [shopName, address, tz] = await Promise.all([
       db.ref(`shop_details/${shop}/displayName`).get().then(s => s.val() || shop),
@@ -38,9 +39,9 @@ exports.handler = async (event) => {
       shopTz(db, shop),
     ]);
     const start = localToMs(b.date, b.time, tz);
-    const { title, details } = calendarText(b, shopName, en);
-    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${en ? 'en' : 'el'}`;
-    const desc = details + '\n\n' + (en ? 'Cancel: ' : 'Ακύρωση: ') + cancelUrl;
+    const { title, details } = calendarText(b, shopName, lang);
+    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${token}&shop=${shop}&id=${id}&lang=${lang}`;
+    const desc = details + '\n\n' + m.k_cancel + cancelUrl;
 
     const lines = [
       'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//TableReserve//Booking//EL', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH',

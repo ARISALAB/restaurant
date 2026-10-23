@@ -246,10 +246,12 @@ const urlParams = new URLSearchParams(window.location.search);
 const shopId = urlParams.get('shop');
 
 // Γλώσσα: ?lang=el|en, αλλιώς από τον browser (Ελληνικά για ελληνικό browser, Αγγλικά για όλους τους άλλους)
+const SITE_LANGS = ['el', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt'];
 const LANG = (() => {
   const q = urlParams.get('lang');
-  if (q === 'el' || q === 'en') return q;
-  return (navigator.language || '').toLowerCase().indexOf('el') === 0 ? 'el' : 'en';
+  if (SITE_LANGS.includes(q)) return q;
+  const prefs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(x => String(x).toLowerCase().slice(0, 2));
+  return prefs.find(x => SITE_LANGS.includes(x)) || 'en';
 })();
 const I18N = {
   el: {
@@ -271,6 +273,66 @@ const I18N = {
     cta_band: 'Book now →', footer_by: 'Your website, free, by',
     title_suffix: ' — Book a table', welcome_to: n => `Welcome to ${n}`, at: n => ' to ' + n,
     default_desc: n => `${n} is a restaurant you'll love — book a table and come find out.`, contact: 'Contact us'
+  },
+  de: {
+    nf_title: 'Restaurant nicht gefunden', nf_desc: 'Bitte prüfen Sie, ob der Link korrekt ist.',
+    nav_about: 'Über uns', nav_photos: 'Fotos', nav_info: 'Zeiten &amp; Anfahrt', cta_nav: 'Tisch reservieren',
+    eyebrow: 'Restaurant', cta_hero: 'Tisch reservieren →', cta_info: 'Zeiten &amp; Anfahrt ansehen',
+    about_eyebrow: 'Unsere Geschichte', welcome: 'Willkommen', hours: 'Öffnungszeiten', address: 'Adresse', phone: 'Telefon',
+    gallery: 'Galerie', gallery_title: 'Ein Vorgeschmack', band_title: 'Tisch in 30 Sekunden reservieren', band_sub: 'Sofortige Bestätigung, ohne Anruf',
+    cta_band: 'Jetzt reservieren →', footer_by: 'Ihre Website, kostenlos, von',
+    title_suffix: ' — Tisch reservieren', welcome_to: n => `Willkommen im ${n}`, at: n => ' im ' + n,
+    default_desc: n => `${n} ist ein Restaurant, das Sie lieben werden – reservieren Sie einen Tisch und überzeugen Sie sich selbst.`, contact: 'Kontaktieren Sie uns'
+  },
+  fr: {
+    nf_title: 'Restaurant introuvable', nf_desc: 'Vérifiez que le lien est correct.',
+    nav_about: 'À propos', nav_photos: 'Photos', nav_info: 'Horaires &amp; adresse', cta_nav: 'Réserver une table',
+    eyebrow: 'Restaurant', cta_hero: 'Réserver une table →', cta_info: 'Voir horaires &amp; adresse',
+    about_eyebrow: 'Notre histoire', welcome: 'Bienvenue', hours: "Heures d'ouverture", address: 'Adresse', phone: 'Téléphone',
+    gallery: 'Galerie', gallery_title: 'Un avant-goût', band_title: 'Réservez une table en 30 secondes', band_sub: 'Confirmation immédiate, sans appel',
+    cta_band: 'Réserver maintenant →', footer_by: 'Votre site, gratuit, par',
+    title_suffix: ' — Réserver une table', welcome_to: n => `Bienvenue chez ${n}`, at: n => ' chez ' + n,
+    default_desc: n => `${n} est un restaurant que vous allez adorer — réservez une table pour le découvrir.`, contact: 'Contactez-nous'
+  },
+  it: {
+    nf_title: 'Ristorante non trovato', nf_desc: 'Verifica che il link sia corretto.',
+    nav_about: 'Chi siamo', nav_photos: 'Foto', nav_info: 'Orari &amp; indirizzo', cta_nav: 'Prenota un tavolo',
+    eyebrow: 'Ristorante', cta_hero: 'Prenota un tavolo →', cta_info: 'Vedi orari &amp; indirizzo',
+    about_eyebrow: 'La nostra storia', welcome: 'Benvenuti', hours: 'Orari di apertura', address: 'Indirizzo', phone: 'Telefono',
+    gallery: 'Galleria', gallery_title: 'Un assaggio', band_title: 'Prenota un tavolo in 30 secondi', band_sub: 'Conferma immediata, senza telefonare',
+    cta_band: 'Prenota ora →', footer_by: 'Il tuo sito, gratis, da',
+    title_suffix: ' — Prenota un tavolo', welcome_to: n => `Benvenuti da ${n}`, at: n => ' da ' + n,
+    default_desc: n => `${n} è un ristorante che amerai — prenota un tavolo per scoprirlo.`, contact: 'Contattaci'
+  },
+  es: {
+    nf_title: 'Restaurante no encontrado', nf_desc: 'Comprueba que el enlace sea correcto.',
+    nav_about: 'Nosotros', nav_photos: 'Fotos', nav_info: 'Horario &amp; dirección', cta_nav: 'Reservar mesa',
+    eyebrow: 'Restaurante', cta_hero: 'Reservar mesa →', cta_info: 'Ver horario &amp; dirección',
+    about_eyebrow: 'Nuestra historia', welcome: 'Bienvenidos', hours: 'Horario', address: 'Dirección', phone: 'Teléfono',
+    gallery: 'Galería', gallery_title: 'Un adelanto', band_title: 'Reserva mesa en 30 segundos', band_sub: 'Confirmación inmediata, sin llamar',
+    cta_band: 'Reservar ahora →', footer_by: 'Tu web, gratis, de',
+    title_suffix: ' — Reservar mesa', welcome_to: n => `Bienvenidos a ${n}`, at: n => ' a ' + n,
+    default_desc: n => `${n} es un restaurante que te va a encantar — reserva mesa y descúbrelo.`, contact: 'Contáctanos'
+  },
+  tr: {
+    nf_title: 'Restoran bulunamadı', nf_desc: 'Lütfen bağlantının doğru olduğunu kontrol edin.',
+    nav_about: 'Hakkımızda', nav_photos: 'Fotoğraflar', nav_info: 'Saatler &amp; adres', cta_nav: 'Masa ayırt',
+    eyebrow: 'Restoran', cta_hero: 'Masa ayırt →', cta_info: 'Saatleri &amp; adresi gör',
+    about_eyebrow: 'Hikâyemiz', welcome: 'Hoş geldiniz', hours: 'Çalışma saatleri', address: 'Adres', phone: 'Telefon',
+    gallery: 'Galeri', gallery_title: 'Bir tadımlık', band_title: '30 saniyede masa ayırtın', band_sub: 'Anında onay, telefon gerekmez',
+    cta_band: 'Hemen rezervasyon yap →', footer_by: 'Web siteniz, ücretsiz:',
+    title_suffix: ' — Masa ayırt', welcome_to: n => `${n} · Hoş geldiniz`, at: n => '',
+    default_desc: n => `${n}, seveceğiniz bir restoran — keşfetmek için masanızı ayırtın.`, contact: 'Bize ulaşın'
+  },
+  pt: {
+    nf_title: 'Restaurante não encontrado', nf_desc: 'Verifique se o link está correto.',
+    nav_about: 'Sobre nós', nav_photos: 'Fotos', nav_info: 'Horário &amp; morada', cta_nav: 'Reservar mesa',
+    eyebrow: 'Restaurante', cta_hero: 'Reservar mesa →', cta_info: 'Ver horário &amp; morada',
+    about_eyebrow: 'A nossa história', welcome: 'Bem-vindo', hours: 'Horário', address: 'Morada', phone: 'Telefone',
+    gallery: 'Galeria', gallery_title: 'Uma amostra', band_title: 'Reserve mesa em 30 segundos', band_sub: 'Confirmação imediata, sem telefonar',
+    cta_band: 'Reservar agora →', footer_by: 'O seu site, grátis, por',
+    title_suffix: ' — Reservar mesa', welcome_to: n => `Bem-vindo ao ${n}`, at: n => ' ao ' + n,
+    default_desc: n => `O ${n} é um restaurante que vai adorar — reserve mesa para o descobrir.`, contact: 'Contacte-nos'
   }
 };
 const T = I18N[LANG];
@@ -294,7 +356,7 @@ async function init() {
   if (!pCover && !pGallery && !pLogo && !address && !description && !hours && !phone && !tagline && !detName) { showNotFound(); return; }
 
   const full = { coverPhoto: pCover, gallery: pGallery, logoPhoto: pLogo };
-  const info = { address, description, displayName: iDisplayName || detName, hours: (LANG === 'en' && hoursEn) ? hoursEn : hours, phone, tagline };
+  const info = { address, description, displayName: iDisplayName || detName, hours: (LANG !== 'el' && hoursEn) ? hoursEn : hours, phone, tagline };
   const name = info.displayName || displayName(shopId);
   trSetSchema({ shopId, name, description, address, phone, hours, tagline, logo: pLogo, cover: pCover, canonical: false });
   const bookingUrl = `https://tablereserve.gr/?shop=${encodeURIComponent(shopId)}&lang=${LANG}`;

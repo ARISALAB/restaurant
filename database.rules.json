@@ -48,7 +48,7 @@
             ".validate": "newData.isString() && newData.val().matches(/^(google|site|social|direct|phone|walkin)$/)"
           },
           "lang": {
-            ".validate": "newData.isString() && newData.val().matches(/^(el|en)$/)"
+            ".validate": "newData.isString() && newData.val().matches(/^(el|en|de|fr|it|es|tr|pt)$/)"
           },
           "createdBy": {
             ".validate": "newData.isString() && newData.val() === 'admin'"

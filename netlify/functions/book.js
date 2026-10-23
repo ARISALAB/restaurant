@@ -1,6 +1,6 @@
 // Νέα κράτηση από τη σελίδα του εστιατορίου. Όλοι οι έλεγχοι γίνονται εδώ, όχι στον browser.
 // POST /.netlify/functions/book
-//   { shop, date:"2026-10-12", time:"20:30", guests, name, phone, email, location, occasion, comments, lang, website }
+//   { shop, date:"2026-10-12", time:"20:30", guests, name, phone, email, location, occasion, comments, lang (el|en|de|fr|it|es|tr|pt), website }
 // ->  200 { ok:true, bookingId, cancelToken }   |   4xx { error: "slot_full" | "shop_inactive" | "day_closed" | "bad_time" |
 //                                           "too_many_guests" | "rate_limited" | "bad_request" }
 const crypto = require('crypto');
@@ -9,6 +9,7 @@ const { json, preflightOk } = require('./_shared/respond');
 const notifyShop = require('./notify');
 const notifyCustomer = require('./notify-customer');
 const { removeBooked } = require('./_shared/waitlist');
+const { normLang } = require('./_shared/i18n');
 
 const WH_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const HOLD_MS = 2 * 60 * 1000;          // πόσο μετράει μια «κράτηση σε εξέλιξη»
@@ -71,7 +72,7 @@ exports.handler = async (event) => {
   const guests = parseInt(b.guests, 10);
   const name = str(b.name, 100), phone = str(b.phone, 30), email = str(b.email, 120);
   const location = str(b.location, 60), occasion = str(b.occasion, 200), comments = str(b.comments, 1000);
-  const lang = b.lang === 'en' ? 'en' : 'el';
+  const lang = normLang(b.lang);
   // Από πού ήρθε ο πελάτης: google (Επαγγελματικό προφίλ), site (site εστιατορίου), social, direct
   const source = ['google', 'site', 'social', 'direct'].includes(b.source) ? b.source : 'direct';
 

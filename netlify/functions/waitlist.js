@@ -7,6 +7,7 @@ const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { localDay, shopTz } = require('./_shared/time');
+const { normLang } = require('./_shared/i18n');
 const { notifyWaitlist, phoneKey, notifyShopJoin } = require('./_shared/waitlist');
 
 const SUPER_UID = 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1';
@@ -33,7 +34,7 @@ async function join(db, b, event) {
   const date = String(b.date || ''), time = String(b.time || '');
   const guests = parseInt(b.guests, 10);
   const name = str(b.name, 100), phone = str(b.phone, 30), email = str(b.email, 120);
-  const lang = b.lang === 'en' ? 'en' : 'el';
+  const lang = normLang(b.lang);
   if (!/^[a-z0-9_]{1,60}$/.test(shop) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !(time === 'any' || /^\d{2}:\d{2}$/.test(time)) ||
       !(guests >= 1 && guests <= 50) || !name || !phone || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json(400, { error: 'bad_request' });
