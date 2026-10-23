@@ -161,32 +161,43 @@ async function scanWaitlists(db) {
 async function notifyShopJoin(db, shop, e, date, updated) {
   const to = (await db.ref(`shop_profile/${shop}/info/notificationEmail`).get()).val();
   if (!to) { console.warn('[waitlist] no notificationEmail for', shop); return; }
-  const shopName = (await db.ref(`shop_details/${shop}/displayName`).get()).val() || shop;
-  const when = e.time === 'any' ? (Array.isArray(e.times) && e.times.length ? e.times.join(', ') : 'οποιαδήποτε ώρα') : e.time;
+  const details = (await db.ref(`shop_details/${shop}`).get()).val() || {};
+  const shopName = details.displayName || shop;
+  const en = details.lang === 'en';
+  const L = en ? {
+    any: 'any time', subject: '⏳ Waitlist', headNew: 'New waitlist request', headUpd: 'Waitlist request updated',
+    date: 'Date', time: 'Time', guests: 'Guests', name: 'Name', phone: 'Phone',
+    note: 'This time is full. If a booking is cancelled, the guest will automatically get an email to book the table. You can also call them yourself if you find a spot.'
+  } : {
+    any: 'οποιαδήποτε ώρα', subject: '⏳ Λίστα αναμονής', headNew: 'Νέο αίτημα στη λίστα αναμονής', headUpd: 'Ενημέρωση αιτήματος στη λίστα αναμονής',
+    date: 'Ημερομηνία', time: 'Ώρα', guests: 'Άτομα', name: 'Όνομα', phone: 'Τηλέφωνο',
+    note: 'Η ώρα είναι πλήρης. Αν ακυρωθεί κάποια κράτηση, ο πελάτης θα πάρει αυτόματα email για να κλείσει το τραπέζι. Μπορείτε επίσης να τον καλέσετε εσείς, αν βρείτε θέση.'
+  };
+  const when = e.time === 'any' ? (Array.isArray(e.times) && e.times.length ? e.times.join(', ') : L.any) : e.time;
   const tel = String(e.phone || '').replace(/[^\d+]/g, '');
   const row = (l, v) => `<tr><td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:38%;">${l}</td><td style="padding:10px 12px;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${v}</td></tr>`;
   await resend.emails.send({
     from: 'TableReserve <noreply@tablereserve.gr>',
     to,
-    subject: `⏳ Λίστα αναμονής - ${shopName} | ${date} ${when} | ${e.name}`,
+    subject: `${L.subject} - ${shopName} | ${date} ${when} | ${e.name}`,
     html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head>
 <body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
 <div style="max-width:580px;margin:0 auto;">
   <div style="background:#0f172a;border-radius:12px 12px 0 0;padding:24px 32px;text-align:center;">
     <div style="font-size:30px;margin-bottom:6px;">⏳</div>
-    <h1 style="color:#fff;margin:0;font-size:19px;font-weight:700;">${updated ? 'Ενημέρωση αιτήματος στη λίστα αναμονής' : 'Νέο αίτημα στη λίστα αναμονής'}</h1>
+    <h1 style="color:#fff;margin:0;font-size:19px;font-weight:700;">${updated ? L.headUpd : L.headNew}</h1>
     <p style="color:rgba(255,255,255,0.75);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
   </div>
   <div style="background:#fff;padding:24px 32px;">
     <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
-      ${row('Ημερομηνία', esc(fmtDate(date, false)))}
-      ${row('Ώρα', esc(when))}
-      ${row('Άτομα', esc(e.guests))}
-      ${row('Όνομα', esc(e.name))}
-      ${row('Τηλέφωνο', `<a href="tel:${esc(tel)}" style="color:#2563eb;text-decoration:none;">${esc(e.phone)}</a>`)}
+      ${row(L.date, esc(fmtDate(date, en)))}
+      ${row(L.time, esc(when))}
+      ${row(L.guests, esc(e.guests))}
+      ${row(L.name, esc(e.name))}
+      ${row(L.phone, `<a href="tel:${esc(tel)}" style="color:#2563eb;text-decoration:none;">${esc(e.phone)}</a>`)}
       ${row('Email', esc(e.email))}
     </table>
-    <p style="color:#64748b;font-size:13px;line-height:1.6;margin:0;">Η ώρα είναι πλήρης. Αν ακυρωθεί κάποια κράτηση, ο πελάτης θα πάρει αυτόματα email για να κλείσει το τραπέζι. Μπορείτε επίσης να τον καλέσετε εσείς, αν βρείτε θέση.</p>
+    <p style="color:#64748b;font-size:13px;line-height:1.6;margin:0;">${L.note}</p>
   </div>
   <div style="background:#f8fafc;border-radius:0 0 12px 12px;padding:14px;text-align:center;border:1px solid #e2e8f0;border-top:none;">
     <p style="color:#94a3b8;font-size:12px;margin:0;">TableReserve &bull; noreply@tablereserve.gr</p>

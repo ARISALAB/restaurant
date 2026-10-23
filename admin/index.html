@@ -1170,21 +1170,21 @@
                         <div class="card-title"><div class="icon">📝</div> <span data-i18n-key="shop_info_title">Πληροφορίες Μαγαζιού</span></div>
                         <div class="input-group">
                             <label data-i18n-key="shop_tagline">Σύνθημα / Slogan</label>
-                            <input type="text" id="prof-tagline" maxlength="80" placeholder="π.χ. Το καλύτερο καφέ της πόλης!" oninput="updateCharCount('prof-tagline','cnt-tagline',80)">
+                            <input type="text" id="prof-tagline" maxlength="80" placeholder="π.χ. Το καλύτερο καφέ της πόλης!" data-i18n-placeholder="ph_tagline" oninput="updateCharCount('prof-tagline','cnt-tagline',80)">
                             <div class="char-counter"><span id="cnt-tagline">0</span>/80</div>
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="shop_description">Περιγραφή</label>
-                            <textarea id="prof-description" rows="4" maxlength="600" placeholder="Γράψτε μια σύντομη περιγραφή του μαγαζιού σας..." oninput="updateCharCount('prof-description','cnt-desc',600)"></textarea>
+                            <textarea id="prof-description" rows="4" maxlength="600" placeholder="Γράψτε μια σύντομη περιγραφή του μαγαζιού σας..." data-i18n-placeholder="ph_description" oninput="updateCharCount('prof-description','cnt-desc',600)"></textarea>
                             <div class="char-counter"><span id="cnt-desc">0</span>/600</div>
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="shop_address">Διεύθυνση</label>
-                            <input type="text" id="prof-address" maxlength="120" placeholder="π.χ. Ερμού 12, Αθήνα">
+                            <input type="text" id="prof-address" maxlength="120" placeholder="π.χ. Ερμού 12, Αθήνα" data-i18n-placeholder="ph_address">
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="shop_phone_pub">Τηλέφωνο Επικοινωνίας</label>
-                            <input type="tel" id="prof-phone" maxlength="20" placeholder="π.χ. 210 1234567">
+                            <input type="tel" id="prof-phone" maxlength="20" placeholder="π.χ. 210 1234567" data-i18n-placeholder="ph_phone">
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="shop_hours">Ωράριο Λειτουργίας</label>
@@ -1200,7 +1200,7 @@
                         </div>
                         <div class="input-group">
                             <label data-i18n-key="cap_label">Μέγιστος αριθμός ατόμων ανά ώρα κράτησης</label>
-                            <input type="number" id="prof-capacity" min="1" max="999" step="1" placeholder="π.χ. 30">
+                            <input type="number" id="prof-capacity" min="1" max="999" step="1" placeholder="π.χ. 30" data-i18n-placeholder="ph_capacity">
                             <small style="color:#64748b; font-size:0.8rem;" data-i18n-key="cap_hint">Όταν μια ώρα γεμίσει, εμφανίζεται ως «Πλήρες» και δεν δέχεται άλλες κρατήσεις. Αφήστε κενό για χωρίς όριο.</small>
                         </div>
                         <div class="input-group">
@@ -1210,9 +1210,9 @@
                             <small id="prof-tz-warn" style="display:none; color:#b45309; font-size:0.8rem; margin-top:4px;"></small>
                         </div>
                         <div class="input-group">
-                            <label>📧 Email Ειδοποιήσεων Κρατήσεων</label>
-                            <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr">
-                            <small style="color:#64748b;font-size:0.8rem;">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
+                            <label data-i18n-key="notif_email_label">📧 Email Ειδοποιήσεων Κρατήσεων</label>
+                            <input type="email" id="prof-notification-email" placeholder="π.χ. info@estiatorio.gr" data-i18n-placeholder="ph_notif_email">
+                            <small style="color:#64748b;font-size:0.8rem;" data-i18n-key="notif_email_hint">Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση</small>
                         </div>
                         <button class="profile-save-btn" id="btn-save-profile" onclick="saveShopProfile()">
                             💾 <span data-i18n-key="save_profile">Αποθήκευση Πληροφοριών</span>
@@ -1221,7 +1221,7 @@
 
                     <!-- Logo Upload -->
                     <div class="card" style="margin-bottom:20px;">
-                        <div class="card-title"><div class="icon">🏷️</div> <span>Λογότυπο</span></div>
+                        <div class="card-title"><div class="icon">🏷️</div> <span data-i18n-key="logo_title">Λογότυπο</span></div>
                         <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
                             <div id="logo-preview-wrap" style="width:80px;height:80px;border-radius:14px;overflow:hidden;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;">
                                 <img id="logo-preview-img" src="" alt="logo" style="width:100%;height:100%;object-fit:cover;display:none;">
@@ -1231,14 +1231,14 @@
                                 <div class="upload-zone" id="logo-zone" style="padding:16px 20px;">
                                     <input type="file" id="logo-input" accept="image/*" onchange="handleLogoUpload(event)">
                                     <div class="upload-zone-icon" style="font-size:1.4rem; margin-bottom:4px;">🏷️</div>
-                                    <div class="upload-zone-text" style="font-size:0.82rem;">Κλικ ή σύρτε λογότυπο</div>
-                                    <div class="upload-zone-sub">PNG με διαφάνεια ή JPG · μέγ. 2MB</div>
+                                    <div class="upload-zone-text" style="font-size:0.82rem;" data-i18n-key="logo_drop">Κλικ ή σύρτε λογότυπο</div>
+                                    <div class="upload-zone-sub" data-i18n-key="logo_sub">PNG με διαφάνεια ή JPG · μέγ. 2MB</div>
                                 </div>
                             </div>
                         </div>
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                            <button class="profile-save-btn" onclick="saveLogoPhoto()">💾 Αποθήκευση Λογότυπου</button>
-                            <button class="btn-outline" id="btn-del-logo" onclick="deleteLogoPhoto()" style="display:none;">🗑️ Διαγραφή</button>
+                            <button class="profile-save-btn" onclick="saveLogoPhoto()">💾 <span data-i18n-key="save_logo">Αποθήκευση Λογότυπου</span></button>
+                            <button class="btn-outline" id="btn-del-logo" onclick="deleteLogoPhoto()" style="display:none;">🗑️ <span data-i18n-key="btn_delete">Διαγραφή</span></button>
                         </div>
                     </div>
 
@@ -1439,7 +1439,11 @@
                 upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 8MB ανά φωτογραφία",
                 toast_profile_saved: "✅ Πληροφορίες αποθηκεύτηκαν!", toast_cover_saved: "✅ Εξώφυλλο αποθηκεύτηκε!",
                 toast_cover_deleted: "🗑️ Εξώφυλλο διαγράφηκε.", toast_photo_saved: "✅ Φωτογραφία προστέθηκε!",
-                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.", toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 8MB!", toast_upload_failed: "⚠️ Η φωτογραφία δεν ανέβηκε. Δοκιμάστε ξανά.",
+                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.", ph_tagline: "π.χ. Το καλύτερο καφέ της πόλης!", ph_description: "Γράψτε μια σύντομη περιγραφή του μαγαζιού σας...", ph_address: "π.χ. Ερμού 12, Αθήνα", ph_phone: "π.χ. 210 1234567", ph_capacity: "π.χ. 30", ph_notif_email: "π.χ. info@estiatorio.gr",
+                notif_email_label: "📧 Email Ειδοποιήσεων Κρατήσεων", notif_email_hint: "Σε αυτό το email θα λαμβάνετε ειδοποιήσεις για κάθε νέα κράτηση",
+                logo_title: "Λογότυπο", logo_drop: "Κλικ ή σύρτε λογότυπο", logo_sub: "PNG με διαφάνεια ή JPG · μέγ. 2MB", save_logo: "Αποθήκευση Λογότυπου", btn_delete: "Διαγραφή",
+                toast_logo_too_big: "⚠️ Το λογότυπο υπερβαίνει τα 2MB!", toast_logo_saved: "✅ Λογότυπο αποθηκεύτηκε!", toast_logo_deleted: "🗑️ Λογότυπο διαγράφηκε.",
+                confirm_del_logo: "Διαγραφή λογότυπου;", confirm_del_cover: "Διαγραφή εξωφύλλου;", confirm_del_photo: "Διαγραφή φωτογραφίας;", toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 8MB!", toast_upload_failed: "⚠️ Η φωτογραφία δεν ανέβηκε. Δοκιμάστε ξανά.",
                 toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
@@ -1524,7 +1528,11 @@
                 upload_gallery_hint: "Multiple photos · max 8MB per photo",
                 toast_profile_saved: "✅ Information saved!", toast_cover_saved: "✅ Cover photo saved!",
                 toast_cover_deleted: "🗑️ Cover photo deleted.", toast_photo_saved: "✅ Photo added!",
-                toast_photo_deleted: "🗑️ Photo deleted.", toast_img_too_big: "⚠️ Photo exceeds 8MB!", toast_upload_failed: "⚠️ The photo could not be uploaded. Please try again.",
+                toast_photo_deleted: "🗑️ Photo deleted.", ph_tagline: "e.g. The best coffee in town!", ph_description: "Write a short description of your restaurant...", ph_address: "e.g. 12 Main Street, Lisbon", ph_phone: "e.g. +351 21 123 4567", ph_capacity: "e.g. 30", ph_notif_email: "e.g. info@restaurant.com",
+                notif_email_label: "📧 Booking notification email", notif_email_hint: "You'll receive a notification at this email for every new booking",
+                logo_title: "Logo", logo_drop: "Click or drag your logo", logo_sub: "PNG with transparency or JPG · max 2MB", save_logo: "Save logo", btn_delete: "Delete",
+                toast_logo_too_big: "⚠️ The logo is larger than 2MB!", toast_logo_saved: "✅ Logo saved!", toast_logo_deleted: "🗑️ Logo deleted.",
+                confirm_del_logo: "Delete the logo?", confirm_del_cover: "Delete the cover photo?", confirm_del_photo: "Delete this photo?", toast_img_too_big: "⚠️ Photo exceeds 8MB!", toast_upload_failed: "⚠️ The photo could not be uploaded. Please try again.",
                 toast_save_error2: "Save error. Please try again.",
             }
         };
@@ -3187,7 +3195,7 @@
         window.handleLogoUpload = (event) => {
             const file = event.target.files[0];
             if (!file) return;
-            if (file.size > 2 * 1024 * 1024) { showToast('⚠️ Το λογότυπο υπερβαίνει τα 2MB!', 'error'); return; }
+            if (file.size > 2 * 1024 * 1024) { showToast(t('toast_logo_too_big'), 'error'); return; }
             const reader = new FileReader();
             pendingLogoFile = file;
             reader.onload = (e) => { pendingLogoBase64 = e.target.result; showLogoPreview(pendingLogoBase64); };
@@ -3203,25 +3211,25 @@
                 await set(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`), logoUrl);
                 pendingLogoFile = null;
                 setChipLogo(logoUrl);
-                showToast('✅ Λογότυπο αποθηκεύτηκε!', 'success');
+                showToast(t('toast_logo_saved'), 'success');
                 pendingLogoBase64 = null;
             } catch(e) {
                 showToast(t('toast_save_error2'), 'error');
             } finally {
-                if (btn) { btn.disabled = false; btn.innerHTML = `💾 Αποθήκευση Λογότυπου`; }
+                if (btn) { btn.disabled = false; btn.innerHTML = `💾 <span>${t('save_logo')}</span>`; }
             }
         };
 
         window.deleteLogoPhoto = async () => {
             if (!currentAdminShop) return;
-            if (!confirm('Διαγραφή λογότυπου;')) return;
+            if (!confirm(t('confirm_del_logo'))) return;
             try {
                 await remove(ref(db, `shop_profile/${currentAdminShop}/logoPhoto`));
                 document.getElementById('logo-preview-img').style.display = 'none';
                 document.getElementById('logo-preview-placeholder').style.display = 'block';
                 document.getElementById('btn-del-logo').style.display = 'none';
                 pendingLogoBase64 = null;
-                showToast('🗑️ Λογότυπο διαγράφηκε.', 'success');
+                showToast(t('toast_logo_deleted'), 'success');
             } catch(e) {
                 showToast(t('toast_save_error2'), 'error');
             }
@@ -3307,7 +3315,7 @@
 
         window.deleteCoverPhoto = async () => {
             if (!currentAdminShop) return;
-            if (!confirm('Διαγραφή εξωφύλλου;')) return;
+            if (!confirm(t('confirm_del_cover'))) return;
             try {
                 await remove(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`));
                 document.getElementById('cover-preview').innerHTML = `<span>${t('no_cover')}</span>`;
@@ -3335,7 +3343,7 @@
                     thumb.className = 'photo-thumb';
                     thumb.innerHTML = `
                         <img src="${trImg(p.data, 300)}" alt="${p.name || ''}" loading="lazy">
-                        <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="Διαγραφή">✕</button>
+                        <button class="photo-del" onclick="deleteGalleryPhoto('${shopId}','${key}')" title="${t('btn_delete')}">✕</button>
                         ${p.name ? `<div class="photo-label">${p.name}</div>` : ''}
                     `;
                     grid.appendChild(thumb);
@@ -3361,7 +3369,7 @@
         };
 
         window.deleteGalleryPhoto = async (shopId, key) => {
-            if (!confirm('Διαγραφή φωτογραφίας;')) return;
+            if (!confirm(t('confirm_del_photo'))) return;
             try {
                 await remove(ref(db, `shop_profile/${shopId}/gallery/${key}`));
                 showToast(t('toast_photo_deleted'), 'success');

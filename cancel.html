@@ -267,7 +267,7 @@
               <p>${txt.too_late_desc}</p>
               <p style="margin-top:10px;">${txt.too_late_desc2}</p>
               <a href="https://tablereserve.gr/?shop=${shopId}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
-          } else if (data.error === 'Μη έγκυρο token ακύρωσης') {
+          } else if (data.error === 'Μη έγκυρο token ακύρωσης' || data.error === 'Κράτηση δεν βρέθηκε') {
             card.innerHTML = `
               <div class="icon">🔒</div>
               <h1>${txt.invalid_token_t}</h1>
@@ -276,7 +276,7 @@
           } else {
             btn.disabled = false;
             btn.innerHTML = txt.btn_cancel;
-            alert(data.error || txt.error_generic);
+            alert(txt.error_generic);   // τα μηνύματα του server είναι στα ελληνικά, ο πελάτης βλέπει το δικό του
           }
         } catch (e) {
           btn.disabled = false;

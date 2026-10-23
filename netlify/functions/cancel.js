@@ -54,12 +54,18 @@ exports.handler = async (event) => {
       const shopName  = shopSnap.exists()
         ? (shopSnap.val().displayName || shopId)
         : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
+      // Γλώσσα του καταστήματος για το email προς αυτό
+      const en = shopSnap.exists() && shopSnap.val().lang === 'en';
+      const tx = en
+        ? { subject: '❌ Booking cancelled', head: 'Booking cancelled', by: 'by the guest', persons: 'guests', name: '👤 Name', phone: '📞 Phone', btn: 'View bookings →' }
+        : { subject: '❌ Ακύρωση Κράτησης', head: 'Ακύρωση Κράτησης', by: 'από πελάτη', persons: 'άτομα', name: '👤 Όνομα', phone: '📞 Τηλέφωνο', btn: 'Δείτε τις κρατήσεις →' };
+      const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
       if (emailSnap.exists() && emailSnap.val()) {
         await resend.emails.send({
           from: 'TableReserve <noreply@tablereserve.gr>',
           to: emailSnap.val(),
-          subject: `❌ Ακύρωση Κράτησης - ${shopName} | ${booking.date} ${booking.time} | ${booking.name}`,
+          subject: `${tx.subject} - ${shopName} | ${booking.date} ${booking.time} | ${booking.name}`,
           html: `
 <!DOCTYPE html>
 <html>
@@ -68,33 +74,33 @@ exports.handler = async (event) => {
   <div style="max-width:580px;margin:0 auto;">
     <div style="background:#ef4444;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
       <div style="font-size:28px;margin-bottom:8px;">❌</div>
-      <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">Ακύρωση Κράτησης</h1>
-      <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${shopName} &bull; από πελάτη</p>
+      <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${tx.head}</h1>
+      <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${esc(shopName)} &bull; ${tx.by}</p>
     </div>
     <div style="background:#fff;padding:28px 32px;">
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
-        <p style="margin:0;color:#991b1b;font-size:22px;font-weight:700;">${booking.date} &bull; ${booking.time}</p>
-        <p style="margin:4px 0 0;color:#ef4444;font-size:14px;">${booking.guests} άτομα</p>
+        <p style="margin:0;color:#991b1b;font-size:22px;font-weight:700;">${esc(booking.date)} &bull; ${esc(booking.time)}</p>
+        <p style="margin:4px 0 0;color:#ef4444;font-size:14px;">${esc(booking.guests)} ${tx.persons}</p>
       </div>
       <table style="width:100%;border-collapse:collapse;">
         <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:35%;">👤 Ονομα</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.name || '-'}</td>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:35%;">${tx.name}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.name || '-')}</td>
         </tr>
         <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">📞 Τηλεφωνο</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.phone || '-'}</td>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${tx.phone}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.phone || '-')}</td>
         </tr>
         ${booking.email ? `
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">✉️ Email</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${booking.email}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.email)}</td>
         </tr>` : ''}
       </table>
       <div style="margin-top:24px;text-align:center;">
         <a href="https://tablereserve.gr/admin"
            style="display:inline-block;background:#2563eb;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">
-          Δες τις Κρατησεις →
+          ${tx.btn}
         </a>
       </div>
     </div>

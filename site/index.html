@@ -105,8 +105,8 @@ footer a:hover{text-decoration:underline}
 
 <div id="notfound" class="site-hidden">
   <div>
-    <h1>Δεν βρέθηκε το κατάστημα</h1>
-    <p>Ελέγξτε ότι το link είναι σωστό.</p>
+    <h1 data-i="nf_title">Δεν βρέθηκε το κατάστημα</h1>
+    <p data-i="nf_desc">Ελέγξτε ότι το link είναι σωστό.</p>
   </div>
 </div>
 
@@ -116,11 +116,11 @@ footer a:hover{text-decoration:underline}
   <div class="wrap">
     <div class="logo"><div class="logo-mark" id="logo-mark">🍽️</div><span id="nav-name"></span></div>
     <div class="nav-links">
-      <a href="#about">Η ταβέρνα</a>
-      <a href="#gallery" id="nav-gallery-link">Φωτογραφίες</a>
-      <a href="#info">Ώρες &amp; Διεύθυνση</a>
+      <a href="#about" data-i="nav_about">Η ταβέρνα</a>
+      <a href="#gallery" id="nav-gallery-link" data-i="nav_photos">Φωτογραφίες</a>
+      <a href="#info" data-i="nav_info">Ώρες &amp; Διεύθυνση</a>
     </div>
-    <a href="#" id="nav-cta" class="nav-cta">Κράτηση τραπεζιού</a>
+    <a href="#" id="nav-cta" class="nav-cta" data-i="cta_nav">Κράτηση τραπεζιού</a>
   </div>
 </nav>
 
@@ -128,12 +128,12 @@ footer a:hover{text-decoration:underline}
   <div class="hero-photo" id="hero-photo"><div class="hero-photo-fallback"></div></div>
   <div class="hero-photo-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Εστιατόριο</div>
+    <div class="hero-eyebrow" data-i="eyebrow">Εστιατόριο</div>
     <h1 id="hero-name"></h1>
     <p id="hero-tagline"></p>
     <div class="hero-ctas">
-      <a href="#" id="hero-cta" class="btn-main">Κάντε κράτηση →</a>
-      <a href="#info" class="btn-ghost">Δείτε ώρες &amp; διεύθυνση</a>
+      <a href="#" id="hero-cta" class="btn-main" data-i="cta_hero">Κάντε κράτηση →</a>
+      <a href="#info" class="btn-ghost" data-i="cta_info">Δείτε ώρες &amp; διεύθυνση</a>
     </div>
   </div>
 </section>
@@ -141,8 +141,8 @@ footer a:hover{text-decoration:underline}
 <section class="about" id="about">
   <div class="wrap">
     <div>
-      <div class="about-eyebrow">Η ιστορία μας</div>
-      <h2>Καλώς ήρθατε<span id="about-name-span"></span></h2>
+      <div class="about-eyebrow" data-i="about_eyebrow">Η ιστορία μας</div>
+      <h2><span data-i="welcome">Καλώς ήρθατε</span><span id="about-name-span"></span></h2>
       <p id="about-description"></p>
     </div>
     <div class="about-photo" id="about-photo">📷</div>
@@ -152,15 +152,15 @@ footer a:hover{text-decoration:underline}
 <section class="info-strip" id="info">
   <div class="wrap">
     <div class="info-card">
-      <h3>Ώρες λειτουργίας</h3>
+      <h3 data-i="hours">Ώρες λειτουργίας</h3>
       <p id="info-hours">—</p>
     </div>
     <div class="info-card">
-      <h3>Διεύθυνση</h3>
+      <h3 data-i="address">Διεύθυνση</h3>
       <p id="info-address">—</p>
     </div>
     <div class="info-card">
-      <h3>Τηλέφωνο</h3>
+      <h3 data-i="phone">Τηλέφωνο</h3>
       <p id="info-phone">—</p>
     </div>
   </div>
@@ -169,8 +169,8 @@ footer a:hover{text-decoration:underline}
 <section class="gallery" id="gallery-section">
   <div class="wrap">
     <div class="gallery-head">
-      <div class="about-eyebrow">Γκαλερί</div>
-      <h2 id="gallery-title">Μια γεύση</h2>
+      <div class="about-eyebrow" data-i="gallery">Γκαλερί</div>
+      <h2 id="gallery-title" data-i="gallery_title">Μια γεύση</h2>
     </div>
     <div class="gal-grid" id="gal-grid"></div>
   </div>
@@ -178,16 +178,16 @@ footer a:hover{text-decoration:underline}
 
 <section class="cta-band">
   <div class="wrap">
-    <h2>Κλείστε τραπέζι σε 30 δευτερόλεπτα</h2>
-    <p>Άμεση επιβεβαίωση, χωρίς τηλεφώνημα</p>
-    <a href="#" id="band-cta" class="btn-main">Κάντε κράτηση τώρα →</a>
+    <h2 data-i="band_title">Κλείστε τραπέζι σε 30 δευτερόλεπτα</h2>
+    <p data-i="band_sub">Άμεση επιβεβαίωση, χωρίς τηλεφώνημα</p>
+    <a href="#" id="band-cta" class="btn-main" data-i="cta_band">Κάντε κράτηση τώρα →</a>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     <div id="footer-name"></div>
-    <div>Το site σας, δωρεάν, από το <a href="https://tablereserve.gr/partners/" target="_blank" rel="noopener">TableReserve</a></div>
+    <div><span data-i="footer_by">Το site σας, δωρεάν, από το</span> <a href="https://tablereserve.gr/partners/" target="_blank" rel="noopener">TableReserve</a></div>
   </div>
 </footer>
 
@@ -245,6 +245,38 @@ const db  = getDatabase(app);
 const urlParams = new URLSearchParams(window.location.search);
 const shopId = urlParams.get('shop');
 
+// Γλώσσα: ?lang=el|en, αλλιώς από τον browser (Ελληνικά για ελληνικό browser, Αγγλικά για όλους τους άλλους)
+const LANG = (() => {
+  const q = urlParams.get('lang');
+  if (q === 'el' || q === 'en') return q;
+  return (navigator.language || '').toLowerCase().indexOf('el') === 0 ? 'el' : 'en';
+})();
+const I18N = {
+  el: {
+    nf_title: 'Δεν βρέθηκε το κατάστημα', nf_desc: 'Ελέγξτε ότι το link είναι σωστό.',
+    nav_about: 'Η ταβέρνα', nav_photos: 'Φωτογραφίες', nav_info: 'Ώρες &amp; Διεύθυνση', cta_nav: 'Κράτηση τραπεζιού',
+    eyebrow: 'Εστιατόριο', cta_hero: 'Κάντε κράτηση →', cta_info: 'Δείτε ώρες &amp; διεύθυνση',
+    about_eyebrow: 'Η ιστορία μας', welcome: 'Καλώς ήρθατε', hours: 'Ώρες λειτουργίας', address: 'Διεύθυνση', phone: 'Τηλέφωνο',
+    gallery: 'Γκαλερί', gallery_title: 'Μια γεύση', band_title: 'Κλείστε τραπέζι σε 30 δευτερόλεπτα', band_sub: 'Άμεση επιβεβαίωση, χωρίς τηλεφώνημα',
+    cta_band: 'Κάντε κράτηση τώρα →', footer_by: 'Το site σας, δωρεάν, από το',
+    title_suffix: ' — Κράτηση τραπεζιού', welcome_to: n => `Καλώς ήρθατε στο ${n}`, at: n => ' στο ' + n,
+    default_desc: n => `Το ${n} είναι ένα εστιατόριο που θα λατρέψετε — κάντε κράτηση για να το ανακαλύψετε.`, contact: 'Επικοινωνήστε μαζί μας'
+  },
+  en: {
+    nf_title: 'Restaurant not found', nf_desc: 'Please check that the link is correct.',
+    nav_about: 'About', nav_photos: 'Photos', nav_info: 'Hours &amp; Location', cta_nav: 'Book a table',
+    eyebrow: 'Restaurant', cta_hero: 'Book a table →', cta_info: 'See hours &amp; location',
+    about_eyebrow: 'Our story', welcome: 'Welcome', hours: 'Opening hours', address: 'Address', phone: 'Phone',
+    gallery: 'Gallery', gallery_title: 'A taste of what awaits', band_title: 'Book a table in 30 seconds', band_sub: 'Instant confirmation, no phone call needed',
+    cta_band: 'Book now →', footer_by: 'Your website, free, by',
+    title_suffix: ' — Book a table', welcome_to: n => `Welcome to ${n}`, at: n => ' to ' + n,
+    default_desc: n => `${n} is a restaurant you'll love — book a table and come find out.`, contact: 'Contact us'
+  }
+};
+const T = I18N[LANG];
+document.documentElement.lang = LANG;
+document.querySelectorAll('[data-i]').forEach(el => { const v = T[el.getAttribute('data-i')]; if (typeof v === 'string') el.innerHTML = v; });
+
 function displayName(id) {
   return id.charAt(0).toUpperCase() + id.slice(1).replace(/_/g, ' ');
 }
@@ -254,20 +286,20 @@ async function init() {
 
   // Μόνο δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
   const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
-  const [pCover, pGallery, pLogo, address, description, iDisplayName, hours, phone, tagline, detName] = await Promise.all([
+  const [pCover, pGallery, pLogo, address, description, iDisplayName, hours, phone, tagline, hoursEn, detName] = await Promise.all([
     P('coverPhoto'), P('gallery'), P('logoPhoto'), P('info/address'), P('info/description'), P('info/displayName'),
-    P('info/hours'), P('info/phone'), P('info/tagline'),
+    P('info/hours'), P('info/phone'), P('info/tagline'), P('info/hoursEn'),
     get(ref(db, `shop_details/${shopId}/displayName`)).then(x => x.val()).catch(() => null)
   ]);
   if (!pCover && !pGallery && !pLogo && !address && !description && !hours && !phone && !tagline && !detName) { showNotFound(); return; }
 
   const full = { coverPhoto: pCover, gallery: pGallery, logoPhoto: pLogo };
-  const info = { address, description, displayName: iDisplayName || detName, hours, phone, tagline };
+  const info = { address, description, displayName: iDisplayName || detName, hours: (LANG === 'en' && hoursEn) ? hoursEn : hours, phone, tagline };
   const name = info.displayName || displayName(shopId);
   trSetSchema({ shopId, name, description, address, phone, hours, tagline, logo: pLogo, cover: pCover, canonical: false });
-  const bookingUrl = `https://tablereserve.gr/?shop=${encodeURIComponent(shopId)}`;
+  const bookingUrl = `https://tablereserve.gr/?shop=${encodeURIComponent(shopId)}&lang=${LANG}`;
 
-  document.title = name + ' — Κράτηση τραπεζιού';
+  document.title = name + T.title_suffix;
 
   // Nav
   document.getElementById('nav-name').textContent = name;
@@ -280,7 +312,7 @@ async function init() {
 
   // Hero
   document.getElementById('hero-name').textContent = name;
-  document.getElementById('hero-tagline').textContent = info.tagline || `Καλώς ήρθατε στο ${name}`;
+  document.getElementById('hero-tagline').textContent = info.tagline || T.welcome_to(name);
   document.getElementById('hero-cta').href = bookingUrl;
   document.getElementById('band-cta').href = bookingUrl;
   if (full.coverPhoto) {
@@ -288,9 +320,9 @@ async function init() {
   }
 
   // About
-  document.getElementById('about-name-span').textContent = ' στο ' + name;
+  document.getElementById('about-name-span').textContent = T.at(name);
   document.getElementById('about-description').textContent =
-    info.description || `Το ${name} είναι ένα εστιατόριο που θα λατρέψετε — κάντε κράτηση για να το ανακαλύψετε.`;
+    info.description || T.default_desc(name);
   if (full.coverPhoto) {
     document.getElementById('about-photo').innerHTML = `<img src="${trImg(full.coverPhoto, 1200)}" alt="${name}">`;
   } else {
@@ -298,8 +330,8 @@ async function init() {
   }
 
   // Info strip
-  document.getElementById('info-hours').textContent   = info.hours   || 'Επικοινωνήστε μαζί μας';
-  document.getElementById('info-address').textContent = info.address || 'Επικοινωνήστε μαζί μας';
+  document.getElementById('info-hours').textContent   = info.hours   || T.contact;
+  document.getElementById('info-address').textContent = info.address || T.contact;
   document.getElementById('info-phone').textContent   = info.phone   || '—';
 
   // Gallery
