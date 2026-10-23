@@ -34,6 +34,8 @@ const M = {
     // ημερολόγιο
     k_title: (s, g) => `Κράτηση: ${s} (${g} άτομα)`, k_details: (g, t) => `Τραπέζι για ${g} στις ${t}. Κράτηση μέσω TableReserve.`, k_cancel: 'Ακύρωση: ',
     e_not_found: 'Η κράτηση δεν βρέθηκε', e_cancelled: 'Η κράτηση έχει ακυρωθεί',
+    // προς το εστιατόριο
+    s_new: "Νέα κράτηση", s_cancel: "Ακύρωση Κράτησης", s_by_guest: "από πελάτη", s_name: "Όνομα", s_phone: "Τηλέφωνο", s_comments: "Σχόλια", s_occasion: "Περίσταση", s_btn: "Δείτε τις κρατήσεις →", s_wl_subject: "Λίστα αναμονής", s_wl_new: "Νέο αίτημα στη λίστα αναμονής", s_wl_upd: "Ενημέρωση αιτήματος στη λίστα αναμονής", s_wl_any: "οποιαδήποτε ώρα", s_date: "Ημερομηνία", s_time: "Ώρα", s_guests: "Άτομα", s_wl_note: "Η ώρα είναι πλήρης. Αν ακυρωθεί κάποια κράτηση, ο πελάτης θα πάρει αυτόματα email για να κλείσει το τραπέζι. Μπορείτε επίσης να τον καλέσετε εσείς, αν βρείτε θέση.",
     loc: { in: 'Εσωτερικός χώρος', out: 'Εξωτερικός χώρος', none: 'Χωρίς προτίμηση' },
   },
   en: {
@@ -54,6 +56,8 @@ const M = {
     g_cancel: 'Cancel reservation', g_table_for: g => `Table for ${g}`,
     k_title: (s, g) => `Reservation: ${s} (${g} guests)`, k_details: (g, t) => `Table for ${g} at ${t}. Booked via TableReserve.`, k_cancel: 'Cancel: ',
     e_not_found: 'Reservation not found', e_cancelled: 'This reservation was cancelled',
+    // προς το εστιατόριο
+    s_new: "New booking", s_cancel: "Booking cancelled", s_by_guest: "by the guest", s_name: "Name", s_phone: "Phone", s_comments: "Comments", s_occasion: "Occasion", s_btn: "View bookings →", s_wl_subject: "Waitlist", s_wl_new: "New waitlist request", s_wl_upd: "Waitlist request updated", s_wl_any: "any time", s_date: "Date", s_time: "Time", s_guests: "Guests", s_wl_note: "This time is full. If a booking is cancelled, the guest will automatically get an email to book the table. You can also call them yourself if you find a spot.",
     loc: { in: 'Indoor', out: 'Outdoor', none: 'No preference' },
   },
   de: {
@@ -74,6 +78,8 @@ const M = {
     g_cancel: 'Reservierung stornieren', g_table_for: g => `Tisch für ${g}`,
     k_title: (s, g) => `Reservierung: ${s} (${g} Personen)`, k_details: (g, t) => `Tisch für ${g} um ${t}. Reserviert über TableReserve.`, k_cancel: 'Stornieren: ',
     e_not_found: 'Reservierung nicht gefunden', e_cancelled: 'Diese Reservierung wurde storniert',
+    // προς το εστιατόριο
+    s_new: "Neue Reservierung", s_cancel: "Reservierung storniert", s_by_guest: "vom Gast", s_name: "Name", s_phone: "Telefon", s_comments: "Kommentare", s_occasion: "Anlass", s_btn: "Reservierungen ansehen →", s_wl_subject: "Warteliste", s_wl_new: "Neue Anfrage auf der Warteliste", s_wl_upd: "Anfrage auf der Warteliste aktualisiert", s_wl_any: "beliebige Uhrzeit", s_date: "Datum", s_time: "Uhrzeit", s_guests: "Personen", s_wl_note: "Diese Uhrzeit ist ausgebucht. Wird eine Reservierung storniert, erhält der Gast automatisch eine E-Mail, um den Tisch zu buchen. Sie können ihn auch selbst anrufen, wenn Sie einen Platz finden.",
     loc: { in: 'Innen', out: 'Draußen', none: 'Keine Präferenz' },
   },
   fr: {
@@ -94,6 +100,8 @@ const M = {
     g_cancel: 'Annuler la réservation', g_table_for: g => `Table pour ${g}`,
     k_title: (s, g) => `Réservation : ${s} (${g} personnes)`, k_details: (g, t) => `Table pour ${g} à ${t}. Réservé via TableReserve.`, k_cancel: 'Annuler : ',
     e_not_found: 'Réservation introuvable', e_cancelled: 'Cette réservation a été annulée',
+    // προς το εστιατόριο
+    s_new: "Nouvelle réservation", s_cancel: "Réservation annulée", s_by_guest: "par le client", s_name: "Nom", s_phone: "Téléphone", s_comments: "Commentaires", s_occasion: "Occasion", s_btn: "Voir les réservations →", s_wl_subject: "Liste d'attente", s_wl_new: "Nouvelle demande sur la liste d'attente", s_wl_upd: "Demande mise à jour sur la liste d'attente", s_wl_any: "n'importe quelle heure", s_date: "Date", s_time: "Heure", s_guests: "Personnes", s_wl_note: "Cette heure est complète. Si une réservation est annulée, le client recevra automatiquement un e-mail pour réserver la table. Vous pouvez aussi l'appeler vous-même si vous trouvez une place.",
     loc: { in: 'En salle', out: 'En terrasse', none: 'Pas de préférence' },
   },
   it: {
@@ -114,6 +122,8 @@ const M = {
     g_cancel: 'Annulla la prenotazione', g_table_for: g => `Tavolo per ${g}`,
     k_title: (s, g) => `Prenotazione: ${s} (${g} persone)`, k_details: (g, t) => `Tavolo per ${g} alle ${t}. Prenotato tramite TableReserve.`, k_cancel: 'Annulla: ',
     e_not_found: 'Prenotazione non trovata', e_cancelled: 'Questa prenotazione è stata annullata',
+    // προς το εστιατόριο
+    s_new: "Nuova prenotazione", s_cancel: "Prenotazione annullata", s_by_guest: "dal cliente", s_name: "Nome", s_phone: "Telefono", s_comments: "Commenti", s_occasion: "Occasione", s_btn: "Vedi le prenotazioni →", s_wl_subject: "Lista d'attesa", s_wl_new: "Nuova richiesta in lista d'attesa", s_wl_upd: "Richiesta in lista d'attesa aggiornata", s_wl_any: "qualsiasi orario", s_date: "Data", s_time: "Orario", s_guests: "Persone", s_wl_note: "Quest'orario è completo. Se una prenotazione viene annullata, il cliente riceverà automaticamente un'email per prenotare il tavolo. Puoi anche chiamarlo tu, se trovi un posto.",
     loc: { in: "All'interno", out: "All'aperto", none: 'Nessuna preferenza' },
   },
   es: {
@@ -134,6 +144,8 @@ const M = {
     g_cancel: 'Cancelar reserva', g_table_for: g => `Mesa para ${g}`,
     k_title: (s, g) => `Reserva: ${s} (${g} personas)`, k_details: (g, t) => `Mesa para ${g} a las ${t}. Reservado con TableReserve.`, k_cancel: 'Cancelar: ',
     e_not_found: 'Reserva no encontrada', e_cancelled: 'Esta reserva ha sido cancelada',
+    // προς το εστιατόριο
+    s_new: "Nueva reserva", s_cancel: "Reserva cancelada", s_by_guest: "por el cliente", s_name: "Nombre", s_phone: "Teléfono", s_comments: "Comentarios", s_occasion: "Ocasión", s_btn: "Ver las reservas →", s_wl_subject: "Lista de espera", s_wl_new: "Nueva solicitud en la lista de espera", s_wl_upd: "Solicitud actualizada en la lista de espera", s_wl_any: "cualquier hora", s_date: "Fecha", s_time: "Hora", s_guests: "Personas", s_wl_note: "Esta hora está completa. Si se cancela una reserva, el cliente recibirá automáticamente un email para reservar la mesa. También puedes llamarle tú si encuentras sitio.",
     loc: { in: 'Interior', out: 'Terraza', none: 'Sin preferencia' },
   },
   tr: {
@@ -154,6 +166,8 @@ const M = {
     g_cancel: 'Rezervasyonu iptal et', g_table_for: g => `${g} kişilik masa`,
     k_title: (s, g) => `Rezervasyon: ${s} (${g} kişi)`, k_details: (g, t) => `${g} kişilik masa, saat ${t}. TableReserve ile ayrıldı.`, k_cancel: 'İptal: ',
     e_not_found: 'Rezervasyon bulunamadı', e_cancelled: 'Bu rezervasyon iptal edildi',
+    // προς το εστιατόριο
+    s_new: "Yeni rezervasyon", s_cancel: "Rezervasyon iptal edildi", s_by_guest: "misafir tarafından", s_name: "Ad", s_phone: "Telefon", s_comments: "Yorumlar", s_occasion: "Özel gün", s_btn: "Rezervasyonları gör →", s_wl_subject: "Bekleme listesi", s_wl_new: "Bekleme listesine yeni talep", s_wl_upd: "Bekleme listesindeki talep güncellendi", s_wl_any: "herhangi bir saat", s_date: "Tarih", s_time: "Saat", s_guests: "Kişi", s_wl_note: "Bu saat dolu. Bir rezervasyon iptal edilirse misafire masayı ayırtması için otomatik e-posta gider. Yer bulursanız onu kendiniz de arayabilirsiniz.",
     loc: { in: 'İç mekân', out: 'Dış mekân', none: 'Fark etmez' },
   },
   pt: {
@@ -174,6 +188,8 @@ const M = {
     g_cancel: 'Cancelar reserva', g_table_for: g => `Mesa para ${g}`,
     k_title: (s, g) => `Reserva: ${s} (${g} pessoas)`, k_details: (g, t) => `Mesa para ${g} às ${t}. Reservado com TableReserve.`, k_cancel: 'Cancelar: ',
     e_not_found: 'Reserva não encontrada', e_cancelled: 'Esta reserva foi cancelada',
+    // προς το εστιατόριο
+    s_new: "Nova reserva", s_cancel: "Reserva cancelada", s_by_guest: "pelo cliente", s_name: "Nome", s_phone: "Telefone", s_comments: "Comentários", s_occasion: "Ocasião", s_btn: "Ver as reservas →", s_wl_subject: "Lista de espera", s_wl_new: "Novo pedido na lista de espera", s_wl_upd: "Pedido atualizado na lista de espera", s_wl_any: "qualquer hora", s_date: "Data", s_time: "Hora", s_guests: "Pessoas", s_wl_note: "Esta hora está esgotada. Se uma reserva for cancelada, o cliente recebe automaticamente um email para reservar a mesa. Também pode ligar-lhe se arranjar lugar.",
     loc: { in: 'Interior', out: 'Esplanada', none: 'Sem preferência' },
   },
 };
@@ -188,4 +204,12 @@ function locationLabel(value, lang) {
   return k ? msg(lang).loc[k] : value;
 }
 
-module.exports = { LANGS, LOCALE, normLang, fmtDate, msg, locationLabel };
+// Γλώσσα για τα email προς το εστιατόριο: ό,τι διάλεξε στο admin, αλλιώς η γλώσσα της εγγραφής
+async function shopLang(db, shop, details) {
+  const a = await db.ref(`shop_profile/${shop}/adminLang`).get().then(x => x.val()).catch(() => null);
+  if (LANGS.includes(a)) return a;
+  const d = details || await db.ref(`shop_details/${shop}/lang`).get().then(x => ({ lang: x.val() })).catch(() => ({}));
+  return normLang(d && d.lang);
+}
+
+module.exports = { LANGS, LOCALE, normLang, fmtDate, msg, locationLabel, shopLang };

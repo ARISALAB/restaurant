@@ -2,7 +2,7 @@
 // Δομή: waitlist/{shop}/{date}/{id} = { name, phone, email, time ("20:30" ή "any"), guests, lang, createdAt, status, notifiedAt }
 const { Resend } = require('resend');
 const { localToMs, localDay, shopTz } = require('./time');
-const { normLang, msg, fmtDate } = require('./i18n');
+const { normLang, msg, fmtDate, shopLang } = require('./i18n');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const MAX_NOTIFY = 3;            // πόσους ειδοποιούμε κάθε φορά που ελευθερώνεται τραπέζι
@@ -152,15 +152,11 @@ async function notifyShopJoin(db, shop, e, date, updated) {
   if (!to) { console.warn('[waitlist] no notificationEmail for', shop); return; }
   const details = (await db.ref(`shop_details/${shop}`).get()).val() || {};
   const shopName = details.displayName || shop;
-  const en = details.lang === 'en';
-  const L = en ? {
-    any: 'any time', subject: '⏳ Waitlist', headNew: 'New waitlist request', headUpd: 'Waitlist request updated',
-    date: 'Date', time: 'Time', guests: 'Guests', name: 'Name', phone: 'Phone',
-    note: 'This time is full. If a booking is cancelled, the guest will automatically get an email to book the table. You can also call them yourself if you find a spot.'
-  } : {
-    any: 'οποιαδήποτε ώρα', subject: '⏳ Λίστα αναμονής', headNew: 'Νέο αίτημα στη λίστα αναμονής', headUpd: 'Ενημέρωση αιτήματος στη λίστα αναμονής',
-    date: 'Ημερομηνία', time: 'Ώρα', guests: 'Άτομα', name: 'Όνομα', phone: 'Τηλέφωνο',
-    note: 'Η ώρα είναι πλήρης. Αν ακυρωθεί κάποια κράτηση, ο πελάτης θα πάρει αυτόματα email για να κλείσει το τραπέζι. Μπορείτε επίσης να τον καλέσετε εσείς, αν βρείτε θέση.'
+  const lang = await shopLang(db, shop, details);
+  const sm = msg(lang);
+  const L = {
+    any: sm.s_wl_any, subject: '⏳ ' + sm.s_wl_subject, headNew: sm.s_wl_new, headUpd: sm.s_wl_upd,
+    date: sm.s_date, time: sm.s_time, guests: sm.s_guests, name: sm.s_name, phone: sm.s_phone, note: sm.s_wl_note
   };
   const when = e.time === 'any' ? (Array.isArray(e.times) && e.times.length ? e.times.join(', ') : L.any) : e.time;
   const tel = String(e.phone || '').replace(/[^\d+]/g, '');
@@ -179,7 +175,7 @@ async function notifyShopJoin(db, shop, e, date, updated) {
   </div>
   <div style="background:#fff;padding:24px 32px;">
     <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">
-      ${row(L.date, esc(fmtDate(date, en ? 'en' : 'el')))}
+      ${row(L.date, esc(fmtDate(date, lang)))}
       ${row(L.time, esc(when))}
       ${row(L.guests, esc(e.guests))}
       ${row(L.name, esc(e.name))}

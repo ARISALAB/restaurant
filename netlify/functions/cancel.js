@@ -3,6 +3,7 @@ const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { notifyWaitlist } = require('./_shared/waitlist');
 const { localToMs, shopTz } = require('./_shared/time');
+const { msg, shopLang } = require('./_shared/i18n');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -55,10 +56,8 @@ exports.handler = async (event) => {
         ? (shopSnap.val().displayName || shopId)
         : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
       // Γλώσσα του καταστήματος για το email προς αυτό
-      const en = shopSnap.exists() && shopSnap.val().lang === 'en';
-      const tx = en
-        ? { subject: '❌ Booking cancelled', head: 'Booking cancelled', by: 'by the guest', persons: 'guests', name: '👤 Name', phone: '📞 Phone', btn: 'View bookings →' }
-        : { subject: '❌ Ακύρωση Κράτησης', head: 'Ακύρωση Κράτησης', by: 'από πελάτη', persons: 'άτομα', name: '👤 Όνομα', phone: '📞 Τηλέφωνο', btn: 'Δείτε τις κρατήσεις →' };
+      const sm = msg(await shopLang(db, shopId, shopSnap.val() || {}));
+      const tx = { subject: '❌ ' + sm.s_cancel, head: sm.s_cancel, by: sm.s_by_guest, persons: sm.persons, name: '👤 ' + sm.s_name, phone: '📞 ' + sm.s_phone, btn: sm.s_btn };
       const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
       if (emailSnap.exists() && emailSnap.val()) {

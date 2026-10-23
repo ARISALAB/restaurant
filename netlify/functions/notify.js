@@ -2,7 +2,7 @@
 const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
-const { locationLabel } = require('./_shared/location');
+const { locationLabel, msg, shopLang, fmtDate } = require('./_shared/i18n');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -31,15 +31,13 @@ exports.handler = async (event) => {
     const notificationEmail = emailSnap.val();
     const details = (await db.ref(`shop_details/${shopId}`).get()).val() || {};
     const shopName = details.displayName || (shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' '));
-    const en = details.lang === 'en';
-    const t = en ? {
-      subject: 'New booking', head: 'New booking', persons: 'guests',
-      name: '👤 Name', phone: '📞 Phone', comments: '💬 Comments', btn: 'View bookings →'
-    } : {
-      subject: 'Νέα κράτηση', head: 'Νέα κράτηση', persons: 'άτομα',
-      name: '👤 Όνομα', phone: '📞 Τηλέφωνο', comments: '💬 Σχόλια', btn: 'Δείτε τις κρατήσεις →'
+    const lang = await shopLang(db, shopId, details);
+    const m = msg(lang);
+    const t = {
+      subject: m.s_new, head: m.s_new, persons: m.persons,
+      name: '👤 ' + m.s_name, phone: '📞 ' + m.s_phone, occasion: '🎉 ' + m.s_occasion, comments: '💬 ' + m.s_comments, btn: m.s_btn
     };
-    const loc = locationLabel(booking.location, en ? 'en' : 'el');
+    const loc = locationLabel(booking.location, lang);
     const row = (l, v) => `
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:35%;">${l}</td>
@@ -63,13 +61,14 @@ exports.handler = async (event) => {
     </div>
     <div style="background:#fff;padding:28px 32px;">
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
-        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${esc(booking.date || '-')} &bull; ${esc(booking.time || '-')}</p>
+        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${esc(booking.date ? fmtDate(booking.date, lang) : '-')} &bull; ${esc(booking.time || '-')}</p>
         <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests || '-')} ${t.persons}${loc ? ' | ' + esc(loc) : ''}</p>
       </div>
       <table style="width:100%;border-collapse:collapse;">
         ${row(t.name, esc(booking.name || '-'))}
         ${row(t.phone, esc(booking.phone || '-'))}
         ${booking.email ? row('✉️ Email', esc(booking.email)) : ''}
+        ${booking.occasion ? row(t.occasion, esc(booking.occasion)) : ''}
         ${booking.comments ? row(t.comments, esc(booking.comments)) : ''}
       </table>
       <div style="margin-top:24px;text-align:center;">

@@ -123,6 +123,15 @@
             color: var(--primary);
             box-shadow: var(--shadow-sm);
         }
+        .lang-select {
+            appearance: none; -webkit-appearance: none;
+            padding: 5px 26px 5px 10px;
+            border-radius: 7px; border: none;
+            background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2364748b' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 9px center;
+            color: var(--primary); box-shadow: var(--shadow-sm);
+            font: inherit; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.02em; cursor: pointer; width: auto; margin: 0;
+        }
+        .lang-select:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
 
         /* Super admin tab hidden by default */
         #tab-superadmin { display: none; }
@@ -769,6 +778,7 @@
             .nav-tab { padding: 6px 8px; font-size: 0.72rem; flex: 1; text-align: center; white-space: nowrap; }
             .lang-switcher { padding: 2px; flex-shrink: 0; }
             .lang-btn { padding: 4px 8px; font-size: 0.72rem; }
+            .lang-select { padding: 4px 22px 4px 8px; font-size: 0.72rem; background-position: right 7px center; }
             .container { padding: 16px 12px; }
             .card { padding: 18px 16px; border-radius: var(--radius-lg); }
             .page-header { margin-bottom: 16px; }
@@ -916,7 +926,7 @@
         </div>
         <div class="splash-title">Table<span>Reserve</span></div>
         <div class="splash-sub" id="splash-sub">Διαχείριση Κρατήσεων</div>
-        <script>try{var l=localStorage.getItem('tr_admin_lang')||((navigator.language||'').toLowerCase().indexOf('el')===0?'el':'en');if(l==='en')document.getElementById('splash-sub').textContent='Reservation management';}catch(e){}</script>
+        <script>try{var S={en:'Reservation management',de:'Reservierungsverwaltung',fr:'Gestion des réservations',it:'Gestione prenotazioni',es:'Gestión de reservas',tr:'Rezervasyon yönetimi',pt:'Gestão de reservas'},l=localStorage.getItem('tr_admin_lang');if(l!=='el'&&!S[l]){l=null;var ns=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];for(var i=0;i<ns.length&&!l;i++){var c=String(ns[i]).toLowerCase().slice(0,2);if(c==='el'||S[c])l=c;}}if(S[l])document.getElementById('splash-sub').textContent=S[l];}catch(e){}</script>
         <div class="splash-dots">
             <div class="splash-dot"></div>
             <div class="splash-dot"></div>
@@ -938,8 +948,16 @@
                 <span id="user-name" style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;"></span>
             </div>
             <div class="lang-switcher">
-                <button class="lang-btn" id="lang-el" onclick="setLang('el')">🇬🇷 ΕΛ</button>
-                <button class="lang-btn active" id="lang-en" onclick="setLang('en')">🇬🇧 EN</button>
+                <select class="lang-select" id="lang-select" aria-label="Language" onchange="setLang(this.value)">
+                    <option value="el">🇬🇷 ΕΛ</option>
+                    <option value="en" selected>🇬🇧 EN</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="it">🇮🇹 IT</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="tr">🇹🇷 TR</option>
+                    <option value="pt">🇵🇹 PT</option>
+                </select>
             </div>
         </div>
     </nav>
@@ -1358,6 +1376,7 @@
         // ======= TRANSLATIONS =======
         const translations = {
             el: {
+                pers_n: "Άτομα", day_1: "ημέρα", day_n: "ημέρες", bill_active: "✓ Συνδρομή ενεργή έως {date}", bill_manage: "Διαχείριση συνδρομής →", bill_cancelled: "Η συνδρομή ακυρώθηκε και ισχύει έως {date}. Μετά οι online κρατήσεις μπαίνουν σε παύση.", bill_pastdue: "Η τελευταία πληρωμή δεν πέρασε. Ενημερώστε την κάρτα σας έως {date} για να μη σταματήσουν οι κρατήσεις.", bill_resume: "Επαναφορά συνδρομής →", bill_update_card: "Ενημέρωση κάρτας →", bill_expired: "Η συνδρομή σας έληξε και οι online κρατήσεις είναι σε παύση. Επιλέξτε πακέτο για να συνεχίσετε.", bill_ends: "Η συνδρομή λήγει σε {n} {days} ({date}). Επιλέξτε πακέτο για να συνεχίσετε.", bill_trial: "Δωρεάν δοκιμή: απομένουν {n} {days} (έως {date}). Επιλέξτε πακέτο για να συνεχίσετε χωρίς διακοπή.", plan_quarter: "Τρίμηνο · 39 €", plan_half: "Εξάμηνο · 69 €", plan_year: "Χρονιαίο · 99 €", terms_title: "Όροι Χρήσης", terms_title_upd: "Ενημερώσαμε τους Όρους Χρήσης", terms_intro: "Πριν συνεχίσετε, διαβάστε και αποδεχτείτε τους Όρους Χρήσης. Μεταξύ άλλων, ", terms_intro_upd: "Η βασική αλλαγή: ", terms_change: "μπορούμε να δηλώνουμε το κατάστημά σας στο Google Maps και στην Αναζήτηση Google, ώστε οι πελάτες να βλέπουν κουμπί «Κράτηση» που οδηγεί στη σελίδα κρατήσεών σας στο TableReserve. Δεν κοινοποιούμε στη Google στοιχεία των πελατών σας.", terms_read: "Διαβάστε τους Όρους Χρήσης ↗", terms_check: "Διάβασα και αποδέχομαι τους Όρους Χρήσης εκ μέρους της επιχείρησης.", terms_accept: "Αποδοχή και συνέχεια", terms_logout: "Αποσύνδεση", terms_thanks: "Ευχαριστούμε, οι όροι έγιναν αποδεκτοί", terms_reload: "Οι όροι μόλις ενημερώθηκαν. Η σελίδα θα ανανεωθεί.", terms_err: "Κάτι πήγε στραβά, δοκιμάστε ξανά", embed_btn_label: "Κράτηση τραπεζιού",
                 tab_reservation: "📅 Κράτηση", tab_admin: "🔧 Admin", new_reservation: "Νέα Κράτηση",
                 loading_shop: "Φόρτωση καταστήματος...", booking_at: "Κράτηση στο: ",
                 select_date_time: "Επιλογή Ημ/νίας & Ώρας", date: "Ημερομηνία", persons: "Άτομα",
@@ -1447,6 +1466,7 @@
                 toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
+                pers_n: "Persons", day_1: "day", day_n: "days", bill_active: "✓ Subscription active until {date}", bill_manage: "Manage subscription →", bill_cancelled: "Your subscription was cancelled and stays active until {date}. After that, online bookings are paused.", bill_pastdue: "Your last payment failed. Please update your card by {date} to keep bookings running.", bill_resume: "Resume subscription →", bill_update_card: "Update card →", bill_expired: "Your subscription has ended and online bookings are paused. Choose a plan to continue.", bill_ends: "Your plan ends in {n} {days} ({date}). Choose a plan to continue.", bill_trial: "Free trial: {n} {days} left (until {date}). Choose a plan to keep going without interruption.", plan_quarter: "Quarterly · €39", plan_half: "6 months · €69", plan_year: "Yearly · €99", terms_title: "Terms of Service", terms_title_upd: "We have updated our Terms of Service", terms_intro: "Before you continue, please read and accept the Terms of Service. Among other things, ", terms_intro_upd: "The main change: ", terms_change: "we may list your restaurant on Google Maps and Google Search, so guests see a “Reserve” button that leads to your TableReserve booking page. We do not share your guests’ details with Google.", terms_read: "Read the Terms of Service ↗", terms_check: "I have read and accept the Terms of Service on behalf of the business.", terms_accept: "Accept and continue", terms_logout: "Log out", terms_thanks: "Thank you, terms accepted", terms_reload: "The terms were just updated. The page will reload.", terms_err: "Something went wrong, please try again", embed_btn_label: "Book a table",
                 tab_reservation: "📅 Reservation", tab_admin: "🔧 Admin", new_reservation: "New Reservation",
                 loading_shop: "Loading store...", booking_at: "Booking at: ",
                 select_date_time: "Select Date & Time", date: "Date", persons: "Persons",
@@ -1534,16 +1554,1694 @@
                 toast_logo_too_big: "⚠️ The logo is larger than 2MB!", toast_logo_saved: "✅ Logo saved!", toast_logo_deleted: "🗑️ Logo deleted.",
                 confirm_del_logo: "Delete the logo?", confirm_del_cover: "Delete the cover photo?", confirm_del_photo: "Delete this photo?", toast_img_too_big: "⚠️ Photo exceeds 8MB!", toast_upload_failed: "⚠️ The photo could not be uploaded. Please try again.",
                 toast_save_error2: "Save error. Please try again.",
+            },
+            de: {
+                "booking_at": "Reservierung bei: ",
+                "date": "Datum",
+                "person_1": "1 Person",
+                "select_opt": "-- Auswählen --",
+                "admin_login": "Admin-Anmeldung",
+                "admin_login_desc": "Reservierungen Ihres Restaurants verwalten",
+                "password": "Passwort",
+                "login": "Anmelden",
+                "reservations": "Reservierungen",
+                "logout": "Abmelden",
+                "total_guests": "Gäste gesamt",
+                "from": "Von",
+                "to": "Bis",
+                "loading": "Wird geladen...",
+                "analytics_tab": "Statistiken",
+                "an_avg_party": "Ø Gruppengröße",
+                "an_cancel_rate": "Stornoquote",
+                "an_repeat_customers": "Stammgäste",
+                "an_google_share": "Über Google",
+                "show_cancelled": "Stornierte anzeigen",
+                "nb_pick_time": "— Uhrzeit wählen —",
+                "nb_other_time": "Andere Uhrzeit…",
+                "nb_closed": "An diesem Tag geschlossen",
+                "nb_out_hours": "außerhalb der Öffnungszeiten",
+                "nb_booked": "Gäste",
+                "nb_free": "Plätze frei",
+                "nb_full": "voll",
+                "gi_visits": "Besuche",
+                "gi_last": "zuletzt",
+                "gi_new": "Neuer Gast",
+                "gi_noshow": "frühere(s) No-Show(s)",
+                "gi_regular": "Stammgast",
+                "bk_edit": "Bearbeiten",
+                "bk_cancel": "Reservierung stornieren",
+                "bk_cancel_q": "Diese Reservierung stornieren? Sie bleibt in Ihren Statistiken als storniert erhalten.",
+                "bk_cancelled": "Storniert",
+                "bk_restore": "Wiederherstellen",
+                "bk_delete_q": "Endgültig löschen? Die Reservierung verschwindet auch aus Ihren Statistiken.",
+                "nb_edit_title": "Reservierung bearbeiten",
+                "nb_update": "Änderungen speichern",
+                "nb_resend": "Dem Gast die geänderten Details per E-Mail senden",
+                "nb_updated": "✅ Reservierung aktualisiert.",
+                "gp_tags": "Merkmale",
+                "gp_allergy": "Allergie / Ernährung",
+                "gp_outdoor": "Sitzt gern draußen",
+                "gp_attention": "Achtung",
+                "gp_notes": "Notizen zu diesem Gast",
+                "gp_history": "Reservierungsverlauf",
+                "gp_save": "Speichern",
+                "gp_saved": "✅ Gastprofil gespeichert.",
+                "gp_visits": "Besuche",
+                "gp_bookings": "Reservierungen",
+                "gp_noshows": "No-Shows",
+                "gp_cancels": "Stornierungen",
+                "gp_visit_n": ". Besuch",
+                "gp_no_phone": "Für ein Gastprofil wird eine Telefonnummer benötigt.",
+                "an_noshow": "No-Show",
+                "wl_title": "Warteliste",
+                "wl_sub": "Wird eine Reservierung storniert, erhalten Gäste, die auf diese Uhrzeit warten, automatisch eine E-Mail. Wer zuerst bucht, bekommt den Tisch.",
+                "wl_any": "Beliebige Uhrzeit",
+                "wl_waiting": "Wartet",
+                "wl_notified": "Benachrichtigt",
+                "wl_del_q": "Von der Warteliste entfernen?",
+                "wl_guests": "Gäste",
+                "att_arrived": "Erschienen",
+                "att_noshow": "No-Show",
+                "nb_btn": "Neue Reservierung",
+                "nb_title": "Neue Reservierung",
+                "nb_phone": "Telefonisch",
+                "nb_walkin": "Ohne Reservierung",
+                "nb_date": "Datum",
+                "nb_time": "Uhrzeit",
+                "nb_guests": "Gäste",
+                "nb_location": "Sitzplatz",
+                "nb_name": "Vor- und Nachname",
+                "nb_tel": "Telefon",
+                "nb_email": "E-Mail (optional)",
+                "nb_notes": "Notizen",
+                "nb_confirm": "Dem Gast eine Bestätigung per E-Mail senden",
+                "nb_save": "Reservierung speichern",
+                "nb_saved": "✅ Reservierung gespeichert.",
+                "nb_missing": "Bitte Datum, Uhrzeit, Gäste und Name ausfüllen.",
+                "nb_error": "⚠️ Die Reservierung wurde nicht gespeichert. Bitte versuchen Sie es erneut.",
+                "an_export_pdf": "PDF exportieren",
+                "rep_period": "Zeitraum",
+                "rep_title": "Reservierungsbericht",
+                "rep_findings": "Wichtigste Erkenntnisse",
+                "rep_issued": "Erstellt am",
+                "rep_total_res": "Reservierungen",
+                "rep_total_guests": "Gäste",
+                "rep_footer": "Erstellt mit TableReserve · tablereserve.gr",
+                "rep_popup": "Ihr Browser hat das neue Fenster blockiert. Bitte erlauben Sie Pop-ups für tablereserve.gr und versuchen Sie es erneut.",
+                "rep_hint": "Wählen Sie im Druckdialog „Als PDF speichern“.",
+                "rep_print": "Als PDF speichern / Drucken",
+                "an_trend_title": "Reservierungen pro Tag",
+                "an_hours_title": "Beliebteste Uhrzeiten",
+                "an_days_title": "Beliebteste Tage",
+                "an_source_title": "Herkunft der Reservierungen",
+                "an_location_title": "Sitzplatz",
+                "an_occasion_title": "Anlässe",
+                "an_repeat_title": "Häufigste Stammgäste",
+                "bk_booked_at": "Gebucht",
+                "bk_new": "Neu",
+                "an_lead_title": "Wie früh Gäste buchen",
+                "an_lead_0": "Am selben Tag",
+                "an_lead_1": "1–3 Tage",
+                "an_lead_4": "4–14 Tage",
+                "an_lead_15": "15+ Tage",
+                "an_no_repeats": "Noch keine",
+                "an_week_guests_title": "Gäste pro Woche",
+                "an_month_guests_title": "Gäste pro Monat",
+                "an_direct": "Direktlink",
+                "an_indoor": "Innen",
+                "an_no_occasion": "Kein Anlass",
+                "phone": "Telefon *",
+                "indoor": "Innen",
+                "outdoor": "Draußen",
+                "no_pref": "Keine Präferenz",
+                "alert_wrong_creds": "Falsche Zugangsdaten!",
+                "nav_home": "← Startseite",
+                "dash_live": "Online-Reservierungen",
+                "open_page": "Seite öffnen",
+                "party_label": "Maximale Personenzahl pro Reservierung",
+                "party_hint": "Wie viele Personen ein Gast in einer Reservierung wählen kann. Größere Gruppen melden sich direkt bei Ihnen.",
+                "wh_open": "Geöffnet",
+                "wh_closed": "Geschlossen",
+                "wh_closed_day": "Ganztägig geschlossen",
+                "wh_add": "+ Pause / zweite Schicht",
+                "wh_copy": "Montag auf alle Tage übertragen",
+                "wh_hint": "Gäste sehen Reservierungszeiten nur, wenn Sie geöffnet haben. Die letzte Reservierungszeit ist 30 Minuten vor Schließung.",
+                "cap_label": "Maximale Gästezahl pro Reservierungszeit",
+                "cap_hint": "Ist eine Uhrzeit voll, wird sie als „Ausgebucht“ angezeigt und nimmt keine weiteren Reservierungen an. Leer lassen für keine Begrenzung.",
+                "tz_label": "Zeitzone des Restaurants",
+                "tz_hint": "Freie Reservierungszeiten, Erinnerungen und Kalendereinträge der Gäste richten sich nach dieser Zeitzone.",
+                "tz_warn": "Ihr Gerät ist in einer anderen Zeitzone ({tz}). Wenn das Restaurant dort ist, ändern Sie sie und klicken Sie auf Speichern.",
+                "g_title": "Reservierungen über Google Maps",
+                "g_desc": "Fügen Sie Ihren Reservierungslink zum Google-Profil Ihres Restaurants hinzu. Wer Sie auf Google Maps oder in der Suche findet, kann mit einem Klick einen Tisch reservieren. Kostenlos und ohne Freigabe.",
+                "g_s1": "Klicken Sie auf „Google Unternehmensprofil öffnen“ und melden Sie sich mit dem Google-Konto Ihres Restaurants an.",
+                "g_s2": "Wählen Sie Ihr Restaurant und klicken Sie auf „Profil bearbeiten“.",
+                "g_s3": "Suchen Sie den Bereich für Reservierungslinks (er kann „Reservierungen“ oder „Links für Terminbuchungen“ heißen).",
+                "g_s4": "Fügen Sie Ihren Link ein, speichern Sie und legen Sie ihn, falls gefragt, als bevorzugt fest.",
+                "g_note": "Es kann einige Tage dauern, bis Google die Änderung anzeigt. Google benennt diese Menüs ab und zu um.",
+                "g_open": "Google Unternehmensprofil öffnen ↗",
+                "embed_title": "Reservierungen auf Ihrer eigenen Website",
+                "embed_desc": "Binden Sie das Reservierungsformular in Ihre eigene Website ein. Kopieren Sie den Code und fügen Sie ihn dort ein, wo das Formular erscheinen soll.",
+                "embed_inline": "Formular auf der Seite",
+                "embed_button": "Button mit Pop-up-Formular",
+                "embed_copy": "Code kopieren",
+                "embed_wp_title": "Sie nutzen WordPress?",
+                "embed_wp_desc": "Laden Sie das Plugin herunter, installieren Sie es unter Plugins → Installieren → Plugin hochladen und tragen Sie Ihre ID unter Einstellungen → TableReserve ein. Ihre ID lautet:",
+                "embed_wp_download": "⬇ WordPress-Plugin herunterladen",
+                "close_title": "Konto schließen",
+                "close_btn": "Konto schließen",
+                "close_desc": "Online-Reservierungen werden sofort gestoppt. Alle Daten des Restaurants (Reservierungen, Profil, Fotos, Konto) werden nach 30 Tagen endgültig gelöscht. Bis dahin können Sie unter info@tablereserve.gr eine Kopie Ihrer Reservierungen oder eine Wiederherstellung anfordern.",
+                "close_confirm": "Zur Bestätigung geben Sie die ID Ihres Restaurants ein: {shop}\n\nEin aktives Abonnement wird gekündigt.",
+                "close_mismatch": "Die ID stimmt nicht überein. Ihr Konto wurde nicht geschlossen.",
+                "close_done": "Ihr Konto ist geschlossen. Ihre Daten werden in 30 Tagen gelöscht.",
+                "close_reauth": "Bitte melden Sie sich aus Sicherheitsgründen ab, wieder an und versuchen Sie es erneut.",
+                "closed_title": "Dieses Konto ist geschlossen",
+                "closed_desc": "Ihre Daten werden endgültig gelöscht am",
+                "closed_restore": "Für eine Wiederherstellung oder eine Kopie Ihrer Reservierungen schreiben Sie an info@tablereserve.gr.",
+                "alert_no_shop_linked": "Für dieses Konto gibt es kein Restaurant. Bitte registrieren Sie sich zuerst auf tablereserve.gr.",
+                "or": "oder",
+                "google_login": "Mit Google anmelden",
+                "google_failed": "Die Anmeldung mit Google wurde nicht abgeschlossen. Bitte versuchen Sie es erneut.",
+                "verify_title": "Bestätigen Sie Ihre E-Mail",
+                "verify_desc": "Wir haben Ihnen eine E-Mail mit einem Bestätigungslink geschickt. Klicken Sie darauf, um Ihr Restaurant zu aktivieren.",
+                "verify_sent_to": "Gesendet an:",
+                "verify_check": "Ich habe bestätigt",
+                "verify_resend": "E-Mail erneut senden",
+                "logout_link": "Abmelden",
+                "verify_not_yet": "Noch nicht bestätigt. Bitte prüfen Sie auch Ihren Spam-Ordner.",
+                "verify_resent": "E-Mail erneut gesendet.",
+                "verify_too_soon": "Bitte warten Sie eine Minute, bevor Sie eine weitere E-Mail anfordern.",
+                "verify_error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+                "booking_link": "Reservierungslink:",
+                "slug_edit": "Bearbeiten",
+                "slug_save": "Speichern",
+                "slug_cancel": "Abbrechen",
+                "slug_note": "Nur Kleinbuchstaben, Zahlen und Bindestriche (3–30). Ihr alter Link funktioniert weiter. Sie können ihn alle 30 Tage einmal ändern.",
+                "slug_checking": "Wird geprüft…",
+                "slug_available": "✓ Verfügbar",
+                "slug_taken": "✗ Bereits vergeben",
+                "slug_reserved": "✗ Reservierter Name, bitte wählen Sie einen anderen",
+                "slug_invalid": "3–30 Zeichen: Kleinbuchstaben, Zahlen und Bindestriche (nicht am Anfang oder Ende)",
+                "slug_same": "Das ist Ihr aktueller Link",
+                "slug_cooldown": "Sie können ihn ab dem {date} wieder ändern",
+                "slug_saved": "Link aktualisiert!",
+                "slug_error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+                "copy": "Kopieren",
+                "copied": "Kopiert!",
+                "no_reservations": "📭 Keine Reservierungen im gewählten Zeitraum.",
+                "delete_text": "Löschen",
+                "guests_label": "Gäste",
+                "location_label_indoor": "Innen",
+                "shop_profile": "Restaurantprofil",
+                "shop_info_title": "Informationen zum Restaurant",
+                "shop_tagline": "Slogan",
+                "shop_description": "Beschreibung",
+                "shop_address": "Adresse",
+                "shop_phone_pub": "Telefon für Gäste",
+                "shop_hours": "Öffnungszeiten",
+                "save_profile": "Informationen speichern",
+                "cover_photo": "Titelbild",
+                "no_cover": "Kein Titelbild festgelegt",
+                "upload_cover": "Titelbild anklicken oder hierher ziehen",
+                "upload_hint": "JPG, PNG, WEBP · max. 8 MB",
+                "save_cover": "Titelbild speichern",
+                "delete_cover": "Löschen",
+                "photo_gallery": "Fotogalerie",
+                "upload_gallery": "Fotos anklicken oder hierher ziehen",
+                "upload_gallery_hint": "Mehrere Fotos · max. 8 MB pro Foto",
+                "toast_profile_saved": "✅ Informationen gespeichert!",
+                "toast_cover_saved": "✅ Titelbild gespeichert!",
+                "toast_cover_deleted": "🗑️ Titelbild gelöscht.",
+                "toast_photo_saved": "✅ Foto hinzugefügt!",
+                "toast_photo_deleted": "🗑️ Foto gelöscht.",
+                "ph_tagline": "z. B. Der beste Kaffee der Stadt!",
+                "ph_description": "Beschreiben Sie Ihr Restaurant in ein paar Sätzen...",
+                "ph_address": "z. B. Hauptstraße 12, Berlin",
+                "ph_phone": "z. B. +49 30 1234567",
+                "ph_capacity": "z. B. 30",
+                "ph_notif_email": "z. B. info@restaurant.de",
+                "notif_email_label": "📧 E-Mail für Reservierungsbenachrichtigungen",
+                "notif_email_hint": "An diese E-Mail erhalten Sie eine Nachricht bei jeder neuen Reservierung",
+                "logo_title": "Logo",
+                "logo_drop": "Logo anklicken oder hierher ziehen",
+                "logo_sub": "PNG mit Transparenz oder JPG · max. 2 MB",
+                "save_logo": "Logo speichern",
+                "btn_delete": "Löschen",
+                "toast_logo_too_big": "⚠️ Das Logo ist größer als 2 MB!",
+                "toast_logo_saved": "✅ Logo gespeichert!",
+                "toast_logo_deleted": "🗑️ Logo gelöscht.",
+                "confirm_del_logo": "Logo löschen?",
+                "confirm_del_cover": "Titelbild löschen?",
+                "confirm_del_photo": "Dieses Foto löschen?",
+                "toast_img_too_big": "⚠️ Das Foto ist größer als 8 MB!",
+                "toast_upload_failed": "⚠️ Das Foto konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut.",
+                "toast_save_error2": "Speichern fehlgeschlagen. Bitte versuchen Sie es erneut.",
+                "pers_n": "Personen",
+                "day_1": "Tag",
+                "day_n": "Tagen",
+                "bill_active": "✓ Abonnement aktiv bis {date}",
+                "bill_manage": "Abonnement verwalten →",
+                "bill_cancelled": "Ihr Abonnement wurde gekündigt und ist bis {date} aktiv. Danach werden Online-Reservierungen pausiert.",
+                "bill_pastdue": "Ihre letzte Zahlung ist fehlgeschlagen. Bitte aktualisieren Sie Ihre Karte bis {date}, damit Reservierungen weiterlaufen.",
+                "bill_resume": "Abonnement fortsetzen →",
+                "bill_update_card": "Karte aktualisieren →",
+                "bill_expired": "Ihr Abonnement ist abgelaufen und Online-Reservierungen sind pausiert. Wählen Sie ein Paket, um fortzufahren.",
+                "bill_ends": "Ihr Abonnement endet in {n} {days} ({date}). Wählen Sie ein Paket, um fortzufahren.",
+                "bill_trial": "Kostenlose Testphase: noch {n} {days} (bis {date}). Wählen Sie ein Paket, um ohne Unterbrechung weiterzumachen.",
+                "plan_quarter": "Vierteljährlich · 39 €",
+                "plan_half": "6 Monate · 69 €",
+                "plan_year": "Jährlich · 99 €",
+                "terms_title": "Nutzungsbedingungen",
+                "terms_title_upd": "Wir haben unsere Nutzungsbedingungen aktualisiert",
+                "terms_intro": "Bevor Sie fortfahren, lesen und akzeptieren Sie bitte die Nutzungsbedingungen. Unter anderem ",
+                "terms_intro_upd": "Die wichtigste Änderung: ",
+                "terms_change": "dürfen wir Ihr Restaurant auf Google Maps und in der Google-Suche eintragen, damit Gäste einen „Reservieren“-Button sehen, der zu Ihrer TableReserve-Reservierungsseite führt. Wir geben keine Daten Ihrer Gäste an Google weiter.",
+                "terms_read": "Nutzungsbedingungen lesen ↗",
+                "terms_check": "Ich habe die Nutzungsbedingungen gelesen und akzeptiere sie im Namen des Unternehmens.",
+                "terms_accept": "Akzeptieren und fortfahren",
+                "terms_logout": "Abmelden",
+                "terms_thanks": "Danke, die Bedingungen wurden akzeptiert",
+                "terms_reload": "Die Bedingungen wurden gerade aktualisiert. Die Seite wird neu geladen.",
+                "terms_err": "Etwas ist schiefgelaufen, bitte versuchen Sie es erneut",
+                "embed_btn_label": "Tisch reservieren",
+                "gp_first": "Neuer Gast",
+                "an_phone": "Telefonisch",
+                "an_walkin": "Ohne Reservierung",
+                "an_google": "Google (Unternehmensprofil)",
+                "an_site": "Website des Restaurants",
+                "an_social": "Soziale Medien",
+                "an_unknown": "Nicht erfasst (älter)",
+                "an_outdoor": "Draußen",
+                "an_bookings": "Reservierungen"
+            },
+            fr: {
+                "booking_at": "Réservation chez : ",
+                "date": "Date",
+                "person_1": "1 personne",
+                "select_opt": "-- Choisir --",
+                "admin_login": "Connexion administrateur",
+                "admin_login_desc": "Gérez les réservations de votre restaurant",
+                "password": "Mot de passe",
+                "login": "Se connecter",
+                "reservations": "Réservations",
+                "logout": "Se déconnecter",
+                "total_guests": "Total couverts",
+                "from": "Du",
+                "to": "Au",
+                "loading": "Chargement...",
+                "analytics_tab": "Statistiques",
+                "an_avg_party": "Taille moyenne des tables",
+                "an_cancel_rate": "Taux d'annulation",
+                "an_repeat_customers": "Clients fidèles",
+                "an_google_share": "Via Google",
+                "show_cancelled": "Afficher les annulées",
+                "nb_pick_time": "— Choisir une heure —",
+                "nb_other_time": "Autre heure…",
+                "nb_closed": "Fermé ce jour-là",
+                "nb_out_hours": "en dehors des horaires d'ouverture",
+                "nb_booked": "couverts",
+                "nb_free": "places libres",
+                "nb_full": "complet",
+                "gi_visits": "visites",
+                "gi_last": "dernière",
+                "gi_new": "Nouveau client",
+                "gi_noshow": "no-show(s) passé(s)",
+                "gi_regular": "Client régulier",
+                "bk_edit": "Modifier",
+                "bk_cancel": "Annuler la réservation",
+                "bk_cancel_q": "Annuler cette réservation ? Elle restera dans vos statistiques comme annulée.",
+                "bk_cancelled": "Annulée",
+                "bk_restore": "Rétablir",
+                "bk_delete_q": "Supprimer définitivement ? La réservation disparaîtra aussi de vos statistiques.",
+                "nb_edit_title": "Modifier la réservation",
+                "nb_update": "Enregistrer les modifications",
+                "nb_resend": "Envoyer les nouveaux détails au client par e-mail",
+                "nb_updated": "✅ Réservation mise à jour.",
+                "gp_tags": "Étiquettes",
+                "gp_allergy": "Allergie / régime",
+                "gp_outdoor": "Préfère la terrasse",
+                "gp_attention": "Attention",
+                "gp_notes": "Notes sur ce client",
+                "gp_history": "Historique des réservations",
+                "gp_save": "Enregistrer",
+                "gp_saved": "✅ Fiche client enregistrée.",
+                "gp_visits": "Visites",
+                "gp_bookings": "Réservations",
+                "gp_noshows": "No-shows",
+                "gp_cancels": "Annulations",
+                "gp_visit_n": "e visite",
+                "gp_no_phone": "Une fiche client nécessite un numéro de téléphone.",
+                "an_noshow": "No-show",
+                "wl_title": "Liste d'attente",
+                "wl_sub": "Quand une réservation est annulée, les clients qui attendent cette heure reçoivent automatiquement un e-mail. La table revient au premier qui réserve.",
+                "wl_any": "N'importe quelle heure",
+                "wl_waiting": "En attente",
+                "wl_notified": "Prévenu",
+                "wl_del_q": "Retirer de la liste d'attente ?",
+                "wl_guests": "couverts",
+                "att_arrived": "Venu",
+                "att_noshow": "No-show",
+                "nb_btn": "Nouvelle réservation",
+                "nb_title": "Nouvelle réservation",
+                "nb_phone": "Par téléphone",
+                "nb_walkin": "Sans réservation",
+                "nb_date": "Date",
+                "nb_time": "Heure",
+                "nb_guests": "Couverts",
+                "nb_location": "Placement",
+                "nb_name": "Nom et prénom",
+                "nb_tel": "Téléphone",
+                "nb_email": "E-mail (facultatif)",
+                "nb_notes": "Notes",
+                "nb_confirm": "Envoyer un e-mail de confirmation au client",
+                "nb_save": "Enregistrer la réservation",
+                "nb_saved": "✅ Réservation enregistrée.",
+                "nb_missing": "Veuillez indiquer la date, l'heure, le nombre de couverts et le nom.",
+                "nb_error": "⚠️ La réservation n'a pas été enregistrée. Veuillez réessayer.",
+                "an_export_pdf": "Exporter en PDF",
+                "rep_period": "Période",
+                "rep_title": "Rapport des réservations",
+                "rep_findings": "Points clés",
+                "rep_issued": "Édité le",
+                "rep_total_res": "Réservations",
+                "rep_total_guests": "Couverts",
+                "rep_footer": "Créé avec TableReserve · tablereserve.gr",
+                "rep_popup": "Votre navigateur a bloqué la nouvelle fenêtre. Autorisez les pop-ups pour tablereserve.gr et réessayez.",
+                "rep_hint": "Dans la fenêtre d'impression, choisissez « Enregistrer au format PDF ».",
+                "rep_print": "Enregistrer en PDF / Imprimer",
+                "an_trend_title": "Réservations par jour",
+                "an_hours_title": "Heures les plus demandées",
+                "an_days_title": "Jours les plus demandés",
+                "an_source_title": "Origine des réservations",
+                "an_location_title": "Placement",
+                "an_occasion_title": "Types d'occasion",
+                "an_repeat_title": "Clients les plus fidèles",
+                "bk_booked_at": "Réservé le",
+                "bk_new": "Nouveau",
+                "an_lead_title": "Délai de réservation",
+                "an_lead_0": "Le jour même",
+                "an_lead_1": "1–3 jours",
+                "an_lead_4": "4–14 jours",
+                "an_lead_15": "15 jours et +",
+                "an_no_repeats": "Aucun pour l'instant",
+                "an_week_guests_title": "Couverts par semaine",
+                "an_month_guests_title": "Couverts par mois",
+                "an_direct": "Lien direct",
+                "an_indoor": "En salle",
+                "an_no_occasion": "Sans occasion",
+                "phone": "Téléphone *",
+                "indoor": "En salle",
+                "outdoor": "En terrasse",
+                "no_pref": "Pas de préférence",
+                "alert_wrong_creds": "Identifiants incorrects !",
+                "nav_home": "← Accueil",
+                "dash_live": "Réservations en ligne",
+                "open_page": "Ouvrir la page",
+                "party_label": "Nombre maximum de personnes par réservation",
+                "party_hint": "Combien de personnes un client peut choisir pour une réservation. Les groupes plus grands vous contacteront directement.",
+                "wh_open": "Ouvert",
+                "wh_closed": "Fermé",
+                "wh_closed_day": "Fermé toute la journée",
+                "wh_add": "+ pause / second service",
+                "wh_copy": "Copier le lundi sur tous les jours",
+                "wh_hint": "Les clients ne voient des horaires de réservation que lorsque vous êtes ouvert. La dernière heure de réservation est 30 minutes avant la fermeture.",
+                "cap_label": "Nombre maximum de couverts par horaire",
+                "cap_hint": "Quand un horaire est plein, il s'affiche « Complet » et n'accepte plus de réservations. Laissez vide pour ne pas limiter.",
+                "tz_label": "Fuseau horaire du restaurant",
+                "tz_hint": "Les horaires disponibles, les rappels et les entrées d'agenda des clients utilisent ce fuseau horaire.",
+                "tz_warn": "Votre appareil est dans un autre fuseau horaire ({tz}). Si le restaurant s'y trouve, modifiez-le puis cliquez sur Enregistrer.",
+                "g_title": "Réservations depuis Google Maps",
+                "g_desc": "Ajoutez votre lien de réservation à la fiche Google de votre restaurant. Toute personne qui vous trouve sur Google Maps ou dans la recherche peut réserver une table en un clic. C'est gratuit et sans validation.",
+                "g_s1": "Cliquez sur « Ouvrir Google Business Profile » et connectez-vous avec le compte Google de votre restaurant.",
+                "g_s2": "Sélectionnez votre restaurant et cliquez sur « Modifier le profil ».",
+                "g_s3": "Trouvez la section des liens de réservation (elle peut s'appeler « Réservations » ou « Liens de réservation »).",
+                "g_s4": "Collez votre lien, enregistrez et, si on vous le demande, définissez-le comme lien préféré.",
+                "g_note": "Google peut mettre quelques jours à afficher le changement. Google renomme ces menus de temps en temps.",
+                "g_open": "Ouvrir Google Business Profile ↗",
+                "embed_title": "Réservations sur votre propre site",
+                "embed_desc": "Intégrez le formulaire de réservation à votre site. Copiez le code et collez-le là où vous voulez que le formulaire apparaisse.",
+                "embed_inline": "Formulaire dans la page",
+                "embed_button": "Bouton avec formulaire en pop-up",
+                "embed_copy": "Copier le code",
+                "embed_wp_title": "Vous utilisez WordPress ?",
+                "embed_wp_desc": "Téléchargez l'extension, installez-la via Extensions → Ajouter → Téléverser une extension, puis saisissez votre ID dans Réglages → TableReserve. Votre ID est :",
+                "embed_wp_download": "⬇ Télécharger l'extension WordPress",
+                "close_title": "Fermer le compte",
+                "close_btn": "Fermer le compte",
+                "close_desc": "Les réservations en ligne s'arrêtent immédiatement. Toutes les données du restaurant (réservations, profil, photos, compte) sont définitivement supprimées après 30 jours. D'ici là, vous pouvez demander une copie de vos réservations ou une restauration à info@tablereserve.gr.",
+                "close_confirm": "Pour confirmer, saisissez l'ID de votre restaurant : {shop}\n\nSi vous avez un abonnement actif, il sera résilié.",
+                "close_mismatch": "L'ID ne correspond pas. Votre compte n'a pas été fermé.",
+                "close_done": "Votre compte est fermé. Vos données seront supprimées dans 30 jours.",
+                "close_reauth": "Par sécurité, déconnectez-vous, reconnectez-vous et recommencez.",
+                "closed_title": "Ce compte est fermé",
+                "closed_desc": "Vos données seront définitivement supprimées le",
+                "closed_restore": "Pour le restaurer ou obtenir une copie de vos réservations, écrivez à info@tablereserve.gr.",
+                "alert_no_shop_linked": "Aucun restaurant n'est associé à ce compte. Inscrivez-vous d'abord sur tablereserve.gr.",
+                "or": "ou",
+                "google_login": "Se connecter avec Google",
+                "google_failed": "La connexion avec Google n'a pas abouti. Veuillez réessayer.",
+                "verify_title": "Confirmez votre e-mail",
+                "verify_desc": "Nous vous avons envoyé un e-mail avec un lien de confirmation. Cliquez dessus pour activer votre restaurant.",
+                "verify_sent_to": "Envoyé à :",
+                "verify_check": "J'ai confirmé",
+                "verify_resend": "Renvoyer l'e-mail",
+                "logout_link": "Se déconnecter",
+                "verify_not_yet": "Pas encore confirmé. Pensez à vérifier vos spams.",
+                "verify_resent": "E-mail renvoyé.",
+                "verify_too_soon": "Veuillez patienter une minute avant de demander un nouvel e-mail.",
+                "verify_error": "Une erreur est survenue. Veuillez réessayer.",
+                "booking_link": "Lien de réservation :",
+                "slug_edit": "Modifier",
+                "slug_save": "Enregistrer",
+                "slug_cancel": "Annuler",
+                "slug_note": "Uniquement lettres minuscules, chiffres et tirets (3–30). Votre ancien lien continuera de fonctionner. Vous pouvez le changer une fois tous les 30 jours.",
+                "slug_checking": "Vérification…",
+                "slug_available": "✓ Disponible",
+                "slug_taken": "✗ Déjà pris",
+                "slug_reserved": "✗ Nom réservé, choisissez-en un autre",
+                "slug_invalid": "3 à 30 caractères : lettres minuscules, chiffres et tirets (pas au début ni à la fin)",
+                "slug_same": "C'est votre lien actuel",
+                "slug_cooldown": "Vous pourrez le changer à nouveau à partir du {date}",
+                "slug_saved": "Lien mis à jour !",
+                "slug_error": "Une erreur est survenue. Veuillez réessayer.",
+                "copy": "Copier",
+                "copied": "Copié !",
+                "no_reservations": "📭 Aucune réservation sur la période choisie.",
+                "delete_text": "Supprimer",
+                "guests_label": "couverts",
+                "location_label_indoor": "En salle",
+                "shop_profile": "Profil du restaurant",
+                "shop_info_title": "Informations du restaurant",
+                "shop_tagline": "Slogan",
+                "shop_description": "Description",
+                "shop_address": "Adresse",
+                "shop_phone_pub": "Téléphone de contact",
+                "shop_hours": "Horaires d'ouverture",
+                "save_profile": "Enregistrer les informations",
+                "cover_photo": "Photo de couverture",
+                "no_cover": "Aucune photo de couverture",
+                "upload_cover": "Cliquez ou glissez une photo de couverture",
+                "upload_hint": "JPG, PNG, WEBP · 8 Mo max.",
+                "save_cover": "Enregistrer la couverture",
+                "delete_cover": "Supprimer",
+                "photo_gallery": "Galerie photos",
+                "upload_gallery": "Cliquez ou glissez des photos",
+                "upload_gallery_hint": "Plusieurs photos · 8 Mo max. par photo",
+                "toast_profile_saved": "✅ Informations enregistrées !",
+                "toast_cover_saved": "✅ Photo de couverture enregistrée !",
+                "toast_cover_deleted": "🗑️ Photo de couverture supprimée.",
+                "toast_photo_saved": "✅ Photo ajoutée !",
+                "toast_photo_deleted": "🗑️ Photo supprimée.",
+                "ph_tagline": "ex. Le meilleur café de la ville !",
+                "ph_description": "Décrivez votre restaurant en quelques mots...",
+                "ph_address": "ex. 12 rue de la Paix, Paris",
+                "ph_phone": "ex. +33 1 23 45 67 89",
+                "ph_capacity": "ex. 30",
+                "ph_notif_email": "ex. contact@restaurant.fr",
+                "notif_email_label": "📧 E-mail des notifications de réservation",
+                "notif_email_hint": "Vous recevrez une notification à cette adresse pour chaque nouvelle réservation",
+                "logo_title": "Logo",
+                "logo_drop": "Cliquez ou glissez votre logo",
+                "logo_sub": "PNG transparent ou JPG · 2 Mo max.",
+                "save_logo": "Enregistrer le logo",
+                "btn_delete": "Supprimer",
+                "toast_logo_too_big": "⚠️ Le logo dépasse 2 Mo !",
+                "toast_logo_saved": "✅ Logo enregistré !",
+                "toast_logo_deleted": "🗑️ Logo supprimé.",
+                "confirm_del_logo": "Supprimer le logo ?",
+                "confirm_del_cover": "Supprimer la photo de couverture ?",
+                "confirm_del_photo": "Supprimer cette photo ?",
+                "toast_img_too_big": "⚠️ La photo dépasse 8 Mo !",
+                "toast_upload_failed": "⚠️ La photo n'a pas pu être envoyée. Veuillez réessayer.",
+                "toast_save_error2": "Erreur d'enregistrement. Veuillez réessayer.",
+                "pers_n": "personnes",
+                "day_1": "jour",
+                "day_n": "jours",
+                "bill_active": "✓ Abonnement actif jusqu'au {date}",
+                "bill_manage": "Gérer l'abonnement →",
+                "bill_cancelled": "Votre abonnement a été résilié et reste actif jusqu'au {date}. Ensuite, les réservations en ligne seront suspendues.",
+                "bill_pastdue": "Votre dernier paiement a échoué. Mettez à jour votre carte avant le {date} pour que les réservations continuent.",
+                "bill_resume": "Réactiver l'abonnement →",
+                "bill_update_card": "Mettre à jour la carte →",
+                "bill_expired": "Votre abonnement est terminé et les réservations en ligne sont suspendues. Choisissez une formule pour continuer.",
+                "bill_ends": "Votre abonnement se termine dans {n} {days} ({date}). Choisissez une formule pour continuer.",
+                "bill_trial": "Essai gratuit : encore {n} {days} (jusqu'au {date}). Choisissez une formule pour continuer sans interruption.",
+                "plan_quarter": "Trimestriel · 39 €",
+                "plan_half": "6 mois · 69 €",
+                "plan_year": "Annuel · 99 €",
+                "terms_title": "Conditions d'utilisation",
+                "terms_title_upd": "Nous avons mis à jour nos Conditions d'utilisation",
+                "terms_intro": "Avant de continuer, veuillez lire et accepter les Conditions d'utilisation. Entre autres, ",
+                "terms_intro_upd": "Le principal changement : ",
+                "terms_change": "nous pouvons référencer votre restaurant sur Google Maps et dans la recherche Google, pour que les clients voient un bouton « Réserver » menant à votre page de réservation TableReserve. Nous ne partageons pas les données de vos clients avec Google.",
+                "terms_read": "Lire les Conditions d'utilisation ↗",
+                "terms_check": "J'ai lu et j'accepte les Conditions d'utilisation au nom de l'entreprise.",
+                "terms_accept": "Accepter et continuer",
+                "terms_logout": "Se déconnecter",
+                "terms_thanks": "Merci, conditions acceptées",
+                "terms_reload": "Les conditions viennent d'être mises à jour. La page va se recharger.",
+                "terms_err": "Une erreur est survenue, veuillez réessayer",
+                "embed_btn_label": "Réserver une table",
+                "gp_first": "Nouveau client",
+                "an_phone": "Par téléphone",
+                "an_walkin": "Sans réservation",
+                "an_google": "Google (Business Profile)",
+                "an_site": "Site du restaurant",
+                "an_social": "Réseaux sociaux",
+                "an_unknown": "Non renseigné (ancien)",
+                "an_outdoor": "En terrasse",
+                "an_bookings": "réservations"
+            },
+            it: {
+                "booking_at": "Prenotazione presso: ",
+                "date": "Data",
+                "person_1": "1 persona",
+                "select_opt": "-- Seleziona --",
+                "admin_login": "Accesso amministratore",
+                "admin_login_desc": "Gestisci le prenotazioni del tuo locale",
+                "password": "Password",
+                "login": "Accedi",
+                "reservations": "Prenotazioni",
+                "logout": "Esci",
+                "total_guests": "Coperti totali",
+                "from": "Dal",
+                "to": "Al",
+                "loading": "Caricamento...",
+                "analytics_tab": "Statistiche",
+                "an_avg_party": "Media persone per tavolo",
+                "an_cancel_rate": "Tasso di cancellazione",
+                "an_repeat_customers": "Clienti abituali",
+                "an_google_share": "Da Google",
+                "show_cancelled": "Mostra annullate",
+                "nb_pick_time": "— Scegli un orario —",
+                "nb_other_time": "Altro orario…",
+                "nb_closed": "Chiuso in questo giorno",
+                "nb_out_hours": "fuori orario",
+                "nb_booked": "coperti",
+                "nb_free": "posti liberi",
+                "nb_full": "completo",
+                "gi_visits": "visite",
+                "gi_last": "ultima",
+                "gi_new": "Nuovo cliente",
+                "gi_noshow": "no-show precedenti",
+                "gi_regular": "Cliente abituale",
+                "bk_edit": "Modifica",
+                "bk_cancel": "Annulla prenotazione",
+                "bk_cancel_q": "Annullare questa prenotazione? Resterà nelle statistiche come annullata.",
+                "bk_cancelled": "Annullata",
+                "bk_restore": "Ripristina",
+                "bk_delete_q": "Eliminare definitivamente? La prenotazione sparirà anche dalle statistiche.",
+                "nb_edit_title": "Modifica prenotazione",
+                "nb_update": "Salva modifiche",
+                "nb_resend": "Invia al cliente i dettagli aggiornati via email",
+                "nb_updated": "✅ Prenotazione aggiornata.",
+                "gp_tags": "Etichette",
+                "gp_allergy": "Allergia / dieta",
+                "gp_outdoor": "Preferisce l'esterno",
+                "gp_attention": "Attenzione",
+                "gp_notes": "Note su questo cliente",
+                "gp_history": "Storico prenotazioni",
+                "gp_save": "Salva",
+                "gp_saved": "✅ Profilo cliente salvato.",
+                "gp_visits": "Visite",
+                "gp_bookings": "Prenotazioni",
+                "gp_noshows": "No-show",
+                "gp_cancels": "Cancellazioni",
+                "gp_visit_n": "ª visita",
+                "gp_no_phone": "Per il profilo cliente serve un numero di telefono.",
+                "an_noshow": "No-show",
+                "wl_title": "Lista d'attesa",
+                "wl_sub": "Quando una prenotazione viene annullata, chi aspetta quell'orario riceve automaticamente un'email. Il tavolo va a chi prenota per primo.",
+                "wl_any": "Qualsiasi orario",
+                "wl_waiting": "In attesa",
+                "wl_notified": "Avvisato",
+                "wl_del_q": "Togliere dalla lista d'attesa?",
+                "wl_guests": "coperti",
+                "att_arrived": "Arrivato",
+                "att_noshow": "No-show",
+                "nb_btn": "Nuova prenotazione",
+                "nb_title": "Nuova prenotazione",
+                "nb_phone": "Al telefono",
+                "nb_walkin": "Senza prenotazione",
+                "nb_date": "Data",
+                "nb_time": "Orario",
+                "nb_guests": "Coperti",
+                "nb_location": "Tavolo",
+                "nb_name": "Nome e cognome",
+                "nb_tel": "Telefono",
+                "nb_email": "Email (facoltativa)",
+                "nb_notes": "Note",
+                "nb_confirm": "Invia un'email di conferma al cliente",
+                "nb_save": "Salva prenotazione",
+                "nb_saved": "✅ Prenotazione salvata.",
+                "nb_missing": "Inserisci data, orario, coperti e nome.",
+                "nb_error": "⚠️ La prenotazione non è stata salvata. Riprova.",
+                "an_export_pdf": "Esporta PDF",
+                "rep_period": "Periodo",
+                "rep_title": "Report prenotazioni",
+                "rep_findings": "Risultati principali",
+                "rep_issued": "Emesso il",
+                "rep_total_res": "Prenotazioni",
+                "rep_total_guests": "Coperti",
+                "rep_footer": "Creato con TableReserve · tablereserve.gr",
+                "rep_popup": "Il browser ha bloccato la nuova finestra. Consenti i pop-up per tablereserve.gr e riprova.",
+                "rep_hint": "Nella finestra di stampa scegli «Salva come PDF».",
+                "rep_print": "Salva come PDF / Stampa",
+                "an_trend_title": "Prenotazioni al giorno",
+                "an_hours_title": "Orari più richiesti",
+                "an_days_title": "Giorni più richiesti",
+                "an_source_title": "Provenienza delle prenotazioni",
+                "an_location_title": "Tavolo",
+                "an_occasion_title": "Tipi di occasione",
+                "an_repeat_title": "Clienti più fedeli",
+                "bk_booked_at": "Prenotato il",
+                "bk_new": "Nuova",
+                "an_lead_title": "Con quanto anticipo prenotano",
+                "an_lead_0": "Stesso giorno",
+                "an_lead_1": "1–3 giorni",
+                "an_lead_4": "4–14 giorni",
+                "an_lead_15": "15+ giorni",
+                "an_no_repeats": "Ancora nessuno",
+                "an_week_guests_title": "Coperti a settimana",
+                "an_month_guests_title": "Coperti al mese",
+                "an_direct": "Link diretto",
+                "an_indoor": "All'interno",
+                "an_no_occasion": "Nessuna occasione",
+                "phone": "Telefono *",
+                "indoor": "All'interno",
+                "outdoor": "All'aperto",
+                "no_pref": "Nessuna preferenza",
+                "alert_wrong_creds": "Credenziali errate!",
+                "nav_home": "← Home",
+                "dash_live": "Prenotazioni online",
+                "open_page": "Apri la pagina",
+                "party_label": "Numero massimo di persone per prenotazione",
+                "party_hint": "Quante persone può scegliere un cliente in una prenotazione. I gruppi più grandi ti contatteranno direttamente.",
+                "wh_open": "Aperto",
+                "wh_closed": "Chiuso",
+                "wh_closed_day": "Chiuso tutto il giorno",
+                "wh_add": "+ pausa / secondo turno",
+                "wh_copy": "Copia il lunedì su tutti i giorni",
+                "wh_hint": "I clienti vedono gli orari di prenotazione solo quando sei aperto. L'ultimo orario prenotabile è 30 minuti prima della chiusura.",
+                "cap_label": "Numero massimo di coperti per orario",
+                "cap_hint": "Quando un orario è pieno appare come «Completo» e non accetta altre prenotazioni. Lascia vuoto per nessun limite.",
+                "tz_label": "Fuso orario del locale",
+                "tz_hint": "Orari disponibili, promemoria e calendario dei clienti usano questo fuso orario.",
+                "tz_warn": "Il tuo dispositivo è in un altro fuso orario ({tz}). Se il locale si trova lì, cambialo e premi Salva.",
+                "g_title": "Prenotazioni da Google Maps",
+                "g_desc": "Aggiungi il link di prenotazione al profilo Google del tuo locale. Chi ti trova su Google Maps o nella ricerca può prenotare un tavolo con un clic. È gratis e non richiede approvazione.",
+                "g_s1": "Clicca «Apri Profilo dell'attività su Google» e accedi con l'account Google del locale.",
+                "g_s2": "Seleziona il tuo locale e clicca «Modifica profilo».",
+                "g_s3": "Trova la sezione dei link di prenotazione (può chiamarsi «Prenotazioni» o «Link per prenotazioni»).",
+                "g_s4": "Incolla il link, salva e, se richiesto, impostalo come preferito.",
+                "g_note": "Google può impiegare qualche giorno a mostrare la modifica. Google rinomina questi menu di tanto in tanto.",
+                "g_open": "Apri Profilo dell'attività su Google ↗",
+                "embed_title": "Prenotazioni sul tuo sito",
+                "embed_desc": "Inserisci il modulo di prenotazione nel tuo sito. Copia il codice e incollalo dove vuoi che appaia il modulo.",
+                "embed_inline": "Modulo nella pagina",
+                "embed_button": "Pulsante con modulo a comparsa",
+                "embed_copy": "Copia codice",
+                "embed_wp_title": "Usi WordPress?",
+                "embed_wp_desc": "Scarica il plugin, installalo da Plugin → Aggiungi nuovo → Carica plugin e inserisci il tuo ID in Impostazioni → TableReserve. Il tuo ID è:",
+                "embed_wp_download": "⬇ Scarica il plugin WordPress",
+                "close_title": "Chiudi l'account",
+                "close_btn": "Chiudi l'account",
+                "close_desc": "Le prenotazioni online si fermano subito. Tutti i dati del locale (prenotazioni, profilo, foto, account) vengono eliminati definitivamente dopo 30 giorni. Fino ad allora puoi chiedere una copia delle prenotazioni o il ripristino a info@tablereserve.gr.",
+                "close_confirm": "Per confermare, scrivi l'ID del tuo locale: {shop}\n\nSe hai un abbonamento attivo, verrà annullato.",
+                "close_mismatch": "L'ID non corrisponde. L'account non è stato chiuso.",
+                "close_done": "Il tuo account è chiuso. I dati verranno eliminati tra 30 giorni.",
+                "close_reauth": "Per sicurezza, esci, accedi di nuovo e riprova.",
+                "closed_title": "Questo account è chiuso",
+                "closed_desc": "I tuoi dati verranno eliminati definitivamente il",
+                "closed_restore": "Per ripristinarlo o avere una copia delle prenotazioni, scrivi a info@tablereserve.gr.",
+                "alert_no_shop_linked": "Non c'è nessun locale per questo account. Registrati prima su tablereserve.gr.",
+                "or": "oppure",
+                "google_login": "Accedi con Google",
+                "google_failed": "L'accesso con Google non è stato completato. Riprova.",
+                "verify_title": "Conferma la tua email",
+                "verify_desc": "Ti abbiamo inviato un'email con un link di conferma. Cliccalo per attivare il tuo locale.",
+                "verify_sent_to": "Inviata a:",
+                "verify_check": "Ho confermato",
+                "verify_resend": "Invia di nuovo l'email",
+                "logout_link": "Esci",
+                "verify_not_yet": "Non ancora confermata. Controlla anche lo spam.",
+                "verify_resent": "Email inviata di nuovo.",
+                "verify_too_soon": "Attendi un minuto prima di richiedere un'altra email.",
+                "verify_error": "Qualcosa è andato storto. Riprova.",
+                "booking_link": "Link di prenotazione:",
+                "slug_edit": "Modifica",
+                "slug_save": "Salva",
+                "slug_cancel": "Annulla",
+                "slug_note": "Solo lettere minuscole, numeri e trattini (3–30). Il vecchio link continuerà a funzionare. Puoi cambiarlo una volta ogni 30 giorni.",
+                "slug_checking": "Verifica…",
+                "slug_available": "✓ Disponibile",
+                "slug_taken": "✗ Già in uso",
+                "slug_reserved": "✗ Nome riservato, scegline un altro",
+                "slug_invalid": "3–30 caratteri: lettere minuscole, numeri e trattini (non all'inizio o alla fine)",
+                "slug_same": "Questo è il tuo link attuale",
+                "slug_cooldown": "Potrai cambiarlo di nuovo dal {date}",
+                "slug_saved": "Link aggiornato!",
+                "slug_error": "Qualcosa è andato storto. Riprova.",
+                "copy": "Copia",
+                "copied": "Copiato!",
+                "no_reservations": "📭 Nessuna prenotazione nel periodo selezionato.",
+                "delete_text": "Elimina",
+                "guests_label": "coperti",
+                "location_label_indoor": "All'interno",
+                "shop_profile": "Profilo del locale",
+                "shop_info_title": "Informazioni sul locale",
+                "shop_tagline": "Slogan",
+                "shop_description": "Descrizione",
+                "shop_address": "Indirizzo",
+                "shop_phone_pub": "Telefono di contatto",
+                "shop_hours": "Orari di apertura",
+                "save_profile": "Salva informazioni",
+                "cover_photo": "Foto di copertina",
+                "no_cover": "Nessuna foto di copertina",
+                "upload_cover": "Clicca o trascina una foto di copertina",
+                "upload_hint": "JPG, PNG, WEBP · max 8 MB",
+                "save_cover": "Salva copertina",
+                "delete_cover": "Elimina",
+                "photo_gallery": "Galleria foto",
+                "upload_gallery": "Clicca o trascina le foto",
+                "upload_gallery_hint": "Più foto · max 8 MB per foto",
+                "toast_profile_saved": "✅ Informazioni salvate!",
+                "toast_cover_saved": "✅ Copertina salvata!",
+                "toast_cover_deleted": "🗑️ Copertina eliminata.",
+                "toast_photo_saved": "✅ Foto aggiunta!",
+                "toast_photo_deleted": "🗑️ Foto eliminata.",
+                "ph_tagline": "es. Il miglior caffè della città!",
+                "ph_description": "Scrivi una breve descrizione del tuo locale...",
+                "ph_address": "es. Via Roma 12, Milano",
+                "ph_phone": "es. +39 02 1234567",
+                "ph_capacity": "es. 30",
+                "ph_notif_email": "es. info@ristorante.it",
+                "notif_email_label": "📧 Email per le notifiche di prenotazione",
+                "notif_email_hint": "Riceverai una notifica a questo indirizzo per ogni nuova prenotazione",
+                "logo_title": "Logo",
+                "logo_drop": "Clicca o trascina il logo",
+                "logo_sub": "PNG trasparente o JPG · max 2 MB",
+                "save_logo": "Salva logo",
+                "btn_delete": "Elimina",
+                "toast_logo_too_big": "⚠️ Il logo supera i 2 MB!",
+                "toast_logo_saved": "✅ Logo salvato!",
+                "toast_logo_deleted": "🗑️ Logo eliminato.",
+                "confirm_del_logo": "Eliminare il logo?",
+                "confirm_del_cover": "Eliminare la foto di copertina?",
+                "confirm_del_photo": "Eliminare questa foto?",
+                "toast_img_too_big": "⚠️ La foto supera gli 8 MB!",
+                "toast_upload_failed": "⚠️ Non è stato possibile caricare la foto. Riprova.",
+                "toast_save_error2": "Errore di salvataggio. Riprova.",
+                "pers_n": "persone",
+                "day_1": "giorno",
+                "day_n": "giorni",
+                "bill_active": "✓ Abbonamento attivo fino al {date}",
+                "bill_manage": "Gestisci abbonamento →",
+                "bill_cancelled": "L'abbonamento è stato annullato e resta attivo fino al {date}. Dopo, le prenotazioni online verranno sospese.",
+                "bill_pastdue": "L'ultimo pagamento non è andato a buon fine. Aggiorna la carta entro il {date} per non interrompere le prenotazioni.",
+                "bill_resume": "Riattiva abbonamento →",
+                "bill_update_card": "Aggiorna carta →",
+                "bill_expired": "L'abbonamento è scaduto e le prenotazioni online sono sospese. Scegli un piano per continuare.",
+                "bill_ends": "L'abbonamento scade tra {n} {days} ({date}). Scegli un piano per continuare.",
+                "bill_trial": "Prova gratuita: mancano {n} {days} (fino al {date}). Scegli un piano per continuare senza interruzioni.",
+                "plan_quarter": "Trimestrale · 39 €",
+                "plan_half": "6 mesi · 69 €",
+                "plan_year": "Annuale · 99 €",
+                "terms_title": "Termini di servizio",
+                "terms_title_upd": "Abbiamo aggiornato i Termini di servizio",
+                "terms_intro": "Prima di continuare, leggi e accetta i Termini di servizio. Tra l'altro, ",
+                "terms_intro_upd": "La modifica principale: ",
+                "terms_change": "possiamo inserire il tuo locale su Google Maps e nella Ricerca Google, così i clienti vedono un pulsante «Prenota» che porta alla tua pagina di prenotazione TableReserve. Non condividiamo con Google i dati dei tuoi clienti.",
+                "terms_read": "Leggi i Termini di servizio ↗",
+                "terms_check": "Ho letto e accetto i Termini di servizio per conto dell'attività.",
+                "terms_accept": "Accetta e continua",
+                "terms_logout": "Esci",
+                "terms_thanks": "Grazie, termini accettati",
+                "terms_reload": "I termini sono appena stati aggiornati. La pagina verrà ricaricata.",
+                "terms_err": "Qualcosa è andato storto, riprova",
+                "embed_btn_label": "Prenota un tavolo",
+                "gp_first": "Nuovo cliente",
+                "an_phone": "Al telefono",
+                "an_walkin": "Senza prenotazione",
+                "an_google": "Google (Profilo dell'attività)",
+                "an_site": "Sito del locale",
+                "an_social": "Social",
+                "an_unknown": "Non registrato (più vecchie)",
+                "an_outdoor": "All'aperto",
+                "an_bookings": "prenotazioni"
+            },
+            es: {
+                "booking_at": "Reserva en: ",
+                "date": "Fecha",
+                "person_1": "1 persona",
+                "select_opt": "-- Elegir --",
+                "admin_login": "Acceso de administrador",
+                "admin_login_desc": "Gestiona las reservas de tu local",
+                "password": "Contraseña",
+                "login": "Entrar",
+                "reservations": "Reservas",
+                "logout": "Cerrar sesión",
+                "total_guests": "Comensales en total",
+                "from": "Desde",
+                "to": "Hasta",
+                "loading": "Cargando...",
+                "analytics_tab": "Estadísticas",
+                "an_avg_party": "Media por mesa",
+                "an_cancel_rate": "Tasa de cancelación",
+                "an_repeat_customers": "Clientes que repiten",
+                "an_google_share": "Desde Google",
+                "show_cancelled": "Mostrar canceladas",
+                "nb_pick_time": "— Elige una hora —",
+                "nb_other_time": "Otra hora…",
+                "nb_closed": "Cerrado este día",
+                "nb_out_hours": "fuera del horario",
+                "nb_booked": "comensales",
+                "nb_free": "plazas libres",
+                "nb_full": "completo",
+                "gi_visits": "visitas",
+                "gi_last": "última",
+                "gi_new": "Cliente nuevo",
+                "gi_noshow": "no-show(s) anteriores",
+                "gi_regular": "Cliente habitual",
+                "bk_edit": "Editar",
+                "bk_cancel": "Cancelar reserva",
+                "bk_cancel_q": "¿Cancelar esta reserva? Seguirá en tus estadísticas como cancelada.",
+                "bk_cancelled": "Cancelada",
+                "bk_restore": "Restaurar",
+                "bk_delete_q": "¿Eliminar definitivamente? La reserva también desaparecerá de tus estadísticas.",
+                "nb_edit_title": "Editar reserva",
+                "nb_update": "Guardar cambios",
+                "nb_resend": "Enviar al cliente los datos actualizados por email",
+                "nb_updated": "✅ Reserva actualizada.",
+                "gp_tags": "Etiquetas",
+                "gp_allergy": "Alergia / dieta",
+                "gp_outdoor": "Prefiere terraza",
+                "gp_attention": "Atención",
+                "gp_notes": "Notas sobre este cliente",
+                "gp_history": "Historial de reservas",
+                "gp_save": "Guardar",
+                "gp_saved": "✅ Ficha del cliente guardada.",
+                "gp_visits": "Visitas",
+                "gp_bookings": "Reservas",
+                "gp_noshows": "No-shows",
+                "gp_cancels": "Cancelaciones",
+                "gp_visit_n": "ª visita",
+                "gp_no_phone": "La ficha de cliente necesita un número de teléfono.",
+                "an_noshow": "No-show",
+                "wl_title": "Lista de espera",
+                "wl_sub": "Cuando se cancela una reserva, quienes esperan esa hora reciben un email automáticamente. La mesa es para quien reserve primero.",
+                "wl_any": "Cualquier hora",
+                "wl_waiting": "Esperando",
+                "wl_notified": "Avisado",
+                "wl_del_q": "¿Quitar de la lista de espera?",
+                "wl_guests": "comensales",
+                "att_arrived": "Ha venido",
+                "att_noshow": "No-show",
+                "nb_btn": "Nueva reserva",
+                "nb_title": "Nueva reserva",
+                "nb_phone": "Por teléfono",
+                "nb_walkin": "Sin reserva",
+                "nb_date": "Fecha",
+                "nb_time": "Hora",
+                "nb_guests": "Comensales",
+                "nb_location": "Mesa",
+                "nb_name": "Nombre y apellidos",
+                "nb_tel": "Teléfono",
+                "nb_email": "Email (opcional)",
+                "nb_notes": "Notas",
+                "nb_confirm": "Enviar un email de confirmación al cliente",
+                "nb_save": "Guardar reserva",
+                "nb_saved": "✅ Reserva guardada.",
+                "nb_missing": "Rellena fecha, hora, comensales y nombre.",
+                "nb_error": "⚠️ No se ha guardado la reserva. Inténtalo de nuevo.",
+                "an_export_pdf": "Exportar PDF",
+                "rep_period": "Periodo",
+                "rep_title": "Informe de reservas",
+                "rep_findings": "Conclusiones principales",
+                "rep_issued": "Emitido el",
+                "rep_total_res": "Reservas",
+                "rep_total_guests": "Comensales",
+                "rep_footer": "Creado con TableReserve · tablereserve.gr",
+                "rep_popup": "Tu navegador ha bloqueado la nueva ventana. Permite las ventanas emergentes para tablereserve.gr e inténtalo de nuevo.",
+                "rep_hint": "En el cuadro de impresión, elige «Guardar como PDF».",
+                "rep_print": "Guardar como PDF / Imprimir",
+                "an_trend_title": "Reservas por día",
+                "an_hours_title": "Horas con más reservas",
+                "an_days_title": "Días con más reservas",
+                "an_source_title": "Origen de las reservas",
+                "an_location_title": "Mesa",
+                "an_occasion_title": "Tipos de ocasión",
+                "an_repeat_title": "Clientes más fieles",
+                "bk_booked_at": "Reservado el",
+                "bk_new": "Nueva",
+                "an_lead_title": "Con cuánta antelación reservan",
+                "an_lead_0": "El mismo día",
+                "an_lead_1": "1–3 días",
+                "an_lead_4": "4–14 días",
+                "an_lead_15": "15+ días",
+                "an_no_repeats": "Todavía ninguno",
+                "an_week_guests_title": "Comensales por semana",
+                "an_month_guests_title": "Comensales por mes",
+                "an_direct": "Enlace directo",
+                "an_indoor": "Interior",
+                "an_no_occasion": "Sin ocasión",
+                "phone": "Teléfono *",
+                "indoor": "Interior",
+                "outdoor": "Terraza",
+                "no_pref": "Sin preferencia",
+                "alert_wrong_creds": "¡Datos de acceso incorrectos!",
+                "nav_home": "← Inicio",
+                "dash_live": "Reservas online",
+                "open_page": "Abrir página",
+                "party_label": "Máximo de personas por reserva",
+                "party_hint": "Cuántas personas puede elegir un cliente en una reserva. Los grupos más grandes te contactarán directamente.",
+                "wh_open": "Abierto",
+                "wh_closed": "Cerrado",
+                "wh_closed_day": "Cerrado todo el día",
+                "wh_add": "+ pausa / segundo turno",
+                "wh_copy": "Copiar el lunes a todos los días",
+                "wh_hint": "Los clientes solo ven horas de reserva cuando estás abierto. La última hora para reservar es 30 minutos antes del cierre.",
+                "cap_label": "Máximo de comensales por hora de reserva",
+                "cap_hint": "Cuando una hora se llena, aparece como «Completo» y no admite más reservas. Déjalo vacío para no poner límite.",
+                "tz_label": "Zona horaria del local",
+                "tz_hint": "Las horas disponibles, los recordatorios y el calendario de los clientes usan esta zona horaria.",
+                "tz_warn": "Tu dispositivo está en otra zona horaria ({tz}). Si el local está allí, cámbiala y pulsa Guardar.",
+                "g_title": "Reservas desde Google Maps",
+                "g_desc": "Añade tu enlace de reservas al perfil de Google de tu local. Quien te encuentre en Google Maps o en la búsqueda podrá reservar mesa con un clic. Es gratis y no necesita aprobación.",
+                "g_s1": "Pulsa «Abrir Perfil de Empresa de Google» e inicia sesión con la cuenta de Google de tu local.",
+                "g_s2": "Elige tu local y pulsa «Editar perfil».",
+                "g_s3": "Busca la sección de enlaces de reserva (puede llamarse «Reservas» o «Enlaces de reserva»).",
+                "g_s4": "Pega tu enlace, guarda y, si te lo pide, márcalo como preferido.",
+                "g_note": "Google puede tardar unos días en mostrar el cambio. Google cambia el nombre de estos menús de vez en cuando.",
+                "g_open": "Abrir Perfil de Empresa de Google ↗",
+                "embed_title": "Reservas en tu propia web",
+                "embed_desc": "Pon el formulario de reservas en tu web. Copia el código y pégalo donde quieras que aparezca el formulario.",
+                "embed_inline": "Formulario en la página",
+                "embed_button": "Botón con formulario emergente",
+                "embed_copy": "Copiar código",
+                "embed_wp_title": "¿Usas WordPress?",
+                "embed_wp_desc": "Descarga el plugin, instálalo desde Plugins → Añadir nuevo → Subir plugin e introduce tu ID en Ajustes → TableReserve. Tu ID es:",
+                "embed_wp_download": "⬇ Descargar el plugin de WordPress",
+                "close_title": "Cerrar la cuenta",
+                "close_btn": "Cerrar la cuenta",
+                "close_desc": "Las reservas online se detienen al momento. Todos los datos del local (reservas, perfil, fotos, cuenta) se eliminan definitivamente a los 30 días. Hasta entonces puedes pedir una copia de tus reservas o la restauración en info@tablereserve.gr.",
+                "close_confirm": "Para confirmar, escribe el ID de tu local: {shop}\n\nSi tienes una suscripción activa, se cancelará.",
+                "close_mismatch": "El ID no coincide. Tu cuenta no se ha cerrado.",
+                "close_done": "Tu cuenta está cerrada. Tus datos se eliminarán en 30 días.",
+                "close_reauth": "Por seguridad, cierra sesión, vuelve a entrar y repite.",
+                "closed_title": "Esta cuenta está cerrada",
+                "closed_desc": "Tus datos se eliminarán definitivamente el",
+                "closed_restore": "Para restaurarla o recibir una copia de tus reservas, escribe a info@tablereserve.gr.",
+                "alert_no_shop_linked": "No hay ningún local para esta cuenta. Regístrate primero en tablereserve.gr.",
+                "or": "o",
+                "google_login": "Entrar con Google",
+                "google_failed": "No se ha completado el acceso con Google. Inténtalo de nuevo.",
+                "verify_title": "Confirma tu email",
+                "verify_desc": "Te hemos enviado un email con un enlace de confirmación. Púlsalo para activar tu local.",
+                "verify_sent_to": "Enviado a:",
+                "verify_check": "Ya lo he confirmado",
+                "verify_resend": "Reenviar el email",
+                "logout_link": "Cerrar sesión",
+                "verify_not_yet": "Aún no está confirmado. Revisa también la carpeta de spam.",
+                "verify_resent": "Email reenviado.",
+                "verify_too_soon": "Espera un minuto antes de pedir otro email.",
+                "verify_error": "Algo ha salido mal. Inténtalo de nuevo.",
+                "booking_link": "Enlace de reservas:",
+                "slug_edit": "Editar",
+                "slug_save": "Guardar",
+                "slug_cancel": "Cancelar",
+                "slug_note": "Solo minúsculas, números y guiones (3–30). Tu enlace antiguo seguirá funcionando. Puedes cambiarlo una vez cada 30 días.",
+                "slug_checking": "Comprobando…",
+                "slug_available": "✓ Disponible",
+                "slug_taken": "✗ Ya está en uso",
+                "slug_reserved": "✗ Nombre reservado, elige otro",
+                "slug_invalid": "3–30 caracteres: minúsculas, números y guiones (no al principio ni al final)",
+                "slug_same": "Este es tu enlace actual",
+                "slug_cooldown": "Podrás cambiarlo de nuevo a partir del {date}",
+                "slug_saved": "¡Enlace actualizado!",
+                "slug_error": "Algo ha salido mal. Inténtalo de nuevo.",
+                "copy": "Copiar",
+                "copied": "¡Copiado!",
+                "no_reservations": "📭 No hay reservas en el periodo seleccionado.",
+                "delete_text": "Eliminar",
+                "guests_label": "comensales",
+                "location_label_indoor": "Interior",
+                "shop_profile": "Perfil del local",
+                "shop_info_title": "Información del local",
+                "shop_tagline": "Eslogan",
+                "shop_description": "Descripción",
+                "shop_address": "Dirección",
+                "shop_phone_pub": "Teléfono de contacto",
+                "shop_hours": "Horario",
+                "save_profile": "Guardar información",
+                "cover_photo": "Foto de portada",
+                "no_cover": "Sin foto de portada",
+                "upload_cover": "Pulsa o arrastra una foto de portada",
+                "upload_hint": "JPG, PNG, WEBP · máx. 8 MB",
+                "save_cover": "Guardar portada",
+                "delete_cover": "Eliminar",
+                "photo_gallery": "Galería de fotos",
+                "upload_gallery": "Pulsa o arrastra fotos",
+                "upload_gallery_hint": "Varias fotos · máx. 8 MB por foto",
+                "toast_profile_saved": "✅ ¡Información guardada!",
+                "toast_cover_saved": "✅ ¡Portada guardada!",
+                "toast_cover_deleted": "🗑️ Portada eliminada.",
+                "toast_photo_saved": "✅ ¡Foto añadida!",
+                "toast_photo_deleted": "🗑️ Foto eliminada.",
+                "ph_tagline": "p. ej. ¡El mejor café de la ciudad!",
+                "ph_description": "Escribe una breve descripción de tu local...",
+                "ph_address": "p. ej. Calle Mayor 12, Madrid",
+                "ph_phone": "p. ej. +34 912 345 678",
+                "ph_capacity": "p. ej. 30",
+                "ph_notif_email": "p. ej. info@restaurante.es",
+                "notif_email_label": "📧 Email para avisos de reservas",
+                "notif_email_hint": "Recibirás un aviso en este email por cada nueva reserva",
+                "logo_title": "Logotipo",
+                "logo_drop": "Pulsa o arrastra tu logotipo",
+                "logo_sub": "PNG con transparencia o JPG · máx. 2 MB",
+                "save_logo": "Guardar logotipo",
+                "btn_delete": "Eliminar",
+                "toast_logo_too_big": "⚠️ ¡El logotipo supera los 2 MB!",
+                "toast_logo_saved": "✅ ¡Logotipo guardado!",
+                "toast_logo_deleted": "🗑️ Logotipo eliminado.",
+                "confirm_del_logo": "¿Eliminar el logotipo?",
+                "confirm_del_cover": "¿Eliminar la foto de portada?",
+                "confirm_del_photo": "¿Eliminar esta foto?",
+                "toast_img_too_big": "⚠️ ¡La foto supera los 8 MB!",
+                "toast_upload_failed": "⚠️ No se ha podido subir la foto. Inténtalo de nuevo.",
+                "toast_save_error2": "Error al guardar. Inténtalo de nuevo.",
+                "pers_n": "personas",
+                "day_1": "día",
+                "day_n": "días",
+                "bill_active": "✓ Suscripción activa hasta el {date}",
+                "bill_manage": "Gestionar suscripción →",
+                "bill_cancelled": "Tu suscripción se ha cancelado y sigue activa hasta el {date}. Después, las reservas online quedarán en pausa.",
+                "bill_pastdue": "Tu último pago no se ha completado. Actualiza tu tarjeta antes del {date} para que las reservas sigan funcionando.",
+                "bill_resume": "Reactivar suscripción →",
+                "bill_update_card": "Actualizar tarjeta →",
+                "bill_expired": "Tu suscripción ha terminado y las reservas online están en pausa. Elige un plan para continuar.",
+                "bill_ends": "Tu suscripción termina en {n} {days} ({date}). Elige un plan para continuar.",
+                "bill_trial": "Prueba gratuita: quedan {n} {days} (hasta el {date}). Elige un plan para seguir sin interrupciones.",
+                "plan_quarter": "Trimestral · 39 €",
+                "plan_half": "6 meses · 69 €",
+                "plan_year": "Anual · 99 €",
+                "terms_title": "Condiciones de uso",
+                "terms_title_upd": "Hemos actualizado las Condiciones de uso",
+                "terms_intro": "Antes de continuar, lee y acepta las Condiciones de uso. Entre otras cosas, ",
+                "terms_intro_upd": "El cambio principal: ",
+                "terms_change": "podemos dar de alta tu local en Google Maps y en la Búsqueda de Google, para que los clientes vean un botón «Reservar» que lleva a tu página de reservas de TableReserve. No compartimos con Google los datos de tus clientes.",
+                "terms_read": "Leer las Condiciones de uso ↗",
+                "terms_check": "He leído y acepto las Condiciones de uso en nombre de la empresa.",
+                "terms_accept": "Aceptar y continuar",
+                "terms_logout": "Cerrar sesión",
+                "terms_thanks": "Gracias, condiciones aceptadas",
+                "terms_reload": "Las condiciones se acaban de actualizar. La página se recargará.",
+                "terms_err": "Algo ha salido mal, inténtalo de nuevo",
+                "embed_btn_label": "Reservar mesa",
+                "gp_first": "Cliente nuevo",
+                "an_phone": "Por teléfono",
+                "an_walkin": "Sin reserva",
+                "an_google": "Google (Perfil de Empresa)",
+                "an_site": "Web del local",
+                "an_social": "Redes sociales",
+                "an_unknown": "Sin registrar (antiguas)",
+                "an_outdoor": "Terraza",
+                "an_bookings": "reservas"
+            },
+            tr: {
+                "booking_at": "Rezervasyon: ",
+                "date": "Tarih",
+                "person_1": "1 kişi",
+                "select_opt": "-- Seçin --",
+                "admin_login": "Yönetici girişi",
+                "admin_login_desc": "İşletmenizin rezervasyonlarını yönetin",
+                "password": "Şifre",
+                "login": "Giriş yap",
+                "reservations": "Rezervasyonlar",
+                "logout": "Çıkış yap",
+                "total_guests": "Toplam misafir",
+                "from": "Başlangıç",
+                "to": "Bitiş",
+                "loading": "Yükleniyor...",
+                "analytics_tab": "İstatistikler",
+                "an_avg_party": "Masa başına ortalama",
+                "an_cancel_rate": "İptal oranı",
+                "an_repeat_customers": "Tekrar gelenler",
+                "an_google_share": "Google üzerinden",
+                "show_cancelled": "İptal edilenleri göster",
+                "nb_pick_time": "— Saat seçin —",
+                "nb_other_time": "Başka saat…",
+                "nb_closed": "Bu gün kapalı",
+                "nb_out_hours": "çalışma saatleri dışında",
+                "nb_booked": "misafir",
+                "nb_free": "boş yer",
+                "nb_full": "dolu",
+                "gi_visits": "ziyaret",
+                "gi_last": "son",
+                "gi_new": "Yeni misafir",
+                "gi_noshow": "önceki gelmeme",
+                "gi_regular": "Düzenli misafir",
+                "bk_edit": "Düzenle",
+                "bk_cancel": "Rezervasyonu iptal et",
+                "bk_cancel_q": "Bu rezervasyon iptal edilsin mi? İstatistiklerinizde iptal olarak kalacak.",
+                "bk_cancelled": "İptal edildi",
+                "bk_restore": "Geri al",
+                "bk_delete_q": "Kalıcı olarak silinsin mi? Rezervasyon istatistiklerinizden de kaybolacak.",
+                "nb_edit_title": "Rezervasyonu düzenle",
+                "nb_update": "Değişiklikleri kaydet",
+                "nb_resend": "Güncel bilgileri misafire e-postayla gönder",
+                "nb_updated": "✅ Rezervasyon güncellendi.",
+                "gp_tags": "Etiketler",
+                "gp_allergy": "Alerji / diyet",
+                "gp_outdoor": "Dış mekânı tercih ediyor",
+                "gp_attention": "Dikkat",
+                "gp_notes": "Bu misafirle ilgili notlar",
+                "gp_history": "Rezervasyon geçmişi",
+                "gp_save": "Kaydet",
+                "gp_saved": "✅ Misafir profili kaydedildi.",
+                "gp_visits": "Ziyaret",
+                "gp_bookings": "Rezervasyon",
+                "gp_noshows": "Gelmedi",
+                "gp_cancels": "İptal",
+                "gp_visit_n": ". ziyaret",
+                "gp_no_phone": "Misafir profili için telefon numarası gerekir.",
+                "an_noshow": "Gelmedi",
+                "wl_title": "Bekleme listesi",
+                "wl_sub": "Bir rezervasyon iptal edildiğinde, o saati bekleyen misafirlere otomatik e-posta gider. Masa ilk rezervasyon yapana verilir.",
+                "wl_any": "Herhangi bir saat",
+                "wl_waiting": "Bekliyor",
+                "wl_notified": "Haber verildi",
+                "wl_del_q": "Bekleme listesinden çıkarılsın mı?",
+                "wl_guests": "misafir",
+                "att_arrived": "Geldi",
+                "att_noshow": "Gelmedi",
+                "nb_btn": "Yeni rezervasyon",
+                "nb_title": "Yeni rezervasyon",
+                "nb_phone": "Telefonla",
+                "nb_walkin": "Rezervasyonsuz",
+                "nb_date": "Tarih",
+                "nb_time": "Saat",
+                "nb_guests": "Misafir",
+                "nb_location": "Oturma yeri",
+                "nb_name": "Ad soyad",
+                "nb_tel": "Telefon",
+                "nb_email": "E-posta (isteğe bağlı)",
+                "nb_notes": "Notlar",
+                "nb_confirm": "Misafire onay e-postası gönder",
+                "nb_save": "Rezervasyonu kaydet",
+                "nb_saved": "✅ Rezervasyon kaydedildi.",
+                "nb_missing": "Lütfen tarih, saat, misafir sayısı ve adı girin.",
+                "nb_error": "⚠️ Rezervasyon kaydedilemedi. Lütfen tekrar deneyin.",
+                "an_export_pdf": "PDF olarak dışa aktar",
+                "rep_period": "Dönem",
+                "rep_title": "Rezervasyon raporu",
+                "rep_findings": "Öne çıkan bulgular",
+                "rep_issued": "Oluşturulma",
+                "rep_total_res": "Rezervasyon",
+                "rep_total_guests": "Misafir",
+                "rep_footer": "TableReserve ile oluşturuldu · tablereserve.gr",
+                "rep_popup": "Tarayıcınız yeni pencereyi engelledi. tablereserve.gr için açılır pencerelere izin verip tekrar deneyin.",
+                "rep_hint": "Yazdırma penceresinde “PDF olarak kaydet” seçeneğini seçin.",
+                "rep_print": "PDF olarak kaydet / Yazdır",
+                "an_trend_title": "Günlük rezervasyon",
+                "an_hours_title": "En yoğun saatler",
+                "an_days_title": "En yoğun günler",
+                "an_source_title": "Rezervasyon kaynağı",
+                "an_location_title": "Oturma yeri",
+                "an_occasion_title": "Özel gün türleri",
+                "an_repeat_title": "En sadık misafirler",
+                "bk_booked_at": "Rezervasyon tarihi",
+                "bk_new": "Yeni",
+                "an_lead_title": "Ne kadar önceden rezervasyon yapılıyor",
+                "an_lead_0": "Aynı gün",
+                "an_lead_1": "1–3 gün",
+                "an_lead_4": "4–14 gün",
+                "an_lead_15": "15+ gün",
+                "an_no_repeats": "Henüz yok",
+                "an_week_guests_title": "Haftalık misafir",
+                "an_month_guests_title": "Aylık misafir",
+                "an_direct": "Doğrudan bağlantı",
+                "an_indoor": "İç mekân",
+                "an_no_occasion": "Özel gün yok",
+                "phone": "Telefon *",
+                "indoor": "İç mekân",
+                "outdoor": "Dış mekân",
+                "no_pref": "Fark etmez",
+                "alert_wrong_creds": "Giriş bilgileri hatalı!",
+                "nav_home": "← Ana sayfa",
+                "dash_live": "Online rezervasyon",
+                "open_page": "Sayfayı aç",
+                "party_label": "Rezervasyon başına en fazla kişi",
+                "party_hint": "Bir misafirin tek rezervasyonda seçebileceği kişi sayısı. Daha kalabalık gruplar sizinle doğrudan iletişime geçer.",
+                "wh_open": "Açık",
+                "wh_closed": "Kapalı",
+                "wh_closed_day": "Tüm gün kapalı",
+                "wh_add": "+ ara / ikinci vardiya",
+                "wh_copy": "Pazartesiyi tüm günlere kopyala",
+                "wh_hint": "Misafirler rezervasyon saatlerini yalnızca açık olduğunuz saatlerde görür. Son rezervasyon saati kapanıştan 30 dakika öncedir.",
+                "cap_label": "Rezervasyon saati başına en fazla misafir",
+                "cap_hint": "Bir saat dolduğunda “Dolu” olarak görünür ve yeni rezervasyon almaz. Sınır istemiyorsanız boş bırakın.",
+                "tz_label": "İşletmenin saat dilimi",
+                "tz_hint": "Uygun rezervasyon saatleri, hatırlatmalar ve misafirlerin takvim kayıtları bu saat dilimine göre hesaplanır.",
+                "tz_warn": "Cihazınız farklı bir saat diliminde ({tz}). İşletme oradaysa saat dilimini değiştirip Kaydet’e basın.",
+                "g_title": "Google Haritalar’dan rezervasyon",
+                "g_desc": "Rezervasyon bağlantınızı işletmenizin Google profiline ekleyin. Sizi Google Haritalar’da ya da aramada bulan herkes tek tıkla masa ayırtabilir. Ücretsizdir ve onay gerektirmez.",
+                "g_s1": "“Google İşletme Profilini aç” düğmesine tıklayın ve işletmenizin Google hesabıyla giriş yapın.",
+                "g_s2": "İşletmenizi seçin ve “Profili düzenle”ye tıklayın.",
+                "g_s3": "Rezervasyon bağlantılarının bölümünü bulun (“Rezervasyonlar” ya da “Rezervasyon bağlantıları” adıyla görünebilir).",
+                "g_s4": "Bağlantınızı yapıştırın, kaydedin ve sorulursa tercih edilen olarak ayarlayın.",
+                "g_note": "Google’ın değişikliği göstermesi birkaç gün sürebilir. Google bu menülerin adını zaman zaman değiştirir.",
+                "g_open": "Google İşletme Profilini aç ↗",
+                "embed_title": "Kendi web sitenizde rezervasyon",
+                "embed_desc": "Rezervasyon formunu kendi web sitenize ekleyin. Kodu kopyalayıp formun görünmesini istediğiniz yere yapıştırın.",
+                "embed_inline": "Sayfada form",
+                "embed_button": "Açılır formlu düğme",
+                "embed_copy": "Kodu kopyala",
+                "embed_wp_title": "WordPress mi kullanıyorsunuz?",
+                "embed_wp_desc": "Eklentiyi indirin, Eklentiler → Yeni ekle → Eklenti yükle bölümünden kurun ve ID’nizi Ayarlar → TableReserve bölümüne girin. ID’niz:",
+                "embed_wp_download": "⬇ WordPress eklentisini indir",
+                "close_title": "Hesabı kapat",
+                "close_btn": "Hesabı kapat",
+                "close_desc": "Online rezervasyonlar hemen durur. İşletmenin tüm verileri (rezervasyonlar, profil, fotoğraflar, hesap) 30 gün sonra kalıcı olarak silinir. O zamana kadar info@tablereserve.gr adresinden rezervasyonlarınızın bir kopyasını ya da hesabın geri yüklenmesini isteyebilirsiniz.",
+                "close_confirm": "Onaylamak için işletmenizin ID’sini yazın: {shop}\n\nEtkin bir aboneliğiniz varsa iptal edilecek.",
+                "close_mismatch": "ID eşleşmiyor. Hesabınız kapatılmadı.",
+                "close_done": "Hesabınız kapatıldı. Verileriniz 30 gün içinde silinecek.",
+                "close_reauth": "Güvenlik için çıkış yapıp tekrar giriş yapın ve yeniden deneyin.",
+                "closed_title": "Bu hesap kapatıldı",
+                "closed_desc": "Verileriniz şu tarihte kalıcı olarak silinecek:",
+                "closed_restore": "Geri yüklemek ya da rezervasyonlarınızın bir kopyasını almak için info@tablereserve.gr adresine yazın.",
+                "alert_no_shop_linked": "Bu hesaba bağlı bir işletme yok. Lütfen önce tablereserve.gr’de kayıt olun.",
+                "or": "ya da",
+                "google_login": "Google ile giriş yap",
+                "google_failed": "Google ile giriş tamamlanmadı. Lütfen tekrar deneyin.",
+                "verify_title": "E-postanızı doğrulayın",
+                "verify_desc": "Size doğrulama bağlantısı içeren bir e-posta gönderdik. İşletmenizi etkinleştirmek için bağlantıya tıklayın.",
+                "verify_sent_to": "Gönderildi:",
+                "verify_check": "Doğruladım",
+                "verify_resend": "E-postayı tekrar gönder",
+                "logout_link": "Çıkış yap",
+                "verify_not_yet": "Henüz doğrulanmadı. Lütfen spam klasörünüzü de kontrol edin.",
+                "verify_resent": "E-posta tekrar gönderildi.",
+                "verify_too_soon": "Yeni bir e-posta istemeden önce lütfen bir dakika bekleyin.",
+                "verify_error": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+                "booking_link": "Rezervasyon bağlantısı:",
+                "slug_edit": "Düzenle",
+                "slug_save": "Kaydet",
+                "slug_cancel": "Vazgeç",
+                "slug_note": "Yalnızca küçük harf, rakam ve kısa çizgi (3–30). Eski bağlantınız çalışmaya devam eder. 30 günde bir değiştirebilirsiniz.",
+                "slug_checking": "Kontrol ediliyor…",
+                "slug_available": "✓ Uygun",
+                "slug_taken": "✗ Zaten kullanılıyor",
+                "slug_reserved": "✗ Ayrılmış ad, lütfen başka bir ad seçin",
+                "slug_invalid": "3–30 karakter: küçük harf, rakam ve kısa çizgi (başta ya da sonda olmamalı)",
+                "slug_same": "Bu, mevcut bağlantınız",
+                "slug_cooldown": "{date} tarihinden itibaren tekrar değiştirebilirsiniz",
+                "slug_saved": "Bağlantı güncellendi!",
+                "slug_error": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+                "copy": "Kopyala",
+                "copied": "Kopyalandı!",
+                "no_reservations": "📭 Seçilen dönemde rezervasyon yok.",
+                "delete_text": "Sil",
+                "guests_label": "misafir",
+                "location_label_indoor": "İç mekân",
+                "shop_profile": "İşletme profili",
+                "shop_info_title": "İşletme bilgileri",
+                "shop_tagline": "Slogan",
+                "shop_description": "Açıklama",
+                "shop_address": "Adres",
+                "shop_phone_pub": "İletişim telefonu",
+                "shop_hours": "Çalışma saatleri",
+                "save_profile": "Bilgileri kaydet",
+                "cover_photo": "Kapak fotoğrafı",
+                "no_cover": "Kapak fotoğrafı yok",
+                "upload_cover": "Kapak fotoğrafı için tıklayın ya da sürükleyin",
+                "upload_hint": "JPG, PNG, WEBP · en fazla 8 MB",
+                "save_cover": "Kapağı kaydet",
+                "delete_cover": "Sil",
+                "photo_gallery": "Fotoğraf galerisi",
+                "upload_gallery": "Fotoğraflar için tıklayın ya da sürükleyin",
+                "upload_gallery_hint": "Birden fazla fotoğraf · fotoğraf başına en fazla 8 MB",
+                "toast_profile_saved": "✅ Bilgiler kaydedildi!",
+                "toast_cover_saved": "✅ Kapak fotoğrafı kaydedildi!",
+                "toast_cover_deleted": "🗑️ Kapak fotoğrafı silindi.",
+                "toast_photo_saved": "✅ Fotoğraf eklendi!",
+                "toast_photo_deleted": "🗑️ Fotoğraf silindi.",
+                "ph_tagline": "örn. Şehrin en iyi kahvesi!",
+                "ph_description": "İşletmenizi kısaca anlatın...",
+                "ph_address": "örn. İstiklal Cad. 12, İstanbul",
+                "ph_phone": "örn. +90 212 123 45 67",
+                "ph_capacity": "örn. 30",
+                "ph_notif_email": "örn. info@restoran.com.tr",
+                "notif_email_label": "📧 Rezervasyon bildirim e-postası",
+                "notif_email_hint": "Her yeni rezervasyonda bu adrese bildirim alırsınız",
+                "logo_title": "Logo",
+                "logo_drop": "Logo için tıklayın ya da sürükleyin",
+                "logo_sub": "Şeffaf PNG ya da JPG · en fazla 2 MB",
+                "save_logo": "Logoyu kaydet",
+                "btn_delete": "Sil",
+                "toast_logo_too_big": "⚠️ Logo 2 MB’tan büyük!",
+                "toast_logo_saved": "✅ Logo kaydedildi!",
+                "toast_logo_deleted": "🗑️ Logo silindi.",
+                "confirm_del_logo": "Logo silinsin mi?",
+                "confirm_del_cover": "Kapak fotoğrafı silinsin mi?",
+                "confirm_del_photo": "Bu fotoğraf silinsin mi?",
+                "toast_img_too_big": "⚠️ Fotoğraf 8 MB’tan büyük!",
+                "toast_upload_failed": "⚠️ Fotoğraf yüklenemedi. Lütfen tekrar deneyin.",
+                "toast_save_error2": "Kaydedilemedi. Lütfen tekrar deneyin.",
+                "pers_n": "kişi",
+                "day_1": "gün",
+                "day_n": "gün",
+                "bill_active": "✓ Abonelik {date} tarihine kadar etkin",
+                "bill_manage": "Aboneliği yönet →",
+                "bill_cancelled": "Aboneliğiniz iptal edildi ve {date} tarihine kadar geçerli. Sonrasında online rezervasyonlar duraklatılacak.",
+                "bill_pastdue": "Son ödemeniz alınamadı. Rezervasyonların durmaması için {date} tarihine kadar kartınızı güncelleyin.",
+                "bill_resume": "Aboneliği yeniden başlat →",
+                "bill_update_card": "Kartı güncelle →",
+                "bill_expired": "Aboneliğiniz sona erdi ve online rezervasyonlar duraklatıldı. Devam etmek için bir paket seçin.",
+                "bill_ends": "Aboneliğiniz {n} {days} sonra bitiyor ({date}). Devam etmek için bir paket seçin.",
+                "bill_trial": "Ücretsiz deneme: {n} {days} kaldı ({date} tarihine kadar). Kesintisiz devam etmek için bir paket seçin.",
+                "plan_quarter": "3 aylık · 39 €",
+                "plan_half": "6 aylık · 69 €",
+                "plan_year": "Yıllık · 99 €",
+                "terms_title": "Kullanım Koşulları",
+                "terms_title_upd": "Kullanım Koşullarımızı güncelledik",
+                "terms_intro": "Devam etmeden önce lütfen Kullanım Koşullarını okuyup kabul edin. Diğer konuların yanı sıra, ",
+                "terms_intro_upd": "Temel değişiklik: ",
+                "terms_change": "işletmenizi Google Haritalar’da ve Google Arama’da listeleyebiliriz; böylece misafirler, TableReserve rezervasyon sayfanıza giden bir “Rezervasyon” düğmesi görür. Misafirlerinizin bilgilerini Google ile paylaşmayız.",
+                "terms_read": "Kullanım Koşullarını oku ↗",
+                "terms_check": "Kullanım Koşullarını okudum ve işletme adına kabul ediyorum.",
+                "terms_accept": "Kabul et ve devam et",
+                "terms_logout": "Çıkış yap",
+                "terms_thanks": "Teşekkürler, koşullar kabul edildi",
+                "terms_reload": "Koşullar az önce güncellendi. Sayfa yeniden yüklenecek.",
+                "terms_err": "Bir şeyler ters gitti, lütfen tekrar deneyin",
+                "embed_btn_label": "Masa ayırt",
+                "gp_first": "Yeni misafir",
+                "an_phone": "Telefonla",
+                "an_walkin": "Rezervasyonsuz",
+                "an_google": "Google (İşletme Profili)",
+                "an_site": "İşletmenin web sitesi",
+                "an_social": "Sosyal medya",
+                "an_unknown": "Kaydedilmemiş (eski)",
+                "an_outdoor": "Dış mekân",
+                "an_bookings": "rezervasyon"
+            },
+            pt: {
+                "booking_at": "Reserva em: ",
+                "date": "Data",
+                "person_1": "1 pessoa",
+                "select_opt": "-- Escolher --",
+                "admin_login": "Acesso de administrador",
+                "admin_login_desc": "Gira as reservas do seu restaurante",
+                "password": "Palavra-passe",
+                "login": "Entrar",
+                "reservations": "Reservas",
+                "logout": "Terminar sessão",
+                "total_guests": "Total de pessoas",
+                "from": "De",
+                "to": "Até",
+                "loading": "A carregar...",
+                "analytics_tab": "Estatísticas",
+                "an_avg_party": "Média por mesa",
+                "an_cancel_rate": "Taxa de cancelamento",
+                "an_repeat_customers": "Clientes habituais",
+                "an_google_share": "Via Google",
+                "show_cancelled": "Mostrar canceladas",
+                "nb_pick_time": "— Escolha uma hora —",
+                "nb_other_time": "Outra hora…",
+                "nb_closed": "Fechado neste dia",
+                "nb_out_hours": "fora do horário",
+                "nb_booked": "pessoas",
+                "nb_free": "lugares livres",
+                "nb_full": "esgotado",
+                "gi_visits": "visitas",
+                "gi_last": "última",
+                "gi_new": "Cliente novo",
+                "gi_noshow": "falta(s) anterior(es)",
+                "gi_regular": "Cliente habitual",
+                "bk_edit": "Editar",
+                "bk_cancel": "Cancelar reserva",
+                "bk_cancel_q": "Cancelar esta reserva? Fica nas estatísticas como cancelada.",
+                "bk_cancelled": "Cancelada",
+                "bk_restore": "Repor",
+                "bk_delete_q": "Eliminar definitivamente? A reserva também desaparece das estatísticas.",
+                "nb_edit_title": "Editar reserva",
+                "nb_update": "Guardar alterações",
+                "nb_resend": "Enviar ao cliente os dados atualizados por email",
+                "nb_updated": "✅ Reserva atualizada.",
+                "gp_tags": "Etiquetas",
+                "gp_allergy": "Alergia / dieta",
+                "gp_outdoor": "Prefere esplanada",
+                "gp_attention": "Atenção",
+                "gp_notes": "Notas sobre este cliente",
+                "gp_history": "Histórico de reservas",
+                "gp_save": "Guardar",
+                "gp_saved": "✅ Perfil do cliente guardado.",
+                "gp_visits": "Visitas",
+                "gp_bookings": "Reservas",
+                "gp_noshows": "Faltas",
+                "gp_cancels": "Cancelamentos",
+                "gp_visit_n": "ª visita",
+                "gp_no_phone": "O perfil do cliente precisa de um número de telefone.",
+                "an_noshow": "Falta",
+                "wl_title": "Lista de espera",
+                "wl_sub": "Quando uma reserva é cancelada, quem espera por essa hora recebe automaticamente um email. A mesa fica para quem reservar primeiro.",
+                "wl_any": "Qualquer hora",
+                "wl_waiting": "À espera",
+                "wl_notified": "Avisado",
+                "wl_del_q": "Retirar da lista de espera?",
+                "wl_guests": "pessoas",
+                "att_arrived": "Veio",
+                "att_noshow": "Faltou",
+                "nb_btn": "Nova reserva",
+                "nb_title": "Nova reserva",
+                "nb_phone": "Por telefone",
+                "nb_walkin": "Sem reserva",
+                "nb_date": "Data",
+                "nb_time": "Hora",
+                "nb_guests": "Pessoas",
+                "nb_location": "Mesa",
+                "nb_name": "Nome completo",
+                "nb_tel": "Telefone",
+                "nb_email": "Email (opcional)",
+                "nb_notes": "Notas",
+                "nb_confirm": "Enviar email de confirmação ao cliente",
+                "nb_save": "Guardar reserva",
+                "nb_saved": "✅ Reserva guardada.",
+                "nb_missing": "Preencha a data, a hora, o número de pessoas e o nome.",
+                "nb_error": "⚠️ A reserva não foi guardada. Tente novamente.",
+                "an_export_pdf": "Exportar PDF",
+                "rep_period": "Período",
+                "rep_title": "Relatório de reservas",
+                "rep_findings": "Principais conclusões",
+                "rep_issued": "Emitido em",
+                "rep_total_res": "Reservas",
+                "rep_total_guests": "Pessoas",
+                "rep_footer": "Criado com TableReserve · tablereserve.gr",
+                "rep_popup": "O seu navegador bloqueou a nova janela. Permita pop-ups para tablereserve.gr e tente novamente.",
+                "rep_hint": "Na janela de impressão, escolha «Guardar como PDF».",
+                "rep_print": "Guardar como PDF / Imprimir",
+                "an_trend_title": "Reservas por dia",
+                "an_hours_title": "Horas mais procuradas",
+                "an_days_title": "Dias mais procurados",
+                "an_source_title": "Origem das reservas",
+                "an_location_title": "Mesa",
+                "an_occasion_title": "Tipos de ocasião",
+                "an_repeat_title": "Clientes mais fiéis",
+                "bk_booked_at": "Reservado em",
+                "bk_new": "Nova",
+                "an_lead_title": "Com quanta antecedência reservam",
+                "an_lead_0": "No próprio dia",
+                "an_lead_1": "1–3 dias",
+                "an_lead_4": "4–14 dias",
+                "an_lead_15": "15+ dias",
+                "an_no_repeats": "Ainda nenhum",
+                "an_week_guests_title": "Pessoas por semana",
+                "an_month_guests_title": "Pessoas por mês",
+                "an_direct": "Link direto",
+                "an_indoor": "Interior",
+                "an_no_occasion": "Sem ocasião",
+                "phone": "Telefone *",
+                "indoor": "Interior",
+                "outdoor": "Esplanada",
+                "no_pref": "Sem preferência",
+                "alert_wrong_creds": "Dados de acesso incorretos!",
+                "nav_home": "← Início",
+                "dash_live": "Reservas online",
+                "open_page": "Abrir página",
+                "party_label": "Número máximo de pessoas por reserva",
+                "party_hint": "Quantas pessoas um cliente pode escolher numa reserva. Grupos maiores entram em contacto consigo diretamente.",
+                "wh_open": "Aberto",
+                "wh_closed": "Fechado",
+                "wh_closed_day": "Fechado todo o dia",
+                "wh_add": "+ pausa / segundo turno",
+                "wh_copy": "Copiar segunda-feira para todos os dias",
+                "wh_hint": "Os clientes só veem horas de reserva quando está aberto. A última hora de reserva é 30 minutos antes do fecho.",
+                "cap_label": "Número máximo de pessoas por hora de reserva",
+                "cap_hint": "Quando uma hora fica cheia, aparece como «Esgotado» e deixa de aceitar reservas. Deixe em branco para não ter limite.",
+                "tz_label": "Fuso horário do restaurante",
+                "tz_hint": "As horas disponíveis, os lembretes e o calendário dos clientes usam este fuso horário.",
+                "tz_warn": "O seu dispositivo está noutro fuso horário ({tz}). Se o restaurante fica lá, altere-o e carregue em Guardar.",
+                "g_title": "Reservas a partir do Google Maps",
+                "g_desc": "Adicione o seu link de reservas ao perfil Google do restaurante. Quem o encontrar no Google Maps ou na pesquisa pode reservar mesa com um clique. É grátis e não precisa de aprovação.",
+                "g_s1": "Clique em «Abrir Perfil da Empresa no Google» e entre com a conta Google do restaurante.",
+                "g_s2": "Escolha o seu restaurante e clique em «Editar perfil».",
+                "g_s3": "Procure a secção dos links de reserva (pode chamar-se «Reservas» ou «Links de reserva»).",
+                "g_s4": "Cole o seu link, guarde e, se lhe for pedido, defina-o como preferido.",
+                "g_note": "O Google pode demorar alguns dias a mostrar a alteração. O Google muda o nome destes menus de vez em quando.",
+                "g_open": "Abrir Perfil da Empresa no Google ↗",
+                "embed_title": "Reservas no seu próprio site",
+                "embed_desc": "Coloque o formulário de reservas no seu site. Copie o código e cole-o onde quer que o formulário apareça.",
+                "embed_inline": "Formulário na página",
+                "embed_button": "Botão com formulário em janela",
+                "embed_copy": "Copiar código",
+                "embed_wp_title": "Usa WordPress?",
+                "embed_wp_desc": "Descarregue o plugin, instale-o em Plugins → Adicionar novo → Carregar plugin e introduza o seu ID em Definições → TableReserve. O seu ID é:",
+                "embed_wp_download": "⬇ Descarregar o plugin WordPress",
+                "close_title": "Encerrar conta",
+                "close_btn": "Encerrar conta",
+                "close_desc": "As reservas online param de imediato. Todos os dados do restaurante (reservas, perfil, fotos, conta) são eliminados definitivamente ao fim de 30 dias. Até lá pode pedir uma cópia das reservas ou a reposição em info@tablereserve.gr.",
+                "close_confirm": "Para confirmar, escreva o ID do seu restaurante: {shop}\n\nSe tiver uma subscrição ativa, será cancelada.",
+                "close_mismatch": "O ID não corresponde. A conta não foi encerrada.",
+                "close_done": "A sua conta foi encerrada. Os seus dados serão eliminados dentro de 30 dias.",
+                "close_reauth": "Por segurança, termine sessão, volte a entrar e repita.",
+                "closed_title": "Esta conta está encerrada",
+                "closed_desc": "Os seus dados serão eliminados definitivamente em",
+                "closed_restore": "Para a repor ou obter uma cópia das reservas, escreva para info@tablereserve.gr.",
+                "alert_no_shop_linked": "Não existe nenhum restaurante para esta conta. Registe-se primeiro em tablereserve.gr.",
+                "or": "ou",
+                "google_login": "Entrar com Google",
+                "google_failed": "O acesso com Google não foi concluído. Tente novamente.",
+                "verify_title": "Confirme o seu email",
+                "verify_desc": "Enviámos-lhe um email com um link de confirmação. Clique nele para ativar o seu restaurante.",
+                "verify_sent_to": "Enviado para:",
+                "verify_check": "Já confirmei",
+                "verify_resend": "Reenviar o email",
+                "logout_link": "Terminar sessão",
+                "verify_not_yet": "Ainda não confirmado. Verifique também a pasta de spam.",
+                "verify_resent": "Email reenviado.",
+                "verify_too_soon": "Aguarde um minuto antes de pedir outro email.",
+                "verify_error": "Algo correu mal. Tente novamente.",
+                "booking_link": "Link de reservas:",
+                "slug_edit": "Editar",
+                "slug_save": "Guardar",
+                "slug_cancel": "Cancelar",
+                "slug_note": "Apenas minúsculas, números e hífenes (3–30). O seu link antigo continua a funcionar. Pode alterá-lo uma vez a cada 30 dias.",
+                "slug_checking": "A verificar…",
+                "slug_available": "✓ Disponível",
+                "slug_taken": "✗ Já está em uso",
+                "slug_reserved": "✗ Nome reservado, escolha outro",
+                "slug_invalid": "3–30 caracteres: minúsculas, números e hífenes (não no início nem no fim)",
+                "slug_same": "Este é o seu link atual",
+                "slug_cooldown": "Pode alterá-lo novamente a partir de {date}",
+                "slug_saved": "Link atualizado!",
+                "slug_error": "Algo correu mal. Tente novamente.",
+                "copy": "Copiar",
+                "copied": "Copiado!",
+                "no_reservations": "📭 Não há reservas no período escolhido.",
+                "delete_text": "Eliminar",
+                "guests_label": "pessoas",
+                "location_label_indoor": "Interior",
+                "shop_profile": "Perfil do restaurante",
+                "shop_info_title": "Informações do restaurante",
+                "shop_tagline": "Slogan",
+                "shop_description": "Descrição",
+                "shop_address": "Morada",
+                "shop_phone_pub": "Telefone de contacto",
+                "shop_hours": "Horário",
+                "save_profile": "Guardar informações",
+                "cover_photo": "Foto de capa",
+                "no_cover": "Sem foto de capa",
+                "upload_cover": "Clique ou arraste uma foto de capa",
+                "upload_hint": "JPG, PNG, WEBP · máx. 8 MB",
+                "save_cover": "Guardar capa",
+                "delete_cover": "Eliminar",
+                "photo_gallery": "Galeria de fotos",
+                "upload_gallery": "Clique ou arraste fotos",
+                "upload_gallery_hint": "Várias fotos · máx. 8 MB por foto",
+                "toast_profile_saved": "✅ Informações guardadas!",
+                "toast_cover_saved": "✅ Foto de capa guardada!",
+                "toast_cover_deleted": "🗑️ Foto de capa eliminada.",
+                "toast_photo_saved": "✅ Foto adicionada!",
+                "toast_photo_deleted": "🗑️ Foto eliminada.",
+                "ph_tagline": "ex. O melhor café da cidade!",
+                "ph_description": "Escreva uma breve descrição do seu restaurante...",
+                "ph_address": "ex. Rua Augusta 12, Lisboa",
+                "ph_phone": "ex. +351 21 123 4567",
+                "ph_capacity": "ex. 30",
+                "ph_notif_email": "ex. info@restaurante.pt",
+                "notif_email_label": "📧 Email para avisos de reservas",
+                "notif_email_hint": "Vai receber um aviso neste email por cada nova reserva",
+                "logo_title": "Logótipo",
+                "logo_drop": "Clique ou arraste o seu logótipo",
+                "logo_sub": "PNG com transparência ou JPG · máx. 2 MB",
+                "save_logo": "Guardar logótipo",
+                "btn_delete": "Eliminar",
+                "toast_logo_too_big": "⚠️ O logótipo tem mais de 2 MB!",
+                "toast_logo_saved": "✅ Logótipo guardado!",
+                "toast_logo_deleted": "🗑️ Logótipo eliminado.",
+                "confirm_del_logo": "Eliminar o logótipo?",
+                "confirm_del_cover": "Eliminar a foto de capa?",
+                "confirm_del_photo": "Eliminar esta foto?",
+                "toast_img_too_big": "⚠️ A foto tem mais de 8 MB!",
+                "toast_upload_failed": "⚠️ Não foi possível carregar a foto. Tente novamente.",
+                "toast_save_error2": "Erro ao guardar. Tente novamente.",
+                "pers_n": "pessoas",
+                "day_1": "dia",
+                "day_n": "dias",
+                "bill_active": "✓ Subscrição ativa até {date}",
+                "bill_manage": "Gerir subscrição →",
+                "bill_cancelled": "A sua subscrição foi cancelada e mantém-se ativa até {date}. Depois, as reservas online ficam em pausa.",
+                "bill_pastdue": "O último pagamento falhou. Atualize o seu cartão até {date} para que as reservas não parem.",
+                "bill_resume": "Retomar subscrição →",
+                "bill_update_card": "Atualizar cartão →",
+                "bill_expired": "A sua subscrição terminou e as reservas online estão em pausa. Escolha um plano para continuar.",
+                "bill_ends": "A sua subscrição termina dentro de {n} {days} ({date}). Escolha um plano para continuar.",
+                "bill_trial": "Teste grátis: faltam {n} {days} (até {date}). Escolha um plano para continuar sem interrupções.",
+                "plan_quarter": "Trimestral · 39 €",
+                "plan_half": "6 meses · 69 €",
+                "plan_year": "Anual · 99 €",
+                "terms_title": "Termos de Utilização",
+                "terms_title_upd": "Atualizámos os nossos Termos de Utilização",
+                "terms_intro": "Antes de continuar, leia e aceite os Termos de Utilização. Entre outras coisas, ",
+                "terms_intro_upd": "A principal alteração: ",
+                "terms_change": "podemos registar o seu restaurante no Google Maps e na Pesquisa Google, para que os clientes vejam um botão «Reservar» que leva à sua página de reservas no TableReserve. Não partilhamos com a Google os dados dos seus clientes.",
+                "terms_read": "Ler os Termos de Utilização ↗",
+                "terms_check": "Li e aceito os Termos de Utilização em nome da empresa.",
+                "terms_accept": "Aceitar e continuar",
+                "terms_logout": "Terminar sessão",
+                "terms_thanks": "Obrigado, termos aceites",
+                "terms_reload": "Os termos acabaram de ser atualizados. A página vai ser recarregada.",
+                "terms_err": "Algo correu mal, tente novamente",
+                "embed_btn_label": "Reservar mesa",
+                "gp_first": "Cliente novo",
+                "an_phone": "Por telefone",
+                "an_walkin": "Sem reserva",
+                "an_google": "Google (Perfil da Empresa)",
+                "an_site": "Site do restaurante",
+                "an_social": "Redes sociais",
+                "an_unknown": "Não registado (antigas)",
+                "an_outdoor": "Esplanada",
+                "an_bookings": "reservas"
             }
         };
 
         let currentLang = 'en';
-        function t(key) { return translations[currentLang][key] || translations['el'][key] || key; }
+        const TR_LANGS = ['el', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt'];
+        const TR_LOCALE = { el: 'el-GR', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', es: 'es-ES', tr: 'tr-TR', pt: 'pt-PT' };
+        const trLocale = () => TR_LOCALE[currentLang] || 'en-GB';
+        const trFmt = (s, v) => String(s).replace(/\{(\w+)\}/g, (m, k) => (v && v[k] !== undefined ? v[k] : m));
+        // Ονόματα ημερών/μηνών από τον browser, στη γλώσσα του admin
+        const trWeekdays = (style) => { try { const f = new Intl.DateTimeFormat(trLocale(), { weekday: style, timeZone: 'UTC' }); return [0,1,2,3,4,5,6].map(i => { const x = f.format(new Date(Date.UTC(2024, 0, 7 + i))); return x.charAt(0).toLocaleUpperCase(trLocale()) + x.slice(1); }); } catch (e) { return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; } };
+        const trMonths = () => { try { const f = new Intl.DateTimeFormat(trLocale(), { month: 'short', timeZone: 'UTC' }); return [...Array(12).keys()].map(i => { const x = f.format(new Date(Date.UTC(2024, i, 15))).replace('.', ''); return x.charAt(0).toLocaleUpperCase(trLocale()) + x.slice(1); }); } catch (e) { return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; } };
+        function t(key) { const d = translations[currentLang] || translations.en; return d[key] !== undefined ? d[key] : (currentLang === 'el' ? translations.el[key] : translations.en[key]) || translations.el[key] || key; }
 
         window.setLang = function(lang) {
             currentLang = lang;
-            document.getElementById('lang-el').classList.toggle('active', lang === 'el');
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            if (!TR_LANGS.includes(lang)) lang = 'en';
+            currentLang = lang;
+            const ls = document.getElementById('lang-select'); if (ls) ls.value = lang;
+            // Η γλώσσα του admin ισχύει και για τα email που λαμβάνει το κατάστημα
+            if (currentAdminShop && trAdminLangSaved !== lang) { trAdminLangSaved = lang; set(ref(db, `shop_profile/${currentAdminShop}/adminLang`), lang).catch(() => {}); }
             document.documentElement.lang = lang;
             try { localStorage.setItem('tr_admin_lang', lang); } catch (e) {}
             applyTranslations();
@@ -1576,7 +3274,7 @@
                 for (let i = 0; i < guestSelect.options.length; i++) {
                     const val = parseInt(guestSelect.options[i].value);
                     if (val === 1) guestSelect.options[i].text = t('person_1');
-                    else guestSelect.options[i].text = val + ' ' + (currentLang === 'en' ? 'Persons' : 'Άτομα');
+                    else guestSelect.options[i].text = val + ' ' + t('pers_n');
                 }
             }
             const tSelect = document.getElementById('time-select');
@@ -1594,6 +3292,7 @@
 
         // ======= ADMIN =======
         let allReservations = [];
+        let trAdminLangSaved = null;
         let currentAdminShop = null;
         const SUPERADMIN_UID = "cGhWqj5Mtiey6AC8CMpiUZDxAGh1";
 
@@ -1601,28 +3300,24 @@
 
 
         // ======= ΣΥΝΔΡΟΜΗ =======
-        const PLANS = [
-            { key: 'quarter', el: 'Τρίμηνο · 39 €', en: 'Quarterly · €39' },
-            { key: 'half',    el: 'Εξάμηνο · 69 €', en: '6 months · €69' },
-            { key: 'year',    el: 'Χρονιαίο · 99 €', en: 'Yearly · €99' }
-        ];
+        const PLANS = ['quarter', 'half', 'year'].map(key => ({ key }));
         async function renderBilling(shopId, user) {
             const box = document.getElementById('billing-banner');
             const d = (await get(ref(db, `shop_details/${shopId}`))).val() || {};
             if (!d.paidUntil) { box.style.display = 'none'; return; }
-            const el = currentLang !== 'en';
             const daysLeft = Math.ceil((d.paidUntil - Date.now()) / 86400000);
-            const dateStr = new Date(d.paidUntil).toLocaleDateString(el ? 'el-GR' : 'en-GB');
+            const dateStr = new Date(d.paidUntil).toLocaleDateString(trLocale());
+            const dayWord = n => t(n === 1 ? 'day_1' : 'day_n');
             const active = d.billingStatus === 'active' || d.billingStatus === 'manual';
             const plansEl = document.getElementById('billing-plans');
             plansEl.innerHTML = '';
 
             if (active && daysLeft > 0) {
                 box.style.cssText += 'display:block; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;';
-                document.getElementById('billing-text').textContent = el ? `✓ Συνδρομή ενεργή έως ${dateStr}` : `✓ Subscription active until ${dateStr}`;
+                document.getElementById('billing-text').textContent = trFmt(t('bill_active'), { date: dateStr });
                 if (d.lemonPortalUrl) {
                     const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
-                    a.textContent = el ? 'Διαχείριση συνδρομής →' : 'Manage subscription →';
+                    a.textContent = t('bill_manage');
                     a.style.cssText = 'color:#065f46; font-weight:600;'; plansEl.appendChild(a);
                 }
                 return;
@@ -1632,13 +3327,13 @@
             if ((d.billingStatus === 'cancelled' || d.billingStatus === 'past_due') && daysLeft > 0) {
                 box.style.cssText += 'display:block; background:#fffbeb; border:1px solid #fde68a; color:#92400e;';
                 document.getElementById('billing-text').textContent = d.billingStatus === 'cancelled'
-                    ? (el ? `Η συνδρομή ακυρώθηκε και ισχύει έως ${dateStr}. Μετά οι online κρατήσεις μπαίνουν σε παύση.` : `Your subscription was cancelled and stays active until ${dateStr}. After that, online bookings are paused.`)
-                    : (el ? `Η τελευταία πληρωμή δεν πέρασε. Ενημερώστε την κάρτα σας έως ${dateStr} για να μη σταματήσουν οι κρατήσεις.` : `Your last payment failed. Please update your card by ${dateStr} to keep bookings running.`);
+                    ? trFmt(t('bill_cancelled'), { date: dateStr })
+                    : trFmt(t('bill_pastdue'), { date: dateStr });
                 if (d.lemonPortalUrl) {
                     const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
                     a.textContent = d.billingStatus === 'cancelled'
-                        ? (el ? 'Επαναφορά συνδρομής →' : 'Resume subscription →')
-                        : (el ? 'Ενημέρωση κάρτας →' : 'Update card →');
+                        ? t('bill_resume')
+                        : t('bill_update_card');
                     a.style.cssText = 'color:#92400e; font-weight:600;'; plansEl.appendChild(a);
                 }
                 return;
@@ -1650,16 +3345,16 @@
                 : 'display:block; background:#eff6ff; border:1px solid #bfdbfe; color:#1e3a8a;';
             const isTrial = !d.billingStatus || d.billingStatus === 'trial';
             document.getElementById('billing-text').textContent = expired
-                ? (el ? 'Η συνδρομή σας έληξε και οι online κρατήσεις είναι σε παύση. Επιλέξτε πακέτο για να συνεχίσετε.' : 'Your subscription has ended and online bookings are paused. Choose a plan to continue.')
-                : !isTrial ? (el ? `Η συνδρομή λήγει σε ${daysLeft} ${daysLeft === 1 ? 'ημέρα' : 'ημέρες'} (${dateStr}). Επιλέξτε πακέτο για να συνεχίσετε.` : `Your plan ends in ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} (${dateStr}). Choose a plan to continue.`)
-                : (el ? `Δωρεάν δοκιμή: απομένουν ${daysLeft} ${daysLeft === 1 ? 'ημέρα' : 'ημέρες'} (έως ${dateStr}). Επιλέξτε πακέτο για να συνεχίσετε χωρίς διακοπή.` : `Free trial: ${daysLeft} ${daysLeft === 1 ? 'day' : 'days'} left (until ${dateStr}). Choose a plan to keep going without interruption.`);
+                ? t('bill_expired')
+                : !isTrial ? trFmt(t('bill_ends'), { n: daysLeft, days: dayWord(daysLeft), date: dateStr })
+                : trFmt(t('bill_trial'), { n: daysLeft, days: dayWord(daysLeft), date: dateStr });
 
             let links = {};
             try { links = await (await fetch('/billing.json', { cache: 'no-store' })).json(); } catch (e) {}
             PLANS.forEach(pl => {
                 const base = links[pl.key];
                 const a = document.createElement('a');
-                a.textContent = el ? pl.el : pl.en;
+                a.textContent = t('plan_' + pl.key);
                 a.style.cssText = 'background:#2563eb; color:#fff; padding:10px 16px; border-radius:10px; font-weight:600; text-decoration:none; font-size:0.9rem;';
                 if (base) {
                     const u = new URL(base);
@@ -1675,14 +3370,16 @@
 
         async function openDashboard(myShop) {
             try {
+                trAdminLangSaved = (await get(ref(db, `shop_profile/${myShop}/adminLang`))).val();
                 if (!localStorage.getItem('tr_admin_lang')) {
-                    const shopLang = (await get(ref(db, `shop_details/${myShop}/lang`))).val();
-                    if (shopLang === 'el' || shopLang === 'en') setLang(shopLang);
+                    const shopLang = trAdminLangSaved || (await get(ref(db, `shop_details/${myShop}/lang`))).val();
+                    if (TR_LANGS.includes(shopLang)) setLang(shopLang);
                 }
             } catch (e) {}
             show('dashboard');
             document.getElementById('shop-title').innerText = myShop;
             currentAdminShop = myShop;
+            if (trAdminLangSaved !== currentLang) { trAdminLangSaved = currentLang; set(ref(db, `shop_profile/${myShop}/adminLang`), currentLang).catch(() => {}); }
             currentSlug = null;
             closeSlugEditor();
             setBookingLink();
@@ -1713,22 +3410,20 @@
                 if (!(typeof v === 'string' && v >= TERMS_VERSION)) prevAt = (await get(ref(db, `shop_details/${shop}/termsAcceptedAt`))).val();
             } catch (e) { return; }
             if (typeof v === 'string' && v >= TERMS_VERSION) return;
-            const en = currentLang === 'en';
             const first = !v && !prevAt;   // δεν έχει αποδεχτεί ποτέ (π.χ. λογαριασμός από το superadmin)
             const $ = id => document.getElementById(id);
             $('terms-title').textContent = first
-                ? (en ? 'Terms of Service' : 'Όροι Χρήσης')
-                : (en ? 'We have updated our Terms of Service' : 'Ενημερώσαμε τους Όρους Χρήσης');
+                ? t('terms_title')
+                : t('terms_title_upd');
             $('terms-text').textContent = (first
-                ? (en ? 'Before you continue, please read and accept the Terms of Service. Among other things, ' : 'Πριν συνεχίσετε, διαβάστε και αποδεχτείτε τους Όρους Χρήσης. Μεταξύ άλλων, ')
-                : (en ? 'The main change: ' : 'Η βασική αλλαγή: '))
-                + (en ? 'we may list your restaurant on Google Maps and Google Search, so guests see a “Reserve” button that leads to your TableReserve booking page. We do not share your guests’ details with Google.'
-                      : 'μπορούμε να δηλώνουμε το κατάστημά σας στο Google Maps και στην Αναζήτηση Google, ώστε οι πελάτες να βλέπουν κουμπί «Κράτηση» που οδηγεί στη σελίδα κρατήσεών σας στο TableReserve. Δεν κοινοποιούμε στη Google στοιχεία των πελατών σας.');
-            $('terms-read').textContent = en ? 'Read the Terms of Service ↗' : 'Διαβάστε τους Όρους Χρήσης ↗';
-            $('terms-read').href = '/terms?lang=' + (en ? 'en' : 'el');
-            $('terms-check-label').textContent = en ? 'I have read and accept the Terms of Service on behalf of the business.' : 'Διάβασα και αποδέχομαι τους Όρους Χρήσης εκ μέρους της επιχείρησης.';
-            $('terms-accept').textContent = en ? 'Accept and continue' : 'Αποδοχή και συνέχεια';
-            $('terms-logout').textContent = en ? 'Log out' : 'Αποσύνδεση';
+                ? t('terms_intro')
+                : t('terms_intro_upd'))
+                + t('terms_change');
+            $('terms-read').textContent = t('terms_read');
+            $('terms-read').href = '/terms?lang=' + currentLang;
+            $('terms-check-label').textContent = t('terms_check');
+            $('terms-accept').textContent = t('terms_accept');
+            $('terms-logout').textContent = t('terms_logout');
             $('terms-check').checked = false;
             $('terms-accept').disabled = true;
             $('terms-check').onchange = () => { $('terms-accept').disabled = !$('terms-check').checked; };
@@ -1738,11 +3433,11 @@
                 try {
                     const token = await auth.currentUser.getIdToken();
                     const res = await fetch(`${API}/accept-terms`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ version: TERMS_VERSION }) });
-                    if (res.ok) { $('terms-modal').classList.remove('open'); showToast(en ? 'Thank you, terms accepted' : 'Ευχαριστούμε, οι όροι έγιναν αποδεκτοί', 'success'); return; }
-                    if (res.status === 409) { alert(en ? 'The terms were just updated. The page will reload.' : 'Οι όροι μόλις ενημερώθηκαν. Η σελίδα θα ανανεωθεί.'); location.reload(); return; }
+                    if (res.ok) { $('terms-modal').classList.remove('open'); showToast(t('terms_thanks'), 'success'); return; }
+                    if (res.status === 409) { alert(t('terms_reload')); location.reload(); return; }
                     throw new Error(res.status);
                 } catch (e) {
-                    console.error('[accept-terms]', e); showToast((en ? 'Something went wrong, please try again' : 'Κάτι πήγε στραβά, δοκιμάστε ξανά') + ' (' + ((e && (e.code || e.message)) || e) + ')', 'error');
+                    console.error('[accept-terms]', e); showToast(t('terms_err') + ' (' + ((e && (e.code || e.message)) || e) + ')', 'error');
                     btn.disabled = !$('terms-check').checked;
                 }
             };
@@ -1784,7 +3479,7 @@
             const status = (await get(ref(db, `shop_details/${myShop}/status`))).val();
             if (status === 'closed') {
                 const del = (await get(ref(db, `shop_details/${myShop}/deleteAfter`))).val();
-                document.getElementById('closed-date').textContent = del ? new Date(del).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'el-GR') : '-';
+                document.getElementById('closed-date').textContent = del ? new Date(del).toLocaleDateString(trLocale()) : '-';
                 document.getElementById('btn-closed-logout').onclick = () => signOut(auth);
                 show('closed-section');
                 return;
@@ -1848,7 +3543,7 @@
         let embedMode = 'inline';
         function renderEmbedCode() {
             const shop = currentAdminShop || 'your_shop';
-            const extra = embedMode === 'button' ? ` data-mode="button" data-label="${currentLang === 'en' ? 'Book a table' : 'Κράτηση τραπεζιού'}"` : '';
+            const extra = embedMode === 'button' ? ` data-mode="button" data-label="${t('embed_btn_label')}"` : '';
             document.getElementById('embed-code').textContent =
                 `<div data-tablereserve="${shop}"${extra}></div>\n<script src="https://tablereserve.gr/embed.js" async><\/script>`;
             document.getElementById('embed-shop-id').textContent = shop;
@@ -1918,7 +3613,7 @@
             if (reason === 'taken') return t('slug_taken');
             if (reason === 'reserved') return t('slug_reserved');
             if (reason === 'invalid') return t('slug_invalid');
-            if (reason === 'cooldown') return t('slug_cooldown').replace('{date}', new Date(until).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'el-GR'));
+            if (reason === 'cooldown') return t('slug_cooldown').replace('{date}', new Date(until).toLocaleDateString(trLocale()));
             return t('slug_error');
         }
 
@@ -2014,7 +3709,7 @@
             });
             if (!rows.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
             rows.sort((a, b) => a.date !== b.date ? a.date.localeCompare(b.date) : (a.time === 'any' ? '99' : a.time).localeCompare(b.time === 'any' ? '99' : b.time) || (a.createdAt || 0) - (b.createdAt || 0));
-            const loc = currentLang === 'en' ? 'en-GB' : 'el-GR';
+            const loc = trLocale();
             box.innerHTML = `<h3>${svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', 16)} ${t('wl_title')} <span class="n">${rows.length}</span></h3>
                 <p class="sub">${t('wl_sub')}</p>` + rows.map(r => `
                 <div class="wl-row">
@@ -2205,7 +3900,7 @@
             const sortedHours = Object.keys(hourMap).sort((a, b) => a - b);
             drawChart('chart-hours', 'bar', sortedHours.map(h => h + ':00'), sortedHours.map(h => hourMap[h]), '#3b82f6');
 
-            const dowLabels = currentLang === 'en' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : ['Κυρ','Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ'];
+            const dowLabels = currentLang === 'el' ? ['Κυρ','Δευ','Τρί','Τετ','Πέμ','Παρ','Σάβ'] : currentLang === 'en' ? ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] : trWeekdays('short');
             const dowCounts = [0,0,0,0,0,0,0];
             active.forEach(r => {
                 const d = new Date(r.date + 'T00:00:00');
@@ -2234,7 +3929,7 @@
 
             const monthNames = currentLang === 'en'
                 ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-                : ['Ιαν','Φεβ','Μάρ','Απρ','Μάι','Ιούν','Ιούλ','Αύγ','Σεπ','Οκτ','Νοέ','Δεκ'];
+                : currentLang === 'el' ? ['Ιαν','Φεβ','Μάρ','Απρ','Μάι','Ιούν','Ιούλ','Αύγ','Σεπ','Οκτ','Νοέ','Δεκ'] : trMonths();
             const monthMap = {};
             active.forEach(r => {
                 const key = (r.date || '').slice(0, 7);
@@ -2304,17 +3999,244 @@
             }
         };
 
+        // Κείμενα για τα ευρήματα/προτάσεις της αναφοράς, ανά γλώσσα
+        const REP_INS = {
+            el: {
+                none: 'Δεν υπάρχουν online κρατήσεις στην επιλεγμένη περίοδο.',
+                none_tip: 'Προσθέστε το link κρατήσεων στο Google Business Profile, στο Instagram bio και στο site σας, ώστε οι πελάτες να κλείνουν τραπέζι με ένα κλικ.',
+                best: (d, c, p, w) => `Πιο δυνατή μέρα: ${d} με ${c} κρατήσεις (${p}% του συνόλου). Παρασκευή έως Κυριακή συγκεντρώνουν το ${w}% των κρατήσεων.`,
+                quiet1: (q, m) => `Η πιο ήσυχη μέρα είναι η ${q} (${m} κρατήσεις). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνη τη μέρα και προβάλετέ τη στα social μαζί με το link κρατήσεων.`,
+                quietN: (q, m) => `Οι πιο ήσυχες μέρες είναι: ${q} (${m} κρατήσεις η καθεμία). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνες τις μέρες και προβάλετέ τη στα social μαζί με το link κρατήσεων.`,
+                and: ' και ',
+                peak: (h, c, two, p) => `Ώρα αιχμής: ${h} με ${c} κρατήσεις. Οι δύο πιο φορτωμένες ώρες (${two}) καλύπτουν το ${p}% των κρατήσεων.`,
+                peak_tip: 'Πάνω από τις μισές κρατήσεις πέφτουν σε δύο ώρες. Ενισχύστε το προσωπικό τότε και σκεφτείτε κίνητρο (π.χ. κέρασμα) για όσους κλείνουν σε πιο ήσυχη ώρα, για να μοιράζεται ο φόρτος.',
+                party: (g, n, avg, big, p) => `Σύνολο ${g} άτομα σε ${n} κρατήσεις, μέσος όρος ${avg} άτομα ανά τραπέζι. Παρέες 6+ ατόμων: ${big} (${p}%).`,
+                big_tip: 'Οι μεγάλες παρέες είναι σημαντικό κομμάτι της πελατείας. Ένα σταθερό μενού για γκρουπ ή πακέτο για γιορτές διευκολύνει την κουζίνα και ανεβάζει τη μέση απόδειξη.',
+                small_tip: 'Τα περισσότερα τραπέζια είναι για 2. Βεβαιωθείτε ότι η διάταξη έχει αρκετά διθέσια, ώστε να μη «χάνονται» τετραθέσια σε ζευγάρια τις ώρες αιχμής.',
+                canc: (c, t, p) => `Ακυρώσεις: ${c} από ${t} (${p}%).`,
+                canc_tip: p => `Το ποσοστό ακυρώσεων (${p}%) είναι υψηλό. Ένα τηλεφώνημα ή μήνυμα επιβεβαίωσης την προηγούμενη μέρα μειώνει σημαντικά τα «no-show».`,
+                lead: (med, p) => `Οι πελάτες κλείνουν συνήθως ${med === 0 ? 'την ίδια μέρα' : med === 1 ? 'μία μέρα πριν' : med + ' μέρες πριν'}. Κρατήσεις για την ίδια μέρα: ${p}%.`,
+                lead_tip: 'Οι κρατήσεις γίνονται κυρίως τελευταία στιγμή. Αναρτήσεις στα social το μεσημέρι της ίδιας μέρας («έχουμε ακόμα τραπέζια απόψε») μπορούν να γεμίσουν κενά.',
+                noshow: (ns, t, p) => `No-show: ${ns} από ${t} κρατήσεις όπου καταγράφηκε αν ήρθε ο πελάτης (${p}%).`,
+                remind: (a, b) => `Με υπενθύμιση email το no-show ήταν ${a}%, χωρίς υπενθύμιση ${b}%.`,
+                google: (g, p) => `Κρατήσεις μέσω Google: ${g} (${p}%).`,
+                google_tip: 'Λίγες κρατήσεις έρχονται από το Google. Προσθέστε το link κρατήσεων στο Google Business Profile (οδηγίες στο Προφίλ Μαγαζιού) — είναι δωρεάν και φέρνει πελάτες που σας βρίσκουν στους χάρτες.',
+                loc_in: 'εσωτερικό χώρο', loc_out: 'εξωτερικό χώρο', loc_none: 'χωρίς προτίμηση',
+                loc: (l, p) => `Οι περισσότεροι προτιμούν ${l} (${p}%).`,
+                out_tip: 'Η ζήτηση είναι κυρίως για έξω. Ενημερώστε τους πελάτες εγκαίρως αν ο καιρός αλλάξει και έχετε έτοιμο σχέδιο για μεταφορά μέσα.',
+                reps: (r, b, p) => `Επαναλαμβανόμενοι πελάτες: ${r}, με ${b} κρατήσεις (${p}% του συνόλου).`,
+                reps_tip: 'Έχετε πιστούς πελάτες. Ένα μικρό κέρασμα ή ευχαριστήριο μήνυμα στην επόμενη επίσκεψη ενισχύει τη σχέση και τις κριτικές.',
+                noreps_tip: 'Δεν υπάρχουν ακόμα επαναλαμβανόμενοι πελάτες στην περίοδο. Ζητήστε από όσους έμειναν ευχαριστημένοι μια κριτική στο Google — φέρνει νέες κρατήσεις.',
+                trend: (up, p) => `Τάση: στο δεύτερο μισό της περιόδου οι κρατήσεις ${up ? 'αυξήθηκαν' : 'μειώθηκαν'} κατά ${p}% σε σχέση με το πρώτο.`
+            },
+            en: {
+                none: 'There are no online reservations in the selected period.',
+                none_tip: 'Add your booking link to your Google Business Profile, Instagram bio and website so guests can book with one click.',
+                best: (d, c, p, w) => `Strongest day: ${d} with ${c} bookings (${p}% of the total). Friday to Sunday account for ${w}% of bookings.`,
+                quiet1: (q, m) => `Your quietest day is ${q} (${m} bookings). Try an offer or a themed evening that day and promote it on social media together with your booking link.`,
+                quietN: (q, m) => `Your quietest days are: ${q} (${m} bookings each). Try an offer or a themed evening on those days and promote it on social media together with your booking link.`,
+                and: ' and ',
+                peak: (h, c, two, p) => `Peak hour: ${h} with ${c} bookings. The two busiest hours (${two}) cover ${p}% of bookings.`,
+                peak_tip: 'More than half of bookings fall in two hours. Add staff at those times and consider a small incentive (e.g. a complimentary drink) for guests who book at quieter times, to spread the load.',
+                party: (g, n, avg, big, p) => `${g} guests across ${n} bookings, an average of ${avg} per table. Groups of 6+: ${big} (${p}%).`,
+                big_tip: "Large groups are a significant share of your guests. A set group menu or celebration package makes the kitchen's work easier and raises the average bill.",
+                small_tip: "Most tables are for two. Make sure your floor plan has enough two-tops so four-tops aren't used by couples at peak times.",
+                canc: (c, t, p) => `Cancellations: ${c} of ${t} (${p}%).`,
+                canc_tip: p => `Your cancellation rate (${p}%) is high. A confirmation call or message the day before significantly reduces no-shows.`,
+                lead: (med, p) => `Guests usually book ${med === 0 ? 'on the same day' : med === 1 ? 'one day ahead' : med + ' days ahead'}. Same-day bookings: ${p}%.`,
+                lead_tip: 'Bookings are mostly last-minute. Same-day social posts around midday ("we still have tables tonight") can fill gaps.',
+                noshow: (ns, t, p) => `No-shows: ${ns} of ${t} bookings where arrival was recorded (${p}%).`,
+                remind: (a, b) => `With an email reminder the no-show rate was ${a}%, without a reminder ${b}%.`,
+                google: (g, p) => `Bookings via Google: ${g} (${p}%).`,
+                google_tip: "Few bookings come from Google. Add your booking link to your Google Business Profile (instructions in Shop Profile) — it's free and brings guests who find you on Maps.",
+                loc_in: 'indoor seating', loc_out: 'outdoor seating', loc_none: 'no preference',
+                loc: (l, p) => `Most guests prefer ${l} (${p}%).`,
+                out_tip: 'Demand is mostly for outdoor seating. Let guests know early if the weather changes and have a plan for moving them inside.',
+                reps: (r, b, p) => `Returning guests: ${r}, with ${b} bookings (${p}% of the total).`,
+                reps_tip: 'You have loyal guests. A small treat or thank-you message on their next visit strengthens the relationship and your reviews.',
+                noreps_tip: 'No returning guests in this period yet. Ask happy guests for a Google review — it brings in new bookings.',
+                trend: (up, p) => `Trend: bookings in the second half of the period ${up ? 'rose' : 'fell'} by ${p}% compared with the first half.`
+            },
+            de: {
+                none: 'Im gewählten Zeitraum gibt es keine Online-Reservierungen.',
+                none_tip: 'Fügen Sie Ihren Reservierungslink zu Ihrem Google-Unternehmensprofil, Ihrer Instagram-Bio und Ihrer Website hinzu, damit Gäste mit einem Klick reservieren können.',
+                best: (d, c, p, w) => `Stärkster Tag: ${d} mit ${c} Reservierungen (${p} % aller Reservierungen). Freitag bis Sonntag machen ${w} % der Reservierungen aus.`,
+                quiet1: (q, m) => `Ihr ruhigster Tag ist ${q} (${m} Reservierungen). Probieren Sie an diesem Tag ein Angebot oder einen Themenabend und bewerben Sie ihn in den sozialen Medien zusammen mit Ihrem Reservierungslink.`,
+                quietN: (q, m) => `Ihre ruhigsten Tage sind: ${q} (je ${m} Reservierungen). Probieren Sie an diesen Tagen ein Angebot oder einen Themenabend und bewerben Sie ihn in den sozialen Medien zusammen mit Ihrem Reservierungslink.`,
+                and: ' und ',
+                peak: (h, c, two, p) => `Stoßzeit: ${h} mit ${c} Reservierungen. Die zwei vollsten Uhrzeiten (${two}) machen ${p} % der Reservierungen aus.`,
+                peak_tip: 'Mehr als die Hälfte der Reservierungen fällt auf zwei Uhrzeiten. Planen Sie dann mehr Personal ein und überlegen Sie einen kleinen Anreiz (z. B. ein Getränk aufs Haus) für Gäste, die zu ruhigeren Zeiten buchen, um die Last zu verteilen.',
+                party: (g, n, avg, big, p) => `${g} Gäste in ${n} Reservierungen, im Schnitt ${avg} pro Tisch. Gruppen ab 6 Personen: ${big} (${p} %).`,
+                big_tip: 'Große Gruppen machen einen wichtigen Teil Ihrer Gäste aus. Ein festes Gruppenmenü oder ein Paket für Feiern erleichtert der Küche die Arbeit und erhöht den Durchschnittsbon.',
+                small_tip: 'Die meisten Tische sind für zwei. Achten Sie darauf, genug Zweiertische zu haben, damit zu Stoßzeiten keine Vierertische von Paaren belegt werden.',
+                canc: (c, t, p) => `Stornierungen: ${c} von ${t} (${p} %).`,
+                canc_tip: p => `Ihre Stornoquote (${p} %) ist hoch. Ein Bestätigungsanruf oder eine Nachricht am Vortag reduziert No-Shows deutlich.`,
+                lead: (med, p) => `Gäste buchen meist ${med === 0 ? 'am selben Tag' : med === 1 ? 'einen Tag vorher' : med + ' Tage vorher'}. Reservierungen für denselben Tag: ${p} %.`,
+                lead_tip: 'Reservierungen kommen meist kurzfristig. Posts in den sozialen Medien um die Mittagszeit („heute Abend haben wir noch Tische frei“) können Lücken füllen.',
+                noshow: (ns, t, p) => `No-Shows: ${ns} von ${t} Reservierungen, bei denen das Erscheinen erfasst wurde (${p} %).`,
+                remind: (a, b) => `Mit E-Mail-Erinnerung lag die No-Show-Quote bei ${a} %, ohne Erinnerung bei ${b} %.`,
+                google: (g, p) => `Reservierungen über Google: ${g} (${p} %).`,
+                google_tip: 'Nur wenige Reservierungen kommen über Google. Fügen Sie Ihren Reservierungslink zu Ihrem Google-Unternehmensprofil hinzu (Anleitung im Restaurantprofil) – das ist kostenlos und bringt Gäste, die Sie auf Maps finden.',
+                loc_in: 'einen Platz drinnen', loc_out: 'einen Platz draußen', loc_none: 'keine Präferenz',
+                loc: (l, p) => `Die meisten Gäste bevorzugen ${l} (${p} %).`,
+                out_tip: 'Die Nachfrage gilt vor allem Plätzen draußen. Informieren Sie Gäste rechtzeitig, wenn das Wetter umschlägt, und halten Sie einen Plan für den Umzug nach drinnen bereit.',
+                reps: (r, b, p) => `Stammgäste: ${r}, mit ${b} Reservierungen (${p} % aller Reservierungen).`,
+                reps_tip: 'Sie haben treue Gäste. Eine kleine Aufmerksamkeit oder ein Dankeschön beim nächsten Besuch stärkt die Bindung und Ihre Bewertungen.',
+                noreps_tip: 'In diesem Zeitraum gibt es noch keine wiederkehrenden Gäste. Bitten Sie zufriedene Gäste um eine Google-Bewertung – das bringt neue Reservierungen.',
+                trend: (up, p) => `Trend: In der zweiten Hälfte des Zeitraums sind die Reservierungen im Vergleich zur ersten um ${p} % ${up ? 'gestiegen' : 'gesunken'}.`
+            },
+            fr: {
+                none: "Aucune réservation en ligne sur la période choisie.",
+                none_tip: "Ajoutez votre lien de réservation à votre fiche Google Business Profile, à votre bio Instagram et à votre site pour que les clients réservent en un clic.",
+                best: (d, c, p, w) => `Jour le plus fort : ${d} avec ${c} réservations (${p} % du total). Du vendredi au dimanche : ${w} % des réservations.`,
+                quiet1: (q, m) => `Votre jour le plus calme est le ${q} (${m} réservations). Essayez une offre ou une soirée à thème ce jour-là et faites-en la promotion sur les réseaux sociaux avec votre lien de réservation.`,
+                quietN: (q, m) => `Vos jours les plus calmes : ${q} (${m} réservations chacun). Essayez une offre ou une soirée à thème ces jours-là et faites-en la promotion sur les réseaux sociaux avec votre lien de réservation.`,
+                and: ' et ',
+                peak: (h, c, two, p) => `Heure de pointe : ${h} avec ${c} réservations. Les deux heures les plus chargées (${two}) représentent ${p} % des réservations.`,
+                peak_tip: "Plus de la moitié des réservations tombent sur deux heures. Renforcez l'équipe à ces moments-là et pensez à une petite attention (ex. un verre offert) pour ceux qui réservent à des heures plus calmes, afin de répartir l'affluence.",
+                party: (g, n, avg, big, p) => `${g} couverts sur ${n} réservations, soit ${avg} en moyenne par table. Groupes de 6 et plus : ${big} (${p} %).`,
+                big_tip: "Les grands groupes représentent une part importante de votre clientèle. Un menu groupe ou une formule fête facilite le travail en cuisine et augmente le ticket moyen.",
+                small_tip: "La plupart des tables sont pour deux. Vérifiez que votre salle compte assez de tables de deux pour ne pas « perdre » des tables de quatre avec des couples aux heures de pointe.",
+                canc: (c, t, p) => `Annulations : ${c} sur ${t} (${p} %).`,
+                canc_tip: p => `Votre taux d'annulation (${p} %) est élevé. Un appel ou un message de confirmation la veille réduit nettement les no-shows.`,
+                lead: (med, p) => `Les clients réservent généralement ${med === 0 ? 'le jour même' : med === 1 ? 'la veille' : med + ' jours avant'}. Réservations le jour même : ${p} %.`,
+                lead_tip: "Les réservations se font surtout à la dernière minute. Une publication sur les réseaux vers midi (« il nous reste des tables ce soir ») peut combler les vides.",
+                noshow: (ns, t, p) => `No-shows : ${ns} sur ${t} réservations où la venue a été notée (${p} %).`,
+                remind: (a, b) => `Avec un rappel par e-mail, le taux de no-show était de ${a} %, sans rappel de ${b} %.`,
+                google: (g, p) => `Réservations via Google : ${g} (${p} %).`,
+                google_tip: "Peu de réservations viennent de Google. Ajoutez votre lien de réservation à votre fiche Google Business Profile (instructions dans Profil du restaurant) : c'est gratuit et cela amène des clients qui vous trouvent sur Maps.",
+                loc_in: 'la salle', loc_out: 'la terrasse', loc_none: 'pas de préférence',
+                loc: (l, p) => `La plupart des clients préfèrent ${l} (${p} %).`,
+                out_tip: "La demande porte surtout sur la terrasse. Prévenez les clients à temps si la météo change et prévoyez un plan pour les installer à l'intérieur.",
+                reps: (r, b, p) => `Clients fidèles : ${r}, avec ${b} réservations (${p} % du total).`,
+                reps_tip: "Vous avez des clients fidèles. Une petite attention ou un message de remerciement lors de leur prochaine visite renforce le lien et vos avis.",
+                noreps_tip: "Pas encore de clients revenus sur cette période. Demandez un avis Google aux clients satisfaits : cela amène de nouvelles réservations.",
+                trend: (up, p) => `Tendance : sur la seconde moitié de la période, les réservations ont ${up ? 'augmenté' : 'baissé'} de ${p} % par rapport à la première.`
+            },
+            it: {
+                none: 'Non ci sono prenotazioni online nel periodo selezionato.',
+                none_tip: 'Aggiungi il link di prenotazione al tuo Profilo dell’attività su Google, alla bio di Instagram e al tuo sito, così i clienti prenotano con un clic.',
+                best: (d, c, p, w) => `Giorno più forte: ${d} con ${c} prenotazioni (${p}% del totale). Da venerdì a domenica si concentra il ${w}% delle prenotazioni.`,
+                quiet1: (q, m) => `Il giorno più tranquillo è ${q} (${m} prenotazioni). Prova un'offerta o una serata a tema quel giorno e promuovila sui social insieme al link di prenotazione.`,
+                quietN: (q, m) => `I giorni più tranquilli sono: ${q} (${m} prenotazioni ciascuno). Prova un'offerta o una serata a tema in quei giorni e promuovila sui social insieme al link di prenotazione.`,
+                and: ' e ',
+                peak: (h, c, two, p) => `Ora di punta: ${h} con ${c} prenotazioni. Le due ore più piene (${two}) coprono il ${p}% delle prenotazioni.`,
+                peak_tip: "Più della metà delle prenotazioni cade in due ore. Rafforza il personale in quei momenti e valuta un piccolo incentivo (es. un drink offerto) per chi prenota in orari più tranquilli, così da distribuire il carico.",
+                party: (g, n, avg, big, p) => `${g} coperti in ${n} prenotazioni, in media ${avg} per tavolo. Gruppi da 6 o più: ${big} (${p}%).`,
+                big_tip: 'I gruppi numerosi sono una parte importante della clientela. Un menu fisso per gruppi o un pacchetto per le feste semplifica il lavoro in cucina e alza lo scontrino medio.',
+                small_tip: 'La maggior parte dei tavoli è per due. Assicurati di avere abbastanza tavoli da due, così nelle ore di punta non «perdi» tavoli da quattro con le coppie.',
+                canc: (c, t, p) => `Cancellazioni: ${c} su ${t} (${p}%).`,
+                canc_tip: p => `Il tasso di cancellazione (${p}%) è alto. Una telefonata o un messaggio di conferma il giorno prima riduce molto i no-show.`,
+                lead: (med, p) => `I clienti prenotano di solito ${med === 0 ? 'lo stesso giorno' : med === 1 ? 'il giorno prima' : med + ' giorni prima'}. Prenotazioni per lo stesso giorno: ${p}%.`,
+                lead_tip: 'Le prenotazioni arrivano soprattutto all’ultimo momento. Post sui social verso mezzogiorno («stasera abbiamo ancora tavoli») possono riempire i vuoti.',
+                noshow: (ns, t, p) => `No-show: ${ns} su ${t} prenotazioni in cui è stato registrato se il cliente è arrivato (${p}%).`,
+                remind: (a, b) => `Con il promemoria via email il no-show è stato del ${a}%, senza promemoria del ${b}%.`,
+                google: (g, p) => `Prenotazioni tramite Google: ${g} (${p}%).`,
+                google_tip: 'Poche prenotazioni arrivano da Google. Aggiungi il link di prenotazione al tuo Profilo dell’attività su Google (istruzioni in Profilo del locale): è gratis e porta clienti che ti trovano su Maps.',
+                loc_in: 'i tavoli all’interno', loc_out: 'i tavoli all’aperto', loc_none: 'nessuna preferenza',
+                loc: (l, p) => `La maggior parte dei clienti preferisce ${l} (${p}%).`,
+                out_tip: 'La richiesta è soprattutto per l’esterno. Avvisa i clienti per tempo se il meteo cambia e tieni pronto un piano per spostarli dentro.',
+                reps: (r, b, p) => `Clienti abituali: ${r}, con ${b} prenotazioni (${p}% del totale).`,
+                reps_tip: 'Hai clienti fedeli. Un piccolo omaggio o un messaggio di ringraziamento alla prossima visita rafforza il rapporto e le recensioni.',
+                noreps_tip: 'Non ci sono ancora clienti abituali nel periodo. Chiedi ai clienti soddisfatti una recensione su Google: porta nuove prenotazioni.',
+                trend: (up, p) => `Tendenza: nella seconda metà del periodo le prenotazioni sono ${up ? 'aumentate' : 'diminuite'} del ${p}% rispetto alla prima.`
+            },
+            es: {
+                none: 'No hay reservas online en el periodo seleccionado.',
+                none_tip: 'Añade tu enlace de reservas a tu Perfil de Empresa de Google, a la bio de Instagram y a tu web para que los clientes reserven con un clic.',
+                best: (d, c, p, w) => `Día más fuerte: ${d} con ${c} reservas (${p} % del total). De viernes a domingo se concentra el ${w} % de las reservas.`,
+                quiet1: (q, m) => `Tu día más tranquilo es el ${q} (${m} reservas). Prueba una oferta o una noche temática ese día y promociónala en redes junto con tu enlace de reservas.`,
+                quietN: (q, m) => `Tus días más tranquilos son: ${q} (${m} reservas cada uno). Prueba una oferta o una noche temática esos días y promociónala en redes junto con tu enlace de reservas.`,
+                and: ' y ',
+                peak: (h, c, two, p) => `Hora punta: ${h} con ${c} reservas. Las dos horas con más reservas (${two}) suman el ${p} % del total.`,
+                peak_tip: 'Más de la mitad de las reservas caen en dos horas. Refuerza el personal en esos momentos y piensa en un pequeño incentivo (p. ej. una invitación) para quien reserve en horas más tranquilas, para repartir la carga.',
+                party: (g, n, avg, big, p) => `${g} comensales en ${n} reservas, una media de ${avg} por mesa. Grupos de 6 o más: ${big} (${p} %).`,
+                big_tip: 'Los grupos grandes son una parte importante de tu clientela. Un menú cerrado para grupos o un paquete para celebraciones facilita el trabajo en cocina y sube el tique medio.',
+                small_tip: 'La mayoría de las mesas son para dos. Asegúrate de tener suficientes mesas de dos para no «perder» mesas de cuatro con parejas en las horas punta.',
+                canc: (c, t, p) => `Cancelaciones: ${c} de ${t} (${p} %).`,
+                canc_tip: p => `Tu tasa de cancelación (${p} %) es alta. Una llamada o un mensaje de confirmación el día anterior reduce mucho los no-shows.`,
+                lead: (med, p) => `Los clientes suelen reservar ${med === 0 ? 'el mismo día' : med === 1 ? 'un día antes' : 'con ' + med + ' días de antelación'}. Reservas para el mismo día: ${p} %.`,
+                lead_tip: 'Las reservas llegan sobre todo a última hora. Publicaciones en redes a mediodía («aún nos quedan mesas esta noche») pueden llenar huecos.',
+                noshow: (ns, t, p) => `No-shows: ${ns} de ${t} reservas en las que se registró si vino el cliente (${p} %).`,
+                remind: (a, b) => `Con recordatorio por email el no-show fue del ${a} %, sin recordatorio del ${b} %.`,
+                google: (g, p) => `Reservas a través de Google: ${g} (${p} %).`,
+                google_tip: 'Pocas reservas llegan desde Google. Añade tu enlace de reservas a tu Perfil de Empresa de Google (instrucciones en Perfil del local): es gratis y trae clientes que te encuentran en Maps.',
+                loc_in: 'el interior', loc_out: 'la terraza', loc_none: 'sin preferencia',
+                loc: (l, p) => `La mayoría de los clientes prefiere ${l} (${p} %).`,
+                out_tip: 'La demanda es sobre todo de terraza. Avisa a los clientes con tiempo si cambia el tiempo y ten preparado un plan para pasarlos dentro.',
+                reps: (r, b, p) => `Clientes que repiten: ${r}, con ${b} reservas (${p} % del total).`,
+                reps_tip: 'Tienes clientes fieles. Un pequeño detalle o un mensaje de agradecimiento en su próxima visita refuerza la relación y tus reseñas.',
+                noreps_tip: 'Todavía no hay clientes que repitan en este periodo. Pide a los clientes satisfechos una reseña en Google: trae nuevas reservas.',
+                trend: (up, p) => `Tendencia: en la segunda mitad del periodo las reservas ${up ? 'subieron' : 'bajaron'} un ${p} % respecto a la primera.`
+            },
+            tr: {
+                none: 'Seçilen dönemde online rezervasyon yok.',
+                none_tip: 'Rezervasyon bağlantınızı Google İşletme Profilinize, Instagram biyografinize ve web sitenize ekleyin; misafirler tek tıkla rezervasyon yapabilsin.',
+                best: (d, c, p, w) => `En yoğun gün: ${d}, ${c} rezervasyon (toplamın %${p}'si). Cuma–pazar arası rezervasyonların %${w}'sini oluşturuyor.`,
+                quiet1: (q, m) => `En sakin gününüz ${q} (${m} rezervasyon). O gün bir kampanya ya da temalı bir akşam deneyin ve rezervasyon bağlantınızla birlikte sosyal medyada duyurun.`,
+                quietN: (q, m) => `En sakin günleriniz: ${q} (her biri ${m} rezervasyon). O günlerde bir kampanya ya da temalı bir akşam deneyin ve rezervasyon bağlantınızla birlikte sosyal medyada duyurun.`,
+                and: ' ve ',
+                peak: (h, c, two, p) => `En yoğun saat: ${h}, ${c} rezervasyon. En yoğun iki saat (${two}) rezervasyonların %${p}'sini oluşturuyor.`,
+                peak_tip: 'Rezervasyonların yarısından fazlası iki saate denk geliyor. Bu saatlerde personeli artırın ve yükü dağıtmak için daha sakin saatlerde rezervasyon yapanlara küçük bir jest (ör. ikram bir içecek) düşünün.',
+                party: (g, n, avg, big, p) => `${n} rezervasyonda toplam ${g} kişi, masa başına ortalama ${avg} kişi. 6 kişi ve üzeri gruplar: ${big} (%${p}).`,
+                big_tip: 'Kalabalık gruplar müşterilerinizin önemli bir kısmı. Sabit bir grup menüsü ya da kutlama paketi mutfağın işini kolaylaştırır ve ortalama hesabı yükseltir.',
+                small_tip: 'Masaların çoğu iki kişilik. Yoğun saatlerde dört kişilik masaların çiftlere gitmemesi için yeterince iki kişilik masanız olduğundan emin olun.',
+                canc: (c, t, p) => `İptaller: ${t} rezervasyondan ${c} (%${p}).`,
+                canc_tip: p => `İptal oranınız (%${p}) yüksek. Bir gün önce yapılan bir onay araması ya da mesajı, gelmeyenleri önemli ölçüde azaltır.`,
+                lead: (med, p) => `Misafirler genellikle ${med === 0 ? 'aynı gün' : med === 1 ? 'bir gün önceden' : med + ' gün önceden'} rezervasyon yapıyor. Aynı gün için rezervasyonlar: %${p}.`,
+                lead_tip: 'Rezervasyonlar çoğunlukla son dakikada geliyor. Aynı gün öğle saatlerinde yapılan sosyal medya paylaşımları ("bu akşam hâlâ boş masamız var") boşlukları doldurabilir.',
+                noshow: (ns, t, p) => `Gelmeyenler: gelişin kaydedildiği ${t} rezervasyondan ${ns} (%${p}).`,
+                remind: (a, b) => `E-posta hatırlatmasıyla gelmeme oranı %${a}, hatırlatma olmadan %${b} oldu.`,
+                google: (g, p) => `Google üzerinden rezervasyonlar: ${g} (%${p}).`,
+                google_tip: 'Google’dan az rezervasyon geliyor. Rezervasyon bağlantınızı Google İşletme Profilinize ekleyin (talimatlar Mağaza Profili bölümünde); ücretsizdir ve sizi Haritalar’da bulan misafirleri getirir.',
+                loc_in: 'iç mekânı', loc_out: 'dış mekânı', loc_none: 'fark etmez seçeneğini',
+                loc: (l, p) => `Misafirlerin çoğu ${l} tercih ediyor (%${p}).`,
+                out_tip: 'Talep çoğunlukla dış mekân için. Hava değişirse misafirlere erkenden haber verin ve onları içeri almak için bir planınız olsun.',
+                reps: (r, b, p) => `Tekrar gelen misafirler: ${r}, ${b} rezervasyonla (toplamın %${p}'si).`,
+                reps_tip: 'Sadık misafirleriniz var. Bir sonraki ziyaretlerinde küçük bir ikram ya da teşekkür mesajı ilişkiyi ve yorumlarınızı güçlendirir.',
+                noreps_tip: 'Bu dönemde henüz tekrar gelen misafir yok. Memnun kalan misafirlerden Google’da yorum isteyin; yeni rezervasyon getirir.',
+                trend: (up, p) => `Eğilim: dönemin ikinci yarısında rezervasyonlar ilk yarıya göre %${p} ${up ? 'arttı' : 'azaldı'}.`
+            },
+            pt: {
+                none: 'Não há reservas online no período escolhido.',
+                none_tip: 'Adicione o seu link de reservas ao Perfil da Empresa no Google, à bio do Instagram e ao seu site, para que os clientes reservem com um clique.',
+                best: (d, c, p, w) => `Dia mais forte: ${d}, com ${c} reservas (${p}% do total). De sexta a domingo concentram-se ${w}% das reservas.`,
+                quiet1: (q, m) => `O seu dia mais calmo é ${q} (${m} reservas). Experimente uma promoção ou uma noite temática nesse dia e divulgue-a nas redes sociais com o seu link de reservas.`,
+                quietN: (q, m) => `Os seus dias mais calmos são: ${q} (${m} reservas cada). Experimente uma promoção ou uma noite temática nesses dias e divulgue-a nas redes sociais com o seu link de reservas.`,
+                and: ' e ',
+                peak: (h, c, two, p) => `Hora de ponta: ${h}, com ${c} reservas. As duas horas mais cheias (${two}) somam ${p}% das reservas.`,
+                peak_tip: 'Mais de metade das reservas cai em duas horas. Reforce a equipa nesses momentos e pense num pequeno incentivo (ex. uma bebida oferecida) para quem reserva em horas mais calmas, para distribuir o movimento.',
+                party: (g, n, avg, big, p) => `${g} pessoas em ${n} reservas, uma média de ${avg} por mesa. Grupos de 6 ou mais: ${big} (${p}%).`,
+                big_tip: 'Os grupos grandes são uma parte importante da sua clientela. Um menu fixo para grupos ou um pacote para celebrações facilita o trabalho da cozinha e aumenta a fatura média.',
+                small_tip: 'A maioria das mesas é para dois. Garanta que tem mesas de dois suficientes para não «perder» mesas de quatro com casais nas horas de ponta.',
+                canc: (c, t, p) => `Cancelamentos: ${c} de ${t} (${p}%).`,
+                canc_tip: p => `A sua taxa de cancelamento (${p}%) é alta. Uma chamada ou mensagem de confirmação na véspera reduz bastante as faltas.`,
+                lead: (med, p) => `Os clientes costumam reservar ${med === 0 ? 'no próprio dia' : med === 1 ? 'na véspera' : 'com ' + med + ' dias de antecedência'}. Reservas para o próprio dia: ${p}%.`,
+                lead_tip: 'As reservas são sobretudo de última hora. Publicações nas redes à hora de almoço («ainda temos mesas para hoje à noite») podem preencher vazios.',
+                noshow: (ns, t, p) => `Faltas: ${ns} de ${t} reservas em que ficou registado se o cliente veio (${p}%).`,
+                remind: (a, b) => `Com lembrete por email a taxa de faltas foi de ${a}%, sem lembrete de ${b}%.`,
+                google: (g, p) => `Reservas através do Google: ${g} (${p}%).`,
+                google_tip: 'Poucas reservas vêm do Google. Adicione o seu link de reservas ao Perfil da Empresa no Google (instruções no Perfil do restaurante): é grátis e traz clientes que o encontram no Maps.',
+                loc_in: 'o interior', loc_out: 'a esplanada', loc_none: 'sem preferência',
+                loc: (l, p) => `A maioria dos clientes prefere ${l} (${p}%).`,
+                out_tip: 'A procura é sobretudo pela esplanada. Avise os clientes a tempo se o tempo mudar e tenha um plano para os passar para dentro.',
+                reps: (r, b, p) => `Clientes habituais: ${r}, com ${b} reservas (${p}% do total).`,
+                reps_tip: 'Tem clientes fiéis. Uma pequena oferta ou uma mensagem de agradecimento na próxima visita reforça a relação e as suas avaliações.',
+                noreps_tip: 'Ainda não há clientes habituais neste período. Peça aos clientes satisfeitos uma avaliação no Google: traz novas reservas.',
+                trend: (up, p) => `Tendência: na segunda metade do período as reservas ${up ? 'subiram' : 'desceram'} ${p}% em relação à primeira.`
+            }
+        };
+
         // Ευρήματα και προτάσεις από τα δεδομένα της περιόδου
         function repInsights(inRange, active) {
-            const EN = currentLang === 'en';
-            const L = (el, en) => EN ? en : el;
+            const X = REP_INS[currentLang] || REP_INS.en;
             const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
-            const days = EN ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
-            const daysAcc = EN ? days : ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο'];
+            const days = currentLang === 'el' ? ['Κυριακή','Δευτέρα','Τρίτη','Τετάρτη','Πέμπτη','Παρασκευή','Σάββατο']
+                : currentLang === 'en' ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'] : trWeekdays('long');
             const n = active.length, findings = [], tips = [];
             if (!n) {
-                findings.push(L('Δεν υπάρχουν online κρατήσεις στην επιλεγμένη περίοδο.', 'There are no online reservations in the selected period.'));
-                tips.push(L('Προσθέστε το link κρατήσεων στο Google Business Profile, στο Instagram bio και στο site σας, ώστε οι πελάτες να κλείνουν τραπέζι με ένα κλικ.', 'Add your booking link to your Google Business Profile, Instagram bio and website so guests can book with one click.'));
+                findings.push(X.none);
+                tips.push(X.none_tip);
                 return { findings, tips };
             }
             const guests = active.reduce((s, r) => s + (parseInt(r.guests) || 0), 0);
@@ -2328,18 +4250,10 @@
             const minV = Math.min(...order.map(i => dow[i]));
             const quiet = order.filter(i => dow[i] === minV);
             const weekend = dow[5] + dow[6] + dow[0];
-            findings.push(L(
-                `Πιο δυνατή μέρα: ${days[best]} με ${dow[best]} κρατήσεις (${pct(dow[best], n)}% του συνόλου). Παρασκευή έως Κυριακή συγκεντρώνουν το ${pct(weekend, n)}% των κρατήσεων.`,
-                `Strongest day: ${days[best]} with ${dow[best]} bookings (${pct(dow[best], n)}% of the total). Friday to Sunday account for ${pct(weekend, n)}% of bookings.`));
+            findings.push(X.best(days[best], dow[best], pct(dow[best], n), pct(weekend, n)));
             if (n >= 5 && quiet.length < 7) {
-                const qn = quiet.map(i => daysAcc[i]).join(EN ? ', ' : ', ');
-                tips.push(L(
-                    quiet.length === 1
-                        ? `Η πιο ήσυχη μέρα είναι η ${qn} (${minV} κρατήσεις). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνη τη μέρα και προβάλετέ τη στα social μαζί με το link κρατήσεων.`
-                        : `Οι πιο ήσυχες μέρες είναι: ${qn} (${minV} κρατήσεις η καθεμία). Δοκιμάστε μια προσφορά ή θεματική βραδιά εκείνες τις μέρες και προβάλετέ τη στα social μαζί με το link κρατήσεων.`,
-                    quiet.length === 1
-                        ? `Your quietest day is ${qn} (${minV} bookings). Try an offer or a themed evening that day and promote it on social media together with your booking link.`
-                        : `Your quietest days are: ${qn} (${minV} bookings each). Try an offer or a themed evening on those days and promote it on social media together with your booking link.`));
+                const qn = quiet.map(i => days[i]).join(', ');
+                tips.push(quiet.length === 1 ? X.quiet1(qn, minV) : X.quietN(qn, minV));
             }
 
             // Ώρες
@@ -2348,81 +4262,57 @@
             const hk = Object.keys(hours).sort((a, b) => hours[b] - hours[a]);
             if (hk.length) {
                 const top = hk[0], top2 = hk.slice(0, 2).reduce((s, h) => s + hours[h], 0);
-                findings.push(L(
-                    `Ώρα αιχμής: ${top}:00 με ${hours[top]} κρατήσεις. Οι δύο πιο φορτωμένες ώρες (${hk.slice(0, 2).map(h => h + ':00').join(' και ')}) καλύπτουν το ${pct(top2, n)}% των κρατήσεων.`,
-                    `Peak hour: ${top}:00 with ${hours[top]} bookings. The two busiest hours (${hk.slice(0, 2).map(h => h + ':00').join(' and ')}) cover ${pct(top2, n)}% of bookings.`));
-                if (pct(top2, n) >= 50) tips.push(L(
-                    `Πάνω από τις μισές κρατήσεις πέφτουν σε δύο ώρες. Ενισχύστε το προσωπικό τότε και σκεφτείτε κίνητρο (π.χ. κέρασμα) για όσους κλείνουν σε πιο ήσυχη ώρα, για να μοιράζεται ο φόρτος.`,
-                    `More than half of bookings fall in two hours. Add staff at those times and consider a small incentive (e.g. a complimentary drink) for guests who book at quieter times, to spread the load.`));
+                findings.push(X.peak(top + ':00', hours[top], hk.slice(0, 2).map(h => h + ':00').join(X.and), pct(top2, n)));
+                if (pct(top2, n) >= 50) tips.push(X.peak_tip);
             }
 
             // Μέγεθος παρέας
             const big = active.filter(r => (parseInt(r.guests) || 0) >= 6).length;
-            findings.push(L(
-                `Σύνολο ${guests} άτομα σε ${n} κρατήσεις, μέσος όρος ${avg.toFixed(1)} άτομα ανά τραπέζι. Παρέες 6+ ατόμων: ${big} (${pct(big, n)}%).`,
-                `${guests} guests across ${n} bookings, an average of ${avg.toFixed(1)} per table. Groups of 6+: ${big} (${pct(big, n)}%).`));
-            if (pct(big, n) >= 20) tips.push(L(
-                'Οι μεγάλες παρέες είναι σημαντικό κομμάτι της πελατείας. Ένα σταθερό μενού για γκρουπ ή πακέτο για γιορτές διευκολύνει την κουζίνα και ανεβάζει τη μέση απόδειξη.',
-                'Large groups are a significant share of your guests. A set group menu or celebration package makes the kitchen\'s work easier and raises the average bill.'));
-            else if (avg < 2.6) tips.push(L(
-                'Τα περισσότερα τραπέζια είναι για 2. Βεβαιωθείτε ότι η διάταξη έχει αρκετά διθέσια, ώστε να μη «χάνονται» τετραθέσια σε ζευγάρια τις ώρες αιχμής.',
-                'Most tables are for two. Make sure your floor plan has enough two-tops so four-tops aren\'t used by couples at peak times.'));
+            findings.push(X.party(guests, n, avg.toFixed(1), big, pct(big, n)));
+            if (pct(big, n) >= 20) tips.push(X.big_tip);
+            else if (avg < 2.6) tips.push(X.small_tip);
 
             // Ακυρώσεις
             const canc = inRange.filter(r => r.status === 'cancelled').length;
             const cr = pct(canc, inRange.length);
-            findings.push(L(`Ακυρώσεις: ${canc} από ${inRange.length} (${cr}%).`, `Cancellations: ${canc} of ${inRange.length} (${cr}%).`));
-            if (cr >= 10) tips.push(L(
-                `Το ποσοστό ακυρώσεων (${cr}%) είναι υψηλό. Ένα τηλεφώνημα ή μήνυμα επιβεβαίωσης την προηγούμενη μέρα μειώνει σημαντικά τα «no-show».`,
-                `Your cancellation rate (${cr}%) is high. A confirmation call or message the day before significantly reduces no-shows.`));
+            findings.push(X.canc(canc, inRange.length, cr));
+            if (cr >= 10) tips.push(X.canc_tip(cr));
 
             // Πόσο νωρίς κλείνουν
             const leads = active.filter(isOnline).map(leadDays).filter(d => d !== null).sort((a, b) => a - b);
             if (leads.length >= 3) {
                 const med = leads[Math.floor(leads.length / 2)];
                 const same = leads.filter(d => d <= 0).length;
-                findings.push(L(
-                    `Οι πελάτες κλείνουν συνήθως ${med === 0 ? 'την ίδια μέρα' : med === 1 ? 'μία μέρα πριν' : med + ' μέρες πριν'}. Κρατήσεις για την ίδια μέρα: ${pct(same, leads.length)}%.`,
-                    `Guests usually book ${med === 0 ? 'on the same day' : med === 1 ? 'one day ahead' : med + ' days ahead'}. Same-day bookings: ${pct(same, leads.length)}%.`));
-                if (med <= 1) tips.push(L(
-                    'Οι κρατήσεις γίνονται κυρίως τελευταία στιγμή. Αναρτήσεις στα social το μεσημέρι της ίδιας μέρας («έχουμε ακόμα τραπέζια απόψε») μπορούν να γεμίσουν κενά.',
-                    'Bookings are mostly last-minute. Same-day social posts around midday ("we still have tables tonight") can fill gaps.'));
+                findings.push(X.lead(med, pct(same, leads.length)));
+                if (med <= 1) tips.push(X.lead_tip);
             }
 
             // Ήρθε / δεν ήρθε, και επίδραση της υπενθύμισης
             const marked = active.filter(r => r.attendance === 'arrived' || r.attendance === 'noshow');
             if (marked.length) {
                 const ns = marked.filter(r => r.attendance === 'noshow').length;
-                findings.push(L(
-                    `No-show: ${ns} από ${marked.length} κρατήσεις όπου καταγράφηκε αν ήρθε ο πελάτης (${pct(ns, marked.length)}%).`,
-                    `No-shows: ${ns} of ${marked.length} bookings where arrival was recorded (${pct(ns, marked.length)}%).`));
+                findings.push(X.noshow(ns, marked.length, pct(ns, marked.length)));
                 const withR = marked.filter(r => r.reminderSentAt), noR = marked.filter(r => !r.reminderSentAt);
                 if (withR.length >= 3 && noR.length >= 3) {
                     const a = pct(withR.filter(r => r.attendance === 'noshow').length, withR.length);
                     const b = pct(noR.filter(r => r.attendance === 'noshow').length, noR.length);
-                    findings.push(L(
-                        `Με υπενθύμιση email το no-show ήταν ${a}%, χωρίς υπενθύμιση ${b}%.`,
-                        `With an email reminder the no-show rate was ${a}%, without a reminder ${b}%.`));
+                    findings.push(X.remind(a, b));
                 }
             }
 
             // Πηγή
             const g = active.filter(r => r.source === 'google').length;
-            findings.push(L(`Κρατήσεις μέσω Google: ${g} (${pct(g, n)}%).`, `Bookings via Google: ${g} (${pct(g, n)}%).`));
-            if (pct(g, n) < 20) tips.push(L(
-                'Λίγες κρατήσεις έρχονται από το Google. Προσθέστε το link κρατήσεων στο Google Business Profile (οδηγίες στο Προφίλ Μαγαζιού) — είναι δωρεάν και φέρνει πελάτες που σας βρίσκουν στους χάρτες.',
-                'Few bookings come from Google. Add your booking link to your Google Business Profile (instructions in Shop Profile) — it\'s free and brings guests who find you on Maps.'));
+            findings.push(X.google(g, pct(g, n)));
+            if (pct(g, n) < 20) tips.push(X.google_tip);
 
             // Χώρος
             const loc = {};
             active.forEach(r => { if (r.location) loc[r.location] = (loc[r.location] || 0) + 1; });
             const lk = Object.keys(loc).sort((a, b) => loc[b] - loc[a]);
             if (lk.length) {
-                const locName = { 'Εσωτερικός': L('εσωτερικό χώρο', 'indoor seating'), 'Εξωτερικός': L('εξωτερικό χώρο', 'outdoor seating'), 'Δεν έχω προτίμηση': L('χωρίς προτίμηση', 'no preference') };
-                findings.push(L(`Οι περισσότεροι προτιμούν ${locName[lk[0]] || lk[0]} (${pct(loc[lk[0]], n)}%).`, `Most guests prefer ${locName[lk[0]] || lk[0]} (${pct(loc[lk[0]], n)}%).`));
-                if (lk[0] === 'Εξωτερικός' && pct(loc[lk[0]], n) >= 50) tips.push(L(
-                    'Η ζήτηση είναι κυρίως για έξω. Ενημερώστε τους πελάτες εγκαίρως αν ο καιρός αλλάξει και έχετε έτοιμο σχέδιο για μεταφορά μέσα.',
-                    'Demand is mostly for outdoor seating. Let guests know early if the weather changes and have a plan for moving them inside.'));
+                const locName = { 'Εσωτερικός': X.loc_in, 'Εξωτερικός': X.loc_out, 'Δεν έχω προτίμηση': X.loc_none };
+                findings.push(X.loc(locName[lk[0]] || lk[0], pct(loc[lk[0]], n)));
+                if (lk[0] === 'Εξωτερικός' && pct(loc[lk[0]], n) >= 50) tips.push(X.out_tip);
             }
 
             // Επαναλαμβανόμενοι
@@ -2430,14 +4320,8 @@
             active.forEach(r => { const k = (r.phone || '').trim(); if (k) byPhone[k] = (byPhone[k] || 0) + 1; });
             const reps = Object.values(byPhone).filter(c => c > 1);
             const repB = reps.reduce((s, c) => s + c, 0);
-            findings.push(L(
-                `Επαναλαμβανόμενοι πελάτες: ${reps.length}, με ${repB} κρατήσεις (${pct(repB, n)}% του συνόλου).`,
-                `Returning guests: ${reps.length}, with ${repB} bookings (${pct(repB, n)}% of the total).`));
-            tips.push(reps.length ? L(
-                'Έχετε πιστούς πελάτες. Ένα μικρό κέρασμα ή ευχαριστήριο μήνυμα στην επόμενη επίσκεψη ενισχύει τη σχέση και τις κριτικές.',
-                'You have loyal guests. A small treat or thank-you message on their next visit strengthens the relationship and your reviews.')
-                : L('Δεν υπάρχουν ακόμα επαναλαμβανόμενοι πελάτες στην περίοδο. Ζητήστε από όσους έμειναν ευχαριστημένοι μια κριτική στο Google — φέρνει νέες κρατήσεις.',
-                    'No returning guests in this period yet. Ask happy guests for a Google review — it brings in new bookings.'));
+            findings.push(X.reps(reps.length, repB, pct(repB, n)));
+            tips.push(reps.length ? X.reps_tip : X.noreps_tip);
 
             // Τάση: πρώτο και δεύτερο μισό της περιόδου
             const dates = active.map(r => r.date).sort();
@@ -2445,9 +4329,7 @@
                 const mid = new Date((new Date(dates[0]).getTime() + new Date(dates[dates.length - 1]).getTime()) / 2).toISOString().slice(0, 10);
                 const a = dates.filter(d => d <= mid).length, b = dates.length - a;
                 const ch = a ? Math.round((b - a) / a * 100) : 0;
-                if (Math.abs(ch) >= 15) findings.push(L(
-                    `Τάση: στο δεύτερο μισό της περιόδου οι κρατήσεις ${ch > 0 ? 'αυξήθηκαν' : 'μειώθηκαν'} κατά ${Math.abs(ch)}% σε σχέση με το πρώτο.`,
-                    `Trend: bookings in the second half of the period ${ch > 0 ? 'rose' : 'fell'} by ${Math.abs(ch)}% compared with the first half.`));
+                if (Math.abs(ch) >= 15) findings.push(X.trend(ch > 0, Math.abs(ch)));
             }
             return { findings, tips };
         }
@@ -3037,11 +4919,11 @@
         function renderWeekHours() {
             const box = document.getElementById('week-hours');
             if (!box || !weekHours) return;
-            const L = currentLang === 'en' ? 'en' : 'el';
+            const dayNames = WH_NAMES[currentLang] || (() => { const w = trWeekdays('long'); return [1,2,3,4,5,6,0].map(i => w[i]); })();
             box.innerHTML = '';
             WH_DAYS.forEach((d, idx) => {
                 const row = document.createElement('div'); row.className = 'wh-row';
-                const name = document.createElement('div'); name.className = 'wh-day'; name.textContent = WH_NAMES[L][idx];
+                const name = document.createElement('div'); name.className = 'wh-day'; name.textContent = dayNames[idx];
                 const isOpen = weekHours[d] !== 'closed';
                 const tg = document.createElement('label'); tg.className = 'wh-toggle';
                 const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = isOpen;
@@ -3379,7 +5261,14 @@
         };
 
         // Initial translations (με την τελευταία γλώσσα που διάλεξε ο χρήστης)
-        try { const saved = localStorage.getItem('tr_admin_lang'); if (saved === 'el' || saved === 'en') setLang(saved); else applyTranslations(); }
+        try {
+            let saved = localStorage.getItem('tr_admin_lang');
+            if (!TR_LANGS.includes(saved)) {
+                const prefs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || '']).map(x => String(x).toLowerCase().slice(0, 2));
+                saved = prefs.find(x => TR_LANGS.includes(x)) || null;
+            }
+            if (saved) setLang(saved); else applyTranslations();
+        }
         catch (e) { applyTranslations(); }
 
         // Splash screen
