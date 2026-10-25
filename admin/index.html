@@ -3615,7 +3615,13 @@
         async function openDashboard(myShop) {
             try {
                 trAdminLangSaved = (await get(ref(db, `shop_profile/${myShop}/adminLang`))).val();
-                if (!trLangChosen) {
+                if (TR_TRIAL) {
+                    // Δοκιμή: η γλώσσα της χώρας του μαγαζιού, εκτός αν ο ιδιοκτήτης διάλεξε άλλη σε ΑΥΤΟ το μαγαζί
+                    let own = null; try { own = localStorage.getItem('tr_trial_lang_' + myShop); } catch (e) {}
+                    const country = (await get(ref(db, `shop_details/${myShop}/lang`))).val();
+                    const L = TR_LANGS.includes(own) ? own : country;
+                    if (TR_LANGS.includes(L)) setLang(L);
+                } else if (!trLangChosen) {
                     const shopLang = trAdminLangSaved || (await get(ref(db, `shop_details/${myShop}/lang`))).val();
                     if (TR_LANGS.includes(shopLang)) setLang(shopLang);
                 }
@@ -3895,7 +3901,13 @@
             });
         }
         // Αλλαγή γλώσσας: ενημέρωση και των κειμένων της δοκιμής
-        { const sel = document.getElementById('lang-select'); if (sel) sel.addEventListener('change', () => setTimeout(() => { if (trInfo) { trTexts(); trLayout(); } }, 0)); }
+        { const sel = document.getElementById('lang-select'); if (sel) sel.addEventListener('change', () => setTimeout(() => {
+            if (!trInfo) return;
+            try { localStorage.setItem('tr_trial_lang_' + currentAdminShop, currentLang); } catch (e) {}
+            trTexts(); trLayout();
+            // Και η σελίδα πελατών στη νέα γλώσσα
+            ['tr-panel-frame', 'tr-cust-frame'].forEach(id => { const f = document.getElementById(id); if (f && f.dataset.src) { f.dataset.src = trFrameUrl(); f.src = trFrameUrl(); } });
+        }, 0)); }
 
         // ── Ενεργοποίηση: email+κωδικός ή Google ΣΤΟΝ ΙΔΙΟ (ανώνυμο) λογαριασμό, μετά /claim ──
         function trOpenActivate() {

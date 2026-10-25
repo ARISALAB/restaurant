@@ -508,6 +508,14 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             border: 1px solid var(--border);
+            position: relative;
+            background: #0f172a;
+        }
+        /* Κάθετη ή στενή φωτογραφία: γεμίζει το πλαίσιο η ίδια εικόνα θολή από πίσω, χωρίς να κόβεται τίποτα */
+        .shop-cover-box::before {
+            content: ''; position: absolute; inset: -24px;
+            background: var(--cover-bg, none) center / cover no-repeat;
+            filter: blur(22px) brightness(.75); transform: scale(1.1);
         }
         .shop-cover-img {
             width: 100%;
@@ -518,6 +526,7 @@
             display: block;
             background: #f8fafc;
         }
+        .shop-cover-box .shop-cover-img { position: relative; z-index: 1; display: block; background: transparent; }
         .shop-cover-placeholder {
             width: 100%;
             height: 80px;
@@ -2187,6 +2196,7 @@
 
                 if (full.coverPhoto) {
                     document.getElementById('client-cover-img').src = trImg(full.coverPhoto, trW(1600));
+                    document.getElementById('client-cover-wrap').style.setProperty('--cover-bg', `url("${String(trImg(full.coverPhoto, 400)).replace(/"/g, '%22')}")`);
                     document.getElementById('client-cover-wrap').style.display = 'block';
                     document.getElementById('client-cover-placeholder').style.display = 'none';
                 }
