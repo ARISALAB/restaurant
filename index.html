@@ -2050,6 +2050,11 @@
             if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="margin-bottom:12px; color:#94a3b8;"><svg class="ic" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;
         }).catch(() => {});
         const shopDisplayEl = document.getElementById('shop-display');
+        function trShowShopName(n) {
+            delete shopDisplayEl.dataset.shopId;
+            shopDisplayEl.removeAttribute('data-i18n-key');
+            shopDisplayEl.innerText = n;
+        }
         shopDisplayEl.dataset.shopId = shopID;
         shopDisplayEl.innerText = t('booking_at') + shopID;
 
@@ -2110,7 +2115,7 @@
                 Promise.all([get(ref(db, `shop_details/${shopId}/displayName`)), trSlugReady]).then(([n]) => trSetSchema({ shopId, name: n.val() || shopId, description, address, phone, hours, tagline, logo: logoPhoto, cover: coverPhoto })).catch(() => {});
 
                 get(ref(db, `shop_details/${shopId}/displayName`)).then(nameSnap => {
-                    document.getElementById('shop-display').innerText = nameSnap.val() || shopId;
+                    trShowShopName(nameSnap.val() || shopId);
                 }).catch(() => {});
 
                 if (full.coverPhoto) {
@@ -2276,7 +2281,7 @@
 
         // Load display name
         get(ref(db, `shop_details/${shopID}/displayName`)).then(nameSnap => {
-            if (nameSnap.exists()) document.getElementById('shop-display').innerText = nameSnap.val() || shopID;
+            if (nameSnap.exists()) trShowShopName(nameSnap.val() || shopID);
         }).catch(() => {});
 
         loadClientShopProfile(shopID);
