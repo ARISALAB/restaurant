@@ -6,7 +6,7 @@
 
 // Υπαρκτές σελίδες/φάκελοι του site: περνάνε ανέγγιχτοι
 const PAGES = new Set([
-  'admin', 'superadmin', 'partners', 'privacy', 'terms', 'site', 'en',
+  'admin', 'superadmin', 'partners', 'privacy', 'terms', 'site', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt',
   'api', 'downloads', 'netlify', 'cancel', 'embed', 'index'
 ]);
 

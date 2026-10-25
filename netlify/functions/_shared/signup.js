@@ -38,6 +38,54 @@ const T = {
     btn: 'Confirm email',
     after: 'Once confirmed, you will land in your dashboard, where you will find your restaurant\'s booking link.',
     ignore: 'If you did not create an account, you can ignore this email.'
+  },
+  de: {
+    subject: 'Bestätigen Sie Ihre E-Mail | TableReserve',
+    hello: n => `Willkommen bei TableReserve, ${n}!`,
+    body: 'Klicken Sie auf den Button, um Ihre E-Mail-Adresse zu bestätigen und Ihr Restaurant zu aktivieren.',
+    btn: 'E-Mail bestätigen',
+    after: 'Nach der Bestätigung gelangen Sie in Ihr Dashboard, wo Sie den Reservierungslink Ihres Restaurants finden.',
+    ignore: 'Wenn Sie kein Konto angelegt haben, können Sie diese E-Mail ignorieren.'
+  },
+  fr: {
+    subject: 'Confirmez votre e-mail | TableReserve',
+    hello: n => `Bienvenue sur TableReserve, ${n} !`,
+    body: 'Cliquez sur le bouton pour confirmer votre adresse e-mail et activer votre restaurant.',
+    btn: "Confirmer l'e-mail",
+    after: 'Une fois la confirmation faite, vous arriverez sur votre tableau de bord, où vous trouverez le lien de réservation de votre restaurant.',
+    ignore: "Si vous n'avez pas créé de compte, ignorez cet e-mail."
+  },
+  it: {
+    subject: 'Conferma la tua email | TableReserve',
+    hello: n => `Benvenuto su TableReserve, ${n}!`,
+    body: 'Clicca il pulsante per confermare il tuo indirizzo email e attivare il tuo locale.',
+    btn: 'Conferma email',
+    after: 'Dopo la conferma entrerai nella tua dashboard, dove troverai il link di prenotazione del tuo locale.',
+    ignore: "Se non hai creato tu un account, ignora quest'email."
+  },
+  es: {
+    subject: 'Confirma tu email | TableReserve',
+    hello: n => `¡Bienvenido a TableReserve, ${n}!`,
+    body: 'Pulsa el botón para confirmar tu dirección de email y activar tu restaurante.',
+    btn: 'Confirmar email',
+    after: 'Tras confirmarlo entrarás en tu panel, donde encontrarás el enlace de reservas de tu restaurante.',
+    ignore: 'Si no has creado ninguna cuenta, ignora este email.'
+  },
+  tr: {
+    subject: 'E-postanızı doğrulayın | TableReserve',
+    hello: n => `TableReserve’e hoş geldiniz, ${n}!`,
+    body: 'E-posta adresinizi doğrulamak ve restoranınızı etkinleştirmek için düğmeye tıklayın.',
+    btn: 'E-postayı doğrula',
+    after: 'Doğrulamadan sonra panelinize yönlendirileceksiniz; restoranınızın rezervasyon bağlantısını orada bulabilirsiniz.',
+    ignore: 'Hesap oluşturmadıysanız bu e-postayı dikkate almayın.'
+  },
+  pt: {
+    subject: 'Confirme o seu email | TableReserve',
+    hello: n => `Bem-vindo ao TableReserve, ${n}!`,
+    body: 'Clique no botão para confirmar o seu endereço de email e ativar o seu restaurante.',
+    btn: 'Confirmar email',
+    after: 'Depois de confirmar, entra no seu painel, onde encontra o link de reservas do seu restaurante.',
+    ignore: 'Se não criou nenhuma conta, ignore este email.'
   }
 };
 

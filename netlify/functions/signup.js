@@ -1,4 +1,5 @@
 const { validTz, TZ } = require('./_shared/time');
+const { normLang } = require('./_shared/i18n');
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { claimInitial } = require('./_shared/slugs');
@@ -24,7 +25,7 @@ exports.handler = async (event) => {
   const phone    = String(b.phone || '').trim().slice(0, 30);
   const type     = String(b.type || '').trim().slice(0, 40);
   const plan     = String(b.plan || '').trim().slice(0, 60);
-  const lang     = b.lang === 'en' ? 'en' : 'el';
+  const lang     = normLang(b.lang);   // γλώσσα της σελίδας εγγραφής: el, en, de, fr, it, es, tr, pt
   const tz       = validTz(b.tz) ? b.tz : TZ;   // ζώνη ώρας από τον browser του ιδιοκτήτη
 
   if (!shopName || !email || !password)       return json(400, { error: 'missing_fields' });

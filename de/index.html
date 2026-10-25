@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TableReserve: Online-Reservierungen für Restaurants</title>
+<meta name="description" content="Online-Reservierungen für Restaurants: Buchungen rund um die Uhr, Bestätigungs- und Erinnerungs-E-Mails, Warteliste und Gästeprofile. Keine Provision pro Gast. 14 Tage kostenlos.">
+<link rel="canonical" href="https://tablereserve.gr/de/">
+<link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
+<link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
+<link rel="alternate" hreflang="de" href="https://tablereserve.gr/de/">
+<link rel="alternate" hreflang="fr" href="https://tablereserve.gr/fr/">
+<link rel="alternate" hreflang="it" href="https://tablereserve.gr/it/">
+<link rel="alternate" hreflang="es" href="https://tablereserve.gr/es/">
+<link rel="alternate" hreflang="tr" href="https://tablereserve.gr/tr/">
+<link rel="alternate" hreflang="pt" href="https://tablereserve.gr/pt/">
+<link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;
+  --accent:#2563eb;--accent2:#1d4ed8;
+  --text:#ede8df;--muted:#c8c4bb;
+  --border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(16px);background:rgba(9,9,10,0.82);border-bottom:0.5px solid var(--border2)}
+.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px}
+.logo em{font-style:normal;color:var(--accent)}
+nav ul{display:flex;gap:36px;list-style:none}
+nav ul a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+nav ul a:hover{color:var(--text)}
+.nav-cta{background:var(--accent);color:#ffffff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:90px 6% 10vh;position:relative;overflow:hidden}
+.hero-copy{position:relative;z-index:2;max-width:640px}
+.hero-photo{position:absolute;left:50%;top:50%;height:108%;aspect-ratio:2/1;transform:translate(-50%,-50%) scale(1);background-image:url('/partners/assets/hero-table.jpg');background-size:cover;background-position:center;animation:kenBurns 26s ease-in-out infinite alternate;overflow:hidden}
+@keyframes kenBurns{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.09)}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,10,.1) 0%,rgba(9,9,10,.2) 60%,var(--bg) 98%),linear-gradient(90deg,rgba(9,9,10,.78) 0%,rgba(9,9,10,.3) 45%,rgba(9,9,10,0) 72%)}
+
+.hero-label{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .7s .2s forwards}
+.hero-label::before{content:'';width:28px;height:1px;background:var(--accent)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,8vw,94px);line-height:1.04;letter-spacing:-2px;margin-bottom:30px;max-width:860px;opacity:0;animation:fadeUp .8s .35s forwards}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:17px;color:var(--muted);max-width:500px;line-height:1.78;margin-bottom:48px;opacity:0;animation:fadeUp .8s .5s forwards}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .65s forwards}
+.btn-main{background:var(--accent);color:#ffffff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:17px 36px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-outline{border:0.5px solid rgba(237,232,223,.15);color:var(--text);font-size:15px;padding:17px 36px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s,transform .15s;display:inline-flex;align-items:center}
+.btn-outline:hover{border-color:rgba(37,99,235,.4);color:var(--accent);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:40px;right:6%;writing-mode:vertical-rl;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s 1.2s forwards}
+.hero-scroll::after{content:'';width:1px;height:50px;background:var(--muted);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.3;transform:scaleY(.5)}}
+
+/* STATS */
+.stats{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2);display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:36px 28px;border-right:0.5px solid var(--border2);text-align:center}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Playfair Display',serif;font-size:48px;line-height:1;color:var(--accent);margin-bottom:6px}
+.stat-l{font-size:12px;color:var(--muted);letter-spacing:.06em}
+
+/* SECTIONS */
+section{padding:110px 6%}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4.5vw,56px);line-height:1.09;letter-spacing:-1.5px;margin-bottom:20px;max-width:700px}
+.section-sub{font-size:16px;color:var(--muted);max-width:500px;line-height:1.75}
+
+/* HOW */
+.how{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:70px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
+.step{background:var(--card);padding:40px 32px;border-right:0.5px solid var(--border2);position:relative;overflow:hidden;transition:background .25s}
+.step:last-child{border-right:none}
+.step:hover{background:#1a1a1c}
+.step::before{content:attr(data-n);position:absolute;bottom:-10px;right:16px;font-family:'Playfair Display',serif;font-size:80px;color:rgba(37,99,235,.06);line-height:1;pointer-events:none}
+.step-dot{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.12);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent)}
+.step h3{font-size:15px;font-weight:500;margin-bottom:10px;margin-top:14px}
+.step p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* BENEFITS */
+.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:70px}
+@media(min-width:900px){.benefits-grid{grid-template-columns:repeat(3,1fr)}}
+.benefit{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:30px 26px;transition:transform .2s,border-color .2s}
+.benefit:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 8px 32px rgba(37,99,235,.15)}
+.b-icon{width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,.08);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
+.benefit h3{font-size:15px;font-weight:500;margin-bottom:8px}
+.benefit p{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* PRICING */
+.pricing{background:var(--bg2)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:70px;max-width:820px}
+.price-card{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:36px 30px;position:relative;transition:border-color .2s}
+.price-card.hot{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
+.hot-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#ffffff;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 16px;border-radius:40px;white-space:nowrap}
+.plan-name{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.plan-price{font-family:'Playfair Display',serif;font-size:54px;line-height:1;margin-bottom:4px}
+.plan-price sup{font-size:22px;vertical-align:super;font-family:'Syne',sans-serif;font-weight:300}
+.plan-price sub{font-size:16px;font-family:'Syne',sans-serif;font-weight:300;color:var(--muted)}
+.plan-desc{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+.plan-features{list-style:none;margin-bottom:30px}
+.plan-features li{font-size:13px;color:var(--muted);padding:9px 0;border-bottom:0.5px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px}
+.plan-features li::before{content:'✓';color:var(--accent);font-weight:500;flex-shrink:0}
+.plan-features li.dim{color:rgba(107,104,96,.45)}
+.plan-features li.dim::before{content:'–';color:rgba(107,104,96,.35)}
+.btn-plan{display:block;text-align:center;padding:14px;border-radius:40px;font-size:14px;font-weight:500;font-family:'Syne',sans-serif;text-decoration:none;transition:all .2s}
+.btn-plan-g{border:0.5px solid rgba(37,99,235,.3);color:var(--accent)}
+.btn-plan-g:hover{background:rgba(37,99,235,.08)}
+.btn-plan-s{background:var(--accent);color:#ffffff}
+.btn-plan-s:hover{background:var(--accent2)}
+
+/* FORM */
+.form-wrap{max-width:620px;background:var(--card);border:0.5px solid var(--border2);border-radius:22px;padding:52px 44px;margin-top:70px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{margin-bottom:20px}
+label{display:block;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+input,select,textarea{width:100%;background:rgba(255,255,255,.035);border:0.5px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;font-size:14px;font-family:'Syne',sans-serif;font-weight:300;color:var(--text);outline:none;transition:border-color .2s,background .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);background:rgba(37,99,235,.04)}
+select option{background:#161618}
+textarea{resize:vertical;min-height:90px}
+.btn-submit{width:100%;background:var(--accent);color:#ffffff;border:none;padding:18px;border-radius:40px;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;cursor:pointer;transition:background .2s,transform .15s;margin-top:6px}
+.btn-submit:hover{background:var(--accent2);transform:translateY(-2px)}
+.form-note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:0.5px solid var(--border2);padding:36px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer p{font-size:13px;color:var(--muted)}
+footer a{color:var(--muted);text-decoration:none}
+footer a:hover{color:var(--accent)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.faq{max-width:760px}
+.faq-item{border-bottom:0.5px solid var(--border2)}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;font-weight:500}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{flex-shrink:0;width:22px;height:22px;position:relative}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--accent);top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-icon::before{width:14px;height:1.5px}
+.faq-icon::after{width:1.5px;height:14px;transition:transform .25s ease}
+.faq-item.open .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scale(0)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:420px}
+.faq-a p{color:var(--muted);font-size:14px;line-height:1.7;padding:0 0 24px}
+
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}
+/* NEW BADGE + COST */
+.benefit{position:relative}
+.b-new{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
+.cost{border-top:0.5px solid var(--border2)}
+.cost-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:70px;align-items:stretch}
+@media(max-width:860px){.cost-wrap{grid-template-columns:1fr}}
+.cost-wrap>*{min-width:0}.cost-calc label,.cost-points li{overflow-wrap:break-word;hyphens:auto}.nav-cta,#navLogin{white-space:nowrap}@media(max-width:480px){nav{padding:16px 5%}#navCta{display:none}nav select{margin-right:12px!important}}
+.cost-calc,.cost-points{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:34px 30px}
+.cost-calc h3,.cost-points h3{font-size:15px;font-weight:500;margin-bottom:22px}
+.cc-row{margin-bottom:22px}
+.cc-row label{text-transform:none;letter-spacing:0;font-weight:300;display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);margin-bottom:10px}
+.cc-row label b{color:var(--text);font-weight:500;white-space:nowrap}
+.cc-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+.cc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.cc-box{border-radius:14px;padding:18px 16px;border:0.5px solid var(--border2);background:var(--bg3)}
+.cc-box.us{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
+.cc-box small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;line-height:1.4}
+.cc-box strong{font-family:'Playfair Display',serif;font-size:32px;font-weight:400;line-height:1}
+.cc-box.us strong{color:var(--accent)}
+.cc-box span{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.cc-save{margin-top:16px;font-size:14px;color:var(--text);line-height:1.6}
+.cc-save b{color:var(--accent);font-weight:600}
+.cc-note{margin-top:14px;font-size:11.5px;color:var(--muted);opacity:.75;line-height:1.6}
+.cost-points ul{list-style:none}
+.cost-points li{display:flex;gap:14px;padding:14px 0;border-bottom:0.5px solid rgba(255,255,255,.05);font-size:13.5px;color:var(--muted);line-height:1.65}
+.cost-points li:last-child{border-bottom:none}
+.cost-points li b{display:block;color:var(--text);font-weight:500;margin-bottom:2px}
+.cost-points li i{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;margin-top:2px}
+</style>
+<script>try{localStorage.setItem('tr_lang','de')}catch(e){}</script>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Table<em>Reserve</em></div>
+  <ul>
+    <li><a href="#how">So funktioniert's</a></li>
+    <li><a href="#benefits">Funktionen</a></li>
+    <li><a href="#pricing">Preise</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;">
+  <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el">ΕΛ</option><option value="/en/?lang=en">EN</option><option value="/de/?lang=de" selected>DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
+  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Anmelden</a><a href="#contact" class="nav-cta" id="navCta">Jetzt starten →</a></span>
+  <a href="/admin" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
+    <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
+    <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
+    <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Dashboard →</span></span>
+  </a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-photo"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-copy">
+    <div class="hero-label">Für Restaurants &amp; Cafés</div>
+    <h1>Online-Reservierungen<br>für Ihr Restaurant,<br><em>ganz ohne Aufwand</em></h1>
+    <p>Online- und Telefonreservierungen an einem Ort, Erinnerungen gegen No-Shows, eine Warteliste und ein Profil für jeden Gast. 14 Tage kostenlos, danach ab 39 € pro Quartal</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-main">Jetzt starten →</a>
+      <a href="https://tablereserve.gr" target="_blank" rel="noopener" class="btn-outline">Live-Demo ansehen ↗</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scrollen</div>
+</section>
+
+<div class="stats reveal">
+  <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Einrichtungszeit</div></div>
+  <div class="stat"><div class="stat-n">€99</div><div class="stat-l">Jahrespaket</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online-Reservierungen</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Automatische E-Mails</div></div>
+</div>
+
+<section class="how" id="how">
+  <div class="reveal">
+    <div class="eyebrow">So funktioniert's</div>
+    <h2>Von der Anmeldung zu echten<br>Reservierungen in 4 Schritten</h2>
+  </div>
+  <div class="steps reveal">
+    <div class="step" data-n="01">
+      <div class="step-dot">01</div>
+      <h3>Anmelden &amp; einrichten</h3>
+      <p>Tragen Sie die Daten Ihres Restaurants, die Öffnungszeiten und die verfügbaren Tische ein. In wenigen Minuten fertig</p>
+    </div>
+    <div class="step" data-n="02">
+      <div class="step-dot">02</div>
+      <h3>Link teilen</h3>
+      <p>Sie erhalten Ihren eigenen Link (tablereserve.gr/ihr-restaurant) für Ihre Instagram-Bio, Google Maps und Ihre Website</p>
+    </div>
+    <div class="step" data-n="03">
+      <div class="step-dot">03</div>
+      <h3>Reservierungen automatisch annehmen</h3>
+      <p>Gäste reservieren online einen Tisch und erhalten automatisch eine E-Mail. Sie sehen alles in Ihrem Dashboard</p>
+    </div>
+    <div class="step" data-n="04">
+      <div class="step-dot">04</div>
+      <h3>Bei Google gefunden werden</h3>
+      <p>Fügen Sie Ihren Reservierungslink zu Ihrem Google-Unternehmensprofil hinzu, damit Gäste direkt aus Google Maps mit einem Klick reservieren können</p>
+    </div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="reveal">
+    <div class="eyebrow">Warum TableReserve</div>
+    <h2>Alles, was Sie brauchen,<br>nichts, was Sie nicht brauchen</h2>
+    <p class="section-sub">Entwickelt von jemandem mit 25 Jahren Erfahrung in der Gastronomie, für die Probleme, die Sie jeden Tag haben</p>
+  </div>
+  <div class="benefits-grid reveal">
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Alle Reservierungen in einem Buch</h3><p>Online-, Telefon- und Walk-in-Reservierungen zusammen. Die Uhrzeiten zeigen freie Plätze, so können Sie am Telefon sofort antworten</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Erkennt Ihre Gäste</h3><p>Geben Sie eine Telefonnummer oder einen Namen ein und sehen Sie Besuche, VIP-Status, Allergien und Notizen, bevor der Gast am Tisch ist</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Erinnerungen & weniger No-Shows</h3><p>Automatische E-Mail 2 Stunden vorher mit Adresse und Route, dazu eine Benachrichtigung aufs Handy des Gastes. Markieren Sie „Erschienen / No-Show“ und behalten Sie Ihre No-Show-Quote im Blick</p></div>
+    <div class="benefit"><span class="b-new">Neu</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Warteliste</h3><p>Ist eine Uhrzeit ausgebucht, tragen sich Gäste in die Warteliste ein, statt zu gehen. Wird eine Reservierung storniert, erhalten sie automatisch eine E-Mail „Tisch frei“</p></div>
+    <div class="benefit"><span class="b-new">Neu</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><path d="M16 14h.01"/></svg></div><h3>Reservierungen in Google Wallet</h3><p>Ein Tipp speichert die Reservierung auf dem Handy des Gastes, mit Ihrem Logo, Uhrzeit, Personenzahl und Adresse</p></div>
+    <div class="benefit"><span class="b-new">Neu</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></div><h3>Benachrichtigungen & Kalender</h3><p>Push-Benachrichtigung auf dem Handy des Gastes und Kalendereintrag für Google, Apple oder Outlook. In Ihrem Paket enthalten</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Wissen, woher Reservierungen kommen</h3><p>Google, Website, soziale Medien, Telefon oder Walk-in: Sehen Sie, welcher Kanal Ihnen Gäste bringt</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>PDF-Bericht mit Erkenntnissen</h3><p>Stoßzeiten und -tage, Stornierungen, No-Shows und Stammgäste, in einem Bericht für Ihren Partner oder Steuerberater</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Automatische E-Mails in 8 Sprachen</h3><p>Reservierungsseite, Bestätigung und Erinnerung in der Sprache des Gastes: Griechisch, Englisch, Deutsch, Französisch, Italienisch, Spanisch, Türkisch und Portugiesisch</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Ihr eigener Reservierungslink</h3><p>tablereserve.gr/ihr-restaurant für Instagram, Ihre Website und Google Maps. Gäste reservieren mit einem Klick</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>Auf dem Handy, in Echtzeit</h3><p>Jede Reservierung und Änderung erscheint sofort, auf Handy, Tablet oder Computer</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Clevere Stornierungen</h3><p>Gäste stornieren selbst bis 2 Stunden vorher, und Sie werden sofort benachrichtigt. Stornierungen bleiben in Ihren Statistiken</p></div>
+  </div>
+</section>
+
+<section class="cost" id="cost">
+  <div class="reveal">
+    <div class="eyebrow">Kosten</div>
+    <h2>Ein fester Preis,<br>keine Gebühr pro Gast</h2>
+    <p class="section-sub">Viele Reservierungsplattformen verlangen eine Gebühr für jeden Gast, der über sie kommt. Je besser Ihr Restaurant läuft, desto mehr zahlen Sie. Rechnen Sie den Unterschied aus</p>
+  </div>
+  <div class="cost-wrap reveal">
+    <div class="cost-calc">
+      <h3>Kostenrechner</h3>
+      <div class="cc-row"><label for="ccGuests">Gäste aus Online-Reservierungen pro Monat <b id="ccGuestsV">300</b></label><input type="range" id="ccGuests" min="50" max="2000" step="50" value="300"></div>
+      <div class="cc-row"><label for="ccFee">Gebühr pro Gast auf einer Provisionsplattform <b id="ccFeeV">€2,00</b></label><input type="range" id="ccFee" min="0.5" max="4" step="0.25" value="2"></div>
+      <div class="cc-out">
+        <div class="cc-box"><small>Mit Gebühr pro Gast</small><strong id="ccThem">—</strong><span>pro Jahr</span></div>
+        <div class="cc-box us"><small>TableReserve, jährlich</small><strong>€99</strong><span>pro Jahr</span></div>
+      </div>
+      <p class="cc-save">Unterschied: <b id="ccDiff">—</b> pro Jahr, die in Ihrem Restaurant bleiben</p>
+      <p class="cc-note">Die Zahlen dienen nur dem Vergleich. Prüfen Sie die Preisliste der Plattform, die Sie nutzen</p>
+    </div>
+    <div class="cost-points">
+      <h3>Was im Preis enthalten ist</h3>
+      <ul><li><i>✓</i><div><b>Keine Provision</b>Weder pro Reservierung noch pro Gast. Ob 10 oder 10.000 Reservierungen, der Preis bleibt gleich</div></li><li><i>✓</i><div><b>Ihre Gäste bleiben Ihre Gäste</b>Ihre Reservierungsseite zeigt nur Ihr Restaurant, nie Vorschläge für andere Lokale</div></li><li><i>✓</i><div><b>Erinnerungen inklusive</b>E-Mail, Handy-Benachrichtigungen und Kalender, ohne Aufpreis</div></li><li><i>✓</i><div><b>Keine Bindung</b>14 Tage kostenlos, dann wählen Sie einen Zeitraum und kündigen, wann Sie wollen</div></li></ul>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var g=document.getElementById('ccGuests'),f=document.getElementById('ccFee');
+  if(!g||!f)return;
+  var eur=function(n,d){return new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',minimumFractionDigits:d,maximumFractionDigits:d}).format(n)};
+  function upd(){
+    var gv=+g.value,fv=+f.value,y=Math.round(gv*fv*12);
+    document.getElementById('ccGuestsV').textContent=gv.toLocaleString('de-DE');
+    document.getElementById('ccFeeV').textContent=eur(fv,2);
+    document.getElementById('ccThem').textContent=eur(y,0);
+    document.getElementById('ccDiff').textContent=eur(Math.max(0,y-99),0);
+  }
+  g.addEventListener('input',upd);f.addEventListener('input',upd);upd();
+})();
+</script>
+
+<section class="pricing" id="pricing">
+  <div class="reveal">
+    <div class="eyebrow">Preise</div>
+    <h2>Einfache, transparente<br>Preise</h2>
+    <p class="section-sub">Starten Sie mit 14 Tagen kostenlos. Vierteljährlich 39 € · Halbjährlich 69 € · Jährlich 99 €, alle Funktionen inklusive</p>
+    <div style="display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:10px 18px;border-radius:40px;background:rgba(37,99,235,.10);border:0.5px solid rgba(37,99,235,.35);color:var(--text);font-size:13px;line-height:1.4"><span style="color:var(--accent);font-size:15px">★</span><strong style="font-weight:600">Gründungspartner-Preis</strong><span style="color:var(--muted)">· garantiert, solange Ihr Abonnement aktiv bleibt</span></div>
+  </div>
+  <div class="pricing-grid reveal" style="max-width:1000px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+    <div class="price-card">
+      <div class="plan-name">Vierteljährlich</div>
+      <div class="plan-price"><sup>€</sup>39<sub>/Quartal</sub></div>
+      <p class="plan-desc">Alle Funktionen, Abrechnung alle 3 Monate</p>
+      <ul class="plan-features">
+        <li>Unbegrenzte Reservierungen, online &amp; telefonisch</li>
+        <li>Bestätigungs- &amp; Erinnerungs-E-Mails</li>
+        <li>Gästeprofile mit Notizen</li>
+        <li>Warteliste mit automatischen Benachrichtigungen</li>
+        <li>Google Wallet, Push &amp; Kalender</li>
+        <li>No-Show- &amp; Herkunftsauswertung</li>
+        <li>Statistiken &amp; PDF-Berichte</li>
+        <li>Eigener Link &amp; Google Maps</li>
+        <li>Voller Support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-g" data-plan="quarter" onclick="setPlan('Vierteljährlich — 39 €','quarter')">Vierteljährlich wählen</a>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Halbjährlich</div>
+      <div class="plan-price"><sup>€</sup>69<sub>/6 Monate</sub></div>
+      <p class="plan-desc">Alle Funktionen, Abrechnung alle 6 Monate. 9 € günstiger als vierteljährlich</p>
+      <ul class="plan-features">
+        <li>Unbegrenzte Reservierungen, online &amp; telefonisch</li>
+        <li>Bestätigungs- &amp; Erinnerungs-E-Mails</li>
+        <li>Gästeprofile mit Notizen</li>
+        <li>Warteliste mit automatischen Benachrichtigungen</li>
+        <li>Google Wallet, Push &amp; Kalender</li>
+        <li>No-Show- &amp; Herkunftsauswertung</li>
+        <li>Statistiken &amp; PDF-Berichte</li>
+        <li>Eigener Link &amp; Google Maps</li>
+        <li>Voller Support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-g" data-plan="half" onclick="setPlan('Halbjährlich — 69 €','half')">Halbjährlich wählen</a>
+    </div>
+    <div class="price-card hot">
+      <div class="hot-badge">Bestes Angebot</div>
+      <div class="plan-name">Jährlich</div>
+      <div class="plan-price"><sup>€</sup>99<sub>/Jahr</sub></div>
+      <p class="plan-desc">57 € günstiger als vierteljährlich: nur 8,25 € im Monat für alle Funktionen</p>
+      <ul class="plan-features">
+        <li>Unbegrenzte Reservierungen, online &amp; telefonisch</li>
+        <li>Bestätigungs- &amp; Erinnerungs-E-Mails</li>
+        <li>Gästeprofile mit Notizen</li>
+        <li>Warteliste mit automatischen Benachrichtigungen</li>
+        <li>Google Wallet, Push &amp; Kalender</li>
+        <li>No-Show- &amp; Herkunftsauswertung</li>
+        <li>Statistiken &amp; PDF-Berichte</li>
+        <li>Eigener Link &amp; Google Maps</li>
+        <li>Voller Support</li>
+      </ul>
+      <a href="#contact" class="btn-plan btn-plan-s" data-plan="year" onclick="setPlan('Jährlich — 99 €','year')">Jährlich wählen</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="reveal">
+    <div class="eyebrow">FAQ</div>
+    <h2>Fragen?<br>Hier sind die Antworten</h2>
+  </div>
+  <div class="faq reveal">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Wie schnell kann ich starten<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Meist innerhalb weniger Minuten, nachdem Sie die Daten Ihres Restaurants eingetragen haben: Öffnungszeiten, Tische, und Ihr eigener Reservierungslink ist bereit</p></div>
+    </div>
+      <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Gibt es eine Einrichtungsgebühr<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Nein. Die Einrichtung ist kostenlos, und Sie haben 14 Tage, um alle Funktionen zu testen, bevor Sie ein Paket wählen</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Kann ich später selbst Änderungen vornehmen<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Natürlich. Im Dashboard ändern Sie Öffnungszeiten, Tische und Restaurantdaten jederzeit, ohne uns kontaktieren zu müssen</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Kann ich auch telefonische Reservierungen eintragen<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ja. Mit „Neue Reservierung“ tragen Sie Telefon- und Walk-in-Reservierungen in Sekunden ein. War der Gast schon einmal da, erkennt ihn das System an Telefonnummer oder Namen und füllt seine Daten aus</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Werden Gäste erinnert<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ja. Jeder Gast mit E-Mail-Adresse erhält 2 Stunden vor der Reservierung automatisch eine Erinnerung mit Adresse, Route und Ihrer Telefonnummer. Gäste, die es erlauben, bekommen auch eine Benachrichtigung aufs Handy und können die Reservierung in ihren Kalender oder in Google Wallet übernehmen. Das senkt die No-Shows, und Sie sehen es in Ihren Statistiken</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Was passiert, wenn eine Uhrzeit ausgebucht ist<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Sie verlieren den Gast nicht: Er trägt sich für die gewünschte Uhrzeit in die Warteliste ein, und Sie erhalten eine E-Mail. Wird eine Reservierung storniert, schickt ihm das System automatisch eine E-Mail, dass ein Tisch frei ist, und die ganze Liste sehen Sie im Admin-Bereich</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Können Gäste die Reservierung auf dem Handy speichern<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ja. Nach der Reservierung sehen sie Buttons für Google Wallet und Kalender (Google, Apple, Outlook). Die Wallet-Karte zeigt Ihr Logo, Uhrzeit, Personenzahl und Adresse, ohne dass Sie etwas einrichten müssen</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Brauche ich technische Kenntnisse<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Überhaupt nicht. Das Dashboard ist für die Nutzung am Handy gemacht, ganz ohne technische Erfahrung</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Kann ich mein Paket später wechseln<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ja. Sie können Ihr Abonnement jederzeit im Dashboard ändern oder kündigen</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Was passiert, wenn mein Abonnement endet<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ihr Abonnement verlängert sich automatisch. Wenn Sie kündigen, bleibt es bis zum Ende des bezahlten Zeitraums aktiv, danach werden die Online-Reservierungen pausiert</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Funktioniert es auf Handy und Computer<span class="faq-icon"></span></button>
+      <div class="faq-a"><p>Ja. Reservierungsseite und Dashboard funktionieren reibungslos auf Handys, Tablets und Computern</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="reveal">
+    <div class="eyebrow">Registrieren</div>
+    <h2>Starten Sie heute —<br>legen Sie Ihr Konto an</h2>
+    <p class="section-sub">Legen Sie Ihr Restaurantkonto in zwei Minuten an und erhalten Sie sofort Ihren eigenen Reservierungslink. 14 Tage kostenlos, keine Kreditkarte nötig.</p>
+  </div>
+  <div class="form-wrap reveal" id="signupWrap">
+    <form id="partnerForm" novalidate>
+      <input type="hidden" name="plan" id="selectedPlan" value="">
+      <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+      <div class="plan-chip" id="planChip" style="display:none;margin-bottom:20px;padding:10px 16px;border-radius:10px;background:rgba(37,99,235,.1);border:0.5px solid rgba(37,99,235,.3);color:var(--accent);font-size:13px;font-weight:500;">
+        ✓ Gewähltes Paket: <span id="planChipText"></span>
+        <a href="#pricing" style="color:var(--muted);text-decoration:underline;margin-left:8px;font-weight:400;">ändern</a>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label for="f-shop">Name des Restaurants</label><input id="f-shop" type="text" name="shopName" placeholder="z. B. Zur Linde" maxlength="80" required></div>
+        <div class="fg"><label for="f-type">Art des Betriebs</label>
+          <select id="f-type" name="type"><option value="">Auswählen...</option><option>Restaurant</option><option>Taverne</option><option>Café / Bistro</option><option>Bar</option><option>Sonstiges</option></select>
+        </div>
+      </div>
+      <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;line-height:1.5;margin:4px 0 18px;cursor:pointer;">
+        <input id="f-terms" type="checkbox" name="acceptTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);" required>
+        <span>Ich akzeptiere die <a href="/terms?lang=de" target="_blank" rel="noopener" style="color:var(--accent);">Nutzungsbedingungen</a> und die <a href="/privacy?lang=de" target="_blank" rel="noopener" style="color:var(--accent);">Datenschutzerklärung</a></span>
+      </label>
+      <button type="button" id="googleBtn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:none;padding:15px;border-radius:40px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;margin:0 0 6px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Mit Google registrieren</span></button>
+      <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 18px;">Kein Passwort, keine Bestätigungs-E-Mail.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 22px;color:var(--muted);font-size:12px;"><span style="flex:1;height:0.5px;background:var(--border2);"></span>oder mit E-Mail<span style="flex:1;height:0.5px;background:var(--border2);"></span></div>
+      <div class="form-row">
+        <div class="fg"><label for="f-email">E-Mail</label><input id="f-email" type="email" name="email" placeholder="hallo@ihr-restaurant.de" autocomplete="email" required></div>
+        <div class="fg"><label for="f-phone">Telefon</label><input id="f-phone" type="tel" name="phone" placeholder="+49 30 1234567" autocomplete="tel"></div>
+      </div>
+      <div class="fg"><label for="f-pass">Passwort</label><input id="f-pass" type="password" name="password" placeholder="Mindestens 8 Zeichen" minlength="8" autocomplete="new-password" required></div>
+      <p id="formError" role="alert" style="display:none;color:#f87171;font-size:13px;margin:0 0 12px;"></p>
+      <button type="submit" class="btn-submit" id="submitBtn">Konto anlegen →</button>
+      <p class="form-note">Sie haben schon ein Konto? <a href="/admin" style="color:var(--accent);">Anmelden</a> · Fragen? <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
+    </form>
+    <div id="signedInBox" style="display:none;text-align:center;">
+      <div style="font-size:15px;color:var(--muted);margin:0 0 8px;">Angemeldet als</div>
+      <div id="signedInName" style="font-size:20px;font-weight:600;margin:0 0 22px;"></div>
+      <a href="/admin" class="btn-main">Dashboard →</a>
+    </div>
+    <div id="signupDone" style="display:none;text-align:center;">
+      <div style="font-size:42px;margin-bottom:14px;">✉️</div>
+      <h3 style="font-size:22px;margin:0 0 12px;">Prüfen Sie Ihre E-Mails</h3>
+      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;">Wir haben einen Bestätigungslink an <strong id="doneEmail" style="color:var(--text);"></strong> geschickt. Klicken Sie darauf, um Ihr Restaurant zu aktivieren. Falls Sie ihn nicht finden, schauen Sie in Ihren Spam-Ordner.</p>
+      <a href="/admin" class="btn-main">Zur Anmeldung →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">Table<em style="font-style:normal;color:var(--accent)">Reserve</em></div>
+  <p>© 2026 TableReserve · AR Akron Services · G.E.MI. 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
+  <p><a href="/privacy?lang=de">Datenschutzerklärung</a> · <a href="/terms?lang=de">Nutzungsbedingungen</a></p>
+  <a href="https://partners.tourist.com/booking-software" target="_blank" rel="noopener"><img src="https://partners.tourist.com/img/badges/listed-on-tourist.svg" width="160" height="35" alt="Listed on Tourist.com" loading="lazy"></a>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1})
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
+</script>
+
+<!-- STICKY MOBILE BAR -->
+<div class="sticky-bar">
+  <p>Ab 39 €, alle Funktionen inklusive</p>
+  <a href="#contact">Jetzt starten →</a>
+</div>
+
+<script>
+// Counter animation for stats
+function animateCounter(el, target, suffix='') {
+  const isText = isNaN(target);
+  if (isText) return; // skip non-numeric like "24/7"
+  let start = 0;
+  const duration = 1800;
+  const step = timestamp => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(ease * target) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  };
+  requestAnimationFrame(step);
+}
+
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const text = el.textContent;
+    if (text === "3'") { animateCounter(el, 3, "'"); }
+    else if (text === '1') { animateCounter(el, 1, ''); }
+    else if (text === '100%') { animateCounter(el, 100, '%'); }
+    statObs.unobserve(el);
+  });
+}, {threshold: 0.5});
+document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
+</script>
+
+
+<script>
+function trBrowserTz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } }
+
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+function setPlan(plan, key) {
+  document.getElementById('selectedPlan').value = plan;
+  const chip = document.getElementById('planChip');
+  const chipText = document.getElementById('planChipText');
+  chip.style.display = 'block';
+  chipText.textContent = plan;
+  // Update form title to reflect chosen plan
+  const h2 = document.querySelector('#contact h2');
+  if (key === 'year') {
+    h2.innerHTML = 'Sie haben Jährlich gewählt —<br>los geht\'s!';
+  } else if (key === 'half') {
+    h2.innerHTML = 'Sie haben Halbjährlich gewählt —<br>los geht\'s!';
+  } else if (key === 'quarter') {
+    h2.innerHTML = 'Sie haben Vierteljährlich gewählt —<br>los geht\'s!';
+  } else {
+    h2.innerHTML = 'Starten Sie heute —<br>legen Sie Ihr Konto an';
+  }
+}
+
+document.getElementById('partnerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const err = document.getElementById('formError');
+  const f = this;
+  const showErr = msg => { err.textContent = msg; err.style.display = 'block'; };
+  err.style.display = 'none';
+
+  const data = {
+    shopName: f.shopName.value.trim(),
+    type: f.type.value,
+    email: f.email.value.trim(),
+    phone: f.phone.value.trim(),
+    password: f.password.value,
+    plan: f.plan.value,
+    website: f.website.value,
+    acceptTerms: f.acceptTerms.checked,
+    lang: 'de'
+  };
+  if (!data.shopName || !data.email || !data.password) return showErr('Bitte geben Sie den Namen des Restaurants, Ihre E-Mail und ein Passwort ein.');
+  if (data.password.length < 8) return showErr('Ihr Passwort braucht mindestens 8 Zeichen.');
+  if (!data.acceptTerms) return showErr('Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzerklärung.');
+
+  btn.textContent = 'Wird angelegt...';
+  btn.disabled = true;
+  const messages = {
+    email_in_use: 'Für diese E-Mail gibt es bereits ein Konto. Bitte melden Sie sich an.',
+    invalid_email: 'Diese E-Mail-Adresse ist ungültig.',
+    weak_password: 'Ihr Passwort braucht mindestens 8 Zeichen.',
+    terms_required: 'Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzerklärung.',
+    name_too_long: 'Der Name des Restaurants ist zu lang.'
+  };
+  try {
+    const res = await fetch('/.netlify/functions/signup', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, tz: trBrowserTz() })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok) {
+      document.getElementById('doneEmail').textContent = data.email;
+      f.style.display = 'none';
+      document.getElementById('signupDone').style.display = 'block';
+      return;
+    }
+    showErr(messages[out.error] || 'Etwas ist schiefgelaufen. Bitte versuchen Sie es gleich noch einmal.');
+  } catch (x) {
+    showErr('Keine Verbindung. Bitte prüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.');
+  }
+  btn.textContent = 'Konto anlegen →';
+  btn.disabled = false;
+});
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+const app = initializeApp({
+  apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+  authDomain: "tablereserve.gr",
+  databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "reser-dfb9a"
+});
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// Κουμπιά πακέτων: αν ο χρήστης έχει κατάστημα, πηγαίνει κατευθείαν στην πληρωμή.
+// Αλλιώς κρατάμε το πακέτο και τον στέλνουμε στην εγγραφή (δοκιμή 14 ημερών).
+document.querySelectorAll('a[data-plan]').forEach(a => a.addEventListener('click', async (e) => {
+  const user = auth.currentUser;
+  if (!user) return;
+  e.preventDefault();
+  try {
+    const shopId = (await get(ref(db, 'users_to_shops/' + user.uid))).val();
+    const links = await (await fetch('/billing.json', { cache: 'no-store' })).json();
+    const base = links[a.dataset.plan];
+    if (!shopId || !base) { window.location.href = '/admin'; return; }
+    const u = new URL(base);
+    u.searchParams.set('checkout[custom][shop_id]', shopId);
+    if (user.email) u.searchParams.set('checkout[email]', user.email);
+    window.location.href = u.toString();
+  } catch (err) { window.location.href = '/admin'; }
+}));
+
+onAuthStateChanged(auth, user => {
+  const cta = document.getElementById('navGuest'), box = document.getElementById('navUser');
+  const form = document.getElementById('partnerForm'), signedIn = document.getElementById('signedInBox');
+  if (!user) { box.style.display = 'none'; cta.style.display = 'flex'; signedIn.style.display = 'none'; if (document.getElementById('signupDone').style.display !== 'block') form.style.display = ''; return; }
+  form.style.display = 'none';
+  document.getElementById('signupDone').style.display = 'none';
+  signedIn.style.display = 'block';
+  document.getElementById('signedInName').textContent = user.displayName || user.email || '';
+  document.querySelectorAll('a[href="#contact"]').forEach(a => { if (!a.closest('nav ul') && !a.dataset.plan) { a.href = '/admin'; a.removeAttribute('onclick'); } });
+  document.querySelectorAll('a[data-plan]').forEach(a => a.removeAttribute('onclick'));
+  const name = user.displayName || user.email || '';
+  document.getElementById('navUserName').textContent = name;
+  const img = document.getElementById('navUserPhoto'), ini = document.getElementById('navUserInitial');
+  if (user.photoURL) { img.src = user.photoURL; img.style.display = 'block'; }
+  else { ini.textContent = name.charAt(0).toUpperCase(); ini.style.display = 'flex'; }
+  cta.style.display = 'none'; box.style.display = 'flex';
+});
+const btn = document.getElementById('googleBtn');
+const err = document.getElementById('formError');
+const showErr = m => { err.textContent = m; err.style.display = 'block'; err.scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+
+btn.addEventListener('click', async () => {
+  const f = document.getElementById('partnerForm');
+  err.style.display = 'none';
+  const shopName = f.shopName.value.trim();
+  if (!shopName) { f.shopName.focus(); return showErr('Bitte geben Sie zuerst den Namen Ihres Restaurants ein.'); }
+  if (!f.acceptTerms.checked) return showErr('Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzerklärung.');
+
+  const label = btn.querySelector('span'); const orig = label.textContent;
+  btn.disabled = true; label.textContent = 'Anmeldung mit Google...';
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const token = await cred.user.getIdToken();
+    const res = await fetch('/.netlify/functions/signup-google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'de', tz: trBrowserTz() })
+    });
+    const out = await res.json().catch(() => ({}));
+    if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin'; return; }
+    await signOut(auth);
+    showErr(out.error === 'name_too_long' ? 'Der Name des Restaurants ist zu lang.' : 'Etwas ist schiefgelaufen. Bitte versuchen Sie es gleich noch einmal.');
+  } catch (e) {
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request')
+      showErr(e.code === 'auth/popup-blocked' ? 'Ihr Browser hat das Google-Fenster blockiert. Bitte erlauben Sie Pop-ups und versuchen Sie es erneut.' : 'Die Anmeldung mit Google wurde nicht abgeschlossen. Bitte versuchen Sie es erneut.');
+  }
+  btn.disabled = false; label.textContent = orig;
+});
+</script>
+
+</body>
+</html>

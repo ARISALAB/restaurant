@@ -8,6 +8,13 @@
 <link rel="canonical" href="https://tablereserve.gr/">
 <link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
 <link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
+<link rel="alternate" hreflang="de" href="https://tablereserve.gr/de/">
+<link rel="alternate" hreflang="fr" href="https://tablereserve.gr/fr/">
+<link rel="alternate" hreflang="it" href="https://tablereserve.gr/it/">
+<link rel="alternate" hreflang="es" href="https://tablereserve.gr/es/">
+<link rel="alternate" hreflang="tr" href="https://tablereserve.gr/tr/">
+<link rel="alternate" hreflang="pt" href="https://tablereserve.gr/pt/">
+<link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500&display=swap" rel="stylesheet">
@@ -154,6 +161,7 @@ footer a:hover{color:var(--accent)}
 .cost{border-top:0.5px solid var(--border2)}
 .cost-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:70px;align-items:stretch}
 @media(max-width:860px){.cost-wrap{grid-template-columns:1fr}}
+.cost-wrap>*{min-width:0}.cost-calc label,.cost-points li{overflow-wrap:break-word;hyphens:auto}.nav-cta,#navLogin{white-space:nowrap}@media(max-width:480px){nav{padding:16px 5%}#navCta{display:none}nav select{margin-right:12px!important}}
 .cost-calc,.cost-points{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:34px 30px}
 .cost-calc h3,.cost-points h3{font-size:15px;font-weight:500;margin-bottom:22px}
 .cc-row{margin-bottom:22px}
@@ -176,17 +184,18 @@ footer a:hover{color:var(--accent)}
 .cost-points li b{display:block;color:var(--text);font-weight:500;margin-bottom:2px}
 .cost-points li i{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;margin-top:2px}
 </style>
-<link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
-<link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
-<link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
 <script>
 (function(){try{
+  var L=['el','en','de','fr','it','es','tr','pt'];
   var p=new URLSearchParams(location.search).get('lang');
   if(p==='el'){localStorage.setItem('tr_lang','el');return;}
   if(/bot|crawl|spider|slurp/i.test(navigator.userAgent))return;
   var s=localStorage.getItem('tr_lang');
-  var nav=(navigator.language||'').toLowerCase();
-  if(s==='en'||(!s&&nav.indexOf('el')!==0))location.replace('/en/'+location.hash);
+  if(s==='el')return;
+  var go=L.indexOf(s)>0?s:null;
+  if(!go){var ns=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||''];
+    for(var i=0;i<ns.length&&!go;i++){var c=String(ns[i]).toLowerCase().slice(0,2);if(c==='el')return;if(L.indexOf(c)>0)go=c;}}
+  location.replace('/'+(go||'en')+'/'+location.hash);
 }catch(e){}})();
 </script>
 </head>
@@ -202,7 +211,7 @@ footer a:hover{color:var(--accent)}
     <li><a href="#contact">Επικοινωνία</a></li>
   </ul>
   <div style="display:flex;align-items:center;">
-  <a href="/en/?lang=en" hreflang="en" style="color:var(--muted);font-size:12px;font-weight:600;text-decoration:none;border:0.5px solid var(--border2);border-radius:20px;padding:5px 10px;margin-right:14px;">EN</a>
+  <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el" selected>ΕΛ</option><option value="/en/?lang=en">EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
   <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Σύνδεση</a><a href="#contact" class="nav-cta" id="navCta">Ξεκινήστε τώρα →</a></span>
   <a href="/admin" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
     <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
@@ -278,7 +287,7 @@ footer a:hover{color:var(--accent)}
     <div class="benefit"><span class="b-new">Νέο</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></div><h3>Ειδοποίηση & ημερολόγιο</h3><p>Push ειδοποίηση στο κινητό και προσθήκη στο ημερολόγιο Google, Apple ή Outlook. Περιλαμβάνεται στη συνδρομή</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Από πού έρχονται οι κρατήσεις</h3><p>Google, site, social, τηλέφωνο ή walk-in: ξέρετε ποιο κανάλι σάς φέρνει πελάτες</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>Αναφορά PDF με ευρήματα</h3><p>Ώρες και μέρες αιχμής, ακυρώσεις, no-show και τακτικοί πελάτες, σε αναφορά έτοιμη για τον συνέταιρο ή τον λογιστή</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Αυτόματα emails, ΕΛ / EN</h3><p>Επιβεβαίωση και υπενθύμιση στη γλώσσα του πελάτη. Οι τουρίστες κλείνουν και ενημερώνονται στα Αγγλικά</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Αυτόματα emails σε 8 γλώσσες</h3><p>Σελίδα κράτησης, επιβεβαίωση και υπενθύμιση στη γλώσσα του πελάτη: Ελληνικά, Αγγλικά, Γερμανικά, Γαλλικά, Ιταλικά, Ισπανικά, Τουρκικά και Πορτογαλικά</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Το δικό σας link κρατήσεων</h3><p>tablereserve.gr/το-μαγαζί-σας για Instagram, site και Google Maps. Οι πελάτες κλείνουν τραπέζι με ένα κλικ</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>Από το κινητό, σε πραγματικό χρόνο</h3><p>Όλες οι κρατήσεις και οι αλλαγές εμφανίζονται αμέσως, στο κινητό, στο tablet ή στον υπολογιστή</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Έξυπνες ακυρώσεις</h3><p>Ο πελάτης ακυρώνει μόνος του έως 2 ώρες πριν και εσείς ειδοποιείστε αμέσως. Οι ακυρώσεις μένουν στα στατιστικά</p></div>

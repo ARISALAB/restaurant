@@ -12,7 +12,7 @@ const COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000;
 
 const RESERVED = new Set([
   // σελίδες και φάκελοι του site
-  'admin', 'superadmin', 'partners', 'partner', 'privacy', 'terms', 'site', 'en', 'el', 'gr',
+  'admin', 'superadmin', 'partners', 'partner', 'privacy', 'terms', 'site', 'en', 'el', 'gr', 'de', 'fr', 'it', 'es', 'tr', 'pt',
   'api', 'downloads', 'download', 'netlify', 'cancel', 'embed', 'index', 'robots', 'sitemap',
   'favicon', 'billing', 'assets', 'static', 'img', 'images', 'css', 'js', 'fonts',
   // πιθανές μελλοντικές σελίδες
