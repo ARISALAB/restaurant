@@ -169,6 +169,7 @@ exports.handler = async (event) => {
     const token = newToken();
     const info = { tz: validTz(b.tz) ? b.tz : 'Europe/Athens' };
     const week = cleanWeek(b.hoursWeek); if (week) info.hoursWeek = week;
+    if (/^\d{1,3}% \d{1,3}%$/.test(String(b.coverPos || ''))) info.coverPos = b.coverPos;
     for (const [k, max] of INFO_FIELDS) { const v = str(b[k], max); if (v) info[k] = v; }
     // Δείγμα κρατήσεων στη γλώσσα της χώρας, για να μην ανοίξει ο ιδιοκτήτης ένα άδειο admin
     const sm = buildSamples({ tz: info.tz, hoursWeek: info.hoursWeek || null, now, seed: now % 1000 });
@@ -228,6 +229,7 @@ exports.handler = async (event) => {
     for (const [k] of INFO_FIELDS) out[k] = info[k] || '';
     out.tz = info.tz || 'Europe/Athens';
     out.hoursWeek = info.hoursWeek || null;
+    out.coverPos = info.coverPos || '';
     return json(200, { ok: true, draft: out });
   }
 
@@ -265,6 +267,7 @@ exports.handler = async (event) => {
       upd[`shop_profile/${shop}/adminLang`] = sampleLang(b.tz);
     }
     upd[`shop_profile/${shop}/info/hoursWeek`] = cleanWeek(b.hoursWeek);
+    upd[`shop_profile/${shop}/info/coverPos`] = /^\d{1,3}% \d{1,3}%$/.test(String(b.coverPos || '')) ? b.coverPos : null;
     await db.ref().update(upd);
     const token = (await db.ref(`drafts/${shop}/token`).get()).val();
     return json(200, { ok: true, shopId: shop, slug, url: token ? adminUrl(shop, token, validTz(b.tz) ? sampleLang(b.tz) : details.lang) : null });

@@ -520,8 +520,8 @@
         /* Όπως το εξώφυλλο στο Facebook: γεμίζει όλο το πλαίσιο, κόβοντας ό,τι περισσεύει γύρω από το κέντρο */
         .shop-cover-img {
             width: 100%;
-            height: 220px;
-            max-height: 220px;
+            height: auto;
+            aspect-ratio: 2.6 / 1;
             object-fit: cover;
             object-position: center;
             display: block;
@@ -576,7 +576,7 @@
         }
 
         @media (min-width: 601px) and (max-width: 900px) {
-            .shop-cover-img { height: 190px; max-height: 190px; }
+            .shop-cover-img { aspect-ratio: 2.2 / 1; }
             .shop-logo-img { width: 64px; height: 64px; }
             .shop-hero-name { font-size: 1.4rem; }
         }
@@ -584,7 +584,7 @@
         @media (max-width: 600px) {
             .shop-hero-inner { padding: 0 12px; }
             .shop-cover-box { margin-top: 12px; border-radius: var(--radius-md); }
-            .shop-cover-img { height: 160px; max-height: 160px; }
+            .shop-cover-img { aspect-ratio: 16 / 9; }
             .shop-cover-placeholder { height: 56px; margin-top: 12px; border-radius: var(--radius-md); }
             .shop-hero-info { gap: 12px; padding: 14px 0 18px; }
             .shop-logo-img { width: 54px; height: 54px; border-radius: 11px; }
@@ -2185,8 +2185,10 @@
         function loadClientShopProfile(shopId) {
             // Διαβάζουμε μόνο τα δημόσια πεδία (το email ειδοποιήσεων μένει ιδιωτικό)
             const P = f => get(ref(db, `shop_profile/${shopId}/${f}`)).then(x => x.val()).catch(() => null);
-            Promise.all(['coverPhoto', 'gallery', 'logoPhoto', 'info/address', 'info/description', 'info/hours', 'info/phone', 'info/tagline'].map(P))
-            .then(([coverPhoto, gallery, logoPhoto, address, description, hours, phone, tagline]) => {
+            Promise.all(['coverPhoto', 'gallery', 'logoPhoto', 'info/address', 'info/description', 'info/hours', 'info/phone', 'info/tagline', 'info/coverPos'].map(P))
+            .then(([coverPhoto, gallery, logoPhoto, address, description, hours, phone, tagline, coverPos]) => {
+                // Ποιο κομμάτι του εξωφύλλου φαίνεται (το διαλέγει ο ιδιοκτήτης)
+                if (typeof coverPos === 'string' && /^\d{1,3}% \d{1,3}%$/.test(coverPos)) document.getElementById('client-cover-img').style.objectPosition = coverPos;
                 const full = { coverPhoto, gallery, logoPhoto };
                 const info = { address, description, hours, phone, tagline };
                 Promise.all([get(ref(db, `shop_details/${shopId}/displayName`)), trSlugReady]).then(([n]) => trSetSchema({ shopId, name: n.val() || shopId, description, address, phone, hours, tagline, logo: logoPhoto, cover: coverPhoto })).catch(() => {});

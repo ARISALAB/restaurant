@@ -753,7 +753,8 @@
             min-height: 80px; display: flex; align-items: center; justify-content: center;
             color: var(--text-muted); font-size: 0.85rem; border: 1px solid var(--border);
         }
-        .shop-banner img { width: 100%; max-height: 200px; object-fit: cover; display: block; }
+        .shop-banner img { width: 100%; aspect-ratio: 2.6 / 1; object-fit: cover; display: block; user-select: none; }
+        .cover-hint { font-size: .8rem; color: var(--text-muted); margin: -12px 0 14px; display: none; }
 
         .char-counter { font-size: 0.72rem; color: var(--text-muted); text-align: right; margin-top: 4px; }
 
@@ -1368,6 +1369,7 @@
                     <div class="card" style="margin-bottom:20px;">
                         <div class="card-title"><div class="icon">🖼️</div> <span data-i18n-key="cover_photo">Εξώφυλλο</span></div>
                         <div id="cover-preview" class="shop-banner"><span data-i18n-key="no_cover">Δεν έχει οριστεί εξώφυλλο</span></div>
+                        <div class="cover-hint" id="cover-hint"></div>
                         <div class="upload-zone" id="cover-zone">
                             <input type="file" id="cover-input" accept="image/*" onchange="handleCoverUpload(event)">
                             <div class="upload-zone-icon">📷</div>
@@ -5467,6 +5469,7 @@
                     const el = document.getElementById(id);
                     if (el) el.dispatchEvent(new Event('input'));
                 });
+                trCoverPos = (full.info && full.info.coverPos) || null;
                 if (full.coverPhoto) showCoverPreview(full.coverPhoto);
                 if (full.logoPhoto)  showLogoPreview(full.logoPhoto);
                 loadGallery(shopId);
@@ -5489,6 +5492,7 @@
                 maxParty:          (() => { const n = parseInt(document.getElementById('prof-maxparty').value, 10); return n > 0 ? Math.min(n, 50) : null; })(),
                 tz:                (() => { const z = (document.getElementById('prof-tz') || {}).value; return trValidTz(z) ? z : TR_DEFAULT_TZ; })(),
                 notificationEmail: document.getElementById('prof-notification-email').value.trim(),
+                coverPos:          trCoverPos || null,
                 updatedAt:         Date.now()
             };
             Object.keys(data).forEach(k => { if (data[k] === null || data[k] === '') { if (k !== 'notificationEmail') delete data[k]; } });
@@ -5609,9 +5613,43 @@
         }
 
         // ======= COVER PHOTO =======
+        // Μετακίνηση εξωφύλλου (όπως στο Facebook): σέρνεις τη φωτογραφία και διαλέγεις ποιο κομμάτι φαίνεται.
+        // Η θέση αποθηκεύεται ως "Χ% Υ%" (CSS object-position).
+        function trCoverDrag(img, pos, onChange) {
+            const parse = v => { const m = /^(\d{1,3})% (\d{1,3})%$/.exec(v || ''); return m ? [Math.min(100, +m[1]), Math.min(100, +m[2])] : [50, 50]; };
+            let [x, y] = parse(pos);
+            const apply = () => { img.style.objectPosition = `${x}% ${y}%`; };
+            apply();
+            img.style.cursor = 'grab'; img.style.touchAction = 'none'; img.draggable = false;
+            let start = null;
+            img.onpointerdown = e => {
+                const r = img.getBoundingClientRect(), nw = img.naturalWidth || r.width, nh = img.naturalHeight || r.height;
+                const sc = Math.max(r.width / nw, r.height / nh);
+                start = { cx: e.clientX, cy: e.clientY, x, y, ox: nw * sc - r.width, oy: nh * sc - r.height };
+                img.setPointerCapture(e.pointerId); img.style.cursor = 'grabbing'; e.preventDefault();
+            };
+            img.onpointermove = e => {
+                if (!start) return;
+                if (start.ox > 1) x = Math.round(Math.max(0, Math.min(100, start.x - (e.clientX - start.cx) / start.ox * 100)));
+                if (start.oy > 1) y = Math.round(Math.max(0, Math.min(100, start.y - (e.clientY - start.cy) / start.oy * 100)));
+                apply();
+            };
+            img.onpointerup = img.onpointercancel = () => { if (!start) return; start = null; img.style.cursor = 'grab'; onChange(`${x}% ${y}%`); };
+        }
+
+        const COVER_HINT = {"el": "↕ Σύρετε τη φωτογραφία για να διαλέξετε τι φαίνεται", "en": "↕ Drag the photo to choose what shows", "de": "↕ Ziehen Sie das Foto, um den Ausschnitt zu wählen", "fr": "↕ Faites glisser la photo pour choisir le cadrage", "it": "↕ Trascina la foto per scegliere cosa si vede", "es": "↕ Arrastra la foto para elegir qué se ve", "pt": "↕ Arraste a foto para escolher o que aparece", "tr": "↕ Görüneni seçmek için fotoğrafı sürükleyin"}, COVER_SAVED = {"el": "Η θέση του εξωφύλλου αποθηκεύτηκε", "en": "Cover position saved", "de": "Bildausschnitt gespeichert", "fr": "Cadrage enregistré", "it": "Posizione salvata", "es": "Posición guardada", "pt": "Posição guardada", "tr": "Kapak konumu kaydedildi"};
+        let trCoverPos = null;
         function showCoverPreview(base64) {
             document.getElementById('cover-preview').innerHTML = `<img src="${base64}" alt="cover">`;
             document.getElementById('btn-del-cover').style.display = 'inline-flex';
+            const hint = document.getElementById('cover-hint');
+            hint.textContent = COVER_HINT[currentLang] || COVER_HINT.en; hint.style.display = 'block';
+            trCoverDrag(document.querySelector('#cover-preview img'), trCoverPos, async pos => {
+                trCoverPos = pos;
+                // Η φωτογραφία είναι ήδη αποθηκευμένη: η θέση σώζεται αμέσως. Αλλιώς μαζί με την «Αποθήκευση».
+                if (pendingCoverBase64 || !currentAdminShop) return;
+                try { await set(ref(db, `shop_profile/${currentAdminShop}/info/coverPos`), pos); showToast(COVER_SAVED[currentLang] || COVER_SAVED.en, 'success'); } catch (e) {}
+            });
         }
 
         window.handleCoverUpload = (event) => {
@@ -5620,7 +5658,7 @@
             if (file.size > 8 * 1024 * 1024) { showToast(t('toast_img_too_big'), 'error'); return; }
             const reader = new FileReader();
             pendingCoverFile = file;
-            reader.onload = (e) => { pendingCoverBase64 = e.target.result; showCoverPreview(pendingCoverBase64); };
+            reader.onload = (e) => { pendingCoverBase64 = e.target.result; trCoverPos = '50% 50%'; showCoverPreview(pendingCoverBase64); };
             reader.readAsDataURL(file);
         };
 
@@ -5631,6 +5669,7 @@
             try {
                 const coverUrl = await trUploadImage(pendingCoverFile || pendingCoverBase64, 'cover');
                 await set(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`), coverUrl);
+                await set(ref(db, `shop_profile/${currentAdminShop}/info/coverPos`), trCoverPos || '50% 50%');
                 showToast(t('toast_cover_saved'), 'success');
                 pendingCoverBase64 = null; pendingCoverFile = null;
             } catch(e) {
@@ -5647,6 +5686,8 @@
                 await remove(ref(db, `shop_profile/${currentAdminShop}/coverPhoto`));
                 document.getElementById('cover-preview').innerHTML = `<span>${t('no_cover')}</span>`;
                 document.getElementById('btn-del-cover').style.display = 'none';
+                document.getElementById('cover-hint').style.display = 'none';
+                remove(ref(db, `shop_profile/${currentAdminShop}/info/coverPos`)).catch(() => {}); trCoverPos = null;
                 pendingCoverBase64 = null;
                 showToast(t('toast_cover_deleted'), 'success');
             } catch(e) {

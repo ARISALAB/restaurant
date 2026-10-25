@@ -356,6 +356,8 @@
         .dr-btn-main { background:#2563eb; color:#fff; }
         .dr-btn-sec { background:#fff; color:#1d4ed8; border:1px solid #bfdbfe !important; }
         .g-badge.blue { background:#dbeafe; color:#1e40af; }
+        .dr-frame { margin-top:10px; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border); display:none; }
+        .dr-frame img { width:100%; aspect-ratio:2.6/1; object-fit:cover; display:block; user-select:none; }
         .dr-photos { display:grid; grid-template-columns:2fr 1fr; gap:12px; }
         .dr-pick { position:relative; border:1.5px dashed #cbd5e1; border-radius:var(--radius-md); background:#fafbfc; height:110px; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; text-align:center; font-size:.8rem; color:var(--text-muted); padding:8px; }
         .dr-pick:hover { border-color:var(--purple); }
@@ -549,7 +551,9 @@
                                 <div class="dr-pick logo" id="dr-pick-logo" onclick="drPick('logo')"><span>Λογότυπο<br>πάτα για επιλογή</span></div>
                             </div>
                             <input type="file" id="dr-file" accept="image/*" style="display:none" onchange="drUpload(this)">
-                            <input type="hidden" id="dr-cover"><input type="hidden" id="dr-logo">
+                            <input type="hidden" id="dr-cover"><input type="hidden" id="dr-logo"><input type="hidden" id="dr-coverpos">
+                            <div class="dr-frame" id="dr-frame"><img id="dr-frame-img" alt=""></div>
+                            <div class="hint" id="dr-frame-hint" style="display:none;">↕ Σύρε τη φωτογραφία για να διαλέξεις τι φαίνεται στο εξώφυλλο (όπως στο Facebook).</div>
                             <div class="hint">Χωρίς εξώφυλλο μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης μπορεί να τις αλλάξει από το admin του.</div>
                         </div>
                         <button class="btn-purple" id="dr-btn" onclick="createDraft()">📝 Δημιουργία προσχεδίου</button>
@@ -696,6 +700,7 @@
                 document.getElementById('btn-logout').style.display = 'block';
                 loadShops();
                 loadDrafts();
+                drFrame();
             } else {
                 if (user) signOut(auth); // αν έχει συνδεθεί κάποιος άλλος
                 document.getElementById('login-section').style.display = 'block';
@@ -942,7 +947,7 @@
                 const editing = window._drEdit;
                 const out = await drCall({ action: editing ? 'update' : 'create', shop: editing || undefined, displayName: name, slug,
                     address: v('dr-address'), phone: v('dr-phone'), hours: '', hoursWeek: drWeek, tagline: v('dr-tagline'),
-                    description: v('dr-desc'), cover: v('dr-cover'), logo: v('dr-logo'), tz: v('dr-tz') });
+                    description: v('dr-desc'), cover: v('dr-cover'), logo: v('dr-logo'), tz: v('dr-tz'), coverPos: v('dr-coverpos') });
                 if (!out.ok) {
                     const m = { slug_taken: 'Αυτό το link το έχει ήδη άλλο μαγαζί', slug_reserved: 'Αυτό το link είναι δεσμευμένο, διάλεξε άλλο',
                         slug_invalid: 'Το link θέλει 3-30 λατινικά, αριθμούς ή παύλα', missing_name: 'Γράψε το όνομα του μαγαζιού', not_superadmin: 'Δεν έχεις δικαίωμα' };
@@ -1030,8 +1035,43 @@
         const CLD_CLOUD = 'djs1rbsbn', CLD_PRESET = 'tablereserve';
         let drPickKind = 'cover';
         const DR_PICK_LABEL = { cover: '📷 Εξώφυλλο<br>πάτα για επιλογή', logo: 'Λογότυπο<br>πάτα για επιλογή' };
+
+        // Μετακίνηση εξωφύλλου (όπως στο Facebook): σέρνεις τη φωτογραφία και διαλέγεις ποιο κομμάτι φαίνεται.
+        // Η θέση αποθηκεύεται ως "Χ% Υ%" (CSS object-position).
+        function trCoverDrag(img, pos, onChange) {
+            const parse = v => { const m = /^(\d{1,3})% (\d{1,3})%$/.exec(v || ''); return m ? [Math.min(100, +m[1]), Math.min(100, +m[2])] : [50, 50]; };
+            let [x, y] = parse(pos);
+            const apply = () => { img.style.objectPosition = `${x}% ${y}%`; };
+            apply();
+            img.style.cursor = 'grab'; img.style.touchAction = 'none'; img.draggable = false;
+            let start = null;
+            img.onpointerdown = e => {
+                const r = img.getBoundingClientRect(), nw = img.naturalWidth || r.width, nh = img.naturalHeight || r.height;
+                const sc = Math.max(r.width / nw, r.height / nh);
+                start = { cx: e.clientX, cy: e.clientY, x, y, ox: nw * sc - r.width, oy: nh * sc - r.height };
+                img.setPointerCapture(e.pointerId); img.style.cursor = 'grabbing'; e.preventDefault();
+            };
+            img.onpointermove = e => {
+                if (!start) return;
+                if (start.ox > 1) x = Math.round(Math.max(0, Math.min(100, start.x - (e.clientX - start.cx) / start.ox * 100)));
+                if (start.oy > 1) y = Math.round(Math.max(0, Math.min(100, start.y - (e.clientY - start.cy) / start.oy * 100)));
+                apply();
+            };
+            img.onpointerup = img.onpointercancel = () => { if (!start) return; start = null; img.style.cursor = 'grab'; onChange(`${x}% ${y}%`); };
+        }
+
+        function drFrame() {
+            const url = document.getElementById('dr-cover').value || 'https://tablereserve.gr/hero-table.jpg';
+            const img = document.getElementById('dr-frame-img');
+            if (img.dataset.src !== url) { img.dataset.src = url; img.src = url.includes('/upload/') ? url.replace('/upload/', '/upload/f_auto,q_auto,c_limit,w_1200/') : url; }
+            document.getElementById('dr-frame').style.display = 'block';
+            document.getElementById('dr-frame-hint').style.display = 'block';
+            trCoverDrag(img, document.getElementById('dr-coverpos').value, pos => { document.getElementById('dr-coverpos').value = pos; });
+        }
         function drShowPhoto(kind, url) {
+            if (kind === 'cover' && (url || '') !== document.getElementById('dr-cover').value) document.getElementById('dr-coverpos').value = '';
             document.getElementById('dr-' + kind).value = url || '';
+            if (kind === 'cover') drFrame();
             const box = document.getElementById('dr-pick-' + kind);
             box.innerHTML = url
                 ? `<img src="${gEsc(url.replace('/upload/', '/upload/f_auto,q_auto,c_limit,w_600/'))}" alt=""><button type="button" class="x" title="Αφαίρεση" onclick="event.stopPropagation();drShowPhoto('${kind}','')">✕</button>`
@@ -1062,6 +1102,7 @@
 
         function drResetForm() {
             ['dr-name', 'dr-slug', 'dr-address', 'dr-phone', 'dr-hours', 'dr-tagline', 'dr-desc'].forEach(id => { const el = document.getElementById(id); el.value = ''; delete el.dataset.touched; });
+            document.getElementById('dr-coverpos').value = '';
             drShowPhoto('cover', ''); drShowPhoto('logo', '');
             document.getElementById('dr-tz').value = 'Europe/Athens';
             drWeek = null; document.getElementById('dr-hours-out').innerHTML = '';
@@ -1085,6 +1126,7 @@
             document.getElementById('dr-tz').value = d.tz || 'Europe/Athens';
             document.getElementById('dr-slug').dataset.touched = '1';
             drShowPhoto('cover', d.cover); drShowPhoto('logo', d.logo);
+            document.getElementById('dr-coverpos').value = d.coverPos || ''; drFrame();
             document.getElementById('dr-form-title').textContent = 'Επεξεργασία προσχεδίου';
             document.getElementById('dr-edit-name').textContent = d.displayName;
             document.getElementById('dr-edit-bar').style.display = 'block';
