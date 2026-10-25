@@ -8,44 +8,17 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') return preflightOk();
-  if (event.httpMethod !== 'POST') return json(405, { error: 'Method Not Allowed' });
-
-  try {
-    const { shopId, bookingId } = JSON.parse(event.body || '{}');
-    if (!shopId || !bookingId)
-      return json(400, { error: 'shopId and bookingId are required' });
-
-    const db = getDb();
-    const bookingSnap = await db.ref(`reservations/${shopId}/${bookingId}`).get();
-    if (!bookingSnap.exists())
-      return json(200, { message: 'Booking not found' });
-
-    const booking = bookingSnap.val();
-
-    const emailSnap = await db.ref(`shop_profile/${shopId}/info/notificationEmail`).get();
-    if (!emailSnap.exists() || !emailSnap.val())
-      return json(200, { message: 'No notification email' });
-
-    const notificationEmail = emailSnap.val();
-    const details = (await db.ref(`shop_details/${shopId}`).get()).val() || {};
-    const shopName = details.displayName || (shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' '));
-    const lang = await shopLang(db, shopId, details);
-    const m = msg(lang);
-    const t = {
-      subject: m.s_new, head: m.s_new, persons: m.persons,
-      name: m.s_name, phone: m.s_phone, occasion: m.s_occasion, comments: m.s_comments, btn: m.s_btn
-    };
-    const loc = locationLabel(booking.location, lang);
-    const row = (l, v) => `
-        <tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${l}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${v}</p></td></tr>`;
-
-    await resend.emails.send({
-      from: 'TableReserve <noreply@tablereserve.gr>',
-      to: notificationEmail,
-      subject: `${t.subject} - ${shopName} | ${booking.date || ''} ${booking.time || ''} | ${booking.name || ''}`,
-      html: `
+// Το email «Νέα κράτηση» προς το κατάστημα. Χρησιμοποιείται και από την προβολή του demo.
+function buildShopNewEmail({ booking, shopName, lang }) {
+  const m = msg(lang);
+  const t = {
+    subject: m.s_new, head: m.s_new, persons: m.persons,
+    name: m.s_name, phone: m.s_phone, occasion: m.s_occasion, comments: m.s_comments, btn: m.s_btn
+  };
+  const loc = locationLabel(booking.location, lang);
+  const row = (l, v) => `
+      <tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${l}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${v}</p></td></tr>`;
+  return { subject: `${t.subject} - ${shopName} | ${booking.date || ''} ${booking.time || ''} | ${booking.name || ''}`, html: `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -77,7 +50,39 @@ exports.handler = async (event) => {
     </div>
   </div>
 </body>
-</html>`,
+</html>` };
+}
+
+exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') return preflightOk();
+  if (event.httpMethod !== 'POST') return json(405, { error: 'Method Not Allowed' });
+
+  try {
+    const { shopId, bookingId } = JSON.parse(event.body || '{}');
+    if (!shopId || !bookingId)
+      return json(400, { error: 'shopId and bookingId are required' });
+
+    const db = getDb();
+    const bookingSnap = await db.ref(`reservations/${shopId}/${bookingId}`).get();
+    if (!bookingSnap.exists())
+      return json(200, { message: 'Booking not found' });
+
+    const booking = bookingSnap.val();
+
+    const emailSnap = await db.ref(`shop_profile/${shopId}/info/notificationEmail`).get();
+    if (!emailSnap.exists() || !emailSnap.val())
+      return json(200, { message: 'No notification email' });
+
+    const notificationEmail = emailSnap.val();
+    const details = (await db.ref(`shop_details/${shopId}`).get()).val() || {};
+    const shopName = details.displayName || (shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' '));
+    const lang = await shopLang(db, shopId, details);
+    const mail = buildShopNewEmail({ booking, shopName, lang });
+    await resend.emails.send({
+      from: 'TableReserve <noreply@tablereserve.gr>',
+      to: notificationEmail,
+      subject: mail.subject,
+      html: mail.html,
     });
 
     return json(200, { success: true, sentTo: notificationEmail });
@@ -86,3 +91,5 @@ exports.handler = async (event) => {
     return json(500, { error: 'Email send failed', details: err.message });
   }
 };
+
+exports.buildShopNewEmail = buildShopNewEmail;

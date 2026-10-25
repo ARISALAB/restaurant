@@ -131,6 +131,14 @@
             color: var(--primary);
             box-shadow: var(--shadow-sm);
         }
+        .demo-bar { display:none; background:#0f172a; color:#e2e8f0; font-size:0.85rem; padding:10px 16px; text-align:center; line-height:1.5; }
+        .demo-bar a { color:#93c5fd; font-weight:600; text-decoration:none; white-space:nowrap; margin-left:6px; }
+        .demo-bar a:hover { text-decoration:underline; }
+        #demo-modal .modal-content { max-width:640px; }
+        .demo-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; background:#f1f5f9; padding:4px; border-radius:10px; margin:14px 0 12px; }
+        .demo-tabs button { border:0; background:transparent; padding:9px 8px; border-radius:8px; font:inherit; font-size:0.86rem; font-weight:600; color:#64748b; cursor:pointer; }
+        .demo-tabs button[aria-selected="true"] { background:#fff; color:var(--primary); box-shadow:0 1px 3px rgba(15,23,42,.08); }
+        .demo-frame { width:100%; height:min(50vh,480px); border:1px solid var(--border); border-radius:12px; background:#f0f2f5; display:block; }
         .ic { display:inline-block; vertical-align:middle; flex-shrink:0; }
         .card-title .icon { color: var(--primary); }
         .meta-pill .ic { color: #94a3b8; }
@@ -862,6 +870,8 @@
         </div>
     </nav>
 
+    <div class="demo-bar" id="demo-bar"><span data-i18n-key="demo_bar"></span><a id="demo-bar-cta" href="/" data-i18n-key="demo_cta"></a></div>
+
     <!-- ===== CLIENT PAGE ===== -->
     <div id="page-client" class="page active">
 
@@ -994,6 +1004,24 @@
         </div>
     </div>
 
+    <!-- ===== DEMO: προβολή των email ===== -->
+    <div id="demo-modal" class="modal">
+        <div class="modal-content card">
+            <div class="done-head">
+                <div class="done-check"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                <h3 data-i18n-key="demo_title"></h3>
+            </div>
+            <p class="done-note" data-i18n-key="demo_sub" style="text-align:center;"></p>
+            <div class="demo-tabs" role="tablist">
+                <button type="button" role="tab" aria-selected="true" data-k="customer" data-i18n-key="demo_tab_guest"></button>
+                <button type="button" role="tab" aria-selected="false" data-k="shop" data-i18n-key="demo_tab_shop"></button>
+            </div>
+            <iframe class="demo-frame" id="demo-frame" sandbox="" title="Email"></iframe>
+            <a class="btn-primary" id="demo-cta" href="/" data-i18n-key="demo_cta" style="display:block;text-align:center;text-decoration:none;margin-top:16px;"></a>
+            <button class="btn-link" id="demo-close" data-i18n-key="done_close" style="color:var(--text-main,#0f172a)">Κλείσιμο</button>
+        </div>
+    </div>
+
     <!-- ===== ΕΠΙΒΕΒΑΙΩΣΗ ===== -->
     <div id="done-modal" class="modal">
         <div class="modal-content card">
@@ -1075,7 +1103,7 @@
                 booking_details: "Στοιχεία Κράτησης", fullname: "Ονοματεπώνυμο *",
                 fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)", email_required: "Email *",
                 location_pref: "Προτίμηση Χώρου", indoor: "Εσωτερικός Χώρος", outdoor: "Εξωτερικός Χώρος",
-                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση", loc_in: "Μέσα", loc_out: "Έξω", loc_any: "Αδιάφορο",
+                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση", loc_in: "Μέσα", loc_out: "Έξω", loc_any: "Αδιάφορο", demo_bar: "Σελίδα επίδειξης — δοκιμάστε ελεύθερα, καμία κράτηση δεν καταχωρείται.", demo_cta: "Θέλω μία για το μαγαζί μου →", demo_title: "Έτσι ολοκληρώνεται μια κράτηση", demo_sub: "Αυτά τα δύο email θα στέλνονταν αυτόματα. Στο demo δεν στάλθηκε τίποτα.", demo_tab_guest: "Email πελάτη", demo_tab_shop: "Email καταστήματος",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
                 confirm_booking: "Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
                 slot_full: "Πλήρες", slot_too_many: "Δεν υπάρχουν αρκετές θέσεις για τόσα άτομα σε αυτή την ώρα", pick_date: "Επιλέξτε ημερομηνία για να δείτε τις διαθέσιμες ώρες.", day_closed: "Το κατάστημα είναι κλειστό αυτή την ημέρα. Επιλέξτε άλλη ημερομηνία.", day_full: "Όλες οι ώρες αυτής της ημέρας είναι πλήρεις. Δοκιμάστε άλλη ημερομηνία ή λιγότερα άτομα.", day_over: "Δεν υπάρχουν άλλες διαθέσιμες ώρες για σήμερα. Επιλέξτε άλλη ημερομηνία.", slot_taken_alert: "Δυστυχώς αυτή η ώρα μόλις γέμισε. Επιλέξτε άλλη ώρα.", rate_limited: "Έγιναν πολλές κρατήσεις από αυτή τη σύνδεση. Δοκιμάστε ξανά σε λίγα λεπτά ή τηλεφωνήστε στο κατάστημα.",
@@ -1150,7 +1178,7 @@
                 booking_details: "Booking Details", fullname: "Full Name *",
                 fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)", email_required: "Email *",
                 location_pref: "Seating Preference", indoor: "Indoor", outdoor: "Outdoor",
-                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion", loc_in: "Indoor", loc_out: "Outdoor", loc_any: "Any",
+                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion", loc_in: "Indoor", loc_out: "Outdoor", loc_any: "Any", demo_bar: "Demo page — try it freely, no booking is saved.", demo_cta: "I want one for my restaurant →", demo_title: "This is how a booking completes", demo_sub: "These two emails would be sent automatically. In the demo nothing was sent.", demo_tab_guest: "Guest email", demo_tab_shop: "Restaurant email",
                 requests: "Additional Requests", requests_ph: "Any special order...",
                 confirm_booking: "Confirm Reservation", cancel: "Cancel",
                 slot_full: "Full", slot_too_many: "Not enough seats left for this many guests at this time", pick_date: "Choose a date to see available times.", day_closed: "The restaurant is closed on this day. Please choose another date.", day_full: "All times on this day are fully booked. Try another date or fewer guests.", day_over: "There are no more available times today. Please choose another date.", slot_taken_alert: "Sorry, this time has just filled up. Please choose another time.", rate_limited: "Too many bookings from this connection. Please try again in a few minutes or call the restaurant.",
@@ -1235,6 +1263,12 @@
                 "loc_in": "Innen",
                 "loc_out": "Draußen",
                 "loc_any": "Egal",
+                "demo_bar": "Demo-Seite – probieren Sie es aus, es wird keine Reservierung gespeichert.",
+                "demo_cta": "Ich will das für mein Restaurant →",
+                "demo_title": "So läuft eine Reservierung ab",
+                "demo_sub": "Diese beiden E-Mails würden automatisch versendet. In der Demo wurde nichts gesendet.",
+                "demo_tab_guest": "E-Mail an den Gast",
+                "demo_tab_shop": "E-Mail an das Restaurant",
                 "requests": "Weitere Wünsche",
                 "requests_ph": "Besondere Wünsche...",
                 "confirm_booking": "Reservierung bestätigen",
@@ -1334,6 +1368,12 @@
                 "loc_in": "Intérieur",
                 "loc_out": "Terrasse",
                 "loc_any": "Peu importe",
+                "demo_bar": "Page de démonstration — essayez librement, aucune réservation n’est enregistrée.",
+                "demo_cta": "J’en veux une pour mon restaurant →",
+                "demo_title": "Voici comment se termine une réservation",
+                "demo_sub": "Ces deux e-mails seraient envoyés automatiquement. Dans la démo, rien n’a été envoyé.",
+                "demo_tab_guest": "E-mail au client",
+                "demo_tab_shop": "E-mail au restaurant",
                 "requests": "Demandes particulières",
                 "requests_ph": "Une demande spéciale...",
                 "confirm_booking": "Confirmer la réservation",
@@ -1433,6 +1473,12 @@
                 "loc_in": "Dentro",
                 "loc_out": "Fuori",
                 "loc_any": "Indifferente",
+                "demo_bar": "Pagina demo — prova liberamente, nessuna prenotazione viene salvata.",
+                "demo_cta": "Ne voglio una per il mio locale →",
+                "demo_title": "Ecco come si completa una prenotazione",
+                "demo_sub": "Queste due email verrebbero inviate automaticamente. Nella demo non è stato inviato nulla.",
+                "demo_tab_guest": "Email al cliente",
+                "demo_tab_shop": "Email al ristorante",
                 "requests": "Altre richieste",
                 "requests_ph": "Qualche richiesta particolare...",
                 "confirm_booking": "Conferma la prenotazione",
@@ -1532,6 +1578,12 @@
                 "loc_in": "Dentro",
                 "loc_out": "Fuera",
                 "loc_any": "Indiferente",
+                "demo_bar": "Página de demostración: pruébala libremente, no se guarda ninguna reserva.",
+                "demo_cta": "Quiero una para mi restaurante →",
+                "demo_title": "Así se completa una reserva",
+                "demo_sub": "Estos dos emails se enviarían automáticamente. En la demo no se ha enviado nada.",
+                "demo_tab_guest": "Email al cliente",
+                "demo_tab_shop": "Email al restaurante",
                 "requests": "Otras peticiones",
                 "requests_ph": "Alguna petición especial...",
                 "confirm_booking": "Confirmar reserva",
@@ -1631,6 +1683,12 @@
                 "loc_in": "İç mekân",
                 "loc_out": "Dış mekân",
                 "loc_any": "Fark etmez",
+                "demo_bar": "Demo sayfası — gönül rahatlığıyla deneyin, hiçbir rezervasyon kaydedilmez.",
+                "demo_cta": "Restoranım için istiyorum →",
+                "demo_title": "Bir rezervasyon böyle tamamlanır",
+                "demo_sub": "Bu iki e-posta otomatik olarak gönderilirdi. Demoda hiçbir şey gönderilmedi.",
+                "demo_tab_guest": "Misafire giden e-posta",
+                "demo_tab_shop": "Restorana giden e-posta",
                 "requests": "Ek istekler",
                 "requests_ph": "Özel bir isteğiniz...",
                 "confirm_booking": "Rezervasyonu onayla",
@@ -1730,6 +1788,12 @@
                 "loc_in": "Interior",
                 "loc_out": "Esplanada",
                 "loc_any": "Indiferente",
+                "demo_bar": "Página de demonstração — experimente à vontade, nenhuma reserva é guardada.",
+                "demo_cta": "Quero uma para o meu restaurante →",
+                "demo_title": "É assim que uma reserva se conclui",
+                "demo_sub": "Estes dois emails seriam enviados automaticamente. Na demo nada foi enviado.",
+                "demo_tab_guest": "Email ao cliente",
+                "demo_tab_shop": "Email ao restaurante",
                 "requests": "Outros pedidos",
                 "requests_ph": "Algum pedido especial...",
                 "confirm_booking": "Confirmar reserva",
@@ -1806,7 +1870,9 @@
             document.querySelectorAll('#cust-location-seg button').forEach(x => x.setAttribute('aria-checked', x === b ? 'true' : 'false'));
             document.getElementById('cust-location').value = b.dataset.v;
         }));
+        function trDemoLinks() { if (typeof TR_DEMO !== 'undefined' && TR_DEMO) { const h = trDemoHome(); document.getElementById('demo-bar-cta').href = h; document.getElementById('demo-cta').href = h; } }
         function applyTranslations() {
+            try { trDemoLinks(); } catch (e) {}
             document.querySelectorAll('[data-i18n-key]').forEach(el => {
                 const key = el.getAttribute('data-i18n-key');
                 const val = t(key);
@@ -1943,6 +2009,22 @@
         }
         const trOnLoad = fn => (document.readyState === 'complete' ? setTimeout(fn, 0) : window.addEventListener('load', fn));
         const shopID = await trResolveShop();
+
+        // Σελίδα επίδειξης: καμία κράτηση δεν καταχωρείται, δείχνουμε τα email που θα στέλνονταν (?real=1 για κανονική δοκιμή)
+        const TR_DEMO = shopID === 'test-restaurant' && !new URLSearchParams(location.search).has('real');
+        const trDemoHome = () => (currentLang === 'el' ? '/?lang=el' : '/' + currentLang + '/') + '#contact';
+        if (TR_DEMO) {
+            document.getElementById('demo-bar').style.display = 'block';
+            const nm = document.createElement('meta'); nm.name = 'robots'; nm.content = 'noindex'; document.head.appendChild(nm);
+        }
+        let trDemoMail = null;
+        function trDemoShow(k) {
+            document.querySelectorAll('#demo-modal .demo-tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.k === k ? 'true' : 'false'));
+            const html = (trDemoMail && trDemoMail[k] && trDemoMail[k].html) || '';
+            document.getElementById('demo-frame').srcdoc = html.replace('</head>', '<style>a{pointer-events:none;cursor:default}</style></head>');
+        }
+        document.querySelectorAll('#demo-modal .demo-tabs button').forEach(b => b.addEventListener('click', () => trDemoShow(b.dataset.k)));
+        document.getElementById('demo-close').addEventListener('click', () => document.getElementById('demo-modal').classList.remove('open'));
 
         if (trNotFound) {
             const nm = document.createElement('meta'); nm.name = 'robots'; nm.content = 'noindex'; document.head.appendChild(nm);
@@ -2569,7 +2651,7 @@
             btn.disabled = true; btn.style.opacity = '0.6';
             let res = null, data = {};
             try {
-                res = await fetch(`${API}/book`, {
+                res = await fetch(`${API}/${TR_DEMO ? 'demo-preview' : 'book'}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -2600,8 +2682,15 @@
             }
 
             modal.classList.remove('open');
-            trRwgConversion();
-            trShowDone({ id: data.bookingId, token: data.cancelToken, date, time: selectedTime, guests });
+            if (TR_DEMO) {
+                trDemoMail = data;
+                document.getElementById('demo-cta').href = trDemoHome();
+                trDemoShow('customer');
+                document.getElementById('demo-modal').classList.add('open');
+            } else {
+                trRwgConversion();
+                trShowDone({ id: data.bookingId, token: data.cancelToken, date, time: selectedTime, guests });
+            }
 
             // Reset form
             ['cust-name','cust-phone','cust-email','cust-occasion','cust-occasion-other','cust-comments']

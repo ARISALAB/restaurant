@@ -9,65 +9,29 @@ const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&a
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') return preflightOk();
-  if (event.httpMethod !== 'POST') return json(405, { error: 'Method Not Allowed' });
-
-  try {
-    const { shopId, bookingId, cancelToken, lang } = JSON.parse(event.body || '{}');
-    if (!shopId || !bookingId || !cancelToken)
-      return json(400, { error: 'shopId, bookingId, cancelToken απαιτούνται' });
-
-    const db = getDb();
-    const bookingSnap = await db.ref(`reservations/${shopId}/${bookingId}`).get();
-    if (!bookingSnap.exists())
-      return json(404, { error: 'Κράτηση δεν βρέθηκε' });
-
-    const booking = bookingSnap.val();
-    if (!booking.email)
-      return json(200, { message: 'Χωρίς email πελάτη — παραλείφθηκε' });
-
-    const shopSnap = await db.ref(`shop_details/${shopId}`).get();
-    const shopName = shopSnap.exists()
-      ? (shopSnap.val().displayName || shopId)
-      : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
-
-    const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
-    const tz = await shopTz(db, shopId);
-    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, lang: normLang(lang), tz });
-    const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang: normLang(lang) });
-    const walletUrl = process.env.GOOGLE_WALLET_ISSUER_ID
-      ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: normLang(lang) }).toString()
-      : null;
-
-    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${normLang(lang)}`;
-
-    const L = normLang(lang);
-    const m = msg(L);
-    const txt = {
-      subject:      `${m.c_subject} - ${shopName} | ${booking.date} ${booking.time}`,
-      header:       m.c_header,
-      greeting:     m.dear(esc(booking.name)),
-      confirmed:    m.c_confirmed,
-      persons:      m.persons,
-      location_lbl: m.c_location,
-      occasion_lbl: m.c_occasion,
-      comments_lbl: m.c_comments,
-      no_pref:      m.no_pref,
-      cal_title:    m.c_cal,
-      cal_google:   m.c_cal_google,
-      cal_other:    m.c_cal_other,
-      cancel_q:     m.c_cancel_q,
-      cancel_btn:   m.c_cancel_btn,
-      cancel_note:  m.c_cancel_note,
-      footer:       'TableReserve &bull; noreply@tablereserve.gr',
-    };
-
-    await resend.emails.send({
-      from: 'TableReserve <noreply@tablereserve.gr>',
-      to: booking.email,
-      subject: txt.subject,
-      html: `
+// Το email επιβεβαίωσης προς τον πελάτη. Χρησιμοποιείται και από την προβολή του demo.
+function buildCustomerEmail({ booking, shopName, gcalUrl, appleUrl, walletUrl, cancelUrl, lang }) {
+  const L = normLang(lang);
+  const m = msg(L);
+  const txt = {
+    subject:      `${m.c_subject} - ${shopName} | ${booking.date} ${booking.time}`,
+    header:       m.c_header,
+    greeting:     m.dear(esc(booking.name)),
+    confirmed:    m.c_confirmed,
+    persons:      m.persons,
+    location_lbl: m.c_location,
+    occasion_lbl: m.c_occasion,
+    comments_lbl: m.c_comments,
+    no_pref:      m.no_pref,
+    cal_title:    m.c_cal,
+    cal_google:   m.c_cal_google,
+    cal_other:    m.c_cal_other,
+    cancel_q:     m.c_cancel_q,
+    cancel_btn:   m.c_cancel_btn,
+    cancel_note:  m.c_cancel_note,
+    footer:       'TableReserve &bull; noreply@tablereserve.gr',
+  };
+  return { subject: txt.subject, html: `
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -117,7 +81,48 @@ exports.handler = async (event) => {
 
   </div>
 </body>
-</html>`,
+</html>` };
+}
+
+exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') return preflightOk();
+  if (event.httpMethod !== 'POST') return json(405, { error: 'Method Not Allowed' });
+
+  try {
+    const { shopId, bookingId, cancelToken, lang } = JSON.parse(event.body || '{}');
+    if (!shopId || !bookingId || !cancelToken)
+      return json(400, { error: 'shopId, bookingId, cancelToken απαιτούνται' });
+
+    const db = getDb();
+    const bookingSnap = await db.ref(`reservations/${shopId}/${bookingId}`).get();
+    if (!bookingSnap.exists())
+      return json(404, { error: 'Κράτηση δεν βρέθηκε' });
+
+    const booking = bookingSnap.val();
+    if (!booking.email)
+      return json(200, { message: 'Χωρίς email πελάτη — παραλείφθηκε' });
+
+    const shopSnap = await db.ref(`shop_details/${shopId}`).get();
+    const shopName = shopSnap.exists()
+      ? (shopSnap.val().displayName || shopId)
+      : shopId.charAt(0).toUpperCase() + shopId.slice(1).replace(/_/g, ' ');
+
+    const address = (await db.ref(`shop_profile/${shopId}/info/address`).get()).val() || '';
+    const tz = await shopTz(db, shopId);
+    const gcalUrl = googleCalendarUrl({ b: booking, shopName, address, lang: normLang(lang), tz });
+    const appleUrl = icsUrl({ shopId, bookingId, cancelToken, lang: normLang(lang) });
+    const walletUrl = process.env.GOOGLE_WALLET_ISSUER_ID
+      ? 'https://tablereserve.gr/.netlify/functions/wallet?' + new URLSearchParams({ shop: shopId, id: bookingId, t: cancelToken, lang: normLang(lang) }).toString()
+      : null;
+
+    const cancelUrl = `https://tablereserve.gr/cancel.html?token=${cancelToken}&shop=${shopId}&id=${bookingId}&lang=${normLang(lang)}`;
+
+    const mail = buildCustomerEmail({ booking, shopName, gcalUrl, appleUrl, walletUrl, cancelUrl, lang });
+    await resend.emails.send({
+      from: 'TableReserve <noreply@tablereserve.gr>',
+      to: booking.email,
+      subject: mail.subject,
+      html: mail.html,
     });
 
     return json(200, { success: true, sentTo: booking.email });
@@ -126,3 +131,5 @@ exports.handler = async (event) => {
     return json(500, { error: 'Αποτυχία αποστολής', details: err.message });
   }
 };
+
+exports.buildCustomerEmail = buildCustomerEmail;
