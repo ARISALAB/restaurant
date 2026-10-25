@@ -492,7 +492,7 @@
                     <div class="card" style="margin-top:18px;">
                         <div class="card-title" id="dr-form-card"><div class="icon">📝</div> <span id="dr-form-title">Νέο προσχέδιο (πιλοτικό)</span></div>
                         <div class="dr-edit-bar" id="dr-edit-bar">Επεξεργάζεσαι το «<b id="dr-edit-name"></b>». Το link που έχεις στείλει δεν αλλάζει (εκτός αν αλλάξεις το όνομα του link).<button onclick="cancelDraftEdit()">Ακύρωση</button></div>
-                        <div class="hint" style="margin-top:-6px;margin-bottom:14px;font-size:.82rem;">Ετοιμάζεις τη σελίδα ενός μαγαζιού χωρίς λογαριασμό. Ο ιδιοκτήτης τη βλέπει με το προσωπικό link και την ενεργοποιεί μόνος του (6 μήνες δωρεάν).</div>
+                        <div class="hint" style="margin-top:-6px;margin-bottom:14px;font-size:.82rem;">Ετοιμάζεις ένα μαγαζί χωρίς λογαριασμό. Ο ιδιοκτήτης μπαίνει με το προσωπικό link κατευθείαν στο admin του (με δείγμα κρατήσεων στη γλώσσα της χώρας), το δοκιμάζει 30 ημέρες και το ενεργοποιεί μόνος του (6 μήνες δωρεάν).</div>
                         <div class="input-group">
                             <label for="dr-name">Όνομα μαγαζιού *</label>
                             <input type="text" id="dr-name" maxlength="80" placeholder="π.χ. Ταβέρνα Το Στέκι" oninput="drSuggestSlug()">
@@ -550,7 +550,7 @@
                             </div>
                             <input type="file" id="dr-file" accept="image/*" style="display:none" onchange="drUpload(this)">
                             <input type="hidden" id="dr-cover"><input type="hidden" id="dr-logo">
-                            <div class="hint">Χωρίς εξώφυλλο μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης μπορεί να τις αλλάξει μετά την ενεργοποίηση.</div>
+                            <div class="hint">Χωρίς εξώφυλλο μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης μπορεί να τις αλλάξει από το admin του.</div>
                         </div>
                         <button class="btn-purple" id="dr-btn" onclick="createDraft()">📝 Δημιουργία προσχεδίου</button>
                         <div class="dr-result" id="dr-result">
@@ -558,8 +558,9 @@
                             <div class="u" id="dr-result-url"></div>
                             <div class="dr-btns">
                                 <button class="dr-btn-main" onclick="copyDraftMsg(window._drLast)">💬 Αντιγραφή μηνύματος</button>
-                                <a class="dr-btn-sec" id="dr-result-open" href="#" target="_blank" rel="noopener">Άνοιγμα ↗</a>
+                                <button class="dr-btn-sec" onclick="copyUrl(window._drLast && window._drLast.url)">🔗 Αντιγραφή link</button>
                             </div>
+                            <div class="hint" style="margin-top:8px;">Για να το δεις όπως ο ιδιοκτήτης, άνοιξε το link σε <b>ανώνυμη καρτέλα</b> ή στο κινητό. Αν το ανοίξεις εδώ, θα αποσυνδεθείς από το superadmin.</div>
                         </div>
                     </div>
 
@@ -912,11 +913,14 @@
             return { ok: res.ok, ...out };
         }
 
-        const drMsg = (name, url) =>
-`Καλησπέρα! Είμαι ο Άρης, 25 χρόνια στην εστίαση. Έφτιαξα μια σελίδα online κρατήσεων για το μαγαζί σας, «${name}». Δείτε πώς φαίνεται:
-${url}
-
-Αν σας αρέσει, την ενεργοποιείτε με ένα κλικ: 6 μήνες δωρεάν, χωρίς κάρτα και χωρίς δέσμευση. Ό,τι χρειαστείτε, εδώ είμαι.`;
+        // Μήνυμα για DM: στη γλώσσα της χώρας του μαγαζιού και, αν δεν είναι ελληνικά, και στα ελληνικά από κάτω
+        const DR_MSG = {"el": "Καλησπέρα! Είμαι ο Άρης, 25 χρόνια στην εστίαση. Έστησα για το μαγαζί σας, «{name}», ένα σύστημα online κρατήσεων. Μπείτε και δείτε το admin σας, χωρίς εγγραφή:\n{url}\n\nΔοκιμάστε το ελεύθερα: κρατήσεις, πελάτες, ωράριο, και πώς βλέπουν οι πελάτες τη σελίδα σας. Αν σας αρέσει, το ενεργοποιείτε με ένα κλικ: 6 μήνες δωρεάν, χωρίς κάρτα. Το link ισχύει 30 ημέρες. Ό,τι χρειαστείτε, εδώ είμαι.", "en": "Hello! I’m Aris, 25 years in hospitality. I’ve set up an online booking system for your restaurant, “{name}”. Take a look at your admin, no sign-up needed:\n{url}\n\nTry it freely: bookings, guests, opening hours, and how your guests see your page. If you like it, activate it with one click: 6 months free, no card. The link is valid for 30 days. Anything you need, I’m here.", "de": "Hallo! Ich bin Aris, seit 25 Jahren in der Gastronomie. Ich habe für Ihr Restaurant „{name}“ ein Online-Reservierungssystem eingerichtet. Schauen Sie sich Ihren Admin an, ganz ohne Anmeldung:\n{url}\n\nProbieren Sie alles aus: Reservierungen, Gäste, Öffnungszeiten und wie Ihre Gäste Ihre Seite sehen. Wenn es Ihnen gefällt, aktivieren Sie es mit einem Klick: 6 Monate kostenlos, ohne Karte. Der Link ist 30 Tage gültig. Wenn Sie etwas brauchen, bin ich für Sie da.", "fr": "Bonjour ! Je suis Aris, 25 ans dans la restauration. J’ai mis en place un système de réservation en ligne pour votre restaurant, « {name} ». Découvrez votre admin, sans inscription :\n{url}\n\nEssayez librement : réservations, clients, horaires, et la page telle que la voient vos clients. Si ça vous plaît, activez-le en un clic : 6 mois gratuits, sans carte. Le lien est valable 30 jours. Pour toute question, je suis là.", "it": "Buongiorno! Sono Aris, 25 anni nella ristorazione. Ho preparato per il vostro ristorante, “{name}”, un sistema di prenotazioni online. Date un’occhiata al vostro admin, senza registrazione:\n{url}\n\nProvate liberamente: prenotazioni, clienti, orari e come i clienti vedono la vostra pagina. Se vi piace, lo attivate con un clic: 6 mesi gratis, senza carta. Il link è valido 30 giorni. Per qualsiasi cosa, sono qui.", "es": "¡Hola! Soy Aris, 25 años en hostelería. He preparado para tu restaurante, «{name}», un sistema de reservas online. Echa un vistazo a tu admin, sin registrarte:\n{url}\n\nPruébalo libremente: reservas, clientes, horarios y cómo ven tus clientes tu página. Si te gusta, lo activas con un clic: 6 meses gratis, sin tarjeta. El enlace es válido 30 días. Para lo que necesites, aquí estoy.", "pt": "Olá! Sou o Aris, 25 anos na restauração. Preparei para o vosso restaurante, “{name}”, um sistema de reservas online. Vejam o vosso admin, sem registo:\n{url}\n\nExperimentem à vontade: reservas, clientes, horários e como os clientes veem a vossa página. Se gostarem, ativam com um clique: 6 meses grátis, sem cartão. O link é válido durante 30 dias. Para o que precisarem, estou aqui.", "tr": "Merhaba! Ben Aris, 25 yıldır yeme-içme sektöründeyim. Restoranınız “{name}” için bir online rezervasyon sistemi hazırladım. Kayıt olmadan admin panelinize göz atın:\n{url}\n\nRahatça deneyin: rezervasyonlar, müşteriler, çalışma saatleri ve müşterilerin sayfanızı nasıl gördüğü. Beğenirseniz tek tıkla etkinleştirin: 6 ay ücretsiz, kart gerekmez. Bağlantı 30 gün geçerli. Ne gerekirse buradayım."};
+        const drMsg = (name, url) => {
+            let lang = 'el';
+            try { lang = new URL(url).searchParams.get('lang') || 'el'; } catch (e) {}
+            const one = l => (DR_MSG[l] || DR_MSG.en).replace('{name}', name).replace('{url}', url);
+            return lang === 'el' ? one('el') : one(lang) + '\n\n— — —\n\n' + one('el');
+        };
 
         window.copyDraftMsg = (d) => {
             if (!d || !d.url) return;
@@ -946,7 +950,6 @@ ${url}
                 }
                 window._drLast = { name, url: out.url };
                 document.getElementById('dr-result-url').textContent = out.url;
-                document.getElementById('dr-result-open').href = out.url;
                 document.getElementById('dr-result').style.display = 'block';
                 drResetForm();
                 showToast(editing ? '✅ Οι αλλαγές αποθηκεύτηκαν' : '✅ Το προσχέδιο δημιουργήθηκε', 'success');
@@ -1093,8 +1096,13 @@ ${url}
         const drDate = ms => ms ? new Date(ms).toLocaleString('el-GR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
         function drState(d) {
             if (d.status !== 'draft') return `<span class="g-badge ok">✓ Ενεργοποιήθηκε ${drDate(d.claimedAt)}${d.claimedBy ? ' · ' + gEsc(d.claimedBy) : ''}</span>`;
-            if (d.views > 0) return `<span class="g-badge blue">👀 Το άνοιξε ${d.views === 1 ? '1 φορά' : d.views + ' φορές'} · τελευταία ${drDate(d.lastViewedAt)}</span>`;
-            return `<span class="g-badge none">Δεν το έχει ανοίξει ακόμα</span>`;
+            const out = [];
+            if (d.expiresAt && d.expiresAt < Date.now()) out.push(`<span class="g-badge warn">⏳ Έληξε ${drDate(d.expiresAt)} · πάτα 🔄 για άλλες 30 ημέρες</span>`);
+            if (d.entries > 0) out.push(`<span class="g-badge blue">👀 Μπήκε στο admin ${d.entries === 1 ? '1 φορά' : d.entries + ' φορές'} · τελευταία ${drDate(d.lastEnteredAt)}</span>`);
+            else out.push(`<span class="g-badge none">Δεν έχει μπει ακόμα</span>`);
+            if (d.testBookings > 0) out.push(`<span class="g-badge ok">🧪 ${d.testBookings === 1 ? '1 δοκιμαστική κράτηση' : d.testBookings + ' δοκιμαστικές κρατήσεις'}</span>`);
+            if (d.expiresAt && d.expiresAt >= Date.now()) out.push(`<span class="g-badge none">Λήγει ${new Date(d.expiresAt).toLocaleDateString('el-GR')}</span>`);
+            return out.join(' ');
         }
 
         window.loadDrafts = async () => {
@@ -1121,8 +1129,8 @@ ${url}
                         <div class="shop-actions">${isDraft ? `
                             <button class="btn-icon copy" title="Επεξεργασία" onclick="editDraft('${d.shopId}')">✏️</button>
                             <button class="btn-icon copy" title="Αντιγραφή μηνύματος για DM" onclick="copyDraftMsg(window._drafts['${d.shopId}'])">💬</button>
-                            <button class="btn-icon copy" title="Άνοιγμα προεπισκόπησης" onclick="window.open(window._drafts['${d.shopId}'].url,'_blank','noopener')">↗</button>
-                            <button class="btn-icon copy" title="Νέο link (το παλιό σταματά να ισχύει)" onclick="renewDraft('${d.shopId}')">🔄</button>
+                            <button class="btn-icon copy" title="Αντιγραφή link" onclick="copyUrl(window._drafts['${d.shopId}'].url)">🔗</button>
+                            <button class="btn-icon copy" title="Νέο link και άλλες 30 ημέρες (το παλιό link σταματά, όποιος έχει μπει συνεχίζει)" onclick="renewDraft('${d.shopId}')">🔄</button>
                             <button class="btn-icon del" title="Διαγραφή προσχεδίου" onclick="deleteDraft('${d.shopId}')">🗑️</button>` : ''}
                         </div>
                     </div>`;
@@ -1133,7 +1141,7 @@ ${url}
         };
 
         window.renewDraft = async (shopId) => {
-            if (!confirm('Νέο link για αυτό το προσχέδιο; Το παλιό link θα σταματήσει να ανοίγει.')) return;
+            if (!confirm('Νέο link με άλλες 30 ημέρες;\nΤο παλιό link θα σταματήσει να ανοίγει. Όποιος έχει ήδη μπει στο admin συνεχίζει κανονικά.')) return;
             const out = await drCall({ action: 'renew', shop: shopId }).catch(() => ({}));
             if (!out.ok) return showToast('Σφάλμα', 'error');
             showToast('🔄 Νέο link έτοιμο', 'success');

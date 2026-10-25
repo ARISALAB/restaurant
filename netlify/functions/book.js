@@ -10,6 +10,7 @@ const notifyShop = require('./notify');
 const notifyCustomer = require('./notify-customer');
 const { removeBooked } = require('./_shared/waitlist');
 const { normLang } = require('./_shared/i18n');
+const { checkDraft } = require('./_shared/drafts');
 
 const WH_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const HOLD_MS = 2 * 60 * 1000;          // πόσο μετράει μια «κράτηση σε εξέλιξη»
@@ -94,7 +95,12 @@ exports.handler = async (event) => {
       db.ref(`shop_profile/${shop}/info`).get().then(s => s.val() || {}),
     ]);
     if (!details) return json(404, { error: 'shop_inactive' });
-    if (details.status === 'pending' || details.status === 'closed' || details.status === 'draft' ||
+    // Προσχέδιο: μόνο με το προσωπικό link. Η κράτηση γράφεται ως «δοκιμή», χωρίς email.
+    let isTest = false;
+    if (details.status === 'draft') {
+      if (!(await checkDraft(db, shop, str(b.draftToken, 60)))) return json(403, { error: 'shop_inactive' });
+      isTest = true;
+    } else if (details.status === 'pending' || details.status === 'closed' ||
         (details.paidUntil && details.paidUntil < now)) {
       return json(403, { error: 'shop_inactive' });
     }
@@ -154,10 +160,16 @@ exports.handler = async (event) => {
         timestamp: Date.now(),
         cancelToken,
         status: 'confirmed',
+        ...(isTest ? { test: true } : {}),
       });
     } catch (e) {
       if (capacity) await holdRef.child(bookingId).remove().catch(() => {});
       throw e;
+    }
+
+    if (isTest) {
+      await db.ref(`drafts/${shop}/testBookings`).transaction(n => (n || 0) + 1).catch(() => {});
+      return json(200, { ok: true, bookingId, cancelToken, test: true });
     }
 
     // Αν ήταν στη λίστα αναμονής για αυτή τη μέρα, δεν χρειάζεται πια

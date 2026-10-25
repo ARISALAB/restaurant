@@ -407,6 +407,71 @@
         .src-tag { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 2px 7px; border-radius: 999px; font-size: 0.74rem; font-weight: 600; letter-spacing: .01em; border: 1px solid transparent; line-height: 1.6; }
         .src-tag svg { flex-shrink: 0; }
         .booked-at { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; color: var(--text-muted); }
+        /* ===== Δοκιμαστική λειτουργία (προσχέδιο) ===== */
+        .tr-badge { font-size:.66rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:999px; background:#f1f5f9; color:#64748b; border:1px solid #e2e8f0; }
+        .tr-badge.test { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+        #tr-bar { display:none; position:sticky; top:var(--tr-nav-h, 64px); z-index:90; background:#1d4ed8; color:#fff; padding:10px 16px; }
+        #tr-bar .in { max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:space-between; }
+        #tr-bar .tx { font-size:.9rem; line-height:1.4; }
+        #tr-bar .tx b { display:block; font-size:.95rem; }
+        #tr-bar button { background:#fff; color:#1d4ed8; border:0; border-radius:999px; padding:9px 18px; font:700 .9rem inherit; cursor:pointer; white-space:nowrap; }
+        #tr-tabs { display:none; position:sticky; top:calc(var(--tr-nav-h, 64px) + var(--tr-bar-h, 58px)); z-index:89; background:#f0f2f7; padding:10px 16px 6px; }
+        #tr-tabs .seg { max-width:520px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; background:#e2e8f0; border-radius:12px; padding:4px; }
+        #tr-tabs button { border:0; background:transparent; border-radius:9px; padding:10px; font:600 .92rem inherit; color:#475569; cursor:pointer; }
+        #tr-tabs button.on { background:#fff; color:#0f172a; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+        #tr-panel { display:none; position:fixed; right:24px; top:calc(var(--tr-nav-h, 64px) + var(--tr-bar-h, 58px) + 18px); bottom:18px; width:380px; z-index:80; flex-direction:column; align-items:center; }
+        #tr-panel .lbl { font-size:.75rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:#64748b; margin-bottom:8px; }
+        .tr-phone { flex:1; width:100%; max-height:820px; border-radius:42px; background:#0f172a; padding:10px; box-shadow:0 20px 50px rgba(15,23,42,.25); }
+        .tr-phone iframe { width:100%; height:100%; border:0; border-radius:33px; background:#fff; }
+        #tr-panel a { margin-top:8px; font-size:.82rem; color:#2563eb; font-weight:600; text-decoration:none; }
+        body.tr-wide #page-admin { margin-right:420px; }
+        #tr-cust { display:none; position:fixed; inset:0; z-index:1000; background:#fff; flex-direction:column; }
+        #tr-cust .top { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#0f172a; color:#fff; font-size:.85rem; }
+        #tr-cust .top button { background:#fff; color:#0f172a; border:0; border-radius:999px; padding:7px 14px; font:700 .85rem inherit; cursor:pointer; white-space:nowrap; }
+        #tr-cust .top span { flex:1; line-height:1.3; }
+        #tr-cust iframe { flex:1; width:100%; border:0; }
+        #tr-arrived { display:none; background:#ecfdf5; color:#065f46; padding:10px 14px; font-size:.9rem; font-weight:600; border-bottom:1px solid #a7f3d0; cursor:pointer; }
+        .tr-modal { display:none; position:fixed; inset:0; z-index:1100; background:rgba(15,23,42,.55); align-items:center; justify-content:center; padding:16px; overflow-y:auto; }
+        .tr-modal.open { display:flex; }
+        .tr-modal .box { background:#fff; border-radius:20px; width:100%; max-width:720px; padding:26px 22px; box-shadow:0 20px 60px rgba(0,0,0,.25); max-height:calc(100vh - 32px); overflow-y:auto; }
+        .tr-modal h2 { font-family:'Sora',sans-serif; font-size:1.35rem; margin:0 0 6px; }
+        .tr-modal .sub { color:#64748b; line-height:1.55; margin:0 0 18px; font-size:.95rem; }
+        .tr-cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .tr-card { border:1.5px solid #e2e8f0; border-radius:16px; padding:16px; cursor:pointer; background:#fff; text-align:left; font:inherit; color:inherit; display:flex; flex-direction:column; gap:8px; }
+        .tr-card:hover { border-color:#2563eb; box-shadow:0 6px 20px rgba(37,99,235,.12); }
+        .tr-card h3 { margin:0; font-size:1.02rem; font-family:'Sora',sans-serif; }
+        .tr-card p { margin:0; color:#64748b; font-size:.88rem; line-height:1.5; }
+        .tr-card .go { color:#2563eb; font-weight:700; font-size:.88rem; margin-top:auto; }
+        .tr-thumb { height:190px; border-radius:12px; overflow:hidden; background:#f1f5f9; position:relative; border:1px solid #e2e8f0; }
+        .tr-thumb iframe { position:absolute; top:0; left:0; width:390px; height:844px; border:0; transform:scale(.45); transform-origin:0 0; pointer-events:none; }
+        .tr-thumb.admin { background:linear-gradient(180deg,#eff6ff,#fff); display:flex; flex-direction:column; gap:7px; padding:14px; }
+        .tr-thumb.admin i { display:block; height:26px; border-radius:8px; background:#fff; border:1px solid #dbeafe; }
+        .tr-thumb.admin i:first-child { height:34px; background:#2563eb; border:0; }
+        .tr-form label { display:block; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#64748b; margin:12px 0 6px; }
+        .tr-form input[type=email], .tr-form input[type=password], .tr-form input[type=tel] { width:100%; padding:12px 14px; border:1.5px solid #e2e8f0; border-radius:10px; font:400 1rem inherit; background:#f8fafc; box-sizing:border-box; }
+        .tr-terms { display:flex !important; gap:10px; align-items:flex-start; font-size:.86rem !important; line-height:1.45; margin:14px 0 !important; color:#0f172a !important; text-transform:none !important; letter-spacing:0 !important; font-weight:400 !important; }
+        .tr-terms input { margin-top:3px; width:16px !important; height:16px; flex:none; padding:0 !important; }
+        .tr-terms a { color:#2563eb; }
+        body.tr-trial .dash-live i { background:#f59e0b !important; box-shadow:none !important; }
+        .tr-gbtn { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:12px; border:1.5px solid #e2e8f0; background:#fff; border-radius:12px; font:600 .95rem inherit; cursor:pointer; }
+        .tr-or { display:flex; align-items:center; gap:12px; color:#94a3b8; font-size:.8rem; margin:16px 0 4px; }
+        .tr-or:before, .tr-or:after { content:''; flex:1; height:1px; background:#e2e8f0; }
+        .tr-err { display:none; background:#fef2f2; color:#b91c1c; border:1px solid #fecaca; border-radius:10px; padding:10px 12px; font-size:.88rem; margin:12px 0 0; }
+        .tr-perks { margin:0 0 16px; padding:0; list-style:none; display:grid; gap:6px; font-size:.9rem; }
+        .tr-perks li:before { content:'✓ '; color:#10b981; font-weight:800; }
+        #tr-bar-days { display:none; font-weight:500; }
+        @media (max-width: 640px) {
+            #tr-bar { padding:7px 12px; }
+            #tr-bar .in { flex-wrap:nowrap; gap:10px; }
+            #tr-bar .tx b { display:inline; font-size:.88rem; }
+            #tr-bar-sub { display:none; }
+            #tr-bar-days { display:inline; font-size:.85rem; opacity:.9; }
+            #tr-bar button { padding:7px 14px; font-size:.82rem; }
+            #tr-tabs { padding:6px 12px 4px; }
+            #tr-tabs button { padding:7px; font-size:.86rem; }
+        }
+        @media (max-width: 640px) { .tr-cards { grid-template-columns:1fr; } .tr-thumb { height:150px; } .tr-thumb iframe { transform:scale(.36); } }
+        body.tr-trial #btn-logout, body.tr-trial #close-card, body.tr-trial .dash-linkbar, body.tr-trial #billing-banner { display:none !important; }
         .new-badge { font-size: 0.68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
         .src-google { background: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
         .src-site   { background: #f0fdf4; color: #15803d; border-color: #dcfce7; }
@@ -962,6 +1027,45 @@
         </div>
     </nav>
 
+    <!-- ===== ΔΟΚΙΜΑΣΤΙΚΗ ΛΕΙΤΟΥΡΓΙΑ (προσχέδιο) ===== -->
+    <div id="tr-bar"><div class="in"><div class="tx"><b id="tr-bar-title"></b><span id="tr-bar-days"></span><span id="tr-bar-sub"></span></div><button type="button" id="tr-bar-btn"></button></div></div>
+    <div id="tr-tabs"><div class="seg"><button type="button" class="on" id="tr-tab-admin"></button><button type="button" id="tr-tab-cust"></button></div></div>
+    <div id="tr-panel"><div class="lbl" id="tr-panel-lbl"></div><div class="tr-phone"><iframe id="tr-panel-frame" title="Booking page"></iframe></div><a id="tr-panel-open" href="#" target="_blank" rel="noopener"></a></div>
+    <div id="tr-cust"><div class="top"><span id="tr-cust-txt"></span><button type="button" id="tr-cust-back"></button></div><div id="tr-arrived"></div><iframe id="tr-cust-frame" title="Booking page"></iframe></div>
+
+    <div class="tr-modal" id="tr-welcome" role="dialog" aria-modal="true" aria-labelledby="tr-w-title"><div class="box">
+        <h2 id="tr-w-title"></h2>
+        <p class="sub" id="tr-w-sub"></p>
+        <div class="tr-cards">
+            <button type="button" class="tr-card" id="tr-w-admin"><div class="tr-thumb admin"><i></i><i></i><i></i><i></i><i></i></div><h3 id="tr-w-admin-t"></h3><p id="tr-w-admin-p"></p><span class="go" id="tr-w-admin-go"></span></button>
+            <button type="button" class="tr-card" id="tr-w-cust"><div class="tr-thumb"><iframe id="tr-w-frame" title="Booking page" tabindex="-1"></iframe></div><h3 id="tr-w-cust-t"></h3><p id="tr-w-cust-p"></p><span class="go" id="tr-w-cust-go"></span></button>
+        </div>
+    </div></div>
+
+    <div class="tr-modal" id="tr-activate" role="dialog" aria-modal="true" aria-labelledby="tr-a-title"><div class="box" style="max-width:440px;">
+        <h2 id="tr-a-title"></h2>
+        <p class="sub" id="tr-a-sub"></p>
+        <ul class="tr-perks"><li id="tr-a-p1"></li><li id="tr-a-p2"></li><li id="tr-a-p3"></li></ul>
+        <label class="tr-terms"><input type="checkbox" id="tr-a-terms"><span id="tr-a-terms-t"></span></label>
+        <button type="button" class="tr-gbtn" id="tr-a-google"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span id="tr-a-google-t"></span></button>
+        <div class="tr-or" id="tr-a-or"></div>
+        <form class="tr-form" id="tr-a-form" novalidate>
+            <label for="tr-a-email">Email</label><input type="email" id="tr-a-email" autocomplete="email">
+            <label for="tr-a-pass" id="tr-a-pass-l"></label><input type="password" id="tr-a-pass" autocomplete="new-password">
+            <label for="tr-a-phone" id="tr-a-phone-l"></label><input type="tel" id="tr-a-phone" autocomplete="tel" maxlength="30">
+            <div class="tr-err" id="tr-a-err"></div>
+            <button type="submit" class="btn-primary" id="tr-a-submit" style="margin-top:16px;"></button>
+        </form>
+        <button type="button" class="btn-link" id="tr-a-close" style="display:block; margin:12px auto 0;"></button>
+    </div></div>
+
+    <div id="tr-expired" style="display:none; max-width:460px; margin:40px auto; padding:0 16px; text-align:center;"><div class="card">
+        <div style="font-size:2rem; margin-bottom:8px;">⏳</div>
+        <h2 style="margin:0 0 10px;" id="tr-x-title"></h2>
+        <p style="color:#64748b; line-height:1.6; margin:0 0 14px;" id="tr-x-sub"></p>
+        <a href="mailto:info@tablereserve.gr" style="color:#2563eb; font-weight:700; text-decoration:none;">info@tablereserve.gr</a>
+    </div></div>
+
     <!-- ===== ADMIN PAGE ===== -->
     <div id="page-admin" class="page active">
         <div class="container">
@@ -1325,7 +1429,7 @@
                         </div>
                     </div>
                     <!-- Κλείσιμο λογαριασμού -->
-                    <div class="card" style="margin-top:20px; border:1px solid #fecaca;">
+                    <div class="card" id="close-card" style="margin-top:20px; border:1px solid #fecaca;">
                         <div class="card-title"><div class="icon">⚠️</div><span data-i18n-key="close_title">Κλείσιμο λογαριασμού</span></div>
                         <p style="color:#64748b; font-size:0.9rem; line-height:1.6; margin:0 0 16px;" data-i18n-key="close_desc">Οι online κρατήσεις σταματούν αμέσως. Όλα τα δεδομένα του καταστήματος (κρατήσεις, προφίλ, φωτογραφίες, λογαριασμός) διαγράφονται οριστικά μετά από 30 ημέρες. Μέχρι τότε μπορείτε να ζητήσετε αντίγραφο των κρατήσεων ή επαναφορά στο info@tablereserve.gr.</p>
                         <button type="button" id="btn-close-account" style="background:#fff; color:#dc2626; border:1px solid #fca5a5; padding:11px 18px; border-radius:10px; font-weight:600; font-family:inherit; cursor:pointer;" data-i18n-key="close_btn">Κλείσιμο λογαριασμού</button>
@@ -1356,7 +1460,8 @@
         import { getDatabase, ref, onValue, get, push, set, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
         import {
             getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut,
-            createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup
+            createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,
+            signInAnonymously, linkWithCredential, linkWithPopup, EmailAuthProvider
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const firebaseConfig = {
@@ -3358,6 +3463,81 @@
         let trAdminLangSaved = null;
         let currentAdminShop = null;
         const SUPERADMIN_UID = "cGhWqj5Mtiey6AC8CMpiUZDxAGh1";
+        // Δοκιμαστική λειτουργία (προσχέδιο πιλοτικού): ο ιδιοκτήτης μπήκε με το προσωπικό link, χωρίς λογαριασμό
+        let TR_TRIAL = false;
+        const TR_ENTRY = (() => { const q = new URLSearchParams(location.search); return q.get('draft') && q.get('t') ? { shop: q.get('draft'), token: q.get('t') } : null; })();
+        let trEntryStarted = false;
+        const TRT = {
+            el: {
+                bar_title: 'Δοκιμαστική λειτουργία', bar_sub: 'Οι πελάτες δεν βλέπουν ακόμα τη σελίδα σας · απομένουν {n} ημέρες',
+                bar_btn: 'Ενεργοποίηση online κρατήσεων', tab_admin: 'Admin', tab_cust: 'Σελίδα πελατών',
+                panel_lbl: 'Έτσι τη βλέπουν οι πελάτες σας', panel_open: 'Άνοιγμα σε νέα καρτέλα ↗',
+                cust_txt: 'Έτσι βλέπουν οι πελάτες τη σελίδα σας. Κάντε μια δοκιμαστική κράτηση.', cust_back: '← Admin',
+                arrived: '✓ Η κράτηση έφτασε στο admin σας. Πατήστε για να τη δείτε →', toast_arrived: 'Νέα δοκιμαστική κράτηση στο admin σας!',
+                w_title: 'Καλώς ήρθατε! Αυτό είναι το σύστημα κρατήσεων του «{name}»',
+                w_sub: 'Είναι έτοιμο και δικό σας για δοκιμή. Πατήστε, αλλάξτε, δοκιμάστε ελεύθερα: οι πελάτες δεν το βλέπουν μέχρι να το ενεργοποιήσετε.',
+                w_admin_t: 'Το admin σας', w_admin_p: 'Εδώ βλέπετε τις κρατήσεις, τους πελάτες και τα στατιστικά, και ορίζετε ωράριο και τραπέζια. Έχουμε βάλει παραδείγματα για να δείτε πώς δουλεύει.', w_admin_go: 'Ξεκινήστε από εδώ →',
+                w_cust_t: 'Η σελίδα των πελατών σας', w_cust_p: 'Από εδώ κλείνουν τραπέζι οι πελάτες σας. Κάντε μια δοκιμαστική κράτηση και δείτε τη να εμφανίζεται στο admin.', w_cust_go: 'Δείτε τη σελίδα →',
+                badge_sample: 'Παράδειγμα', badge_test: 'Δοκιμή',
+                a_title: 'Ενεργοποίηση online κρατήσεων', a_sub: 'Η σελίδα σας ανοίγει για τους πελάτες και όλα όσα ρυθμίσατε μένουν όπως είναι. Τα παραδείγματα σβήνονται.',
+                a_p1: '6 μήνες δωρεάν, χωρίς κάρτα', a_p2: 'Χωρίς προμήθεια ανά κράτηση', a_p3: 'Μετά, αν θέλετε να συνεχίσετε, 99 € τον χρόνο',
+                a_terms: 'Αποδέχομαι τους <a href="/terms" target="_blank" rel="noopener">Όρους Χρήσης</a> και την <a href="/privacy" target="_blank" rel="noopener">Πολιτική Απορρήτου</a>.',
+                a_google: 'Ενεργοποίηση με Google', a_or: 'ή με email', a_pass: 'Κωδικός (τουλάχιστον 8 χαρακτήρες)', a_phone: 'Κινητό (προαιρετικό)',
+                a_submit: 'Ενεργοποίηση', a_close: 'Όχι ακόμα', a_working: 'Μισό λεπτό...',
+                e_terms: 'Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.', e_email: 'Γράψτε ένα έγκυρο email.', e_pass: 'Ο κωδικός χρειάζεται τουλάχιστον 8 χαρακτήρες.',
+                e_in_use: 'Αυτό το email (ή ο λογαριασμός Google) έχει ήδη λογαριασμό στο TableReserve. Χρησιμοποιήστε άλλο.', e_popup: 'Ο browser μπλόκαρε το παράθυρο της Google. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.',
+                e_generic: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.',
+                x_title: 'Η δοκιμαστική περίοδος έληξε', x_sub: 'Το link της δοκιμής ίσχυε 30 ημέρες. Αν θέλετε να συνεχίσετε, στείλτε μας μήνυμα και θα σας δώσουμε νέο.',
+                x_invalid_title: 'Ο σύνδεσμος δεν ισχύει', x_invalid_sub: 'Ίσως το κατάστημα έχει ήδη ενεργοποιηθεί. Συνδεθείτε με το email σας, ή στείλτε μας μήνυμα.'
+            },
+            en: {
+                bar_title: 'Trial mode', bar_sub: 'Guests can’t see your page yet · {n} days left',
+                bar_btn: 'Activate online bookings', tab_admin: 'Admin', tab_cust: 'Guest page',
+                panel_lbl: 'This is what your guests see', panel_open: 'Open in a new tab ↗',
+                cust_txt: 'This is your page as guests see it. Make a test booking.', cust_back: '← Admin',
+                arrived: '✓ The booking reached your admin. Tap to see it →', toast_arrived: 'New test booking in your admin!',
+                w_title: 'Welcome! This is the booking system of “{name}”',
+                w_sub: 'It is ready and yours to try. Click, change and test freely: guests won’t see it until you activate it.',
+                w_admin_t: 'Your admin', w_admin_p: 'See bookings, guests and statistics, and set opening hours and tables. We added examples so you can see how it works.', w_admin_go: 'Start here →',
+                w_cust_t: 'Your guest page', w_cust_p: 'This is where your guests book a table. Make a test booking and watch it appear in your admin.', w_cust_go: 'See the page →',
+                badge_sample: 'Example', badge_test: 'Test',
+                a_title: 'Activate online bookings', a_sub: 'Your page opens to guests and everything you set up stays as it is. The examples are removed.',
+                a_p1: '6 months free, no card', a_p2: 'No commission per booking', a_p3: 'Afterwards, if you want to continue, €99 per year',
+                a_terms: 'I accept the <a href="/terms" target="_blank" rel="noopener">Terms of Use</a> and the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.',
+                a_google: 'Activate with Google', a_or: 'or with email', a_pass: 'Password (at least 8 characters)', a_phone: 'Mobile (optional)',
+                a_submit: 'Activate', a_close: 'Not yet', a_working: 'Please wait...',
+                e_terms: 'Please accept the Terms of Use and the Privacy Policy.', e_email: 'Please enter a valid email.', e_pass: 'The password needs at least 8 characters.',
+                e_in_use: 'This email (or Google account) already has a TableReserve account. Please use another one.', e_popup: 'Your browser blocked the Google window. Allow pop-ups and try again.',
+                e_generic: 'Something went wrong. Please try again in a moment.',
+                x_title: 'The trial has ended', x_sub: 'The trial link was valid for 30 days. If you’d like to continue, send us a message and we’ll give you a new one.',
+                x_invalid_title: 'This link is not valid', x_invalid_sub: 'The restaurant may already be activated. Sign in with your email, or send us a message.'
+            },
+            de: {
+                bar_title: 'Testmodus', bar_sub: 'Gäste sehen Ihre Seite noch nicht · noch {n} Tage',
+                bar_btn: 'Online-Reservierungen aktivieren', tab_admin: 'Admin', tab_cust: 'Gästeseite',
+                panel_lbl: 'So sehen Ihre Gäste die Seite', panel_open: 'In neuem Tab öffnen ↗',
+                cust_txt: 'So sehen Gäste Ihre Seite. Machen Sie eine Testreservierung.', cust_back: '← Admin',
+                arrived: '✓ Die Reservierung ist in Ihrem Admin angekommen. Tippen zum Ansehen →', toast_arrived: 'Neue Testreservierung in Ihrem Admin!',
+                w_title: 'Willkommen! Das ist das Reservierungssystem von „{name}“',
+                w_sub: 'Es ist fertig und gehört Ihnen zum Testen. Klicken, ändern, ausprobieren: Gäste sehen es erst, wenn Sie es aktivieren.',
+                w_admin_t: 'Ihr Admin', w_admin_p: 'Hier sehen Sie Reservierungen, Gäste und Statistiken und legen Öffnungszeiten und Tische fest. Mit Beispielen, damit Sie sehen, wie es funktioniert.', w_admin_go: 'Hier beginnen →',
+                w_cust_t: 'Ihre Gästeseite', w_cust_p: 'Hier reservieren Ihre Gäste. Machen Sie eine Testreservierung und sehen Sie, wie sie im Admin erscheint.', w_cust_go: 'Seite ansehen →',
+                badge_sample: 'Beispiel', badge_test: 'Test',
+                a_title: 'Online-Reservierungen aktivieren', a_sub: 'Ihre Seite wird für Gäste freigeschaltet, alle Einstellungen bleiben erhalten. Die Beispiele werden gelöscht.',
+                a_p1: '6 Monate kostenlos, ohne Karte', a_p2: 'Keine Provision pro Reservierung', a_p3: 'Danach, wenn Sie weitermachen möchten, 99 € pro Jahr',
+                a_terms: 'Ich akzeptiere die <a href="/terms" target="_blank" rel="noopener">Nutzungsbedingungen</a> und die <a href="/privacy" target="_blank" rel="noopener">Datenschutzerklärung</a>.',
+                a_google: 'Mit Google aktivieren', a_or: 'oder mit E-Mail', a_pass: 'Passwort (mindestens 8 Zeichen)', a_phone: 'Handy (optional)',
+                a_submit: 'Aktivieren', a_close: 'Noch nicht', a_working: 'Einen Moment...',
+                e_terms: 'Bitte akzeptieren Sie die Nutzungsbedingungen und die Datenschutzerklärung.', e_email: 'Bitte geben Sie eine gültige E-Mail ein.', e_pass: 'Das Passwort braucht mindestens 8 Zeichen.',
+                e_in_use: 'Diese E-Mail (oder dieses Google-Konto) hat bereits ein TableReserve-Konto. Bitte verwenden Sie ein anderes.', e_popup: 'Ihr Browser hat das Google-Fenster blockiert. Erlauben Sie Pop-ups und versuchen Sie es erneut.',
+                e_generic: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es gleich noch einmal.',
+                x_title: 'Der Testzeitraum ist abgelaufen', x_sub: 'Der Test-Link war 30 Tage gültig. Wenn Sie weitermachen möchten, schreiben Sie uns, und wir schicken Ihnen einen neuen.',
+                x_invalid_title: 'Dieser Link ist nicht gültig', x_invalid_sub: 'Das Restaurant ist vielleicht schon aktiviert. Melden Sie sich mit Ihrer E-Mail an oder schreiben Sie uns.'
+            }
+        };
+        Object.assign(TRT, {"fr": {"bar_title": "Mode essai", "bar_sub": "Vos clients ne voient pas encore votre page · encore {n} jours", "bar_btn": "Activer les réservations en ligne", "tab_admin": "Admin", "tab_cust": "Page clients", "panel_lbl": "Voici ce que voient vos clients", "panel_open": "Ouvrir dans un nouvel onglet ↗", "cust_txt": "Voici votre page telle que la voient vos clients. Faites une réservation test.", "cust_back": "← Admin", "arrived": "✓ La réservation est arrivée dans votre admin. Touchez pour la voir →", "toast_arrived": "Nouvelle réservation test dans votre admin !", "w_title": "Bienvenue ! Voici le système de réservation de « {name} »", "w_sub": "Il est prêt et à vous pour l’essayer. Cliquez, modifiez, testez librement : vos clients ne le verront pas avant que vous l’activiez.", "w_admin_t": "Votre admin", "w_admin_p": "Vous y voyez les réservations, les clients et les statistiques, et réglez horaires et tables. Nous avons ajouté des exemples pour vous montrer comment ça marche.", "w_admin_go": "Commencez ici →", "w_cust_t": "Votre page clients", "w_cust_p": "C’est ici que vos clients réservent une table. Faites une réservation test et voyez-la apparaître dans l’admin.", "w_cust_go": "Voir la page →", "badge_sample": "Exemple", "badge_test": "Test", "a_title": "Activer les réservations en ligne", "a_sub": "Votre page s’ouvre aux clients et tout ce que vous avez réglé reste en place. Les exemples sont supprimés.", "a_p1": "6 mois gratuits, sans carte", "a_p2": "Aucune commission par réservation", "a_p3": "Ensuite, si vous souhaitez continuer, 99 € par an", "a_terms": "J’accepte les <a href=\"/terms\" target=\"_blank\" rel=\"noopener\">Conditions d’utilisation</a> et la <a href=\"/privacy\" target=\"_blank\" rel=\"noopener\">Politique de confidentialité</a>.", "a_google": "Activer avec Google", "a_or": "ou par e-mail", "a_pass": "Mot de passe (au moins 8 caractères)", "a_phone": "Mobile (facultatif)", "a_submit": "Activer", "a_close": "Pas encore", "a_working": "Un instant...", "e_terms": "Veuillez accepter les Conditions d’utilisation et la Politique de confidentialité.", "e_email": "Saisissez un e-mail valide.", "e_pass": "Le mot de passe doit contenir au moins 8 caractères.", "e_in_use": "Cet e-mail (ou ce compte Google) a déjà un compte TableReserve. Utilisez-en un autre.", "e_popup": "Votre navigateur a bloqué la fenêtre Google. Autorisez les pop-ups et réessayez.", "e_generic": "Un problème est survenu. Réessayez dans un instant.", "x_title": "La période d’essai est terminée", "x_sub": "Le lien d’essai était valable 30 jours. Si vous souhaitez continuer, écrivez-nous et nous vous en enverrons un nouveau.", "x_invalid_title": "Ce lien n’est pas valide", "x_invalid_sub": "Le restaurant est peut-être déjà activé. Connectez-vous avec votre e-mail ou écrivez-nous."}, "it": {"bar_title": "Modalità prova", "bar_sub": "I clienti non vedono ancora la tua pagina · mancano {n} giorni", "bar_btn": "Attiva le prenotazioni online", "tab_admin": "Admin", "tab_cust": "Pagina clienti", "panel_lbl": "Così la vedono i tuoi clienti", "panel_open": "Apri in una nuova scheda ↗", "cust_txt": "Così i clienti vedono la tua pagina. Fai una prenotazione di prova.", "cust_back": "← Admin", "arrived": "✓ La prenotazione è arrivata nel tuo admin. Tocca per vederla →", "toast_arrived": "Nuova prenotazione di prova nel tuo admin!", "w_title": "Benvenuto! Questo è il sistema di prenotazione di “{name}”", "w_sub": "È pronto ed è tuo da provare. Clicca, modifica, prova liberamente: i clienti non lo vedranno finché non lo attivi.", "w_admin_t": "Il tuo admin", "w_admin_p": "Qui vedi prenotazioni, clienti e statistiche, e imposti orari e tavoli. Abbiamo aggiunto degli esempi per mostrarti come funziona.", "w_admin_go": "Inizia da qui →", "w_cust_t": "La tua pagina clienti", "w_cust_p": "Qui i tuoi clienti prenotano un tavolo. Fai una prenotazione di prova e guardala comparire nell’admin.", "w_cust_go": "Vedi la pagina →", "badge_sample": "Esempio", "badge_test": "Prova", "a_title": "Attiva le prenotazioni online", "a_sub": "La tua pagina si apre ai clienti e tutto ciò che hai impostato resta com’è. Gli esempi vengono eliminati.", "a_p1": "6 mesi gratis, senza carta", "a_p2": "Nessuna commissione per prenotazione", "a_p3": "Dopo, se vuoi continuare, 99 € all’anno", "a_terms": "Accetto i <a href=\"/terms\" target=\"_blank\" rel=\"noopener\">Termini di utilizzo</a> e l’<a href=\"/privacy\" target=\"_blank\" rel=\"noopener\">Informativa sulla privacy</a>.", "a_google": "Attiva con Google", "a_or": "oppure con email", "a_pass": "Password (almeno 8 caratteri)", "a_phone": "Cellulare (facoltativo)", "a_submit": "Attiva", "a_close": "Non ancora", "a_working": "Un attimo...", "e_terms": "Accetta i Termini di utilizzo e l’Informativa sulla privacy.", "e_email": "Inserisci un’email valida.", "e_pass": "La password deve avere almeno 8 caratteri.", "e_in_use": "Questa email (o questo account Google) ha già un account TableReserve. Usane un’altra.", "e_popup": "Il browser ha bloccato la finestra di Google. Consenti i pop-up e riprova.", "e_generic": "Qualcosa è andato storto. Riprova tra poco.", "x_title": "Il periodo di prova è terminato", "x_sub": "Il link di prova era valido 30 giorni. Se vuoi continuare, scrivici e te ne invieremo uno nuovo.", "x_invalid_title": "Questo link non è valido", "x_invalid_sub": "Il ristorante potrebbe essere già attivo. Accedi con la tua email o scrivici."}, "es": {"bar_title": "Modo de prueba", "bar_sub": "Tus clientes aún no ven tu página · quedan {n} días", "bar_btn": "Activar las reservas online", "tab_admin": "Admin", "tab_cust": "Página de clientes", "panel_lbl": "Así la ven tus clientes", "panel_open": "Abrir en una pestaña nueva ↗", "cust_txt": "Así ven tus clientes tu página. Haz una reserva de prueba.", "cust_back": "← Admin", "arrived": "✓ La reserva ha llegado a tu admin. Pulsa para verla →", "toast_arrived": "¡Nueva reserva de prueba en tu admin!", "w_title": "¡Bienvenido! Este es el sistema de reservas de «{name}»", "w_sub": "Está listo y es tuyo para probarlo. Pulsa, cambia y prueba libremente: tus clientes no lo verán hasta que lo actives.", "w_admin_t": "Tu admin", "w_admin_p": "Aquí ves reservas, clientes y estadísticas, y configuras horarios y mesas. Hemos añadido ejemplos para que veas cómo funciona.", "w_admin_go": "Empieza aquí →", "w_cust_t": "Tu página de clientes", "w_cust_p": "Aquí tus clientes reservan mesa. Haz una reserva de prueba y mira cómo aparece en el admin.", "w_cust_go": "Ver la página →", "badge_sample": "Ejemplo", "badge_test": "Prueba", "a_title": "Activar las reservas online", "a_sub": "Tu página se abre a los clientes y todo lo que configuraste se mantiene. Los ejemplos se eliminan.", "a_p1": "6 meses gratis, sin tarjeta", "a_p2": "Sin comisión por reserva", "a_p3": "Después, si quieres continuar, 99 € al año", "a_terms": "Acepto los <a href=\"/terms\" target=\"_blank\" rel=\"noopener\">Términos de uso</a> y la <a href=\"/privacy\" target=\"_blank\" rel=\"noopener\">Política de privacidad</a>.", "a_google": "Activar con Google", "a_or": "o con email", "a_pass": "Contraseña (al menos 8 caracteres)", "a_phone": "Móvil (opcional)", "a_submit": "Activar", "a_close": "Todavía no", "a_working": "Un momento...", "e_terms": "Acepta los Términos de uso y la Política de privacidad.", "e_email": "Escribe un email válido.", "e_pass": "La contraseña necesita al menos 8 caracteres.", "e_in_use": "Este email (o esta cuenta de Google) ya tiene una cuenta de TableReserve. Usa otro.", "e_popup": "Tu navegador bloqueó la ventana de Google. Permite las ventanas emergentes y vuelve a intentarlo.", "e_generic": "Algo salió mal. Inténtalo de nuevo en un momento.", "x_title": "El periodo de prueba ha terminado", "x_sub": "El enlace de prueba era válido 30 días. Si quieres continuar, escríbenos y te enviaremos uno nuevo.", "x_invalid_title": "Este enlace no es válido", "x_invalid_sub": "Puede que el restaurante ya esté activado. Inicia sesión con tu email o escríbenos."}, "pt": {"bar_title": "Modo de teste", "bar_sub": "Os clientes ainda não veem a sua página · faltam {n} dias", "bar_btn": "Ativar as reservas online", "tab_admin": "Admin", "tab_cust": "Página de clientes", "panel_lbl": "É assim que os seus clientes a veem", "panel_open": "Abrir num novo separador ↗", "cust_txt": "É assim que os clientes veem a sua página. Faça uma reserva de teste.", "cust_back": "← Admin", "arrived": "✓ A reserva chegou ao seu admin. Toque para a ver →", "toast_arrived": "Nova reserva de teste no seu admin!", "w_title": "Bem-vindo! Este é o sistema de reservas de “{name}”", "w_sub": "Está pronto e é seu para experimentar. Clique, altere e teste à vontade: os clientes só o veem quando o ativar.", "w_admin_t": "O seu admin", "w_admin_p": "Aqui vê reservas, clientes e estatísticas, e define horários e mesas. Adicionámos exemplos para ver como funciona.", "w_admin_go": "Comece aqui →", "w_cust_t": "A sua página de clientes", "w_cust_p": "É aqui que os seus clientes reservam mesa. Faça uma reserva de teste e veja-a aparecer no admin.", "w_cust_go": "Ver a página →", "badge_sample": "Exemplo", "badge_test": "Teste", "a_title": "Ativar as reservas online", "a_sub": "A sua página abre aos clientes e tudo o que configurou mantém-se. Os exemplos são apagados.", "a_p1": "6 meses grátis, sem cartão", "a_p2": "Sem comissão por reserva", "a_p3": "Depois, se quiser continuar, 99 € por ano", "a_terms": "Aceito os <a href=\"/terms\" target=\"_blank\" rel=\"noopener\">Termos de utilização</a> e a <a href=\"/privacy\" target=\"_blank\" rel=\"noopener\">Política de privacidade</a>.", "a_google": "Ativar com Google", "a_or": "ou com email", "a_pass": "Palavra-passe (pelo menos 8 caracteres)", "a_phone": "Telemóvel (opcional)", "a_submit": "Ativar", "a_close": "Ainda não", "a_working": "Um momento...", "e_terms": "Aceite os Termos de utilização e a Política de privacidade.", "e_email": "Escreva um email válido.", "e_pass": "A palavra-passe precisa de pelo menos 8 caracteres.", "e_in_use": "Este email (ou esta conta Google) já tem uma conta TableReserve. Use outro.", "e_popup": "O browser bloqueou a janela da Google. Permita pop-ups e tente de novo.", "e_generic": "Algo correu mal. Tente de novo dentro de momentos.", "x_title": "O período de teste terminou", "x_sub": "O link de teste era válido durante 30 dias. Se quiser continuar, envie-nos uma mensagem e enviamos um novo.", "x_invalid_title": "Este link não é válido", "x_invalid_sub": "O restaurante pode já estar ativado. Entre com o seu email ou envie-nos uma mensagem."}, "tr": {"bar_title": "Deneme modu", "bar_sub": "Müşteriler sayfanızı henüz görmüyor · {n} gün kaldı", "bar_btn": "Online rezervasyonları etkinleştir", "tab_admin": "Admin", "tab_cust": "Müşteri sayfası", "panel_lbl": "Müşterileriniz böyle görüyor", "panel_open": "Yeni sekmede aç ↗", "cust_txt": "Müşteriler sayfanızı böyle görüyor. Bir deneme rezervasyonu yapın.", "cust_back": "← Admin", "arrived": "✓ Rezervasyon admin panelinize ulaştı. Görmek için dokunun →", "toast_arrived": "Admin panelinizde yeni deneme rezervasyonu!", "w_title": "Hoş geldiniz! Bu, “{name}” için rezervasyon sistemi", "w_sub": "Hazır ve denemeniz için sizin. Tıklayın, değiştirin, rahatça deneyin: etkinleştirene kadar müşteriler görmez.", "w_admin_t": "Admin paneliniz", "w_admin_p": "Burada rezervasyonları, müşterileri ve istatistikleri görür, çalışma saatlerini ve masaları ayarlarsınız. Nasıl çalıştığını görmeniz için örnekler ekledik.", "w_admin_go": "Buradan başlayın →", "w_cust_t": "Müşteri sayfanız", "w_cust_p": "Müşterileriniz burada masa ayırtır. Bir deneme rezervasyonu yapın ve admin panelinde belirdiğini görün.", "w_cust_go": "Sayfayı görün →", "badge_sample": "Örnek", "badge_test": "Deneme", "a_title": "Online rezervasyonları etkinleştir", "a_sub": "Sayfanız müşterilere açılır ve ayarladığınız her şey olduğu gibi kalır. Örnekler silinir.", "a_p1": "6 ay ücretsiz, kart gerekmez", "a_p2": "Rezervasyon başına komisyon yok", "a_p3": "Sonrasında devam etmek isterseniz yılda 99 €", "a_terms": "<a href=\"/terms\" target=\"_blank\" rel=\"noopener\">Kullanım Koşulları</a>’nı ve <a href=\"/privacy\" target=\"_blank\" rel=\"noopener\">Gizlilik Politikası</a>’nı kabul ediyorum.", "a_google": "Google ile etkinleştir", "a_or": "veya e-posta ile", "a_pass": "Şifre (en az 8 karakter)", "a_phone": "Cep telefonu (isteğe bağlı)", "a_submit": "Etkinleştir", "a_close": "Şimdi değil", "a_working": "Bir saniye...", "e_terms": "Lütfen Kullanım Koşulları’nı ve Gizlilik Politikası’nı kabul edin.", "e_email": "Geçerli bir e-posta yazın.", "e_pass": "Şifre en az 8 karakter olmalı.", "e_in_use": "Bu e-postanın (veya Google hesabının) zaten bir TableReserve hesabı var. Başka birini kullanın.", "e_popup": "Tarayıcınız Google penceresini engelledi. Açılır pencerelere izin verip tekrar deneyin.", "e_generic": "Bir şeyler ters gitti. Birazdan tekrar deneyin.", "x_title": "Deneme süresi sona erdi", "x_sub": "Deneme bağlantısı 30 gün geçerliydi. Devam etmek isterseniz bize yazın, yenisini gönderelim.", "x_invalid_title": "Bu bağlantı geçerli değil", "x_invalid_sub": "Restoran zaten etkinleştirilmiş olabilir. E-postanızla giriş yapın veya bize yazın."}});
+        Object.entries({"el": "{n} ημέρες", "en": "{n} days", "de": "{n} Tage", "fr": "{n} jours", "it": "{n} giorni", "es": "{n} días", "pt": "{n} dias", "tr": "{n} gün"}).forEach(([l, v]) => { if (TRT[l]) TRT[l].days_left = v; });
+        function trT(k) { const d = TRT[currentLang] || TRT.en; return d[k] !== undefined ? d[k] : (TRT.en[k] !== undefined ? TRT.en[k] : k); }
 
         const show = (id) => ['login-section','verify-section','closed-section','dashboard'].forEach(x => document.getElementById(x).style.display = (x === id ? 'block' : 'none'));
 
@@ -3366,6 +3546,7 @@
         const PLANS = ['quarter', 'half', 'year'].map(key => ({ key }));
         async function renderBilling(shopId, user) {
             const box = document.getElementById('billing-banner');
+            if (TR_TRIAL) { box.style.display = 'none'; return; }
             const d = (await get(ref(db, `shop_details/${shopId}`))).val() || {};
             if (!d.paidUntil) { box.style.display = 'none'; return; }
             const daysLeft = Math.ceil((d.paidUntil - Date.now()) / 86400000);
@@ -3462,11 +3643,13 @@
             renderGoogleCard();
             setChipShopName(myShop);
             checkTerms(myShop);
+            if (TR_TRIAL) trTrialInit(myShop);
         }
 
         // ======= ΟΡΟΙ ΧΡΗΣΗΣ =======
         const TERMS_VERSION = '2026-10-20';   // ίδια με netlify/functions/_shared/terms.js
         async function checkTerms(shop) {
+            if (TR_TRIAL) return;   // οι όροι γίνονται αποδεκτοί στην ενεργοποίηση
             let v = null, prevAt = null;
             try {
                 v = (await get(ref(db, `shop_details/${shop}/termsVersion`))).val();
@@ -3527,7 +3710,8 @@
         }
 
         onAuthStateChanged(auth, async (user) => {
-            renderUserChip(user);
+            if (TR_ENTRY) { if (!trEntryStarted) { trEntryStarted = true; trEnterDraft(user); } return; }
+            renderUserChip(user && user.isAnonymous ? null : user);
             // Αποσύνδεση αφού είχε ανοίξει κατάστημα: καθαρή σελίδα, για να μη μείνουν
             // φωτογραφίες ή στοιχεία του προηγούμενου καταστήματος στη φόρμα
             if (!user) { if (currentAdminShop) { location.reload(); return; } show('login-section'); return; }
@@ -3567,6 +3751,7 @@
                 document.getElementById('btn-verify-logout').onclick = () => signOut(auth);
                 return;
             }
+            TR_TRIAL = status === 'draft';
             openDashboard(myShop);
         });
 
@@ -3575,6 +3760,191 @@
                 if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') alert(t('google_failed'));
             });
         };
+
+        // ======= ΔΟΚΙΜΑΣΤΙΚΗ ΛΕΙΤΟΥΡΓΙΑ (προσχέδιο πιλοτικού) =======
+
+        // Είσοδος με το προσωπικό link: ανώνυμη σύνδεση και μετά το κατάστημα συνδέεται με αυτόν τον λογαριασμό
+        async function trEnterDraft(user) {
+            try {
+                if (user && !user.isAnonymous) await signOut(auth);
+                if (!user || !user.isAnonymous) user = (await signInAnonymously(auth)).user;
+                const res = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${await user.getIdToken()}` },
+                    body: JSON.stringify({ action: 'enter', shop: TR_ENTRY.shop, token: TR_ENTRY.token }) });
+                const out = await res.json().catch(() => ({}));
+                if (res.ok) {
+                    const q = new URLSearchParams(location.search); q.delete('draft'); q.delete('t');
+                    location.replace('/admin' + (q.toString() ? '?' + q.toString() : ''));
+                    return;
+                }
+                trShowExpired(out.error === 'expired' ? 'expired' : 'invalid');
+            } catch (e) {
+                console.warn('[trial] enter failed', e);
+                trShowExpired('invalid');
+            }
+        }
+        function trShowExpired(kind) {
+            const hide = id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; };
+            ['login-section', 'verify-section', 'closed-section', 'dashboard', 'tr-bar', 'tr-tabs', 'tr-panel'].forEach(hide);
+            document.body.classList.remove('tr-wide');
+            document.getElementById('tr-x-title').textContent = trT(kind === 'expired' ? 'x_title' : 'x_invalid_title');
+            document.getElementById('tr-x-sub').textContent = trT(kind === 'expired' ? 'x_sub' : 'x_invalid_sub');
+            document.getElementById('tr-expired').style.display = 'block';
+            if (typeof trHideSplash === 'function') trHideSplash();
+            const sp = document.getElementById('splash'); if (sp) sp.style.display = 'none';
+        }
+
+        let trInfo = null, trTestIds = null;
+        const trFrameUrl = () => trInfo ? trInfo.previewUrl + '&inadmin=1&lang=' + currentLang : 'about:blank';
+        function trTexts() {
+            if (!trInfo) return;
+            const days = Math.max(1, Math.ceil((trInfo.expiresAt - Date.now()) / 86400000));
+            const set = (id, v, html) => { const el = document.getElementById(id); if (el) el[html ? 'innerHTML' : 'textContent'] = v; };
+            const narrow = window.innerWidth <= 640;
+            set('tr-bar-title', trT('bar_title')); set('tr-bar-sub', trT('bar_sub').replace('{n}', days));
+            set('tr-bar-days', ' · ' + trT('days_left').replace('{n}', days));
+            set('tr-bar-btn', narrow ? trT('a_submit') : trT('bar_btn'));
+            set('tr-tab-admin', trT('tab_admin')); set('tr-tab-cust', trT('tab_cust'));
+            set('tr-panel-lbl', trT('panel_lbl')); set('tr-panel-open', trT('panel_open'));
+            set('tr-cust-txt', trT('cust_txt')); set('tr-cust-back', trT('cust_back')); set('tr-arrived', trT('arrived'));
+            const name = (document.getElementById('dash-name') || {}).textContent || '';
+            set('tr-w-title', trT('w_title').replace('{name}', name)); set('tr-w-sub', trT('w_sub'));
+            ['admin_t', 'admin_p', 'admin_go', 'cust_t', 'cust_p', 'cust_go'].forEach(k => set('tr-w-' + k.replace('_', '-'), trT('w_' + k)));
+            ['title', 'sub', 'p1', 'p2', 'p3', 'or', 'close'].forEach(k => set('tr-a-' + k, trT('a_' + k)));
+            set('tr-a-terms-t', trT('a_terms'), true); set('tr-a-google-t', trT('a_google'));
+            set('tr-a-pass-l', trT('a_pass')); set('tr-a-phone-l', trT('a_phone')); set('tr-a-submit', trT('a_submit'));
+            const live = document.querySelector('.dash-live'); if (live) { live.style.color = '#b45309'; const sp = live.querySelector('span'); if (sp) sp.textContent = trT('bar_title'); }
+        }
+        function trLayout() {
+            const wide = window.innerWidth >= 1100;
+            const bb = document.getElementById('tr-bar-btn'); if (bb && trInfo) bb.textContent = window.innerWidth <= 640 ? trT('a_submit') : trT('bar_btn');
+            document.body.classList.toggle('tr-wide', wide);
+            document.getElementById('tr-panel').style.display = wide ? 'flex' : 'none';
+            document.getElementById('tr-tabs').style.display = wide ? 'none' : 'block';
+            const bar = document.getElementById('tr-bar'), nav = document.querySelector('.topnav');
+            document.documentElement.style.setProperty('--tr-bar-h', bar.offsetHeight + 'px');
+            if (nav) document.documentElement.style.setProperty('--tr-nav-h', nav.offsetHeight + 'px');
+            const pf = document.getElementById('tr-panel-frame');
+            if (wide && pf.dataset.src !== trFrameUrl()) { pf.dataset.src = trFrameUrl(); pf.src = trFrameUrl(); }
+        }
+        function trOpenCust() {
+            const f = document.getElementById('tr-cust-frame');
+            if (f.dataset.src !== trFrameUrl()) { f.dataset.src = trFrameUrl(); f.src = trFrameUrl(); }
+            document.getElementById('tr-arrived').style.display = 'none';
+            document.getElementById('tr-cust').style.display = 'flex';
+            document.getElementById('tr-tab-cust').classList.add('on'); document.getElementById('tr-tab-admin').classList.remove('on');
+        }
+        function trCloseCust() {
+            document.getElementById('tr-cust').style.display = 'none';
+            document.getElementById('tr-tab-admin').classList.add('on'); document.getElementById('tr-tab-cust').classList.remove('on');
+        }
+        let trLastTestDate = null;
+        function trGoToBookings() {
+            trCloseCust();
+            // Η λίστα δείχνει την ημέρα της δοκιμαστικής κράτησης, ώστε να φαίνεται αμέσως
+            if (trLastTestDate) {
+                document.getElementById('filter-from').value = trLastTestDate;
+                document.getElementById('filter-to').value = trLastTestDate;
+                try { renderDashboard(currentAdminShop); } catch (e) {}
+            }
+            const list = document.getElementById('reservation-list');
+            if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        async function trTrialInit(shop) {
+            document.body.classList.add('tr-trial');
+            try {
+                const res = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${await auth.currentUser.getIdToken()}` }, body: JSON.stringify({ action: 'trial' }) });
+                const out = await res.json().catch(() => ({}));
+                if (res.status === 410 || out.error === 'expired') { trShowExpired('expired'); return; }
+                if (!res.ok) return;
+                trInfo = out;
+            } catch (e) { return; }
+            document.getElementById('tr-bar').style.display = 'block';
+            trTexts();
+            trLayout();
+            window.addEventListener('resize', trLayout);
+            document.getElementById('tr-panel-open').href = trInfo.previewUrl;
+            document.getElementById('tr-bar-btn').onclick = trOpenActivate;
+            document.getElementById('tr-tab-cust').onclick = trOpenCust;
+            document.getElementById('tr-tab-admin').onclick = trCloseCust;
+            document.getElementById('tr-cust-back').onclick = trCloseCust;
+            document.getElementById('tr-arrived').onclick = trGoToBookings;
+
+            // Καλωσόρισμα την πρώτη φορά σε κάθε συσκευή
+            let seen = false;
+            try { seen = localStorage.getItem('tr_trial_welcome_' + shop) === '1'; } catch (e) {}
+            if (!seen) {
+                const wf = document.getElementById('tr-w-frame'); wf.src = trFrameUrl();
+                document.getElementById('tr-welcome').classList.add('open');
+                const done = () => { document.getElementById('tr-welcome').classList.remove('open'); wf.src = 'about:blank'; try { localStorage.setItem('tr_trial_welcome_' + shop, '1'); } catch (e) {} };
+                document.getElementById('tr-w-admin').onclick = done;
+                document.getElementById('tr-w-cust').onclick = () => { done(); if (window.innerWidth < 1100) trOpenCust(); };
+            }
+
+            // Δοκιμαστική κράτηση από τη σελίδα πελατών -> ειδοποίηση εδώ
+            onValue(ref(db, 'reservations/' + shop), snap => {
+                const ids = []; let newest = null;
+                snap.forEach(c => { const v = c.val(); if (v && v.test) { ids.push(c.key); if (!newest || (v.timestamp || 0) > (newest.timestamp || 0)) newest = v; } });
+                if (trTestIds && ids.some(id => !trTestIds.includes(id))) {
+                    trLastTestDate = newest && newest.date;
+                    if (window.innerWidth >= 1100) trGoToBookings();
+                    showToast(trT('toast_arrived'), 'success');
+                    if (document.getElementById('tr-cust').style.display === 'flex') document.getElementById('tr-arrived').style.display = 'block';
+                }
+                trTestIds = ids;
+            });
+        }
+        // Αλλαγή γλώσσας: ενημέρωση και των κειμένων της δοκιμής
+        { const sel = document.getElementById('lang-select'); if (sel) sel.addEventListener('change', () => setTimeout(() => { if (trInfo) { trTexts(); trLayout(); } }, 0)); }
+
+        // ── Ενεργοποίηση: email+κωδικός ή Google ΣΤΟΝ ΙΔΙΟ (ανώνυμο) λογαριασμό, μετά /claim ──
+        function trOpenActivate() {
+            trTexts();
+            document.getElementById('tr-a-err').style.display = 'none';
+            document.getElementById('tr-activate').classList.add('open');
+        }
+        document.getElementById('tr-a-close').onclick = () => document.getElementById('tr-activate').classList.remove('open');
+        const trErr = m => { const e = document.getElementById('tr-a-err'); e.textContent = m; e.style.display = 'block'; };
+        async function trClaim() {
+            const res = await fetch(`${API}/claim`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${await auth.currentUser.getIdToken(true)}` },
+                body: JSON.stringify({ acceptTerms: true, lang: currentLang, phone: document.getElementById('tr-a-phone').value.trim() }) });
+            const out = await res.json().catch(() => ({}));
+            if (res.ok || out.error === 'not_draft') { location.replace('/admin'); return true; }
+            trErr(trT('e_generic')); return false;
+        }
+        const trInUse = c => ['auth/credential-already-in-use', 'auth/email-already-in-use', 'auth/account-exists-with-different-credential'].includes(c);
+        document.getElementById('tr-a-google').onclick = async () => {
+            document.getElementById('tr-a-err').style.display = 'none';
+            if (!document.getElementById('tr-a-terms').checked) return trErr(trT('e_terms'));
+            const btn = document.getElementById('tr-a-google'); btn.disabled = true;
+            try {
+                try { await linkWithPopup(auth.currentUser, new GoogleAuthProvider()); }
+                catch (e) { if (e.code !== 'auth/provider-already-linked') throw e; }
+                await trClaim();
+            } catch (e) {
+                if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request')
+                    trErr(trInUse(e.code) ? trT('e_in_use') : e.code === 'auth/popup-blocked' ? trT('e_popup') : trT('e_generic'));
+            }
+            btn.disabled = false;
+        };
+        document.getElementById('tr-a-form').addEventListener('submit', async (ev) => {
+            ev.preventDefault();
+            document.getElementById('tr-a-err').style.display = 'none';
+            const email = document.getElementById('tr-a-email').value.trim(), pass = document.getElementById('tr-a-pass').value;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return trErr(trT('e_email'));
+            if (pass.length < 8) return trErr(trT('e_pass'));
+            if (!document.getElementById('tr-a-terms').checked) return trErr(trT('e_terms'));
+            const btn = document.getElementById('tr-a-submit'), orig = btn.textContent;
+            btn.disabled = true; btn.textContent = trT('a_working');
+            try {
+                try { await linkWithCredential(auth.currentUser, EmailAuthProvider.credential(email, pass)); }
+                catch (e) { if (e.code !== 'auth/provider-already-linked') throw e; }
+                if (await trClaim()) return;
+            } catch (e) {
+                trErr(trInUse(e.code) ? trT('e_in_use') : e.code === 'auth/invalid-email' ? trT('e_email') : e.code === 'auth/weak-password' ? trT('e_pass') : trT('e_generic'));
+            }
+            btn.disabled = false; btn.textContent = orig;
+        });
 
         document.getElementById('btn-close-account').onclick = async () => {
             const shop = currentAdminShop;
@@ -3865,7 +4235,7 @@
                 div.innerHTML = `
                     <div class="card-header">
                         <div class="time-badge">${repEsc(res.time)}</div>
-                        <div class="date-text">${repEsc(res.date)}${isNew ? ` <span class="new-badge">${t('bk_new')}</span>` : ''}</div>
+                        <div class="date-text">${repEsc(res.date)}${isNew ? ` <span class="new-badge">${t('bk_new')}</span>` : ''}${res.test ? ` <span class="tr-badge test">${trT('badge_test')}</span>` : res.sample ? ` <span class="tr-badge">${trT('badge_sample')}</span>` : ''}</div>
                         ${acts}
                     </div>
                     <div class="card-body">
