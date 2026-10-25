@@ -22,6 +22,7 @@ const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
 const { slugify } = require('./_shared/signup');
 const { toSlug, unavailableReason, claim, claimInitial } = require('./_shared/slugs');
+const { validTz } = require('./_shared/time');
 
 const SUPERADMIN_UID = process.env.SUPERADMIN_UID || 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1';
 const DEFAULT_COVER = 'https://tablereserve.gr/hero-table.jpg';
@@ -44,6 +45,21 @@ const previewUrl = (slug, shop, token) => `${BASE}${slug || shop}?claim=${token}
 const INFO_FIELDS = [['address', 200], ['phone', 30], ['hours', 200], ['description', 500], ['tagline', 120]];
 // Μόνο εικόνες από https (στην πράξη το Cloudinary του TableReserve)
 const imgUrl = v => { const u = str(v, 500); return /^https:\/\//.test(u) ? u : ''; };
+
+// Ωράριο ανά ημέρα, ίδια μορφή με το admin: { mon:'closed' | [{o:'11:30', c:'14:30'}, ...], ... }
+const WH_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const HM = /^([01]\d|2[0-3]):[0-5]\d$/;
+function cleanWeek(w) {
+  if (!w || typeof w !== 'object') return null;
+  const out = {}; let open = 0;
+  for (const d of WH_DAYS) {
+    const v = w[d];
+    const ranges = Array.isArray(v) ? v.filter(r => r && HM.test(r.o) && HM.test(r.c) && r.o !== r.c).slice(0, 3).map(r => ({ o: r.o, c: r.c })) : [];
+    out[d] = ranges.length ? ranges : 'closed';
+    if (ranges.length) open++;
+  }
+  return open ? out : null;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflightOk();
@@ -101,7 +117,8 @@ exports.handler = async (event) => {
 
     const now = Date.now();
     const token = newToken();
-    const info = { tz: 'Europe/Athens' };
+    const info = { tz: validTz(b.tz) ? b.tz : 'Europe/Athens' };
+    const week = cleanWeek(b.hoursWeek); if (week) info.hoursWeek = week;
     for (const [k, max] of INFO_FIELDS) { const v = str(b[k], max); if (v) info[k] = v; }
     await db.ref().update({
       [`shop_details/${shopId}`]: { displayName, status: 'draft', source: 'draft', createdAt: now, lang: 'el' },
@@ -151,6 +168,8 @@ exports.handler = async (event) => {
     const out = { shopId: shop, displayName: details.displayName || '', slug: details.slug || '',
       cover: profile.coverPhoto === DEFAULT_COVER ? '' : (profile.coverPhoto || ''), logo: profile.logoPhoto || '' };
     for (const [k] of INFO_FIELDS) out[k] = info[k] || '';
+    out.tz = info.tz || 'Europe/Athens';
+    out.hoursWeek = info.hoursWeek || null;
     return json(200, { ok: true, draft: out });
   }
 
@@ -181,6 +200,8 @@ exports.handler = async (event) => {
       [`shop_profile/${shop}/logoPhoto`]: imgUrl(b.logo) || null,
     };
     for (const [k, max] of INFO_FIELDS) upd[`shop_profile/${shop}/info/${k}`] = str(b[k], max) || null;
+    if (validTz(b.tz)) upd[`shop_profile/${shop}/info/tz`] = b.tz;
+    upd[`shop_profile/${shop}/info/hoursWeek`] = cleanWeek(b.hoursWeek);
     await db.ref().update(upd);
     const token = (await db.ref(`drafts/${shop}/token`).get()).val();
     return json(200, { ok: true, shopId: shop, slug, url: token ? previewUrl(slug, shop, token) : null });

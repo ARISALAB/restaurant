@@ -506,17 +506,35 @@
                             <label for="dr-address">Διεύθυνση</label>
                             <input type="text" id="dr-address" maxlength="200" placeholder="Οδός αριθμός, Περιοχή">
                         </div>
-                        <div class="form-row">
-                            <div class="input-group" style="margin-bottom:0;">
-                                <label for="dr-phone">Τηλέφωνο</label>
-                                <input type="tel" id="dr-phone" maxlength="30" placeholder="210 1234567">
-                            </div>
-                            <div class="input-group" style="margin-bottom:0;">
-                                <label for="dr-hours">Ωράριο</label>
-                                <input type="text" id="dr-hours" maxlength="200" placeholder="Καθημερινά 13:00 – 23:00">
-                            </div>
+                        <div class="input-group">
+                            <label for="dr-phone">Τηλέφωνο</label>
+                            <input type="tel" id="dr-phone" maxlength="30" placeholder="210 1234567">
+                        </div>
+                        <div class="input-group" style="margin-bottom:0;">
+                            <label for="dr-hours">Ωράριο (επικόλληση από το Google)</label>
+                            <textarea id="dr-hours" rows="5" placeholder="Δευτέρα  Κλειστά&#10;Τρίτη  11:30 π.μ. - 2:30 μ.μ., 5:00 μ.μ. - 11:00 μ.μ.&#10;..." oninput="drParseHours()"></textarea>
+                            <div class="hint">Αντέγραψε το ωράριο από το Google Maps και κόλλησέ το εδώ. Όσες μέρες δεν αναφέρονται θεωρούνται κλειστές.</div>
+                            <div id="dr-hours-out" style="margin-top:8px;font-size:.82rem;line-height:1.6;"></div>
                         </div>
                         <div class="input-group" style="margin-top:16px;">
+                            <label for="dr-tz">Χώρα / ζώνη ώρας</label>
+                            <select id="dr-tz">
+                                <option value="Europe/Athens">Ελλάδα</option>
+                                <option value="Asia/Nicosia">Κύπρος</option>
+                                <option value="Europe/Berlin">Γερμανία</option>
+                                <option value="Europe/Vienna">Αυστρία</option>
+                                <option value="Europe/Zurich">Ελβετία</option>
+                                <option value="Europe/Amsterdam">Ολλανδία</option>
+                                <option value="Europe/Brussels">Βέλγιο</option>
+                                <option value="Europe/Paris">Γαλλία</option>
+                                <option value="Europe/Rome">Ιταλία</option>
+                                <option value="Europe/Madrid">Ισπανία</option>
+                                <option value="Europe/Lisbon">Πορτογαλία</option>
+                                <option value="Europe/London">Ηνωμένο Βασίλειο</option>
+                                <option value="Europe/Istanbul">Τουρκία</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
                             <label for="dr-tagline">Σύντομη φράση</label>
                             <input type="text" id="dr-tagline" maxlength="120" placeholder="π.χ. Μεζέδες & θάλασσα στη Νίκαια">
                         </div>
@@ -919,8 +937,8 @@ ${url}
             try {
                 const editing = window._drEdit;
                 const out = await drCall({ action: editing ? 'update' : 'create', shop: editing || undefined, displayName: name, slug,
-                    address: v('dr-address'), phone: v('dr-phone'), hours: v('dr-hours'), tagline: v('dr-tagline'),
-                    description: v('dr-desc'), cover: v('dr-cover'), logo: v('dr-logo') });
+                    address: v('dr-address'), phone: v('dr-phone'), hours: '', hoursWeek: drWeek, tagline: v('dr-tagline'),
+                    description: v('dr-desc'), cover: v('dr-cover'), logo: v('dr-logo'), tz: v('dr-tz') });
                 if (!out.ok) {
                     const m = { slug_taken: 'Αυτό το link το έχει ήδη άλλο μαγαζί', slug_reserved: 'Αυτό το link είναι δεσμευμένο, διάλεξε άλλο',
                         slug_invalid: 'Το link θέλει 3-30 λατινικά, αριθμούς ή παύλα', missing_name: 'Γράψε το όνομα του μαγαζιού', not_superadmin: 'Δεν έχεις δικαίωμα' };
@@ -938,6 +956,71 @@ ${url}
             } finally {
                 btn.innerHTML = window._drEdit ? '💾 Αποθήκευση αλλαγών' : '📝 Δημιουργία προσχεδίου'; btn.disabled = false;
             }
+        };
+
+        // Ωράριο: μετατροπή του κειμένου του Google σε ωράριο ανά ημέρα
+        const DR_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        const DR_DAY_GR = ['Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο', 'Κυριακή'];
+        const DR_DAY_RX = [
+            /^(δευτέρα|δευτερα|δευ|monday|mon|montag|mo)(?![\p{L}])/iu, /^(τρίτη|τριτη|τρι|tuesday|tue|dienstag|di)(?![\p{L}])/iu,
+            /^(τετάρτη|τεταρτη|τετ|wednesday|wed|mittwoch|mi)(?![\p{L}])/iu, /^(πέμπτη|πεμπτη|πεμ|thursday|thu|donnerstag|do)(?![\p{L}])/iu,
+            /^(παρασκευή|παρασκευη|παρ|friday|fri|freitag|fr)(?![\p{L}])/iu, /^(σάββατο|σαββατο|σαβ|saturday|sat|samstag|sa)(?![\p{L}])/iu,
+            /^(κυριακή|κυριακη|κυρ|sunday|sun|sonntag|so)(?![\p{L}])/iu];
+        const DR_PM = /^(μ\.?\s*μ\.?|pm|p\.m\.)$/i, DR_AM = /^(π\.?\s*μ\.?|am|a\.m\.)$/i;
+        let drWeek = null;
+        function drHM(h, m, ap, other) {
+            h = parseInt(h, 10); m = parseInt(m || '0', 10);
+            const mk = (ap || other || '').replace(/\s+/g, '').toLowerCase();
+            if (DR_PM.test(mk) && h < 12) h += 12;
+            if (DR_AM.test(mk) && h === 12) h = 0;
+            if (h === 24 || (h === 0 && m === 0)) return '23:59';
+            if (h > 23 || m > 59) return null;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+        function drParseWeek(text) {
+            const days = {}; let cur = null, curs = [];
+            const T = String(text || '').replace(/[–—−]/g, '-').replace(/\u202f|\u00a0/g, ' ');
+            const RX = /(\d{1,2})(?:[:.](\d{2}))?\s*(π\.?\s*μ\.?|μ\.?\s*μ\.?|am|pm|a\.m\.|p\.m\.)?\s*-\s*(\d{1,2})(?:[:.](\d{2}))?\s*(π\.?\s*μ\.?|μ\.?\s*μ\.?|am|pm|a\.m\.|p\.m\.)?/giu;
+            for (let line of T.split(/\n/)) {
+                line = line.trim(); if (!line) continue;
+                const k = DR_DAY_RX.findIndex(rx => rx.test(line));
+                if (k >= 0) {
+                    line = line.replace(DR_DAY_RX[k], '').replace(/^[\s:,.\t]+/, '');
+                    curs = [k];
+                    // Εύρος ημερών, π.χ. «Τρίτη - Κυριακή» ή «Di–So»
+                    const r = line.match(/^-\s*/);
+                    if (r) {
+                        const rest = line.slice(r[0].length), k2 = DR_DAY_RX.findIndex(rx => rx.test(rest));
+                        if (k2 >= 0) { curs = []; for (let i = k; ; i = (i + 1) % 7) { curs.push(i); if (i === k2) break; } line = rest.replace(DR_DAY_RX[k2], '').replace(/^[\s:,.\t]+/, ''); }
+                    }
+                    cur = DR_DAYS[k];
+                    curs.forEach(i => { if (!days[DR_DAYS[i]]) days[DR_DAYS[i]] = []; });
+                }
+                if (!cur) continue;
+                const targets = curs.map(i => DR_DAYS[i]);
+                if (/κλειστ|closed|geschlossen|ruhetag/i.test(line)) { targets.forEach(d => days[d] = 'closed'); continue; }
+                if (/24\s*(ώρες|ωρες|hours|stunden)/i.test(line)) { targets.forEach(d => days[d] = [{ o: '00:00', c: '23:59' }]); continue; }
+                let m; RX.lastIndex = 0;
+                while ((m = RX.exec(line))) {
+                    const c = drHM(m[4], m[5], m[6]);
+                    // «5:00 - 11:00 μ.μ.»: η ώρα ανοίγματος παίρνει το ίδιο π.μ./μ.μ., αν βγαίνει λογικό
+                    let o = drHM(m[1], m[2], m[3], m[3] ? null : m[6]);
+                    if (!m[3] && o && c && o >= c) o = drHM(m[1], m[2], null);
+                    if (o && c && o !== c) targets.forEach(d => { if (Array.isArray(days[d])) days[d].push({ o, c }); });
+                }
+            }
+            const out = {}; let open = 0;
+            DR_DAYS.forEach(d => { const v = days[d]; out[d] = Array.isArray(v) && v.length ? v : 'closed'; if (out[d] !== 'closed') open++; });
+            return open ? out : null;
+        }
+        const drWeekText = w => DR_DAYS.map((d, i) => DR_DAY_GR[i] + ': ' + (w[d] === 'closed' ? 'Κλειστά' : w[d].map(r => r.o + '–' + r.c).join(', '))).join('\n');
+        window.drParseHours = () => {
+            const txt = document.getElementById('dr-hours').value, out = document.getElementById('dr-hours-out');
+            drWeek = drParseWeek(txt);
+            if (!txt.trim()) { out.innerHTML = ''; return; }
+            if (!drWeek) { out.innerHTML = '<span style="color:#dc2626;">Δεν αναγνώρισα ωράριο. Δοκίμασε μορφή «Τρίτη 17:00-23:00».</span>'; return; }
+            out.innerHTML = '<b style="color:#166534;">✓ Θα αποθηκευτεί έτσι:</b><br>' + DR_DAYS.map((d, i) =>
+                `<span style="display:inline-block;min-width:84px;color:#64748b;">${DR_DAY_GR[i]}</span>${drWeek[d] === 'closed' ? '<span style="color:#dc2626;">Κλειστά</span>' : drWeek[d].map(r => r.o + '–' + r.c).join(', ')}`).join('<br>');
         };
 
         // Φωτογραφίες: ανεβαίνουν στο Cloudinary (ίδιο preset με το admin) και κρατάμε μόνο το link
@@ -977,6 +1060,8 @@ ${url}
         function drResetForm() {
             ['dr-name', 'dr-slug', 'dr-address', 'dr-phone', 'dr-hours', 'dr-tagline', 'dr-desc'].forEach(id => { const el = document.getElementById(id); el.value = ''; delete el.dataset.touched; });
             drShowPhoto('cover', ''); drShowPhoto('logo', '');
+            document.getElementById('dr-tz').value = 'Europe/Athens';
+            drWeek = null; document.getElementById('dr-hours-out').innerHTML = '';
             window._drEdit = null;
             document.getElementById('dr-form-title').textContent = 'Νέο προσχέδιο (πιλοτικό)';
             document.getElementById('dr-edit-bar').style.display = 'none';
@@ -992,7 +1077,9 @@ ${url}
             window._drEdit = shopId;
             const set = (id, v) => { document.getElementById(id).value = v || ''; };
             set('dr-name', d.displayName); set('dr-slug', d.slug); set('dr-address', d.address); set('dr-phone', d.phone);
-            set('dr-hours', d.hours); set('dr-tagline', d.tagline); set('dr-desc', d.description);
+            set('dr-hours', d.hoursWeek ? drWeekText(d.hoursWeek) : (d.hours || '')); set('dr-tagline', d.tagline); set('dr-desc', d.description);
+            drParseHours();
+            document.getElementById('dr-tz').value = d.tz || 'Europe/Athens';
             document.getElementById('dr-slug').dataset.touched = '1';
             drShowPhoto('cover', d.cover); drShowPhoto('logo', d.logo);
             document.getElementById('dr-form-title').textContent = 'Επεξεργασία προσχεδίου';
