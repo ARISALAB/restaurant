@@ -199,8 +199,8 @@ footer a:hover{color:var(--accent)}
   </ul>
   <div style="display:flex;align-items:center;">
   <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el">ΕΛ</option><option value="/en/?lang=en" selected>EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
-  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Log in</a><a href="#contact" class="nav-cta" id="navCta">Get started →</a></span>
-  <a href="/admin" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
+  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin?lang=en" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Log in</a><a href="#contact" class="nav-cta" id="navCta">Get started →</a></span>
+  <a href="/admin?lang=en" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
     <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
     <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
     <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Dashboard →</span></span>
@@ -472,18 +472,18 @@ footer a:hover{color:var(--accent)}
       <div class="fg"><label for="f-pass">Password</label><input id="f-pass" type="password" name="password" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required></div>
       <p id="formError" role="alert" style="display:none;color:#f87171;font-size:13px;margin:0 0 12px;"></p>
       <button type="submit" class="btn-submit" id="submitBtn">Create account →</button>
-      <p class="form-note">Already have an account? <a href="/admin" style="color:var(--accent);">Log in</a> · Questions? <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
+      <p class="form-note">Already have an account? <a href="/admin?lang=en" style="color:var(--accent);">Log in</a> · Questions? <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
     </form>
     <div id="signedInBox" style="display:none;text-align:center;">
       <div style="font-size:15px;color:var(--muted);margin:0 0 8px;">Signed in as</div>
       <div id="signedInName" style="font-size:20px;font-weight:600;margin:0 0 22px;"></div>
-      <a href="/admin" class="btn-main">Dashboard →</a>
+      <a href="/admin?lang=en" class="btn-main">Dashboard →</a>
     </div>
     <div id="signupDone" style="display:none;text-align:center;">
       <div style="font-size:42px;margin-bottom:14px;">✉️</div>
       <h3 style="font-size:22px;margin:0 0 12px;">Check your email</h3>
       <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;">We sent a confirmation link to <strong id="doneEmail" style="color:var(--text);"></strong>. Click it to activate your restaurant. If you can't find it, check your spam folder.</p>
-      <a href="/admin" class="btn-main">Go to log in →</a>
+      <a href="/admin?lang=en" class="btn-main">Go to log in →</a>
     </div>
   </div>
 </section>
@@ -643,12 +643,12 @@ document.querySelectorAll('a[data-plan]').forEach(a => a.addEventListener('click
     const shopId = (await get(ref(db, 'users_to_shops/' + user.uid))).val();
     const links = await (await fetch('/billing.json', { cache: 'no-store' })).json();
     const base = links[a.dataset.plan];
-    if (!shopId || !base) { window.location.href = '/admin'; return; }
+    if (!shopId || !base) { window.location.href = '/admin?lang=en'; return; }
     const u = new URL(base);
     u.searchParams.set('checkout[custom][shop_id]', shopId);
     if (user.email) u.searchParams.set('checkout[email]', user.email);
     window.location.href = u.toString();
-  } catch (err) { window.location.href = '/admin'; }
+  } catch (err) { window.location.href = '/admin?lang=en'; }
 }));
 
 onAuthStateChanged(auth, user => {
@@ -659,7 +659,7 @@ onAuthStateChanged(auth, user => {
   document.getElementById('signupDone').style.display = 'none';
   signedIn.style.display = 'block';
   document.getElementById('signedInName').textContent = user.displayName || user.email || '';
-  document.querySelectorAll('a[href="#contact"]').forEach(a => { if (!a.closest('nav ul') && !a.dataset.plan) { a.href = '/admin'; a.removeAttribute('onclick'); } });
+  document.querySelectorAll('a[href="#contact"]').forEach(a => { if (!a.closest('nav ul') && !a.dataset.plan) { a.href = '/admin?lang=en'; a.removeAttribute('onclick'); } });
   document.querySelectorAll('a[data-plan]').forEach(a => a.removeAttribute('onclick'));
   const name = user.displayName || user.email || '';
   document.getElementById('navUserName').textContent = name;
@@ -690,7 +690,7 @@ btn.addEventListener('click', async () => {
       body: JSON.stringify({ shopName, type: f.type.value, phone: f.phone.value.trim(), plan: f.plan.value, acceptTerms: true, lang: 'en', tz: trBrowserTz() })
     });
     const out = await res.json().catch(() => ({}));
-    if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin'; return; }
+    if (res.ok || out.error === 'already_has_shop') { window.location.href = '/admin?lang=en'; return; }
     await signOut(auth);
     showErr(out.error === 'name_too_long' ? 'The restaurant name is too long.' : 'Something went wrong. Please try again shortly.');
   } catch (e) {
