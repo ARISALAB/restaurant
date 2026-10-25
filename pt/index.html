@@ -184,6 +184,12 @@ footer a:hover{color:var(--accent)}
 .cost-points li:last-child{border-bottom:none}
 .cost-points li b{display:block;color:var(--text);font-weight:500;margin-bottom:2px}
 .cost-points li i{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;margin-top:2px}
+
+/* Κινητό: η κάτω μπάρα δεν κρύβει το footer, το μενού δεν ψηλώνει με τον λογαριασμό, ο τίτλος δεν κρύβεται κάτω από το μενού */
+#navUser>span:last-child>span{white-space:nowrap}
+.hero{padding-top:120px}
+@media(max-width:768px){footer{padding-bottom:110px}}
+@media(max-width:480px){#navUser>span:last-child>span:last-child{display:none!important}#navUserName{max-width:120px!important}#navUser{padding:5px 12px 5px 5px!important}}
 </style>
 <script>try{localStorage.setItem('tr_lang','pt')}catch(e){}</script>
 </head>
