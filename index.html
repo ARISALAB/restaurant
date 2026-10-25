@@ -1958,20 +1958,25 @@
                     el.querySelector('span').innerText = info.hours; el.style.display = 'inline-flex';
                 }
                 if (full.gallery) {
-                    const photos = Object.values(full.gallery);
+                    const photos = Object.values(full.gallery).filter(p => p && p.data);
                     if (photos.length > 0) {
                         const strip = document.getElementById('client-gallery-strip');
-                        strip.innerHTML = '';
-                        photos.forEach(p => {
+                        const big = photos.map(p => trImg(p.data, 1600));
+                        const addImg = (p, i, dup) => {
                             const img = document.createElement('img');
-                            img.src = trImg(p.data, 320); img.alt = p.name || ''; img.loading = 'lazy'; img.width = 160; img.height = 110;
+                            img.src = trImg(p.data, 320); img.alt = dup ? '' : t('photo_gallery') + ' ' + (i + 1); img.loading = 'lazy'; img.width = 160; img.height = 110;
+                            img.draggable = false;
+                            if (dup) img.setAttribute('aria-hidden', 'true');
                             img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
                             img.onmouseover = () => img.style.transform = 'scale(1.03)';
                             img.onmouseout  = () => img.style.transform = '';
-                            img.onclick = () => openLightbox(trImg(p.data, 1600), p.name);
+                            img.onclick = () => openLightbox(big, i);
                             strip.appendChild(img);
-                        });
+                        };
+                        strip.innerHTML = '';
+                        photos.forEach((p, i) => addImg(p, i, false));
                         document.getElementById('client-gallery-wrap').style.display = 'block';
+                        trGalleryCarousel(strip, photos, addImg);
                     }
                 }
                 // Η σελίδα εμφανίζεται όταν φορτώσει και το εξώφυλλο (το πολύ +1,5″), ώστε να μη μετακινηθεί τίποτα μετά
@@ -1985,14 +1990,83 @@
             });
         }
 
-        function openLightbox(src, caption) {
+        // Γκαλερί: κινείται μόνη της σαν καρουζέλ, σταματά όσο ο χρήστης την αγγίζει / έχει το ποντίκι επάνω
+        let trCarouselPaused = false;
+        function trGalleryCarousel(strip, photos, addImg) {
+            if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            requestAnimationFrame(() => {
+                if (strip.scrollWidth <= strip.clientWidth + 4) return;   // χωράνε όλες: δεν χρειάζεται κίνηση
+                const loopW = strip.scrollWidth + 10;                       // πλάτος ενός κύκλου (+ το κενό)
+                photos.forEach((p, i) => addImg(p, i, true));               // δεύτερο αντίγραφο για συνεχή κύκλο
+                const SPEED = 28;                                            // px ανά δευτερόλεπτο
+                let pos = strip.scrollLeft, last = 0, hover = false, touch = false, resumeAt = 0;
+                const hold = ms => { resumeAt = Math.max(resumeAt, performance.now() + ms); };
+                strip.addEventListener('mouseenter', () => { hover = true; });
+                strip.addEventListener('mouseleave', () => { hover = false; pos = strip.scrollLeft; });
+                strip.addEventListener('touchstart', () => { touch = true; }, { passive: true });
+                strip.addEventListener('touchend', () => { touch = false; hold(2500); }, { passive: true });
+                strip.addEventListener('wheel', () => hold(2500), { passive: true });
+                strip.addEventListener('focusin', () => hold(4000));
+                const step = now => {
+                    const dt = last ? Math.min(now - last, 100) : 0; last = now;
+                    if (hover || touch || trCarouselPaused || now < resumeAt || document.hidden) {
+                        pos = strip.scrollLeft;
+                    } else {
+                        pos += SPEED * dt / 1000;
+                        if (pos >= loopW) pos -= loopW;
+                        strip.scrollLeft = pos;
+                    }
+                    if (strip.scrollLeft >= loopW) { strip.scrollLeft -= loopW; pos = strip.scrollLeft; }
+                    requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            });
+        }
+
+        // Προβολή φωτογραφίας σε πλήρη οθόνη, με αλλαγή αριστερά/δεξιά (βελάκια, σύρσιμο, πλήκτρα)
+        function openLightbox(list, start) {
+            let i = start || 0;
+            const n = list.length;
+            trCarouselPaused = true;
             const lb = document.createElement('div');
-            lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:20px;';
-            lb.innerHTML = `<img src="${src}" style="max-width:100%;max-height:80vh;border-radius:12px;object-fit:contain;">
-                ${caption ? `<div style="color:rgba(255,255,255,0.7);font-size:0.85rem;">${caption}</div>` : ''}
-                <div style="color:rgba(255,255,255,0.5);font-size:0.8rem;">${t('lb_close')}</div>`;
-            lb.onclick = () => document.body.removeChild(lb);
+            lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true');
+            lb.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;touch-action:pan-y;user-select:none;-webkit-user-select:none;';
+            const btn = 'position:absolute;border:0;background:rgba(255,255,255,0.14);color:#fff;width:44px;height:44px;border-radius:50%;font-size:22px;line-height:44px;text-align:center;cursor:pointer;padding:0;';
+            lb.innerHTML = `<img alt="" draggable="false" style="max-width:100%;max-height:85vh;border-radius:12px;object-fit:contain;transition:opacity .15s;">
+                <button type="button" data-a="x" aria-label="${t('lb_close')}" style="${btn}top:14px;right:14px;">&times;</button>
+                ${n > 1 ? `<button type="button" data-a="p" aria-label="‹" style="${btn}left:12px;top:50%;transform:translateY(-50%);">&#8249;</button>
+                <button type="button" data-a="n" aria-label="›" style="${btn}right:12px;top:50%;transform:translateY(-50%);">&#8250;</button>
+                <div data-c style="position:absolute;bottom:16px;left:0;right:0;text-align:center;color:rgba(255,255,255,0.7);font-size:0.85rem;"></div>` : ''}`;
+            const img = lb.querySelector('img'), counter = lb.querySelector('[data-c]');
+            const show = k => {
+                i = (k + n) % n;
+                img.style.opacity = '0.4'; img.src = list[i];
+                img.onload = () => { img.style.opacity = '1'; };
+                if (counter) counter.textContent = `${i + 1} / ${n}`;
+                [list[(i + 1) % n], list[(i - 1 + n) % n]].forEach(u => { const pre = new Image(); pre.src = u; });
+            };
+            const close = () => { document.removeEventListener('keydown', key); lb.remove(); trCarouselPaused = false; };
+            const key = e => {
+                if (e.key === 'Escape') close();
+                else if (e.key === 'ArrowRight' && n > 1) show(i + 1);
+                else if (e.key === 'ArrowLeft' && n > 1) show(i - 1);
+            };
+            lb.addEventListener('click', e => {
+                const a = e.target.closest('[data-a]');
+                if (a) { e.stopPropagation(); if (a.dataset.a === 'x') close(); else show(i + (a.dataset.a === 'n' ? 1 : -1)); return; }
+                if (e.target === lb) close();       // κλικ στο σκούρο φόντο = κλείσιμο
+            });
+            let sx = null, sy = 0;
+            lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+            lb.addEventListener('touchend', e => {
+                if (sx === null || n < 2) return;
+                const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+                if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(i + (dx < 0 ? 1 : -1));
+            }, { passive: true });
+            document.addEventListener('keydown', key);
             document.body.appendChild(lb);
+            show(i);
+            lb.querySelector('[data-a="x"]').focus({ preventScroll: true });
         }
 
         // Load display name
