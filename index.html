@@ -15,6 +15,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
     <style>
+        #client-gallery-strip::-webkit-scrollbar { display: none; }
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
@@ -871,7 +872,7 @@
 
         <div class="container">
             <div id="client-gallery-wrap" style="display:none; margin-bottom:24px;">
-                <div id="client-gallery-strip" style="display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin;"></div>
+                <div id="client-gallery-strip" style="display:flex; gap:12px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;"></div>
             </div>
 
             <div class="client-layout">
@@ -1964,12 +1965,12 @@
                         const big = photos.map(p => trImg(p.data, 1600));
                         const addImg = (p, i, dup) => {
                             const img = document.createElement('img');
-                            img.src = trImg(p.data, 320); img.alt = dup ? '' : t('photo_gallery') + ' ' + (i + 1); img.loading = 'lazy'; img.width = 160; img.height = 110;
+                            img.src = trImg(p.data, 640); img.alt = dup ? '' : t('photo_gallery') + ' ' + (i + 1); img.loading = 'lazy';
                             img.draggable = false;
                             if (dup) img.setAttribute('aria-hidden', 'true');
-                            img.style.cssText = 'height:110px; width:160px; object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:transform 0.2s;';
-                            img.onmouseover = () => img.style.transform = 'scale(1.03)';
-                            img.onmouseout  = () => img.style.transform = '';
+                            img.style.cssText = 'object-fit:cover; border-radius:12px; flex-shrink:0; border:1px solid var(--border); cursor:pointer; transition:filter 0.2s;';
+                            img.onmouseover = () => img.style.filter = 'brightness(1.06)';
+                            img.onmouseout  = () => img.style.filter = '';
                             img.onclick = () => openLightbox(big, i);
                             strip.appendChild(img);
                         };
@@ -1990,25 +1991,43 @@
             });
         }
 
-        // Γκαλερί: κινείται μόνη της σαν καρουζέλ, σταματά όσο ο χρήστης την αγγίζει / έχει το ποντίκι επάνω
+        // Γκαλερί: οι φωτογραφίες γεμίζουν ακριβώς το πλάτος (ίδιο με τις κάρτες από κάτω) και κυλάνε συνεχώς.
+        // Σταματά όσο ο χρήστης έχει το ποντίκι επάνω / ακουμπάει το δάχτυλο / έχει ανοιχτή φωτογραφία.
         let trCarouselPaused = false;
         function trGalleryCarousel(strip, photos, addImg) {
-            if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-            requestAnimationFrame(() => {
-                if (strip.scrollWidth <= strip.clientWidth + 4) return;   // χωράνε όλες: δεν χρειάζεται κίνηση
-                const loopW = strip.scrollWidth + 10;                       // πλάτος ενός κύκλου (+ το κενό)
-                photos.forEach((p, i) => addImg(p, i, true));               // δεύτερο αντίγραφο για συνεχή κύκλο
-                const SPEED = 28;                                            // px ανά δευτερόλεπτο
-                let pos = strip.scrollLeft, last = 0, hover = false, touch = false, resumeAt = 0;
-                const hold = ms => { resumeAt = Math.max(resumeAt, performance.now() + ms); };
-                strip.addEventListener('mouseenter', () => { hover = true; });
-                strip.addEventListener('mouseleave', () => { hover = false; pos = strip.scrollLeft; });
-                strip.addEventListener('touchstart', () => { touch = true; }, { passive: true });
-                strip.addEventListener('touchend', () => { touch = false; hold(2500); }, { passive: true });
-                strip.addEventListener('wheel', () => hold(2500), { passive: true });
-                strip.addEventListener('focusin', () => hold(4000));
-                const step = now => {
-                    const dt = last ? Math.min(now - last, 100) : 0; last = now;
+            const GAP = 12, n = photos.length;
+            const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let perView = 1, loopW = 0, moving = false;
+            const layout = () => {
+                const W = strip.clientWidth;
+                if (!W) return;
+                const base = W >= 1000 ? 4 : W >= 640 ? 3 : 2;
+                moving = !reduce && n > base;            // κινείται όταν οι φωτογραφίες είναι περισσότερες από όσες χωράνε
+                perView = moving ? base : Math.max(1, n); // αλλιώς μοιράζονται ισόποσα όλο το πλάτος
+                const w = (W - GAP * (perView - 1)) / perView;
+                const h = Math.round(Math.min(w * 0.66, 240));
+                strip.querySelectorAll('img').forEach(img => { img.style.width = w + 'px'; img.style.height = h + 'px'; });
+                loopW = n * (w + GAP);
+                // Αντίγραφα για συνεχή κύκλο μόνο όταν κινείται
+                const copies = strip.querySelectorAll('img[aria-hidden="true"]').length;
+                if (moving && !copies) { photos.forEach((p, i) => addImg(p, i, true)); layout(); }
+                if (!moving && copies) { strip.querySelectorAll('img[aria-hidden="true"]').forEach(x => x.remove()); strip.scrollLeft = 0; }
+            };
+            layout();
+            let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(layout, 150); });
+
+            const SPEED = 30;                                            // px ανά δευτερόλεπτο
+            let pos = strip.scrollLeft, last = 0, hover = false, touch = false, resumeAt = 0;
+            const hold = ms => { resumeAt = Math.max(resumeAt, performance.now() + ms); };
+            strip.addEventListener('mouseenter', () => { hover = true; });
+            strip.addEventListener('mouseleave', () => { hover = false; });
+            strip.addEventListener('touchstart', () => { touch = true; }, { passive: true });
+            strip.addEventListener('touchend', () => { touch = false; hold(2500); }, { passive: true });
+            strip.addEventListener('wheel', () => hold(2500), { passive: true });
+            strip.addEventListener('focusin', () => hold(4000));
+            const step = now => {
+                const dt = last ? Math.min(now - last, 100) : 0; last = now;
+                if (moving && loopW) {
                     if (hover || touch || trCarouselPaused || now < resumeAt || document.hidden) {
                         pos = strip.scrollLeft;
                     } else {
@@ -2017,10 +2036,10 @@
                         strip.scrollLeft = pos;
                     }
                     if (strip.scrollLeft >= loopW) { strip.scrollLeft -= loopW; pos = strip.scrollLeft; }
-                    requestAnimationFrame(step);
-                };
+                }
                 requestAnimationFrame(step);
-            });
+            };
+            requestAnimationFrame(step);
         }
 
         // Προβολή φωτογραφίας σε πλήρη οθόνη, με αλλαγή αριστερά/δεξιά (βελάκια, σύρσιμο, πλήκτρα)
