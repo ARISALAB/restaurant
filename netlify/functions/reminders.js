@@ -31,7 +31,6 @@ function emailHtml({ b, shopName, info, lang }) {
 <body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
 <div style="max-width:580px;margin:0 auto;">
   <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
-    <div style="font-size:32px;margin-bottom:8px;">⏰</div>
     <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${t.head}</h1>
     <p style="color:rgba(255,255,255,0.85);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
   </div>

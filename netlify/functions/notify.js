@@ -35,7 +35,7 @@ exports.handler = async (event) => {
     const m = msg(lang);
     const t = {
       subject: m.s_new, head: m.s_new, persons: m.persons,
-      name: '👤 ' + m.s_name, phone: '📞 ' + m.s_phone, occasion: '🎉 ' + m.s_occasion, comments: '💬 ' + m.s_comments, btn: m.s_btn
+      name: m.s_name, phone: m.s_phone, occasion: m.s_occasion, comments: m.s_comments, btn: m.s_btn
     };
     const loc = locationLabel(booking.location, lang);
     const row = (l, v) => `
@@ -55,7 +55,6 @@ exports.handler = async (event) => {
 <body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
   <div style="max-width:580px;margin:0 auto;">
     <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:8px;">🍽️</div>
       <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${t.head}</h1>
       <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
     </div>
@@ -67,7 +66,7 @@ exports.handler = async (event) => {
       <table style="width:100%;border-collapse:collapse;">
         ${row(t.name, esc(booking.name || '-'))}
         ${row(t.phone, esc(booking.phone || '-'))}
-        ${booking.email ? row('✉️ Email', esc(booking.email)) : ''}
+        ${booking.email ? row('Email', esc(booking.email)) : ''}
         ${booking.occasion ? row(t.occasion, esc(booking.occasion)) : ''}
         ${booking.comments ? row(t.comments, esc(booking.comments)) : ''}
       </table>

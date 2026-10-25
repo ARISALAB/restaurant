@@ -131,6 +131,25 @@
             color: var(--primary);
             box-shadow: var(--shadow-sm);
         }
+        .ic { display:inline-block; vertical-align:middle; flex-shrink:0; }
+        .card-title .icon { color: var(--primary); }
+        .meta-pill .ic { color: #94a3b8; }
+        .selected-time-badge .ic { color: var(--primary); }
+        .lang-switcher { display:flex; align-items:center; }
+        .seg { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .seg button {
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+            min-height:68px; padding:10px 6px; border-radius:12px;
+            border:1.5px solid var(--border); background:#f8fafc; color:#475569;
+            font:inherit; font-size:0.86rem; font-weight:600; cursor:pointer; line-height:1.2; text-align:center;
+            transition:border-color .15s, background .15s, color .15s;
+            -webkit-tap-highlight-color:transparent;
+        }
+        .seg button .ic { color:#94a3b8; transition:color .15s; }
+        .seg button:hover { border-color:#cbd5e1; }
+        .seg button[aria-checked="true"] { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+        .seg button[aria-checked="true"] .ic { color:var(--primary); }
+        .seg button:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
         .lang-select {
             appearance: none; -webkit-appearance: none;
             padding: 5px 26px 5px 10px;
@@ -828,15 +847,16 @@
         <div class="logo">Table<span>Reserve</span></div>
         <div class="nav-right">
             <div class="lang-switcher">
+                <svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#64748b;flex-shrink:0;margin-left:6px"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 <select class="lang-select" id="lang-select" aria-label="Language" onchange="setLang(this.value)">
-                    <option value="el">🇬🇷 ΕΛ</option>
-                    <option value="en" selected>🇬🇧 EN</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="it">🇮🇹 IT</option>
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="tr">🇹🇷 TR</option>
-                    <option value="pt">🇵🇹 PT</option>
+                    <option value="el">ΕΛ</option>
+                    <option value="en" selected>EN</option>
+                    <option value="de">DE</option>
+                    <option value="fr">FR</option>
+                    <option value="it">IT</option>
+                    <option value="es">ES</option>
+                    <option value="tr">TR</option>
+                    <option value="pt">PT</option>
                 </select>
             </div>
         </div>
@@ -850,7 +870,7 @@
                 <div id="client-cover-wrap" class="shop-cover-box" style="display:none;">
                     <img id="client-cover-img" src="" alt="cover" class="shop-cover-img">
                 </div>
-                <div id="client-cover-placeholder" class="shop-cover-placeholder"><span>🏪</span></div>
+                <div id="client-cover-placeholder" class="shop-cover-placeholder"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#94a3b8"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></div>
 
                 <div class="shop-hero-info">
                     <div id="client-logo-wrap" class="shop-logo-wrap" style="display:none;">
@@ -861,9 +881,9 @@
                         <p id="client-tagline" class="shop-hero-tagline" style="display:none;"></p>
                         <p id="client-description" class="shop-hero-desc" style="display:none;"></p>
                         <div id="client-meta" class="shop-hero-meta">
-                            <span id="client-address" class="meta-pill" style="display:none;">📍 <span></span></span>
-                            <span id="client-phone-pub" class="meta-pill" style="display:none;">📞 <a id="client-phone-link" href="#" style="color:inherit;text-decoration:none;"></a></span>
-                            <span id="client-hours" class="meta-pill" style="display:none;">🕐 <span></span></span>
+                            <span id="client-address" class="meta-pill" style="display:none;"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> <span></span></span>
+                            <span id="client-phone-pub" class="meta-pill" style="display:none;"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> <a id="client-phone-link" href="#" style="color:inherit;text-decoration:none;"></a></span>
+                            <span id="client-hours" class="meta-pill" style="display:none;"><svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> <span></span></span>
                         </div>
                     </div>
                 </div>
@@ -877,7 +897,7 @@
 
             <div class="client-layout">
                 <div class="card">
-                    <div class="card-title"><div class="icon">📅</div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
+                    <div class="card-title"><div class="icon"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div> <span data-i18n-key="select_date_time">Επιλογή Ημ/νίας &amp; Ώρας</span></div>
                     <div class="input-group">
                         <label data-i18n-key="date">Ημερομηνία</label>
                         <input type="date" id="cust-date-only">
@@ -897,13 +917,13 @@
                         <button type="button" id="wl-open" data-i18n-key="wl_cta_btn">Λίστα αναμονής</button>
                     </div>
                     <div id="time-badge" class="selected-time-badge">
-                        <span>🕐</span>
+                        <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                         <span><span data-i18n-key="selected_time">Επιλεγμένη ώρα:</span> <strong id="badge-time-text"></strong></span>
                     </div>
                     <button class="btn-primary" id="open-modal" style="display:none; margin-top:20px;" data-i18n-key="continue">Συνέχεια →</button>
                 </div>
                 <div class="card info-panel" style="position:sticky; top:84px;">
-                    <div class="card-title"><div class="icon">ℹ️</div> <span data-i18n-key="instructions">Οδηγίες</span></div>
+                    <div class="card-title"><div class="icon"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div> <span data-i18n-key="instructions">Οδηγίες</span></div>
                     <ol style="padding-left:18px; color:var(--text-muted); font-size:0.9rem; line-height:2.2;">
                         <li data-i18n-key="step1">Επιλέξτε <strong>ημερομηνία</strong></li>
                         <li data-i18n-key="step2">Επιλέξτε <strong>αριθμό ατόμων</strong></li>
@@ -912,7 +932,7 @@
                         <li data-i18n-key="step5">Συμπληρώστε τα στοιχεία σας</li>
                     </ol>
                     <div style="margin-top:24px; padding:16px; background:#f0fdf4; border-radius:var(--radius-md); border:1px solid #bbf7d0;">
-                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px;">✅ <span data-i18n-key="instant_confirm">Άμεση επιβεβαίωση</span></div>
+                        <div style="font-size:0.8rem; font-weight:700; color:#166534; margin-bottom:4px; display:flex; align-items:center; gap:6px;"><svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg> <span data-i18n-key="instant_confirm">Άμεση επιβεβαίωση</span></div>
                         <div style="font-size:0.82rem; color:#166534;" data-i18n-key="instant_confirm_desc">Η κράτησή σας αποθηκεύεται άμεσα και το κατάστημα ενημερώνεται αυτόματα.</div>
                     </div>
                 </div>
@@ -923,17 +943,18 @@
     <!-- ===== BOOKING MODAL ===== -->
     <div id="booking-modal" class="modal">
         <div class="modal-content card">
-            <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
+            <div class="card-title" style="margin-bottom:24px;"><div class="icon"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg></div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
             <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" autocomplete="name" autocapitalize="words" enterkeyhint="next" data-i18n-placeholder="fullname_ph"></div>
             <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" autocomplete="tel" inputmode="tel" enterkeyhint="next" placeholder="69XXXXXXXX"></div>
             <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="cust-email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="name@example.com" required></div>
             <div class="input-group">
-                <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
-                <select id="cust-location">
-                    <option value="Εσωτερικός" data-i18n-key="indoor">Εσωτερικός Χώρος</option>
-                    <option value="Εξωτερικός" data-i18n-key="outdoor">Εξωτερικός Χώρος</option>
-                    <option value="Δεν έχω προτίμηση" data-i18n-key="no_pref">Δεν έχω προτίμηση</option>
-                </select>
+                <label data-i18n-key="location_pref" id="cust-location-lbl">Προτίμηση Χώρου</label>
+                <div class="seg" id="cust-location-seg" role="radiogroup" aria-labelledby="cust-location-lbl">
+                    <button type="button" role="radio" aria-checked="false" data-v="Εσωτερικός"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n-key="loc_in">Μέσα</span></button>
+                    <button type="button" role="radio" aria-checked="false" data-v="Εξωτερικός"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg><span data-i18n-key="loc_out">Έξω</span></button>
+                    <button type="button" role="radio" aria-checked="true" data-v="Δεν έχω προτίμηση"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg><span data-i18n-key="loc_any">Αδιάφορο</span></button>
+                </div>
+                <input type="hidden" id="cust-location" value="Δεν έχω προτίμηση">
             </div>
             <div class="input-group"><label data-i18n-key="occasion" for="cust-occasion">Ειδικό Γεγονός</label>
                 <select id="cust-occasion" onchange="var o=document.getElementById('cust-occasion-other');o.style.display=this.value==='__other'?'block':'none';if(this.value==='__other')o.focus();"><option value="" data-i18n-key="occ_none">— Καμία —</option><option value="Γενέθλια" data-i18n-key="occ_birthday">Γενέθλια</option><option value="Επέτειος" data-i18n-key="occ_anniversary">Επέτειος</option><option value="Ονομαστική γιορτή" data-i18n-key="occ_nameday">Ονομαστική γιορτή</option><option value="Ρομαντικό δείπνο" data-i18n-key="occ_romantic">Ρομαντικό δείπνο</option><option value="Πρόταση γάμου" data-i18n-key="occ_proposal">Πρόταση γάμου</option><option value="Επαγγελματικό γεύμα" data-i18n-key="occ_business">Επαγγελματικό γεύμα</option><option value="Οικογενειακή γιορτή" data-i18n-key="occ_family">Οικογενειακή γιορτή</option><option value="__other" data-i18n-key="occ_other">Άλλο…</option></select>
@@ -941,7 +962,7 @@
             </div>
             <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" autocomplete="off" enterkeyhint="done" data-i18n-placeholder="requests_ph"></textarea></div>
             <input type="text" id="cust-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-            <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
+            <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">Επιβεβαίωση Κράτησης</button>
             <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
             <p class="privacy-note" data-i18n-key="privacy_note" style="font-size:0.8rem;color:#64748b;text-align:center;margin:12px 0 0;line-height:1.5;">Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href="/privacy" target="_blank" rel="noopener">Πολιτική Απορρήτου</a></p>
         </div>
@@ -951,7 +972,7 @@
     <div id="wl-modal" class="modal">
         <div class="modal-content card">
             <div id="wl-form">
-                <div class="card-title" style="margin-bottom:16px;"><div class="icon">⏳</div> <span data-i18n-key="wl_title">Λίστα αναμονής</span></div>
+                <div class="card-title" style="margin-bottom:16px;"><div class="icon"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div> <span data-i18n-key="wl_title">Λίστα αναμονής</span></div>
                 <div class="wl-sum" id="wl-sum"></div>
                 <div class="input-group"><label data-i18n-key="wl_time">Ώρα που θέλετε</label><select id="wl-time"></select></div>
                 <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="wl-name" autocomplete="name"></div>
@@ -1020,7 +1041,7 @@
         const translations = {
             el: {
                 persons_n: "Άτομα", lb_close: "Κλικ οπουδήποτε για κλείσιμο", closed: "κλειστά", cal_prefix: "Κράτηση: ", splash: "Online κρατήσεις", wallet_alt: "Προσθήκη στο Πορτοφόλι Google",
-                tab_reservation: "📅 Κράτηση", tab_admin: "🔧 Admin", new_reservation: "Νέα Κράτηση",
+                tab_reservation: "Κράτηση", tab_admin: "Admin", new_reservation: "Νέα Κράτηση",
                 loading_shop: "Φόρτωση καταστήματος...", booking_at: "Κράτηση στο: ", shop_not_found: "Δεν βρέθηκε κατάστημα με αυτή τη διεύθυνση. Ελέγξτε ότι το link είναι σωστό.",
                 select_date_time: "Επιλογή Ημ/νίας & Ώρας", date: "Ημερομηνία", persons: "Άτομα",
                 person_1: "1 Άτομο", person_2: "2 Άτομα", person_3: "3 Άτομα", person_4: "4 Άτομα",
@@ -1049,34 +1070,34 @@
                 new_shop: "Νέο Κατάστημα", shop_id_label: "Όνομα Καταστήματος (ID)",
                 shop_id_hint: "Μόνο λατινικά, αριθμοί, _ (χωρίς κενά)", display_name: "Εμφανιζόμενο Όνομα",
                 display_name_ph: "π.χ. Καφενείο Αθήνας", shop_admin_email: "Email Admin Μαγαζιού",
-                pass_hint: "Τουλ. 6 χαρακτήρες", create_shop: "➕ Δημιουργία Καταστήματος",
+                pass_hint: "Τουλ. 6 χαρακτήρες", create_shop: "Δημιουργία Καταστήματος",
                 shops: "Καταστήματα", loading_shops: "Φόρτωση καταστημάτων...",
                 booking_details: "Στοιχεία Κράτησης", fullname: "Ονοματεπώνυμο *",
                 fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)", email_required: "Email *",
                 location_pref: "Προτίμηση Χώρου", indoor: "Εσωτερικός Χώρος", outdoor: "Εξωτερικός Χώρος",
-                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση",
+                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση", loc_in: "Μέσα", loc_out: "Έξω", loc_any: "Αδιάφορο",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
-                confirm_booking: "✅ Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
+                confirm_booking: "Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
                 slot_full: "Πλήρες", slot_too_many: "Δεν υπάρχουν αρκετές θέσεις για τόσα άτομα σε αυτή την ώρα", pick_date: "Επιλέξτε ημερομηνία για να δείτε τις διαθέσιμες ώρες.", day_closed: "Το κατάστημα είναι κλειστό αυτή την ημέρα. Επιλέξτε άλλη ημερομηνία.", day_full: "Όλες οι ώρες αυτής της ημέρας είναι πλήρεις. Δοκιμάστε άλλη ημερομηνία ή λιγότερα άτομα.", day_over: "Δεν υπάρχουν άλλες διαθέσιμες ώρες για σήμερα. Επιλέξτε άλλη ημερομηνία.", slot_taken_alert: "Δυστυχώς αυτή η ώρα μόλις γέμισε. Επιλέξτε άλλη ώρα.", rate_limited: "Έγιναν πολλές κρατήσεις από αυτή τη σύνδεση. Δοκιμάστε ξανά σε λίγα λεπτά ή τηλεφωνήστε στο κατάστημα.",
                 shop_not_active: "Οι online κρατήσεις για αυτό το κατάστημα δεν έχουν ενεργοποιηθεί ακόμα.",
                 privacy_note: "Τα στοιχεία σας χρησιμοποιούνται μόνο για την κράτηση. <a href=\"/privacy?lang=el\" target=\"_blank\" rel=\"noopener\">Πολιτική Απορρήτου</a>",
                 alert_select_date: "Επιλέξτε ημερομηνία πρώτα!", alert_name_phone: "Όνομα και Τηλέφωνο είναι υποχρεωτικά!", alert_name_phone_email: "Όνομα, Τηλέφωνο και Email είναι υποχρεωτικά!",
                 alert_select_time: "Επιλέξτε ώρα!", alert_select_date2: "Επιλέξτε ημερομηνία!",
-                toast_saved: "✅ Η κράτηση αποθηκεύτηκε!", wl_cta_t: "Δεν βρίσκετε την ώρα που θέλετε;", wl_cta_s: "Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.", wl_cta_btn: "Λίστα αναμονής", wl_title: "Λίστα αναμονής", wl_time: "Ώρα που θέλετε", wl_any: "Οποιαδήποτε από τις πλήρεις ώρες", wl_join: "Μπείτε στη λίστα", wl_note: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.", wl_done_t: "Είστε στη λίστα αναμονής", wl_done_s: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.", wl_error: "Δεν ήταν δυνατή η εγγραφή στη λίστα. Δοκιμάστε ξανά.", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_wallet: "Προσθήκη στο Google Wallet", done_wallet_s: "Η κράτηση στο πορτοφόλι του κινητού σας", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
+                toast_saved: "Η κράτηση αποθηκεύτηκε!", wl_cta_t: "Δεν βρίσκετε την ώρα που θέλετε;", wl_cta_s: "Μπείτε στη λίστα αναμονής. Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email.", wl_cta_btn: "Λίστα αναμονής", wl_title: "Λίστα αναμονής", wl_time: "Ώρα που θέλετε", wl_any: "Οποιαδήποτε από τις πλήρεις ώρες", wl_join: "Μπείτε στη λίστα", wl_note: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε email. Θα το πάρει όποιος κλείσει πρώτος.", wl_done_t: "Είστε στη λίστα αναμονής", wl_done_s: "Αν ελευθερωθεί τραπέζι, θα σας στείλουμε αμέσως email με κουμπί για να το κλείσετε.", wl_error: "Δεν ήταν δυνατή η εγγραφή στη λίστα. Δοκιμάστε ξανά.", done_title: "Η κράτηση επιβεβαιώθηκε", done_email: "Σας στείλαμε email με όλα τα στοιχεία.", done_remind: "Θέλετε υπενθύμιση;", done_push: "Ειδοποίηση στο κινητό", done_push_s: "2 ώρες πριν, χωρίς να κατεβάσετε εφαρμογή", done_push_on: "Θα λάβετε ειδοποίηση", done_push_on_s: "2 ώρες πριν από την κράτηση", done_push_denied: "Οι ειδοποιήσεις είναι κλειστές", done_push_denied_s: "Ενεργοποιήστε τες από τις ρυθμίσεις του browser", done_push_err: "Δεν ήταν δυνατή η ενεργοποίηση", done_cal: "Προσθήκη στο ημερολόγιο", done_cal_s: "Το κινητό σας θα σας θυμίσει μόνο του", done_other: "ή", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Κλείσιμο", done_wallet: "Προσθήκη στο Google Wallet", done_wallet_s: "Η κράτηση στο πορτοφόλι του κινητού σας", done_persons: "άτομα", toast_save_error: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
                 alert_wrong_creds: "Λάθος στοιχεία!", alert_no_shop_url: "ΣΦΑΛΜΑ: Δεν έχει οριστεί κατάστημα στο URL!",
                 alert_forbidden: "ΑΠΑΓΟΡΕΥΕΤΑΙ: ", alert_no_shop_linked: "Ο λογαριασμός δεν είναι συνδεδεμένος με κατάστημα!",
-                no_reservations: "📭 Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
+                no_reservations: "Δεν βρέθηκαν κρατήσεις για το επιλεγμένο διάστημα.",
                 delete_confirm: "Οριστική διαγραφή κράτησης;", delete_text: "Διαγραφή",
                 guests_label: "άτομα", location_label_indoor: "Εσωτερικός",
                 toast_no_access: "Δεν έχετε πρόσβαση Super Admin", alert_wrong_creds_sa: "Λάθος στοιχεία!",
                 no_shops: "Δεν υπάρχουν καταστήματα ακόμα.", copy_title: "Αντιγραφή URL", delete_title: "Διαγραφή",
                 delete_shop_confirm: 'Διαγραφή καταστήματος "', delete_shop_confirm2: '"; Αυτό θα διαγράψει και τα δεδομένα στο Firebase.',
-                toast_copy: "🔗 URL αντιγράφηκε!", copy_prompt: "Αντιγράψτε το URL:",
-                toast_shop_deleted: '🗑️ Το κατάστημα "', toast_shop_deleted2: '" διαγράφηκε.',
+                toast_copy: "URL αντιγράφηκε!", copy_prompt: "Αντιγράψτε το URL:",
+                toast_shop_deleted: 'Το κατάστημα "', toast_shop_deleted2: '" διαγράφηκε.',
                 toast_delete_error: "Σφάλμα κατά τη διαγραφή.", sa_fill_all: "Συμπληρώστε όλα τα πεδία!",
                 sa_id_invalid: "Το ID μαγαζιού: μόνο a-z, 0-9, _", sa_pass_short: "Ο κωδικός χρειάζεται τουλάχιστον 6 χαρακτήρες!",
                 sa_creating: "Δημιουργία...", sa_relogin_prompt: "Εισάγετε ξανά τον κωδικό Super Admin για επαναφορά:",
-                toast_shop_created: '✅ Κατάστημα "', toast_shop_created2: '" δημιουργήθηκε!',
+                toast_shop_created: 'Κατάστημα "', toast_shop_created2: '" δημιουργήθηκε!',
                 sa_error_create: "Σφάλμα δημιουργίας.", sa_email_in_use: "Το email χρησιμοποιείται ήδη!",
                 sa_invalid_email: "Μη έγκυρο email!",
                 shop_profile: "Προφίλ Μαγαζιού", shop_info_title: "Πληροφορίες Μαγαζιού",
@@ -1088,14 +1109,14 @@
                 delete_cover: "Διαγραφή", photo_gallery: "Γκαλερί Φωτογραφιών",
                 upload_gallery: "Κλικ ή σύρτε φωτογραφίες γκαλερί",
                 upload_gallery_hint: "Πολλαπλές φωτογραφίες · μέγιστο 2MB ανά φωτογραφία",
-                toast_profile_saved: "✅ Πληροφορίες αποθηκεύτηκαν!", toast_cover_saved: "✅ Εξώφυλλο αποθηκεύτηκε!",
-                toast_cover_deleted: "🗑️ Εξώφυλλο διαγράφηκε.", toast_photo_saved: "✅ Φωτογραφία προστέθηκε!",
-                toast_photo_deleted: "🗑️ Φωτογραφία διαγράφηκε.", toast_img_too_big: "⚠️ Η φωτογραφία υπερβαίνει τα 2MB!",
+                toast_profile_saved: "Πληροφορίες αποθηκεύτηκαν!", toast_cover_saved: "Εξώφυλλο αποθηκεύτηκε!",
+                toast_cover_deleted: "Εξώφυλλο διαγράφηκε.", toast_photo_saved: "Φωτογραφία προστέθηκε!",
+                toast_photo_deleted: "Φωτογραφία διαγράφηκε.", toast_img_too_big: "Η φωτογραφία υπερβαίνει τα 2MB!",
                 toast_save_error2: "Σφάλμα αποθήκευσης. Δοκιμάστε ξανά.",
             },
             en: {
                 persons_n: "Persons", lb_close: "Tap anywhere to close", closed: "closed", cal_prefix: "Reservation: ", splash: "Online reservations", wallet_alt: "Add to Google Wallet",
-                tab_reservation: "📅 Reservation", tab_admin: "🔧 Admin", new_reservation: "New Reservation",
+                tab_reservation: "Reservation", tab_admin: "Admin", new_reservation: "New Reservation",
                 loading_shop: "Loading store...", booking_at: "Booking at: ", shop_not_found: "We couldn't find a restaurant at this address. Please check that the link is correct.",
                 select_date_time: "Select Date & Time", date: "Date", persons: "Persons",
                 person_1: "1 Person", person_2: "2 Persons", person_3: "3 Persons", person_4: "4 Persons",
@@ -1124,34 +1145,34 @@
                 new_shop: "New Store", shop_id_label: "Store Name (ID)",
                 shop_id_hint: "Only latin letters, numbers, _ (no spaces)", display_name: "Display Name",
                 display_name_ph: "e.g. Athens Café", shop_admin_email: "Store Admin Email",
-                pass_hint: "Min. 6 characters", create_shop: "➕ Create Store",
+                pass_hint: "Min. 6 characters", create_shop: "Create Store",
                 shops: "Stores", loading_shops: "Loading stores...",
                 booking_details: "Booking Details", fullname: "Full Name *",
                 fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)", email_required: "Email *",
                 location_pref: "Seating Preference", indoor: "Indoor", outdoor: "Outdoor",
-                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion",
+                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion", loc_in: "Indoor", loc_out: "Outdoor", loc_any: "Any",
                 requests: "Additional Requests", requests_ph: "Any special order...",
-                confirm_booking: "✅ Confirm Reservation", cancel: "Cancel",
+                confirm_booking: "Confirm Reservation", cancel: "Cancel",
                 slot_full: "Full", slot_too_many: "Not enough seats left for this many guests at this time", pick_date: "Choose a date to see available times.", day_closed: "The restaurant is closed on this day. Please choose another date.", day_full: "All times on this day are fully booked. Try another date or fewer guests.", day_over: "There are no more available times today. Please choose another date.", slot_taken_alert: "Sorry, this time has just filled up. Please choose another time.", rate_limited: "Too many bookings from this connection. Please try again in a few minutes or call the restaurant.",
                 shop_not_active: "Online reservations for this restaurant are not active yet.",
                 privacy_note: "Your details are used only for this reservation. <a href=\"/privacy?lang=en\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>",
                 alert_select_date: "Please select a date first!", alert_name_phone: "Name and Phone are required!", alert_name_phone_email: "Name, Phone and Email are required!",
                 alert_select_time: "Please select a time!", alert_select_date2: "Please select a date!",
-                toast_saved: "✅ Reservation saved!", wl_cta_t: "Can't find the time you want?", wl_cta_s: "Join the waiting list. If a table opens up, we will email you.", wl_cta_btn: "Waiting list", wl_title: "Waiting list", wl_time: "Preferred time", wl_any: "Any of the full times", wl_join: "Join the list", wl_note: "If a table opens up, we will email you. It goes to whoever books first.", wl_done_t: "You are on the waiting list", wl_done_s: "If a table opens up, we will email you right away with a button to book it.", wl_error: "Could not add you to the list. Please try again.", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_wallet: "Add to Google Wallet", done_wallet_s: "Keep your reservation in your phone wallet", done_persons: "guests", toast_save_error: "Save error. Please try again.",
+                toast_saved: "Reservation saved!", wl_cta_t: "Can't find the time you want?", wl_cta_s: "Join the waiting list. If a table opens up, we will email you.", wl_cta_btn: "Waiting list", wl_title: "Waiting list", wl_time: "Preferred time", wl_any: "Any of the full times", wl_join: "Join the list", wl_note: "If a table opens up, we will email you. It goes to whoever books first.", wl_done_t: "You are on the waiting list", wl_done_s: "If a table opens up, we will email you right away with a button to book it.", wl_error: "Could not add you to the list. Please try again.", done_title: "Your table is booked", done_email: "We have emailed you all the details.", done_remind: "Want a reminder?", done_push: "Notification on your phone", done_push_s: "2 hours before, no app needed", done_push_on: "You will get a notification", done_push_on_s: "2 hours before your reservation", done_push_denied: "Notifications are blocked", done_push_denied_s: "Turn them on in your browser settings", done_push_err: "Could not turn on notifications", done_cal: "Add to calendar", done_cal_s: "Your phone will remind you", done_other: "or", done_gcal: "Google Calendar", done_ics: "iPhone / Outlook", done_close: "Close", done_wallet: "Add to Google Wallet", done_wallet_s: "Keep your reservation in your phone wallet", done_persons: "guests", toast_save_error: "Save error. Please try again.",
                 alert_wrong_creds: "Wrong credentials!", alert_no_shop_url: "ERROR: No store set in URL!",
                 alert_forbidden: "FORBIDDEN: ", alert_no_shop_linked: "This account is not linked to a store!",
-                no_reservations: "📭 No reservations found for the selected period.",
+                no_reservations: "No reservations found for the selected period.",
                 delete_confirm: "Permanently delete reservation?", delete_text: "Delete",
                 guests_label: "guests", location_label_indoor: "Indoor",
                 toast_no_access: "You don't have Super Admin access", alert_wrong_creds_sa: "Wrong credentials!",
                 no_shops: "No stores yet.", copy_title: "Copy URL", delete_title: "Delete",
                 delete_shop_confirm: 'Delete store "', delete_shop_confirm2: '"? This will also delete its data in Firebase.',
-                toast_copy: "🔗 URL copied!", copy_prompt: "Copy the URL:",
-                toast_shop_deleted: '🗑️ Store "', toast_shop_deleted2: '" deleted.',
+                toast_copy: "URL copied!", copy_prompt: "Copy the URL:",
+                toast_shop_deleted: 'Store "', toast_shop_deleted2: '" deleted.',
                 toast_delete_error: "Error during deletion.", sa_fill_all: "Please fill in all fields!",
                 sa_id_invalid: "Store ID: only a-z, 0-9, _", sa_pass_short: "Password needs at least 6 characters!",
                 sa_creating: "Creating...", sa_relogin_prompt: "Enter Super Admin password again to restore session:",
-                toast_shop_created: '✅ Store "', toast_shop_created2: '" created!',
+                toast_shop_created: 'Store "', toast_shop_created2: '" created!',
                 sa_error_create: "Creation error.", sa_email_in_use: "Email already in use!",
                 sa_invalid_email: "Invalid email!",
                 shop_profile: "Shop Profile", shop_info_title: "Shop Information",
@@ -1163,9 +1184,9 @@
                 delete_cover: "Delete", photo_gallery: "Photo Gallery",
                 upload_gallery: "Click or drag gallery photos",
                 upload_gallery_hint: "Multiple photos · max 2MB per photo",
-                toast_profile_saved: "✅ Information saved!", toast_cover_saved: "✅ Cover photo saved!",
-                toast_cover_deleted: "🗑️ Cover photo deleted.", toast_photo_saved: "✅ Photo added!",
-                toast_photo_deleted: "🗑️ Photo deleted.", toast_img_too_big: "⚠️ Photo exceeds 2MB!",
+                toast_profile_saved: "Information saved!", toast_cover_saved: "Cover photo saved!",
+                toast_cover_deleted: "Cover photo deleted.", toast_photo_saved: "Photo added!",
+                toast_photo_deleted: "Photo deleted.", toast_img_too_big: "Photo exceeds 2MB!",
                 toast_save_error2: "Save error. Please try again.",
             },
             de: {
@@ -1211,9 +1232,12 @@
                 "occ_family": "Familienfeier",
                 "occ_other": "Anderes…",
                 "occ_other_ph": "Anlass beschreiben",
+                "loc_in": "Innen",
+                "loc_out": "Draußen",
+                "loc_any": "Egal",
                 "requests": "Weitere Wünsche",
                 "requests_ph": "Besondere Wünsche...",
-                "confirm_booking": "✅ Reservierung bestätigen",
+                "confirm_booking": "Reservierung bestätigen",
                 "cancel": "Abbrechen",
                 "slot_full": "Ausgebucht",
                 "slot_too_many": "Zu dieser Uhrzeit sind nicht mehr genug Plätze für so viele Personen frei",
@@ -1307,9 +1331,12 @@
                 "occ_family": "Fête de famille",
                 "occ_other": "Autre…",
                 "occ_other_ph": "Décrivez l'occasion",
+                "loc_in": "Intérieur",
+                "loc_out": "Terrasse",
+                "loc_any": "Peu importe",
                 "requests": "Demandes particulières",
                 "requests_ph": "Une demande spéciale...",
-                "confirm_booking": "✅ Confirmer la réservation",
+                "confirm_booking": "Confirmer la réservation",
                 "cancel": "Annuler",
                 "slot_full": "Complet",
                 "slot_too_many": "Il ne reste plus assez de places pour autant de personnes à cette heure",
@@ -1403,9 +1430,12 @@
                 "occ_family": "Festa di famiglia",
                 "occ_other": "Altro…",
                 "occ_other_ph": "Descrivi l'occasione",
+                "loc_in": "Dentro",
+                "loc_out": "Fuori",
+                "loc_any": "Indifferente",
                 "requests": "Altre richieste",
                 "requests_ph": "Qualche richiesta particolare...",
-                "confirm_booking": "✅ Conferma la prenotazione",
+                "confirm_booking": "Conferma la prenotazione",
                 "cancel": "Annulla",
                 "slot_full": "Completo",
                 "slot_too_many": "A quest'ora non ci sono più abbastanza posti per così tante persone",
@@ -1499,9 +1529,12 @@
                 "occ_family": "Celebración familiar",
                 "occ_other": "Otra…",
                 "occ_other_ph": "Describe la ocasión",
+                "loc_in": "Dentro",
+                "loc_out": "Fuera",
+                "loc_any": "Indiferente",
                 "requests": "Otras peticiones",
                 "requests_ph": "Alguna petición especial...",
-                "confirm_booking": "✅ Confirmar reserva",
+                "confirm_booking": "Confirmar reserva",
                 "cancel": "Cancelar",
                 "slot_full": "Completo",
                 "slot_too_many": "A esta hora ya no quedan plazas suficientes para tantas personas",
@@ -1595,9 +1628,12 @@
                 "occ_family": "Aile kutlaması",
                 "occ_other": "Diğer…",
                 "occ_other_ph": "Özel günü yazın",
+                "loc_in": "İç mekân",
+                "loc_out": "Dış mekân",
+                "loc_any": "Fark etmez",
                 "requests": "Ek istekler",
                 "requests_ph": "Özel bir isteğiniz...",
-                "confirm_booking": "✅ Rezervasyonu onayla",
+                "confirm_booking": "Rezervasyonu onayla",
                 "cancel": "Vazgeç",
                 "slot_full": "Dolu",
                 "slot_too_many": "Bu saatte bu kadar kişi için yeterli yer kalmadı",
@@ -1691,9 +1727,12 @@
                 "occ_family": "Celebração familiar",
                 "occ_other": "Outra…",
                 "occ_other_ph": "Descreva a ocasião",
+                "loc_in": "Interior",
+                "loc_out": "Esplanada",
+                "loc_any": "Indiferente",
                 "requests": "Outros pedidos",
                 "requests_ph": "Algum pedido especial...",
-                "confirm_booking": "✅ Confirmar reserva",
+                "confirm_booking": "Confirmar reserva",
                 "cancel": "Cancelar",
                 "slot_full": "Esgotado",
                 "slot_too_many": "A esta hora já não há lugares suficientes para tantas pessoas",
@@ -1763,6 +1802,10 @@
             applyTranslations();
         };
 
+        document.querySelectorAll('#cust-location-seg button').forEach(b => b.addEventListener('click', () => {
+            document.querySelectorAll('#cust-location-seg button').forEach(x => x.setAttribute('aria-checked', x === b ? 'true' : 'false'));
+            document.getElementById('cust-location').value = b.dataset.v;
+        }));
         function applyTranslations() {
             document.querySelectorAll('[data-i18n-key]').forEach(el => {
                 const key = el.getAttribute('data-i18n-key');
@@ -1777,12 +1820,6 @@
             const shopDisplay = document.getElementById('shop-display');
             if (shopDisplay && shopDisplay.dataset.shopId) {
                 shopDisplay.innerText = t('booking_at') + shopDisplay.dataset.shopId;
-            }
-            const locSelect = document.getElementById('cust-location');
-            if (locSelect) {
-                locSelect.options[0].text = t('indoor');
-                locSelect.options[1].text = t('outdoor');
-                locSelect.options[2].text = t('no_pref');
             }
             const guestSelect = document.getElementById('cust-guests');
             if (guestSelect) {
@@ -1912,7 +1949,7 @@
             // Μετά την αρχικοποίηση της σελίδας, ώστε ο υπόλοιπος κώδικας να βρει τα στοιχεία της φόρμας
             setTimeout(() => {
                 const lay = document.querySelector('.client-layout');
-                if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🔍</div><p data-i18n-key="shop_not_found" style="margin:0 0 16px; font-size:1.05rem;">${t('shop_not_found')}</p><a href="/" style="color:var(--primary); font-weight:600;">tablereserve.gr</a></div>`;
+                if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="margin-bottom:12px; color:#94a3b8;"><svg class="ic" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><p data-i18n-key="shop_not_found" style="margin:0 0 16px; font-size:1.05rem;">${t('shop_not_found')}</p><a href="/" style="color:var(--primary); font-weight:600;">tablereserve.gr</a></div>`;
                 const sd = document.getElementById('shop-display'); if (sd) { delete sd.dataset.shopId; sd.innerText = ''; }
             }, 0);
         }
@@ -1924,7 +1961,7 @@
             if (!inactive) return;
             trHideSplash();
             const lay = document.querySelector('.client-layout');
-            if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="font-size:2rem; margin-bottom:12px;">🕐</div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;
+            if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="margin-bottom:12px; color:#94a3b8;"><svg class="ic" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><p style="margin:0; font-size:1.05rem;">${t('shop_not_active')}</p></div>`;
         }).catch(() => {});
         const shopDisplayEl = document.getElementById('shop-display');
         shopDisplayEl.dataset.shopId = shopID;

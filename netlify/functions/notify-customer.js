@@ -45,7 +45,7 @@ exports.handler = async (event) => {
     const L = normLang(lang);
     const m = msg(L);
     const txt = {
-      subject:      `✅ ${m.c_subject} - ${shopName} | ${booking.date} ${booking.time}`,
+      subject:      `${m.c_subject} - ${shopName} | ${booking.date} ${booking.time}`,
       header:       m.c_header,
       greeting:     m.dear(esc(booking.name)),
       confirmed:    m.c_confirmed,
@@ -75,7 +75,6 @@ exports.handler = async (event) => {
   <div style="max-width:580px;margin:0 auto;">
 
     <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
-      <div style="font-size:32px;margin-bottom:8px;">🍽️</div>
       <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${txt.header}</h1>
       <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
     </div>

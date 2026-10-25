@@ -42,7 +42,11 @@
       border: 1px solid rgba(0,0,0,0.04);
     }
 
-    .icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .icon { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; background: #eff6ff; color: #2563eb; }
+    .icon.red { background: #fef2f2; color: #dc2626; }
+    .icon.green { background: #f0fdf4; color: #16a34a; }
+    .icon.amber { background: #fffbeb; color: #d97706; }
+    .icon svg { display: block; }
 
     h1 {
       font-family: 'Sora', sans-serif;
@@ -150,7 +154,7 @@
   <div class="logo">Table<span>Reserve</span></div>
 
   <div class="card" id="card">
-    <div class="icon">⏳</div>
+    <div class="icon"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></div>
     <h1>Φόρτωση...</h1>
     <p>Παρακαλώ περιμένετε.</p>
   </div>
@@ -171,13 +175,13 @@
       back_home:       '← Home',
       title:           'Cancel Reservation',
       confirm_q:       'Are you sure you want to cancel your reservation?',
-      warn:            '⚠️ Cancellation is only allowed up to <strong>2 hours</strong> before the reservation. After that, please contact the restaurant directly.',
-      btn_cancel:      '❌ Yes, Cancel Reservation',
+      warn:            'Cancellation is only allowed up to <strong>2 hours</strong> before the reservation. After that, please contact the restaurant directly.',
+      btn_cancel:      'Yes, Cancel Reservation',
       btn_back:        '← Back to Restaurant',
       cancelling:      'Cancelling...',
       success_title:   'Reservation Cancelled',
       success_desc:    'Your reservation has been successfully cancelled.<br>Thank you for letting us know — we hope to see you soon!',
-      new_booking:     '📅 New Reservation',
+      new_booking:     'New Reservation',
       already_title:   'Already Cancelled',
       already_desc:    'This reservation has already been cancelled.',
       too_late_title:  'Cancellation Not Allowed',
@@ -196,13 +200,13 @@
       back_home:       '← Αρχική Σελίδα',
       title:           'Ακύρωση Κράτησης',
       confirm_q:       'Είστε σίγουροι ότι θέλετε να ακυρώσετε την κράτησή σας;',
-      warn:            '⚠️ Η ακύρωση επιτρέπεται μόνο έως <strong>2 ώρες</strong> πριν την κράτηση. Μετά από αυτό το διάστημα, παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.',
-      btn_cancel:      '❌ Ναι, Ακύρωση Κράτησης',
+      warn:            'Η ακύρωση επιτρέπεται μόνο έως <strong>2 ώρες</strong> πριν την κράτηση. Μετά από αυτό το διάστημα, παρακαλώ επικοινωνήστε απευθείας με το κατάστημα.',
+      btn_cancel:      'Ναι, Ακύρωση Κράτησης',
       btn_back:        '← Πίσω στο Κατάστημα',
       cancelling:      'Ακύρωση...',
       success_title:   'Η κράτηση ακυρώθηκε',
       success_desc:    'Η κράτησή σας ακυρώθηκε επιτυχώς.<br>Σας ευχαριστούμε για την ενημέρωση και ελπίζουμε να σας δούμε σύντομα!',
-      new_booking:     '📅 Νέα Κράτηση',
+      new_booking:     'Νέα Κράτηση',
       already_title:   'Ήδη ακυρωμένη',
       already_desc:    'Η κράτηση αυτή έχει ήδη ακυρωθεί.',
       too_late_title:  'Δεν επιτρέπεται η ακύρωση',
@@ -221,13 +225,13 @@
       back_home:       '← Startseite',
       title:           'Reservierung stornieren',
       confirm_q:       'Möchten Sie Ihre Reservierung wirklich stornieren?',
-      warn:            '⚠️ Eine Stornierung ist nur bis <strong>2 Stunden</strong> vor der Reservierung möglich. Danach wenden Sie sich bitte direkt an das Restaurant.',
-      btn_cancel:      '❌ Ja, Reservierung stornieren',
+      warn:            'Eine Stornierung ist nur bis <strong>2 Stunden</strong> vor der Reservierung möglich. Danach wenden Sie sich bitte direkt an das Restaurant.',
+      btn_cancel:      'Ja, Reservierung stornieren',
       btn_back:        '← Zurück zum Restaurant',
       cancelling:      'Wird storniert...',
       success_title:   'Reservierung storniert',
       success_desc:    'Ihre Reservierung wurde erfolgreich storniert.<br>Danke für Ihre Nachricht – wir hoffen, Sie bald zu sehen!',
-      new_booking:     '📅 Neue Reservierung',
+      new_booking:     'Neue Reservierung',
       already_title:   'Bereits storniert',
       already_desc:    'Diese Reservierung wurde bereits storniert.',
       too_late_title:  'Stornierung nicht möglich',
@@ -246,13 +250,13 @@
       back_home:       '← Accueil',
       title:           'Annuler la réservation',
       confirm_q:       'Voulez-vous vraiment annuler votre réservation ?',
-      warn:            "⚠️ L'annulation n'est possible que jusqu'à <strong>2 heures</strong> avant la réservation. Ensuite, veuillez contacter directement le restaurant.",
-      btn_cancel:      '❌ Oui, annuler la réservation',
+      warn:            "L'annulation n'est possible que jusqu'à <strong>2 heures</strong> avant la réservation. Ensuite, veuillez contacter directement le restaurant.",
+      btn_cancel:      'Oui, annuler la réservation',
       btn_back:        '← Retour au restaurant',
       cancelling:      'Annulation...',
       success_title:   'Réservation annulée',
       success_desc:    'Votre réservation a bien été annulée.<br>Merci de nous avoir prévenus, à bientôt nous l’espérons !',
-      new_booking:     '📅 Nouvelle réservation',
+      new_booking:     'Nouvelle réservation',
       already_title:   'Déjà annulée',
       already_desc:    'Cette réservation a déjà été annulée.',
       too_late_title:  'Annulation impossible',
@@ -271,13 +275,13 @@
       back_home:       '← Home',
       title:           'Annulla la prenotazione',
       confirm_q:       'Vuoi davvero annullare la tua prenotazione?',
-      warn:            "⚠️ L'annullamento è possibile solo fino a <strong>2 ore</strong> prima della prenotazione. Dopo, contatta direttamente il ristorante.",
-      btn_cancel:      '❌ Sì, annulla la prenotazione',
+      warn:            "L'annullamento è possibile solo fino a <strong>2 ore</strong> prima della prenotazione. Dopo, contatta direttamente il ristorante.",
+      btn_cancel:      'Sì, annulla la prenotazione',
       btn_back:        '← Torna al ristorante',
       cancelling:      'Annullamento...',
       success_title:   'Prenotazione annullata',
       success_desc:    'La tua prenotazione è stata annullata.<br>Grazie per averci avvisato, speriamo di vederti presto!',
-      new_booking:     '📅 Nuova prenotazione',
+      new_booking:     'Nuova prenotazione',
       already_title:   'Già annullata',
       already_desc:    'Questa prenotazione è già stata annullata.',
       too_late_title:  'Annullamento non consentito',
@@ -296,13 +300,13 @@
       back_home:       '← Inicio',
       title:           'Cancelar reserva',
       confirm_q:       '¿Seguro que quieres cancelar tu reserva?',
-      warn:            '⚠️ Solo puedes cancelar hasta <strong>2 horas</strong> antes de la reserva. Después, ponte en contacto directamente con el restaurante.',
-      btn_cancel:      '❌ Sí, cancelar reserva',
+      warn:            'Solo puedes cancelar hasta <strong>2 horas</strong> antes de la reserva. Después, ponte en contacto directamente con el restaurante.',
+      btn_cancel:      'Sí, cancelar reserva',
       btn_back:        '← Volver al restaurante',
       cancelling:      'Cancelando...',
       success_title:   'Reserva cancelada',
       success_desc:    'Tu reserva se ha cancelado correctamente.<br>Gracias por avisarnos, ¡esperamos verte pronto!',
-      new_booking:     '📅 Nueva reserva',
+      new_booking:     'Nueva reserva',
       already_title:   'Ya cancelada',
       already_desc:    'Esta reserva ya se había cancelado.',
       too_late_title:  'No se puede cancelar',
@@ -321,13 +325,13 @@
       back_home:       '← Ana sayfa',
       title:           'Rezervasyonu iptal et',
       confirm_q:       'Rezervasyonunuzu iptal etmek istediğinizden emin misiniz?',
-      warn:            '⚠️ İptal yalnızca rezervasyondan <strong>2 saat</strong> öncesine kadar mümkündür. Sonrasında lütfen doğrudan restoranla iletişime geçin.',
-      btn_cancel:      '❌ Evet, rezervasyonu iptal et',
+      warn:            'İptal yalnızca rezervasyondan <strong>2 saat</strong> öncesine kadar mümkündür. Sonrasında lütfen doğrudan restoranla iletişime geçin.',
+      btn_cancel:      'Evet, rezervasyonu iptal et',
       btn_back:        '← Restorana dön',
       cancelling:      'İptal ediliyor...',
       success_title:   'Rezervasyon iptal edildi',
       success_desc:    'Rezervasyonunuz başarıyla iptal edildi.<br>Haber verdiğiniz için teşekkürler, sizi yakında görmeyi umuyoruz!',
-      new_booking:     '📅 Yeni rezervasyon',
+      new_booking:     'Yeni rezervasyon',
       already_title:   'Zaten iptal edilmiş',
       already_desc:    'Bu rezervasyon zaten iptal edilmiş.',
       too_late_title:  'İptal edilemiyor',
@@ -346,13 +350,13 @@
       back_home:       '← Início',
       title:           'Cancelar reserva',
       confirm_q:       'Tem a certeza de que quer cancelar a sua reserva?',
-      warn:            '⚠️ Só pode cancelar até <strong>2 horas</strong> antes da reserva. Depois disso, contacte diretamente o restaurante.',
-      btn_cancel:      '❌ Sim, cancelar reserva',
+      warn:            'Só pode cancelar até <strong>2 horas</strong> antes da reserva. Depois disso, contacte diretamente o restaurante.',
+      btn_cancel:      'Sim, cancelar reserva',
       btn_back:        '← Voltar ao restaurante',
       cancelling:      'A cancelar...',
       success_title:   'Reserva cancelada',
       success_desc:    'A sua reserva foi cancelada com sucesso.<br>Obrigado por nos avisar, esperamos vê-lo em breve!',
-      new_booking:     '📅 Nova reserva',
+      new_booking:     'Nova reserva',
       already_title:   'Já cancelada',
       already_desc:    'Esta reserva já tinha sido cancelada.',
       too_late_title:  'Não é possível cancelar',
@@ -374,14 +378,14 @@
 
     if (!token || !shopId || !bookingId) {
       card.innerHTML = `
-        <div class="icon">❌</div>
+        <div class="icon red"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg></div>
         <h1>${txt.invalid_title}</h1>
         <p>${txt.invalid_desc}</p>
         <a href="https://tablereserve.gr" class="btn btn-gray" style="margin-top:20px;">${txt.back_home}</a>
       `;
     } else {
       card.innerHTML = `
-        <div class="icon">🗓️</div>
+        <div class="icon"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
         <h1>${txt.title}</h1>
         <p>${txt.confirm_q}</p>
         <div class="booking-box">
@@ -407,26 +411,26 @@
 
           if (data.success) {
             card.innerHTML = `
-              <div class="icon">✅</div>
+              <div class="icon green"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div>
               <h1>${txt.success_title}</h1>
               <p>${txt.success_desc}</p>
               <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.alreadyCancelled) {
             card.innerHTML = `
-              <div class="icon">ℹ️</div>
+              <div class="icon"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div>
               <h1>${txt.already_title}</h1>
               <p>${txt.already_desc}</p>
               <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.new_booking}</a>`;
           } else if (data.error === 'too_late') {
             card.innerHTML = `
-              <div class="icon">⏰</div>
+              <div class="icon amber"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
               <h1>${txt.too_late_title}</h1>
               <p>${txt.too_late_desc}</p>
               <p style="margin-top:10px;">${txt.too_late_desc2}</p>
               <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;
           } else if (data.error === 'Μη έγκυρο token ακύρωσης' || data.error === 'Κράτηση δεν βρέθηκε') {
             card.innerHTML = `
-              <div class="icon">🔒</div>
+              <div class="icon amber"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
               <h1>${txt.invalid_token_t}</h1>
               <p>${txt.invalid_token_d}</p>
               <a href="https://tablereserve.gr/?shop=${shopId}&lang=${lang}" class="btn btn-gray" style="margin-top:24px;">${txt.back}</a>`;

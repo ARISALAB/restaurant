@@ -6,7 +6,7 @@ const T = {
   el: {
     newSubject: (s, b) => `Νέα κράτηση - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
     newTitle: 'Νέα κράτηση',
-    cancelSubject: (s, b) => `❌ Ακύρωση κράτησης - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
+    cancelSubject: (s, b) => `Ακύρωση κράτησης - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
     cancelTitle: 'Ακύρωση κράτησης', byGuest: 'από τον πελάτη',
     guests: 'άτομα', name: 'Όνομα', phone: 'Τηλέφωνο', occasion: 'Περίσταση', comments: 'Σχόλια',
     button: 'Δες τις κρατήσεις →'
@@ -14,7 +14,7 @@ const T = {
   en: {
     newSubject: (s, b) => `New reservation - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
     newTitle: 'New reservation',
-    cancelSubject: (s, b) => `❌ Reservation cancelled - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
+    cancelSubject: (s, b) => `Reservation cancelled - ${s} | ${b.date || ''} ${b.time || ''} | ${b.name || ''}`,
     cancelTitle: 'Reservation cancelled', byGuest: 'by the guest',
     guests: 'guests', name: 'Name', phone: 'Phone', occasion: 'Occasion', comments: 'Comments',
     button: 'View reservations →'
@@ -41,7 +41,6 @@ function buildShopEmail(kind, booking, shopName, lang) {
 <body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
   <div style="max-width:580px;margin:0 auto;">
     <div style="background:${color};border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
-      <div style="font-size:28px;margin-bottom:8px;">${cancel ? '❌' : '🍽️'}</div>
       <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${cancel ? t.cancelTitle : t.newTitle}</h1>
       <p style="color:rgba(255,255,255,0.85);margin:6px 0 0;font-size:14px;">${esc(shopName)}${cancel ? ' &bull; ' + t.byGuest : ''}</p>
     </div>
@@ -51,11 +50,11 @@ function buildShopEmail(kind, booking, shopName, lang) {
         <p style="margin:4px 0 0;color:${boxSub};font-size:14px;">${esc(b.guests || '-')} ${t.guests}${b.location ? ' | ' + esc(locationLabel(b.location, lang)) : ''}</p>
       </div>
       <table style="width:100%;border-collapse:collapse;">
-        ${row('👤 ' + t.name, b.name || '-')}
-        ${row('📞 ' + t.phone, b.phone || '-')}
-        ${row('✉️ Email', b.email)}
-        ${cancel ? '' : row('🎉 ' + t.occasion, b.occasion)}
-        ${cancel ? '' : row('💬 ' + t.comments, b.comments)}
+        ${row(t.name, b.name || '-')}
+        ${row(t.phone, b.phone || '-')}
+        ${row('Email', b.email)}
+        ${cancel ? '' : row(t.occasion, b.occasion)}
+        ${cancel ? '' : row(t.comments, b.comments)}
       </table>
       <div style="margin-top:24px;text-align:center;">
         <a href="https://tablereserve.gr/admin" style="display:inline-block;background:#2563eb;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">${t.button}</a>
