@@ -86,7 +86,7 @@ exports.handler = async () => {
   let sent = 0, pushed = 0, failed = 0;
 
   for (const [shop, d] of Object.entries(details)) {
-    if (!d || d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < now)) continue;
+    if (!d || d.status === 'pending' || d.status === 'closed' || d.status === 'draft' || (d.paidUntil && d.paidUntil < now)) continue;
     const info = (await db.ref(`shop_profile/${shop}/info`).get()).val() || {};
     if (info.remindersOff === true) continue;
     const tz = tzOr(info.tz);

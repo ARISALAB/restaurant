@@ -343,6 +343,19 @@
         .g-badge.ok { background: #dcfce7; color: #166534; }
         .g-badge.warn { background: #fef3c7; color: #92400e; }
         .g-badge.none { background: #f1f5f9; color: #64748b; }
+        /* Προσχέδια (πιλοτικό) */
+        textarea { width:100%; padding:12px 16px; border:1.5px solid var(--border); border-radius:var(--radius-md); font:inherit; font-size:0.95rem; background:#fafbfc; color:var(--text-main); resize:vertical; min-height:70px; }
+        textarea:focus { outline:none; border-color:var(--purple); background:var(--white); }
+        .dr-slug { display:flex; align-items:center; border:1.5px solid var(--border); border-radius:var(--radius-md); background:#fafbfc; overflow:hidden; }
+        .dr-slug span { padding:0 0 0 14px; color:var(--text-muted); font-size:0.9rem; white-space:nowrap; }
+        .dr-slug input { border:0; background:transparent; padding-left:2px; font-family:monospace; }
+        .dr-result { display:none; margin-top:16px; padding:16px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:var(--radius-md); }
+        .dr-result .u { font-family:monospace; font-size:0.78rem; background:#fff; padding:8px 12px; border-radius:6px; border:1px solid #bfdbfe; word-break:break-all; margin:6px 0 10px; }
+        .dr-btns { display:flex; gap:8px; flex-wrap:wrap; }
+        .dr-btns button, .dr-btns a { flex:1; min-width:120px; padding:9px; border:none; border-radius:8px; font-weight:700; font-size:0.85rem; cursor:pointer; text-align:center; text-decoration:none; }
+        .dr-btn-main { background:#2563eb; color:#fff; }
+        .dr-btn-sec { background:#fff; color:#1d4ed8; border:1px solid #bfdbfe !important; }
+        .g-badge.blue { background:#dbeafe; color:#1e40af; }
         .g-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 900; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
         .g-overlay.open { display: flex; }
         .g-modal { background: var(--white); border-radius: var(--radius-xl); width: 100%; max-width: 620px; padding: 28px 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
@@ -468,6 +481,56 @@
                     </div>
 
                     <div class="card" style="margin-top:18px;">
+                        <div class="card-title"><div class="icon">📝</div> Νέο προσχέδιο (πιλοτικό)</div>
+                        <div class="hint" style="margin-top:-6px;margin-bottom:14px;font-size:.82rem;">Ετοιμάζεις τη σελίδα ενός μαγαζιού χωρίς λογαριασμό. Ο ιδιοκτήτης τη βλέπει με το προσωπικό link και την ενεργοποιεί μόνος του (6 μήνες δωρεάν).</div>
+                        <div class="input-group">
+                            <label for="dr-name">Όνομα μαγαζιού *</label>
+                            <input type="text" id="dr-name" maxlength="80" placeholder="π.χ. Ταβέρνα Το Στέκι" oninput="drSuggestSlug()">
+                        </div>
+                        <div class="input-group">
+                            <label for="dr-slug">Link</label>
+                            <div class="dr-slug"><span>tablereserve.gr/</span><input type="text" id="dr-slug" maxlength="30" placeholder="to-steki" oninput="this.dataset.touched='1'"></div>
+                            <div class="hint">Λατινικά, αριθμοί και παύλα. Αν το αφήσεις κενό, βγαίνει από το όνομα.</div>
+                        </div>
+                        <div class="input-group">
+                            <label for="dr-address">Διεύθυνση</label>
+                            <input type="text" id="dr-address" maxlength="200" placeholder="Οδός αριθμός, Περιοχή">
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label for="dr-phone">Τηλέφωνο</label>
+                                <input type="tel" id="dr-phone" maxlength="30" placeholder="210 1234567">
+                            </div>
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label for="dr-hours">Ωράριο</label>
+                                <input type="text" id="dr-hours" maxlength="200" placeholder="Καθημερινά 13:00 – 23:00">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top:16px;">
+                            <label for="dr-tagline">Σύντομη φράση</label>
+                            <input type="text" id="dr-tagline" maxlength="120" placeholder="π.χ. Μεζέδες & θάλασσα στη Νίκαια">
+                        </div>
+                        <div class="input-group">
+                            <label for="dr-desc">Περιγραφή</label>
+                            <textarea id="dr-desc" maxlength="500" placeholder="2-3 προτάσεις για το μαγαζί"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="dr-cover">Εξώφυλλο (link εικόνας, προαιρετικό)</label>
+                            <input type="url" id="dr-cover" maxlength="500" placeholder="https://...">
+                            <div class="hint">Αν το αφήσεις κενό, μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης ανεβάζει τις δικές του μετά την ενεργοποίηση.</div>
+                        </div>
+                        <button class="btn-purple" id="dr-btn" onclick="createDraft()">📝 Δημιουργία προσχεδίου</button>
+                        <div class="dr-result" id="dr-result">
+                            <div style="font-size:0.85rem;font-weight:700;color:#1e40af;">✅ Το προσχέδιο είναι έτοιμο</div>
+                            <div class="u" id="dr-result-url"></div>
+                            <div class="dr-btns">
+                                <button class="dr-btn-main" onclick="copyDraftMsg(window._drLast)">💬 Αντιγραφή μηνύματος</button>
+                                <a class="dr-btn-sec" id="dr-result-open" href="#" target="_blank" rel="noopener">Άνοιγμα ↗</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top:18px;">
                         <div class="card-title"><div class="icon">🌐</div> Google feed</div>
                         <div class="hint" style="margin-top:-6px;margin-bottom:12px;font-size:.82rem;">Ποια καταστήματα είναι έτοιμα να εμφανιστούν με κουμπί «Κράτηση» στο Google Maps. Τα στοιχεία συμπληρώνονται από το κουμπί <b>G</b> σε κάθε κατάστημα.</div>
                         <button class="btn-purple" id="gf-btn" onclick="previewFeed()">🔍 Προεπισκόπηση feed</button>
@@ -477,6 +540,10 @@
 
                 <!-- RIGHT: Λίστα Καταστημάτων -->
                 <div>
+                    <div class="card" style="margin-bottom:18px;">
+                        <div class="card-title"><div class="icon">📝</div> Προσχέδια <span class="stat-pill" style="margin-left:auto;font-size:.75rem;padding:4px 10px;" id="dr-count"></span></div>
+                        <div id="dr-list"><div class="no-data">Φόρτωση...</div></div>
+                    </div>
                     <div class="card">
                         <div class="card-title"><div class="icon">🏪</div> Καταστήματα</div>
                         <div id="sa-shops-list">
@@ -594,6 +661,7 @@
                 document.getElementById('dashboard-section').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'block';
                 loadShops();
+                loadDrafts();
             } else {
                 if (user) signOut(auth); // αν έχει συνδεθεί κάποιος άλλος
                 document.getElementById('login-section').style.display = 'block';
@@ -783,6 +851,134 @@
             } catch(e) {
                 showToast('Σφάλμα κατά τη διαγραφή.', 'error');
             }
+        };
+
+        // ── Προσχέδια (πιλοτικό) ──
+        const DR_GR = {α:'a',ά:'a',β:'v',γ:'g',δ:'d',ε:'e',έ:'e',ζ:'z',η:'i',ή:'i',θ:'th',ι:'i',ί:'i',ϊ:'i',ΐ:'i',κ:'k',λ:'l',μ:'m',ν:'n',ξ:'x',ο:'o',ό:'o',π:'p',ρ:'r',σ:'s',ς:'s',τ:'t',υ:'y',ύ:'y',ϋ:'y',ΰ:'y',φ:'f',χ:'ch',ψ:'ps',ω:'o',ώ:'o'};
+        const drToSlug = v => String(v || '').toLowerCase()
+            .replace(/ού/g, 'ou').replace(/ου/g, 'ou').replace(/μπ/g, 'b').replace(/ντ/g, 'nt')
+            .replace(/[α-ωάέήίόύώϊϋΐΰς]/g, c => DR_GR[c] || '')
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 30).replace(/-+$/, '');
+        window.drSuggestSlug = () => {
+            const el = document.getElementById('dr-slug');
+            if (el.dataset.touched) return;
+            // Χωρίς το «ταβέρνα», «εστιατόριο» κ.λπ. μπροστά το link βγαίνει πιο σύντομο
+            const name = document.getElementById('dr-name').value.replace(/^\s*(ταβέρνα|ταβερνα|εστιατόριο|εστιατοριο|ψαροταβέρνα|ψαροταβερνα|μεζεδοπωλείο|μεζεδοπωλειο|ουζερί|ουζερι|καφέ|καφε|bar|cafe|restaurant)\s+/i, '');
+            el.value = drToSlug(name);
+        };
+
+        async function drCall(body) {
+            const token = await auth.currentUser.getIdToken();
+            const res = await fetch('/.netlify/functions/draft', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(body)
+            });
+            const out = await res.json().catch(() => ({}));
+            return { ok: res.ok, ...out };
+        }
+
+        const drMsg = (name, url) =>
+`Καλησπέρα! Είμαι ο Άρης, 25 χρόνια στην εστίαση. Έφτιαξα μια σελίδα online κρατήσεων για το μαγαζί σας, «${name}». Δείτε πώς φαίνεται:
+${url}
+
+Αν σας αρέσει, την ενεργοποιείτε με ένα κλικ: 6 μήνες δωρεάν, χωρίς κάρτα και χωρίς δέσμευση. Ό,τι χρειαστείτε, εδώ είμαι.`;
+
+        window.copyDraftMsg = (d) => {
+            if (!d || !d.url) return;
+            const txt = drMsg(d.name, d.url);
+            navigator.clipboard.writeText(txt)
+                .then(() => showToast('💬 Το μήνυμα αντιγράφηκε, κόλλησέ το στο DM', 'success'))
+                .catch(() => prompt('Αντέγραψε το μήνυμα:', txt));
+        };
+
+        window.createDraft = async () => {
+            const v = id => document.getElementById(id).value.trim();
+            const name = v('dr-name');
+            if (!name) return showToast('Γράψε το όνομα του μαγαζιού', 'error');
+            const slug = drToSlug(v('dr-slug'));
+            const btn = document.getElementById('dr-btn');
+            btn.innerHTML = '<span class="spinner"></span> Δημιουργία...'; btn.disabled = true;
+            document.getElementById('dr-result').style.display = 'none';
+            try {
+                const out = await drCall({ action: 'create', displayName: name, slug, address: v('dr-address'), phone: v('dr-phone'),
+                    hours: v('dr-hours'), tagline: v('dr-tagline'), description: v('dr-desc'), cover: v('dr-cover') });
+                if (!out.ok) {
+                    const m = { slug_taken: 'Αυτό το link το έχει ήδη άλλο μαγαζί', slug_reserved: 'Αυτό το link είναι δεσμευμένο, διάλεξε άλλο',
+                        slug_invalid: 'Το link θέλει 3-30 λατινικά, αριθμούς ή παύλα', missing_name: 'Γράψε το όνομα του μαγαζιού', not_superadmin: 'Δεν έχεις δικαίωμα' };
+                    return showToast(m[out.error] || 'Σφάλμα δημιουργίας', 'error');
+                }
+                window._drLast = { name, url: out.url };
+                document.getElementById('dr-result-url').textContent = out.url;
+                document.getElementById('dr-result-open').href = out.url;
+                document.getElementById('dr-result').style.display = 'block';
+                ['dr-name', 'dr-slug', 'dr-address', 'dr-phone', 'dr-hours', 'dr-tagline', 'dr-desc', 'dr-cover'].forEach(id => { const el = document.getElementById(id); el.value = ''; delete el.dataset.touched; });
+                showToast('✅ Το προσχέδιο δημιουργήθηκε', 'success');
+                loadDrafts();
+            } catch (e) {
+                showToast('Σφάλμα σύνδεσης με τον server', 'error');
+            } finally {
+                btn.innerHTML = '📝 Δημιουργία προσχεδίου'; btn.disabled = false;
+            }
+        };
+
+        const drDate = ms => ms ? new Date(ms).toLocaleString('el-GR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+        function drState(d) {
+            if (d.status !== 'draft') return `<span class="g-badge ok">✓ Ενεργοποιήθηκε ${drDate(d.claimedAt)}${d.claimedBy ? ' · ' + gEsc(d.claimedBy) : ''}</span>`;
+            if (d.views > 0) return `<span class="g-badge blue">👀 Το άνοιξε ${d.views === 1 ? '1 φορά' : d.views + ' φορές'} · τελευταία ${drDate(d.lastViewedAt)}</span>`;
+            return `<span class="g-badge none">Δεν το έχει ανοίξει ακόμα</span>`;
+        }
+
+        window.loadDrafts = async () => {
+            const list = document.getElementById('dr-list');
+            try {
+                const out = await drCall({ action: 'list' });
+                if (!out.ok) { list.innerHTML = "<div class='no-data'>Σφάλμα φόρτωσης</div>"; return; }
+                window._drafts = {};
+                const ds = out.drafts || [];
+                const open = ds.filter(d => d.status === 'draft').length, done = ds.length - open;
+                document.getElementById('dr-count').textContent = `${done} / ${ds.length} ενεργοποιήθηκαν`;
+                if (!ds.length) { list.innerHTML = "<div class='no-data'>Δεν υπάρχουν προσχέδια ακόμα.</div>"; return; }
+                list.innerHTML = ds.map(d => {
+                    window._drafts[d.shopId] = d;
+                    const isDraft = d.status === 'draft';
+                    return `<div class="shop-item">
+                        <div class="shop-icon">${isDraft ? '📝' : '🏪'}</div>
+                        <div class="shop-info">
+                            <div class="shop-name">${gEsc(d.name)}</div>
+                            <div class="shop-url">tablereserve.gr/${gEsc(d.slug || d.shopId)}</div>
+                            <div style="font-size:12px;color:#64748b;margin-top:2px;">Δημιουργήθηκε ${drDate(d.createdAt)}</div>
+                            <div>${drState(d)}</div>
+                        </div>
+                        <div class="shop-actions">${isDraft ? `
+                            <button class="btn-icon copy" title="Αντιγραφή μηνύματος για DM" onclick="copyDraftMsg(window._drafts['${d.shopId}'])">💬</button>
+                            <button class="btn-icon copy" title="Άνοιγμα προεπισκόπησης" onclick="window.open(window._drafts['${d.shopId}'].url,'_blank','noopener')">↗</button>
+                            <button class="btn-icon copy" title="Νέο link (το παλιό σταματά να ισχύει)" onclick="renewDraft('${d.shopId}')">🔄</button>
+                            <button class="btn-icon del" title="Διαγραφή προσχεδίου" onclick="deleteDraft('${d.shopId}')">🗑️</button>` : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch (e) {
+                list.innerHTML = "<div class='no-data'>Σφάλμα φόρτωσης</div>";
+            }
+        };
+
+        window.renewDraft = async (shopId) => {
+            if (!confirm('Νέο link για αυτό το προσχέδιο; Το παλιό link θα σταματήσει να ανοίγει.')) return;
+            const out = await drCall({ action: 'renew', shop: shopId }).catch(() => ({}));
+            if (!out.ok) return showToast('Σφάλμα', 'error');
+            showToast('🔄 Νέο link έτοιμο', 'success');
+            loadDrafts();
+        };
+
+        window.deleteDraft = async (shopId) => {
+            const d = (window._drafts || {})[shopId];
+            if (!confirm(`Διαγραφή του προσχεδίου «${d ? d.name : shopId}»;\nΤο link του θα σταματήσει να λειτουργεί.`)) return;
+            const out = await drCall({ action: 'delete', shop: shopId }).catch(() => ({}));
+            if (!out.ok) return showToast(out.error === 'not_draft' ? 'Έχει ήδη ενεργοποιηθεί, δεν διαγράφεται από εδώ' : 'Σφάλμα διαγραφής', 'error');
+            showToast('🗑️ Το προσχέδιο διαγράφηκε', 'success');
+            loadDrafts();
         };
 
         // ── Όροι Χρήσης ──

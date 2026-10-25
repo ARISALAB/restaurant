@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Ενεργοποίηση καταστήματος | TableReserve</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --primary:#2563eb; --primary-d:#1d4ed8; --bg:#f0f2f7; --text:#0f172a; --muted:#64748b; --border:#e2e8f0; --ok:#10b981; --err:#dc2626; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'DM Sans', system-ui, sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+  header { background:#fff; border-bottom:1px solid var(--border); padding:14px 20px; }
+  .logo { font-family:'Sora', sans-serif; font-weight:700; font-size:1.25rem; color:var(--text); text-decoration:none; }
+  .logo b { color:var(--primary); }
+  main { max-width:460px; margin:28px auto 48px; padding:0 16px; }
+  .card { background:#fff; border-radius:20px; padding:28px 24px; box-shadow:0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04); }
+  .kicker { font-size:.75rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--primary); }
+  h1 { font-family:'Sora', sans-serif; font-size:1.45rem; line-height:1.25; margin:8px 0 10px; }
+  .lead { color:var(--muted); line-height:1.55; font-size:.95rem; }
+  .perks { list-style:none; margin:18px 0 22px; display:grid; gap:10px; }
+  .perks li { display:flex; gap:10px; align-items:flex-start; font-size:.93rem; line-height:1.45; }
+  .perks svg { flex:none; margin-top:2px; color:var(--ok); }
+  .btn-google { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:13px; border:1.5px solid var(--border); background:#fff; border-radius:12px; font:600 .95rem 'DM Sans', sans-serif; color:var(--text); cursor:pointer; }
+  .btn-google:hover { background:#f8fafc; }
+  .or { display:flex; align-items:center; gap:12px; color:#94a3b8; font-size:.8rem; margin:18px 0; }
+  .or:before, .or:after { content:''; flex:1; height:1px; background:var(--border); }
+  label { display:block; font-size:.75rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
+  .field { margin-bottom:14px; }
+  input[type=email], input[type=password], input[type=tel] { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font:400 1rem 'DM Sans', sans-serif; background:#f8fafc; color:var(--text); }
+  input:focus { outline:none; border-color:var(--primary); background:#fff; }
+  .hint { font-size:.8rem; color:var(--muted); margin-top:5px; }
+  .terms { display:flex; gap:10px; align-items:flex-start; font-size:.86rem; line-height:1.45; margin:6px 0 18px; text-transform:none; letter-spacing:0; font-weight:400; color:var(--text); }
+  .terms input { margin-top:3px; width:16px; height:16px; flex:none; }
+  .terms a { color:var(--primary); }
+  .btn { width:100%; padding:14px; border:0; border-radius:12px; background:var(--primary); color:#fff; font:600 1rem 'DM Sans', sans-serif; cursor:pointer; }
+  .btn:hover { background:var(--primary-d); }
+  .btn:disabled, .btn-google:disabled { opacity:.6; cursor:default; }
+  .err { display:none; background:#fef2f2; color:var(--err); border:1px solid #fecaca; border-radius:10px; padding:10px 12px; font-size:.88rem; margin-bottom:14px; line-height:1.45; }
+  .fine { font-size:.8rem; color:var(--muted); text-align:center; margin-top:16px; line-height:1.5; }
+  .back { display:inline-block; margin-top:16px; color:var(--primary); font-weight:600; text-decoration:none; font-size:.9rem; }
+  .state { text-align:center; }
+  .state .ic { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .state .ic.ok { background:#ecfdf5; color:var(--ok); }
+  .state .ic.no { background:#f1f5f9; color:#94a3b8; }
+  .hp { position:absolute; left:-9999px; }
+  .loading { text-align:center; color:var(--muted); padding:40px 0; }
+</style>
+</head>
+<body>
+<header><a class="logo" href="/">Table<b>Reserve</b></a></header>
+<main>
+  <div class="card" id="loading"><div class="loading" data-k="loading">Φόρτωση...</div></div>
+
+  <!-- Ο σύνδεσμος δεν ισχύει -->
+  <div class="card state" id="invalid" hidden>
+    <div class="ic no"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+    <h1 data-k="bad_title">Ο σύνδεσμος δεν ισχύει</h1>
+    <p class="lead" data-k="bad_text">Ίσως το κατάστημα έχει ήδη ενεργοποιηθεί. Αν είστε ο ιδιοκτήτης, συνδεθείτε στον πίνακα διαχείρισης.</p>
+    <a class="back" href="/admin" data-k="to_admin">Σύνδεση στο admin →</a>
+  </div>
+
+  <!-- Φόρμα ενεργοποίησης -->
+  <div class="card" id="form-card" hidden>
+    <div class="kicker" data-k="kicker">Πιλοτικό πρόγραμμα</div>
+    <h1><span data-k="title">Ενεργοποίηση:</span> <span id="shop-name"></span></h1>
+    <p class="lead" data-k="lead">Η σελίδα κρατήσεων του μαγαζιού σας είναι έτοιμη. Ενεργοποιήστε τη και γίνεται δική σας.</p>
+    <ul class="perks">
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span data-k="p1">6 μήνες δωρεάν, χωρίς κάρτα και χωρίς δέσμευση</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span data-k="p2">Αλλάζετε στοιχεία και φωτογραφίες όποτε θέλετε</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span data-k="p3">Χωρίς προμήθεια ανά κράτηση</span></li>
+    </ul>
+
+    <div class="err" id="err"></div>
+
+    <button type="button" class="btn-google" id="btn-google">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+      <span data-k="google">Συνέχεια με Google</span>
+    </button>
+
+    <div class="or" data-k="or">ή με email</div>
+
+    <form id="claim-form" novalidate>
+      <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off">
+      <div class="field"><label for="f-email">Email</label><input type="email" id="f-email" autocomplete="email" required></div>
+      <div class="field"><label for="f-pass" data-k="pass">Κωδικός</label><input type="password" id="f-pass" autocomplete="new-password" minlength="8" required><div class="hint" data-k="pass_hint">Τουλάχιστον 8 χαρακτήρες</div></div>
+      <div class="field"><label for="f-phone" data-k="phone">Κινητό (προαιρετικό)</label><input type="tel" id="f-phone" autocomplete="tel" maxlength="30"><div class="hint" data-k="phone_hint">Μόνο για να σας βοηθήσουμε αν χρειαστεί. Δεν φαίνεται πουθενά.</div></div>
+      <label class="terms"><input type="checkbox" id="f-terms"><span data-k="terms_html">Αποδέχομαι τους <a href="/terms" target="_blank" rel="noopener">Όρους Χρήσης</a> και την <a href="/privacy" target="_blank" rel="noopener">Πολιτική Απορρήτου</a>.</span></label>
+      <button type="submit" class="btn" id="btn-claim" data-k="cta">Ενεργοποίηση δωρεάν</button>
+    </form>
+    <p class="fine" data-k="after">Μετά τους 6 μήνες, αν θέλετε να συνεχίσετε, η τιμή είναι 99 € τον χρόνο. Αλλιώς οι κρατήσεις απλώς σταματούν, χωρίς χρέωση.</p>
+    <p class="fine"><a href="#" id="back-preview" style="color:var(--primary);" data-k="back">← Πίσω στη σελίδα</a></p>
+  </div>
+
+  <!-- Έγινε: επιβεβαίωση email -->
+  <div class="card state" id="done" hidden>
+    <div class="ic ok"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h1 data-k="done_title">Σχεδόν έτοιμο!</h1>
+    <p class="lead"><span data-k="done_text">Σας στείλαμε email επιβεβαίωσης στο</span> <b id="done-email"></b>. <span data-k="done_text2">Πατήστε το κουμπί μέσα στο email και η σελίδα σας ενεργοποιείται.</span></p>
+    <a class="back" href="/admin" id="done-admin" data-k="to_admin">Σύνδεση στο admin →</a>
+  </div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyCEkDMQ2Q3N886s8SyG03p6ZgzwO3N4pX4",
+  authDomain: "tablereserve.gr",
+  databaseURL: "https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "reser-dfb9a"
+});
+const auth = getAuth(app);
+const API = '/.netlify/functions';
+
+const q = new URLSearchParams(location.search);
+const shop = q.get('shop') || '';
+const token = q.get('t') || '';
+const lang = q.get('lang') === 'el' || !q.get('lang') ? 'el' : 'en';
+
+const TXT = {
+  en: {
+    loading: 'Loading...', bad_title: 'This link is no longer valid', bad_text: 'The restaurant may already be activated. If you are the owner, sign in to your dashboard.',
+    to_admin: 'Sign in to the dashboard →', kicker: 'Pilot programme', title: 'Activate:', lead: 'Your restaurant’s booking page is ready. Activate it and it becomes yours.',
+    p1: '6 months free, no card and no commitment', p2: 'Change your details and photos whenever you like', p3: 'No commission per booking',
+    google: 'Continue with Google', or: 'or with email', pass: 'Password', pass_hint: 'At least 8 characters', phone: 'Mobile (optional)',
+    phone_hint: 'Only so we can help you if needed. It is not shown anywhere.',
+    terms_html: 'I accept the <a href="/terms" target="_blank" rel="noopener">Terms of Use</a> and the <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.',
+    cta: 'Activate for free', after: 'After 6 months, if you want to continue, the price is €99 per year. Otherwise bookings simply stop, with no charge.',
+    back: '← Back to the page', done_title: 'Almost done!', done_text: 'We sent a confirmation email to', done_text2: 'Click the button in the email and your page goes live.',
+    e_terms: 'Please accept the Terms of Use and the Privacy Policy.', e_email: 'Please enter a valid email.', e_pass: 'The password needs at least 8 characters.',
+    e_in_use: 'This email already has an account. Use another email, or Google.', e_has_shop: 'This account already has a restaurant. Use another email.',
+    e_link: 'This link is no longer valid.', e_google: 'Google sign-in was not completed. Please try again.', e_popup: 'Your browser blocked the Google window. Allow pop-ups and try again.',
+    e_generic: 'Something went wrong. Please try again in a moment.', working: 'Please wait...'
+  },
+  el: {
+    e_terms: 'Χρειάζεται να αποδεχτείτε τους Όρους Χρήσης και την Πολιτική Απορρήτου.', e_email: 'Γράψτε ένα έγκυρο email.', e_pass: 'Ο κωδικός χρειάζεται τουλάχιστον 8 χαρακτήρες.',
+    e_in_use: 'Αυτό το email έχει ήδη λογαριασμό. Χρησιμοποιήστε άλλο email ή τη Google.', e_has_shop: 'Αυτός ο λογαριασμός έχει ήδη κατάστημα. Χρησιμοποιήστε άλλο email.',
+    e_link: 'Ο σύνδεσμος δεν ισχύει πια.', e_google: 'Η σύνδεση με Google δεν ολοκληρώθηκε. Δοκιμάστε ξανά.', e_popup: 'Ο browser μπλόκαρε το παράθυρο της Google. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.',
+    e_generic: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.', working: 'Μισό λεπτό...'
+  }
+};
+const T = k => (TXT[lang] && TXT[lang][k]) || TXT.el[k] || k;
+if (lang === 'en') {
+  document.documentElement.lang = 'en';
+  document.title = 'Activate your restaurant | TableReserve';
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const v = TXT.en[el.dataset.k]; if (v === undefined) return;
+    if (el.dataset.k.endsWith('_html')) el.innerHTML = v; else el.textContent = v;
+  });
+}
+
+const $ = id => document.getElementById(id);
+const show = id => ['loading', 'invalid', 'form-card', 'done'].forEach(x => $(x).hidden = x !== id);
+const err = m => { $('err').textContent = m; $('err').style.display = 'block'; $('err').scrollIntoView({ block: 'center', behavior: 'smooth' }); };
+const clearErr = () => { $('err').style.display = 'none'; };
+const tz = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } };
+const errMsg = e => ({ invalid_email: T('e_email'), weak_password: T('e_pass'), email_in_use: T('e_in_use'), already_has_shop: T('e_has_shop'), invalid_link: T('e_link'), terms_required: T('e_terms') }[e] || T('e_generic'));
+
+let slug = null;
+(async () => {
+  if (!shop || !token) return show('invalid');
+  try {
+    const r = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', shop, token, track: false }) });
+    if (!r.ok) return show('invalid');
+    const d = await r.json();
+    slug = d.slug;
+    $('shop-name').textContent = d.name;
+    $('back-preview').href = '/' + (slug || shop) + '?claim=' + encodeURIComponent(token) + '&lang=' + lang;
+    show('form-card');
+  } catch (e) { show('invalid'); }
+})();
+
+async function claim(body, idToken) {
+  const res = await fetch(`${API}/claim`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}) },
+    body: JSON.stringify({ shop, token, acceptTerms: true, lang, tz: tz(), phone: $('f-phone').value.trim(), ...body })
+  });
+  return { res, out: await res.json().catch(() => ({})) };
+}
+
+$('btn-google').addEventListener('click', async () => {
+  clearErr();
+  if (!$('f-terms').checked) return err(T('e_terms'));
+  const btn = $('btn-google'), label = btn.querySelector('span'), orig = label.textContent;
+  btn.disabled = true; label.textContent = T('working');
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const { res, out } = await claim({}, await cred.user.getIdToken());
+    if (res.ok) { location.href = '/admin?lang=' + lang; return; }
+    await signOut(auth);
+    if (out.error === 'invalid_link') return show('invalid');
+    err(errMsg(out.error));
+  } catch (e) {
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request')
+      err(e.code === 'auth/popup-blocked' ? T('e_popup') : T('e_google'));
+  }
+  btn.disabled = false; label.textContent = orig;
+});
+
+$('claim-form').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  clearErr();
+  const email = $('f-email').value.trim(), password = $('f-pass').value;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return err(T('e_email'));
+  if (password.length < 8) return err(T('e_pass'));
+  if (!$('f-terms').checked) return err(T('e_terms'));
+  const btn = $('btn-claim'), orig = btn.textContent;
+  btn.disabled = true; btn.textContent = T('working');
+  try {
+    const { res, out } = await claim({ email, password, website: ev.target.website.value });
+    if (res.ok) {
+      // Σύνδεση αμέσως, ώστε το admin να ανοίξει στην οθόνη επιβεβαίωσης email
+      await signInWithEmailAndPassword(auth, email, password).catch(() => {});
+      $('done-email').textContent = email;
+      $('done-admin').href = '/admin?lang=' + lang;
+      show('done');
+      return;
+    }
+    if (out.error === 'invalid_link') return show('invalid');
+    err(errMsg(out.error));
+  } catch (e) { err(T('e_generic')); }
+  btn.disabled = false; btn.textContent = orig;
+});
+</script>
+</body>
+</html>

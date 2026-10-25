@@ -47,7 +47,7 @@ async function join(db, b, event) {
     db.ref(`shop_details/${shop}`).get().then(s => s.val()),
     db.ref(`shop_profile/${shop}/info/capacity`).get().then(s => s.val()),
   ]);
-  if (!details || details.status === 'pending' || details.status === 'closed' || (details.paidUntil && details.paidUntil < Date.now())) {
+  if (!details || details.status === 'pending' || details.status === 'closed' || details.status === 'draft' || (details.paidUntil && details.paidUntil < Date.now())) {
     return json(403, { error: 'shop_inactive' });
   }
   if (typeof capacity !== 'number' || capacity <= 0) return json(400, { error: 'no_waitlist' });

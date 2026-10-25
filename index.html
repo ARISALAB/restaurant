@@ -134,6 +134,8 @@
         .demo-bar { display:none; background:#0f172a; color:#e2e8f0; font-size:0.85rem; padding:10px 16px; text-align:center; line-height:1.5; }
         .demo-bar a { color:#93c5fd; font-weight:600; text-decoration:none; white-space:nowrap; margin-left:6px; }
         .demo-bar a:hover { text-decoration:underline; }
+        .demo-bar.draft { background:#1d4ed8; color:#fff; font-size:0.92rem; padding:12px 16px; }
+        .demo-bar.draft a { display:inline-block; background:#fff; color:#1d4ed8; padding:7px 16px; border-radius:999px; margin:6px 0 0 8px; text-decoration:none; }
         #demo-modal .modal-content { max-width:640px; }
         .demo-tabs { display:grid; grid-template-columns:1fr 1fr; gap:6px; background:#f1f5f9; padding:4px; border-radius:10px; margin:14px 0 12px; }
         .demo-tabs button { border:0; background:transparent; padding:9px 8px; border-radius:8px; font:inherit; font-size:0.86rem; font-weight:600; color:#64748b; cursor:pointer; }
@@ -1103,7 +1105,7 @@
                 booking_details: "Στοιχεία Κράτησης", fullname: "Ονοματεπώνυμο *",
                 fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)", email_required: "Email *",
                 location_pref: "Προτίμηση Χώρου", indoor: "Εσωτερικός Χώρος", outdoor: "Εξωτερικός Χώρος",
-                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση", loc_in: "Μέσα", loc_out: "Έξω", loc_any: "Αδιάφορο", demo_bar: "Σελίδα επίδειξης — δοκιμάστε ελεύθερα, καμία κράτηση δεν καταχωρείται.", demo_cta: "Θέλω μία για το μαγαζί μου →", demo_title: "Έτσι ολοκληρώνεται μια κράτηση", demo_sub: "Αυτά τα δύο email θα στέλνονταν αυτόματα. Στο demo δεν στάλθηκε τίποτα.", demo_tab_guest: "Email πελάτη", demo_tab_shop: "Email καταστήματος",
+                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση", loc_in: "Μέσα", loc_out: "Έξω", loc_any: "Αδιάφορο", demo_bar: "Σελίδα επίδειξης — δοκιμάστε ελεύθερα, καμία κράτηση δεν καταχωρείται.", demo_cta: "Θέλω μία για το μαγαζί μου →", demo_title: "Έτσι ολοκληρώνεται μια κράτηση", demo_sub: "Αυτά τα δύο email θα στέλνονταν αυτόματα. Στο demo δεν στάλθηκε τίποτα.", demo_tab_guest: "Email πελάτη", demo_tab_shop: "Email καταστήματος", draft_bar: "Αυτή είναι η σελίδα κρατήσεων που ετοιμάσαμε για το μαγαζί σας. Δοκιμάστε την ελεύθερα: δεν καταχωρείται καμία κράτηση και δεν τη βλέπει ακόμα κανείς άλλος.", draft_cta: "Ενεργοποίηση δωρεάν →",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
                 confirm_booking: "Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
                 slot_full: "Πλήρες", slot_too_many: "Δεν υπάρχουν αρκετές θέσεις για τόσα άτομα σε αυτή την ώρα", pick_date: "Επιλέξτε ημερομηνία για να δείτε τις διαθέσιμες ώρες.", day_closed: "Το κατάστημα είναι κλειστό αυτή την ημέρα. Επιλέξτε άλλη ημερομηνία.", day_full: "Όλες οι ώρες αυτής της ημέρας είναι πλήρεις. Δοκιμάστε άλλη ημερομηνία ή λιγότερα άτομα.", day_over: "Δεν υπάρχουν άλλες διαθέσιμες ώρες για σήμερα. Επιλέξτε άλλη ημερομηνία.", slot_taken_alert: "Δυστυχώς αυτή η ώρα μόλις γέμισε. Επιλέξτε άλλη ώρα.", rate_limited: "Έγιναν πολλές κρατήσεις από αυτή τη σύνδεση. Δοκιμάστε ξανά σε λίγα λεπτά ή τηλεφωνήστε στο κατάστημα.",
@@ -1178,7 +1180,7 @@
                 booking_details: "Booking Details", fullname: "Full Name *",
                 fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)", email_required: "Email *",
                 location_pref: "Seating Preference", indoor: "Indoor", outdoor: "Outdoor",
-                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion", loc_in: "Indoor", loc_out: "Outdoor", loc_any: "Any", demo_bar: "Demo page — try it freely, no booking is saved.", demo_cta: "I want one for my restaurant →", demo_title: "This is how a booking completes", demo_sub: "These two emails would be sent automatically. In the demo nothing was sent.", demo_tab_guest: "Guest email", demo_tab_shop: "Restaurant email",
+                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion", loc_in: "Indoor", loc_out: "Outdoor", loc_any: "Any", demo_bar: "Demo page — try it freely, no booking is saved.", demo_cta: "I want one for my restaurant →", demo_title: "This is how a booking completes", demo_sub: "These two emails would be sent automatically. In the demo nothing was sent.", demo_tab_guest: "Guest email", demo_tab_shop: "Restaurant email", draft_bar: "This is the booking page we prepared for your restaurant. Try it freely: no booking is saved and nobody else can see it yet.", draft_cta: "Activate for free →",
                 requests: "Additional Requests", requests_ph: "Any special order...",
                 confirm_booking: "Confirm Reservation", cancel: "Cancel",
                 slot_full: "Full", slot_too_many: "Not enough seats left for this many guests at this time", pick_date: "Choose a date to see available times.", day_closed: "The restaurant is closed on this day. Please choose another date.", day_full: "All times on this day are fully booked. Try another date or fewer guests.", day_over: "There are no more available times today. Please choose another date.", slot_taken_alert: "Sorry, this time has just filled up. Please choose another time.", rate_limited: "Too many bookings from this connection. Please try again in a few minutes or call the restaurant.",
@@ -2014,9 +2016,13 @@
         // Το demo ορίζεται με το καθαρό όνομα (slug) του καταστήματος, γιατί το εσωτερικό ID είναι διαφορετικό
         const TR_DEMO_SLUGS = ['test-restaurant'];
         const trPathName = (location.pathname || '').replace(/^\/+|\/+$/g, '').toLowerCase();
-        const TR_DEMO = [trPathName, trSlug, shopID].some(x => x && TR_DEMO_SLUGS.includes(String(x).toLowerCase()))
+        let TR_DEMO = [trPathName, trSlug, shopID].some(x => x && TR_DEMO_SLUGS.includes(String(x).toLowerCase()))
             && !new URLSearchParams(location.search).has('real');
-        const trDemoHome = () => (currentLang === 'el' ? '/?lang=el' : '/' + currentLang + '/') + '#contact';
+        // Προσχέδιο (πιλοτικό): ο ιδιοκτήτης βλέπει τη σελίδα του με το προσωπικό link (?claim=...) πριν την ενεργοποιήσει
+        let TR_DRAFT = false;
+        const trClaimTok = urlParams.get('claim');
+        const trClaimUrl = () => '/claim?shop=' + encodeURIComponent(shopID) + '&t=' + encodeURIComponent(trClaimTok || '') + '&lang=' + currentLang;
+        const trDemoHome = () => TR_DRAFT ? trClaimUrl() : (currentLang === 'el' ? '/?lang=el' : '/' + currentLang + '/') + '#contact';
         if (TR_DEMO) {
             document.getElementById('demo-bar').style.display = 'block';
             const nm = document.createElement('meta'); nm.name = 'robots'; nm.content = 'noindex'; document.head.appendChild(nm);
@@ -2040,8 +2046,38 @@
             }, 0);
         }
 
+        async function trDraftGate() {
+            const nm = document.createElement('meta'); nm.name = 'robots'; nm.content = 'noindex'; document.head.appendChild(nm);
+            let ok = false;
+            if (trClaimTok) {
+                try {
+                    const r = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', shop: shopID, token: trClaimTok }) });
+                    ok = r.ok;
+                } catch (e) {}
+            }
+            if (!ok) {
+                // Χωρίς έγκυρο προσωπικό link η σελίδα δεν υπάρχει για το κοινό
+                trHideSplash();
+                const hero = document.querySelector('.shop-hero-wrap'); if (hero) hero.style.display = 'none';
+                const lay = document.querySelector('.client-layout');
+                if (lay) lay.innerHTML = `<div class="card" style="grid-column:1/-1; text-align:center; padding:48px 24px;"><div style="margin-bottom:12px; color:#94a3b8;"><svg class="ic" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div><p data-i18n-key="shop_not_found" style="margin:0 0 16px; font-size:1.05rem;">${t('shop_not_found')}</p><a href="/" style="color:var(--primary); font-weight:600;">tablereserve.gr</a></div>`;
+                return;
+            }
+            TR_DEMO = true; TR_DRAFT = true;
+            const bar = document.getElementById('demo-bar');
+            bar.classList.add('draft');
+            bar.querySelector('span').setAttribute('data-i18n-key', 'draft_bar');
+            bar.querySelector('span').textContent = t('draft_bar');
+            ['demo-bar-cta', 'demo-cta'].forEach(id => {
+                const a = document.getElementById(id);
+                a.setAttribute('data-i18n-key', 'draft_cta'); a.textContent = t('draft_cta'); a.href = trClaimUrl();
+            });
+            bar.style.display = 'block';
+        }
+
         // Κατάστημα που δεν έχει ενεργοποιηθεί ακόμα: δεν δέχεται κρατήσεις
         Promise.all(['status', 'paidUntil'].map(f => get(ref(db, `shop_details/${shopID}/${f}`)).then(x => x.val()))).then(([status, paidUntil]) => {
+            if (status === 'draft') { trDraftGate(); return; }
             const d = { status, paidUntil };
             const inactive = d.status === 'pending' || d.status === 'closed' || (d.paidUntil && d.paidUntil < Date.now());
             if (!inactive) return;
@@ -2302,6 +2338,7 @@
             shopCapacity = typeof capacity_ === 'number' && capacity_ > 0 ? capacity_ : null;
 
             const guestSelect = document.getElementById('cust-guests');
+            if (!guestSelect) return;   // η φόρμα αντικαταστάθηκε (ανενεργό κατάστημα ή προσχέδιο χωρίς link)
             guestSelect.innerHTML = '';
             for (let i = 1; i <= maxGuests; i++) {
                 const opt = document.createElement('option');

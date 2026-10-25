@@ -1,4 +1,4 @@
-// Προβολή των email μιας κράτησης για τη σελίδα επίδειξης. Δεν αποθηκεύει τίποτα και δεν στέλνει τίποτα.
+// Προβολή των email μιας κράτησης για τη σελίδα επίδειξης και τα προσχέδια. Δεν αποθηκεύει τίποτα και δεν στέλνει τίποτα.
 // POST /.netlify/functions/demo-preview
 //   { shop, date, time, guests, name, phone, email, location, occasion, comments, lang }
 // ->  200 { ok:true, customer:{subject,html}, shop:{subject,html} }   |   4xx { error }
@@ -29,7 +29,9 @@ exports.handler = async (event) => {
     const shop = str(b.shop, 60);
     if (!/^[A-Za-z0-9_-]{1,60}$/.test(shop)) return json(400, { error: 'bad_request' });
     const db = getDb();
-    if (!(await isDemoShop(db, shop))) return json(403, { error: 'not_demo' });
+    // Σελίδα επίδειξης ή προσχέδιο (προεπισκόπηση για τον ιδιοκτήτη πριν την ενεργοποίηση)
+    const isDraft = (await db.ref(`shop_details/${shop}/status`).get()).val() === 'draft';
+    if (!isDraft && !(await isDemoShop(db, shop))) return json(403, { error: 'not_demo' });
     const date = str(b.date, 10), time = str(b.time, 5);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return json(400, { error: 'bad_request' });
     const lang = normLang(b.lang);

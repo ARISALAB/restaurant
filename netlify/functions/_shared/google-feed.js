@@ -53,7 +53,7 @@ function postal(code, country) {
 
 function isActive(details, now) {
   if (!details) return false;
-  if (details.status === 'pending' || details.status === 'closed') return false;
+  if (details.status === 'pending' || details.status === 'closed' || details.status === 'draft') return false;
   if (details.paidUntil && details.paidUntil < now) return false;
   return true;
 }

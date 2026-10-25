@@ -94,7 +94,7 @@ exports.handler = async (event) => {
       db.ref(`shop_profile/${shop}/info`).get().then(s => s.val() || {}),
     ]);
     if (!details) return json(404, { error: 'shop_inactive' });
-    if (details.status === 'pending' || details.status === 'closed' ||
+    if (details.status === 'pending' || details.status === 'closed' || details.status === 'draft' ||
         (details.paidUntil && details.paidUntil < now)) {
       return json(403, { error: 'shop_inactive' });
     }
