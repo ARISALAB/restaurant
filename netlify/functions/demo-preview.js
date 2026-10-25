@@ -10,8 +10,14 @@ const { normLang } = require('./_shared/i18n');
 const { buildCustomerEmail } = require('./notify-customer');
 const { buildShopNewEmail } = require('./notify');
 
-// Καταστήματα επίδειξης (εσωτερικό ID, όχι slug)
-const DEMO_SHOPS = new Set(['test-restaurant']);
+// Καταστήματα επίδειξης, με το καθαρό τους όνομα (slug). Το εσωτερικό ID βρίσκεται από τη βάση.
+const DEMO_SLUGS = ['test-restaurant'];
+
+async function isDemoShop(db, shop) {
+  if (DEMO_SLUGS.includes(shop)) return true;
+  const owners = await Promise.all(DEMO_SLUGS.map(s => db.ref(`slugs/${s}`).get().then(x => x.val()).catch(() => null)));
+  return owners.some(o => o && o.shop === shop);
+}
 
 const str = (v, max) => (typeof v === 'string' ? v.trim() : '').slice(0, max);
 
@@ -21,7 +27,9 @@ exports.handler = async (event) => {
   try {
     const b = JSON.parse(event.body || '{}');
     const shop = str(b.shop, 60);
-    if (!DEMO_SHOPS.has(shop)) return json(403, { error: 'not_demo' });
+    if (!/^[A-Za-z0-9_-]{1,60}$/.test(shop)) return json(400, { error: 'bad_request' });
+    const db = getDb();
+    if (!(await isDemoShop(db, shop))) return json(403, { error: 'not_demo' });
     const date = str(b.date, 10), time = str(b.time, 5);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^\d{2}:\d{2}$/.test(time)) return json(400, { error: 'bad_request' });
     const lang = normLang(b.lang);
@@ -32,7 +40,6 @@ exports.handler = async (event) => {
       location: str(b.location, 60), occasion: str(b.occasion, 200), comments: str(b.comments, 1000),
     };
 
-    const db = getDb();
     const [details, address, tz] = await Promise.all([
       db.ref(`shop_details/${shop}`).get().then(x => x.val() || {}),
       db.ref(`shop_profile/${shop}/info/address`).get().then(x => x.val() || ''),

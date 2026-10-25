@@ -2011,7 +2011,11 @@
         const shopID = await trResolveShop();
 
         // Σελίδα επίδειξης: καμία κράτηση δεν καταχωρείται, δείχνουμε τα email που θα στέλνονταν (?real=1 για κανονική δοκιμή)
-        const TR_DEMO = shopID === 'test-restaurant' && !new URLSearchParams(location.search).has('real');
+        // Το demo ορίζεται με το καθαρό όνομα (slug) του καταστήματος, γιατί το εσωτερικό ID είναι διαφορετικό
+        const TR_DEMO_SLUGS = ['test-restaurant'];
+        const trPathName = (location.pathname || '').replace(/^\/+|\/+$/g, '').toLowerCase();
+        const TR_DEMO = [trPathName, trSlug, shopID].some(x => x && TR_DEMO_SLUGS.includes(String(x).toLowerCase()))
+            && !new URLSearchParams(location.search).has('real');
         const trDemoHome = () => (currentLang === 'el' ? '/?lang=el' : '/' + currentLang + '/') + '#contact';
         if (TR_DEMO) {
             document.getElementById('demo-bar').style.display = 'block';
