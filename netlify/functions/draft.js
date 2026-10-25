@@ -13,6 +13,8 @@
 //   { action:'list' }                                  superadmin
 //   { action:'delete', shop }                          superadmin (μόνο προσχέδια)
 //   { action:'renew', shop }                           superadmin: νέο link (το παλιό σταματά να ισχύει)
+//   { action:'get', shop }                             superadmin: τα στοιχεία για επεξεργασία
+//   { action:'update', shop, displayName, slug?, ... } superadmin: διόρθωση προσχεδίου (το link δεν αλλάζει)
 
 const crypto = require('crypto');
 const admin = require('firebase-admin');
@@ -38,6 +40,10 @@ async function isSuperadmin(event) {
 }
 
 const previewUrl = (slug, shop, token) => `${BASE}${slug || shop}?claim=${token}`;
+
+const INFO_FIELDS = [['address', 200], ['phone', 30], ['hours', 200], ['description', 500], ['tagline', 120]];
+// Μόνο εικόνες από https (στην πράξη το Cloudinary του TableReserve)
+const imgUrl = v => { const u = str(v, 500); return /^https:\/\//.test(u) ? u : ''; };
 
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return preflightOk();
@@ -96,14 +102,12 @@ exports.handler = async (event) => {
     const now = Date.now();
     const token = newToken();
     const info = { tz: 'Europe/Athens' };
-    for (const [k, max] of [['address', 200], ['phone', 30], ['hours', 200], ['description', 500], ['tagline', 120]]) {
-      const v = str(b[k], max); if (v) info[k] = v;
-    }
-    const cover = str(b.cover, 500);
+    for (const [k, max] of INFO_FIELDS) { const v = str(b[k], max); if (v) info[k] = v; }
     await db.ref().update({
       [`shop_details/${shopId}`]: { displayName, status: 'draft', source: 'draft', createdAt: now, lang: 'el' },
       [`shop_profile/${shopId}/info`]: info,
-      [`shop_profile/${shopId}/coverPhoto`]: /^https:\/\//.test(cover) ? cover : DEFAULT_COVER,
+      [`shop_profile/${shopId}/coverPhoto`]: imgUrl(b.cover) || DEFAULT_COVER,
+      [`shop_profile/${shopId}/logoPhoto`]: imgUrl(b.logo) || null,
       [`drafts/${shopId}`]: { token, createdAt: now, views: 0 },
     });
 
@@ -132,6 +136,54 @@ exports.handler = async (event) => {
       };
     }).filter(x => x.status !== 'deleted').sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     return json(200, { ok: true, drafts: out });
+  }
+
+  // ── Στοιχεία προσχεδίου για επεξεργασία ──
+  if (action === 'get') {
+    const shop = str(b.shop, 60);
+    if (!/^[A-Za-z0-9_-]{1,60}$/.test(shop)) return json(400, { error: 'bad_request' });
+    const [details, profile] = await Promise.all([
+      db.ref(`shop_details/${shop}`).get().then(x => x.val()),
+      db.ref(`shop_profile/${shop}`).get().then(x => x.val() || {}),
+    ]);
+    if (!details || details.status !== 'draft') return json(409, { error: 'not_draft' });
+    const info = profile.info || {};
+    const out = { shopId: shop, displayName: details.displayName || '', slug: details.slug || '',
+      cover: profile.coverPhoto === DEFAULT_COVER ? '' : (profile.coverPhoto || ''), logo: profile.logoPhoto || '' };
+    for (const [k] of INFO_FIELDS) out[k] = info[k] || '';
+    return json(200, { ok: true, draft: out });
+  }
+
+  // ── Διόρθωση προσχεδίου ──
+  if (action === 'update') {
+    const shop = str(b.shop, 60);
+    if (!/^[A-Za-z0-9_-]{1,60}$/.test(shop)) return json(400, { error: 'bad_request' });
+    const details = (await db.ref(`shop_details/${shop}`).get()).val();
+    if (!details || details.status !== 'draft') return json(409, { error: 'not_draft' });
+    const displayName = str(b.displayName, 80);
+    if (!displayName) return json(400, { error: 'missing_name' });
+
+    // Αλλαγή link: μόνο αν είναι ελεύθερο. Το παλιό ελευθερώνεται (το προσχέδιο δεν είναι δημόσιο).
+    const wanted = toSlug(str(b.slug, 40));
+    let slug = details.slug || null;
+    if (wanted && wanted !== slug) {
+      const why = await unavailableReason(db, wanted, shop);
+      if (why) return json(409, { error: 'slug_' + why });
+      if (!(await claim(db, wanted, shop))) return json(409, { error: 'slug_taken' });
+      if (slug) await db.ref(`slugs/${slug}`).remove().catch(() => {});
+      slug = wanted;
+    }
+
+    const upd = {
+      [`shop_details/${shop}/displayName`]: displayName,
+      [`shop_details/${shop}/slug`]: slug,
+      [`shop_profile/${shop}/coverPhoto`]: imgUrl(b.cover) || DEFAULT_COVER,
+      [`shop_profile/${shop}/logoPhoto`]: imgUrl(b.logo) || null,
+    };
+    for (const [k, max] of INFO_FIELDS) upd[`shop_profile/${shop}/info/${k}`] = str(b[k], max) || null;
+    await db.ref().update(upd);
+    const token = (await db.ref(`drafts/${shop}/token`).get()).val();
+    return json(200, { ok: true, shopId: shop, slug, url: token ? previewUrl(slug, shop, token) : null });
   }
 
   // ── Νέο link (το παλιό σταματά να ισχύει) ──

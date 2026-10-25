@@ -356,6 +356,15 @@
         .dr-btn-main { background:#2563eb; color:#fff; }
         .dr-btn-sec { background:#fff; color:#1d4ed8; border:1px solid #bfdbfe !important; }
         .g-badge.blue { background:#dbeafe; color:#1e40af; }
+        .dr-photos { display:grid; grid-template-columns:2fr 1fr; gap:12px; }
+        .dr-pick { position:relative; border:1.5px dashed #cbd5e1; border-radius:var(--radius-md); background:#fafbfc; height:110px; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; text-align:center; font-size:.8rem; color:var(--text-muted); padding:8px; }
+        .dr-pick:hover { border-color:var(--purple); }
+        .dr-pick img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .dr-pick.logo img { object-fit:contain; background:#fff; padding:8px; }
+        .dr-pick .x { position:absolute; top:6px; right:6px; z-index:2; width:26px; height:26px; border-radius:50%; border:none; background:rgba(15,23,42,.75); color:#fff; cursor:pointer; font-size:14px; line-height:26px; padding:0; }
+        .dr-pick .busy { position:absolute; inset:0; z-index:3; background:rgba(255,255,255,.8); display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--purple); }
+        .dr-edit-bar { display:none; background:#fef3c7; color:#92400e; border-radius:var(--radius-md); padding:10px 12px; font-size:.85rem; margin-bottom:14px; }
+        .dr-edit-bar button { background:none; border:none; color:#92400e; font-weight:700; text-decoration:underline; cursor:pointer; font-size:.85rem; margin-left:6px; }
         .g-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 900; display: none; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto; }
         .g-overlay.open { display: flex; }
         .g-modal { background: var(--white); border-radius: var(--radius-xl); width: 100%; max-width: 620px; padding: 28px 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
@@ -481,7 +490,8 @@
                     </div>
 
                     <div class="card" style="margin-top:18px;">
-                        <div class="card-title"><div class="icon">📝</div> Νέο προσχέδιο (πιλοτικό)</div>
+                        <div class="card-title" id="dr-form-card"><div class="icon">📝</div> <span id="dr-form-title">Νέο προσχέδιο (πιλοτικό)</span></div>
+                        <div class="dr-edit-bar" id="dr-edit-bar">Επεξεργάζεσαι το «<b id="dr-edit-name"></b>». Το link που έχεις στείλει δεν αλλάζει (εκτός αν αλλάξεις το όνομα του link).<button onclick="cancelDraftEdit()">Ακύρωση</button></div>
                         <div class="hint" style="margin-top:-6px;margin-bottom:14px;font-size:.82rem;">Ετοιμάζεις τη σελίδα ενός μαγαζιού χωρίς λογαριασμό. Ο ιδιοκτήτης τη βλέπει με το προσωπικό link και την ενεργοποιεί μόνος του (6 μήνες δωρεάν).</div>
                         <div class="input-group">
                             <label for="dr-name">Όνομα μαγαζιού *</label>
@@ -515,9 +525,14 @@
                             <textarea id="dr-desc" maxlength="500" placeholder="2-3 προτάσεις για το μαγαζί"></textarea>
                         </div>
                         <div class="input-group">
-                            <label for="dr-cover">Εξώφυλλο (link εικόνας, προαιρετικό)</label>
-                            <input type="url" id="dr-cover" maxlength="500" placeholder="https://...">
-                            <div class="hint">Αν το αφήσεις κενό, μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης ανεβάζει τις δικές του μετά την ενεργοποίηση.</div>
+                            <label>Φωτογραφίες (προαιρετικά)</label>
+                            <div class="dr-photos">
+                                <div class="dr-pick" id="dr-pick-cover" onclick="drPick('cover')"><span>📷 Εξώφυλλο<br>πάτα για επιλογή</span></div>
+                                <div class="dr-pick logo" id="dr-pick-logo" onclick="drPick('logo')"><span>Λογότυπο<br>πάτα για επιλογή</span></div>
+                            </div>
+                            <input type="file" id="dr-file" accept="image/*" style="display:none" onchange="drUpload(this)">
+                            <input type="hidden" id="dr-cover"><input type="hidden" id="dr-logo">
+                            <div class="hint">Χωρίς εξώφυλλο μπαίνει η φωτογραφία με τα κεριά του tablereserve.gr. Ο ιδιοκτήτης μπορεί να τις αλλάξει μετά την ενεργοποίηση.</div>
                         </div>
                         <button class="btn-purple" id="dr-btn" onclick="createDraft()">📝 Δημιουργία προσχεδίου</button>
                         <div class="dr-result" id="dr-result">
@@ -902,8 +917,10 @@ ${url}
             btn.innerHTML = '<span class="spinner"></span> Δημιουργία...'; btn.disabled = true;
             document.getElementById('dr-result').style.display = 'none';
             try {
-                const out = await drCall({ action: 'create', displayName: name, slug, address: v('dr-address'), phone: v('dr-phone'),
-                    hours: v('dr-hours'), tagline: v('dr-tagline'), description: v('dr-desc'), cover: v('dr-cover') });
+                const editing = window._drEdit;
+                const out = await drCall({ action: editing ? 'update' : 'create', shop: editing || undefined, displayName: name, slug,
+                    address: v('dr-address'), phone: v('dr-phone'), hours: v('dr-hours'), tagline: v('dr-tagline'),
+                    description: v('dr-desc'), cover: v('dr-cover'), logo: v('dr-logo') });
                 if (!out.ok) {
                     const m = { slug_taken: 'Αυτό το link το έχει ήδη άλλο μαγαζί', slug_reserved: 'Αυτό το link είναι δεσμευμένο, διάλεξε άλλο',
                         slug_invalid: 'Το link θέλει 3-30 λατινικά, αριθμούς ή παύλα', missing_name: 'Γράψε το όνομα του μαγαζιού', not_superadmin: 'Δεν έχεις δικαίωμα' };
@@ -913,14 +930,77 @@ ${url}
                 document.getElementById('dr-result-url').textContent = out.url;
                 document.getElementById('dr-result-open').href = out.url;
                 document.getElementById('dr-result').style.display = 'block';
-                ['dr-name', 'dr-slug', 'dr-address', 'dr-phone', 'dr-hours', 'dr-tagline', 'dr-desc', 'dr-cover'].forEach(id => { const el = document.getElementById(id); el.value = ''; delete el.dataset.touched; });
-                showToast('✅ Το προσχέδιο δημιουργήθηκε', 'success');
+                drResetForm();
+                showToast(editing ? '✅ Οι αλλαγές αποθηκεύτηκαν' : '✅ Το προσχέδιο δημιουργήθηκε', 'success');
                 loadDrafts();
             } catch (e) {
                 showToast('Σφάλμα σύνδεσης με τον server', 'error');
             } finally {
-                btn.innerHTML = '📝 Δημιουργία προσχεδίου'; btn.disabled = false;
+                btn.innerHTML = window._drEdit ? '💾 Αποθήκευση αλλαγών' : '📝 Δημιουργία προσχεδίου'; btn.disabled = false;
             }
+        };
+
+        // Φωτογραφίες: ανεβαίνουν στο Cloudinary (ίδιο preset με το admin) και κρατάμε μόνο το link
+        const CLD_CLOUD = 'djs1rbsbn', CLD_PRESET = 'tablereserve';
+        let drPickKind = 'cover';
+        const DR_PICK_LABEL = { cover: '📷 Εξώφυλλο<br>πάτα για επιλογή', logo: 'Λογότυπο<br>πάτα για επιλογή' };
+        function drShowPhoto(kind, url) {
+            document.getElementById('dr-' + kind).value = url || '';
+            const box = document.getElementById('dr-pick-' + kind);
+            box.innerHTML = url
+                ? `<img src="${gEsc(url.replace('/upload/', '/upload/f_auto,q_auto,c_limit,w_600/'))}" alt=""><button type="button" class="x" title="Αφαίρεση" onclick="event.stopPropagation();drShowPhoto('${kind}','')">✕</button>`
+                : `<span>${DR_PICK_LABEL[kind]}</span>`;
+        }
+        window.drShowPhoto = drShowPhoto;
+        window.drPick = (kind) => { drPickKind = kind; document.getElementById('dr-file').click(); };
+        window.drUpload = async (input) => {
+            const file = input.files && input.files[0];
+            input.value = '';
+            if (!file) return;
+            if (!/^image\//.test(file.type)) return showToast('Διάλεξε αρχείο εικόνας', 'error');
+            if (file.size > 15 * 1024 * 1024) return showToast('Η εικόνα είναι πολύ μεγάλη (έως 15 MB)', 'error');
+            const kind = drPickKind, box = document.getElementById('dr-pick-' + kind);
+            const busy = document.createElement('div'); busy.className = 'busy'; busy.textContent = 'Ανέβασμα...'; box.appendChild(busy);
+            try {
+                const fd = new FormData();
+                fd.append('file', file); fd.append('upload_preset', CLD_PRESET); fd.append('tags', 'tablereserve,draft,' + kind);
+                const r = await fetch(`https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`, { method: 'POST', body: fd });
+                const d = await r.json().catch(() => ({}));
+                if (!r.ok || !d.secure_url) throw new Error('upload');
+                drShowPhoto(kind, d.secure_url);
+            } catch (e) {
+                busy.remove();
+                showToast('Το ανέβασμα απέτυχε, δοκίμασε ξανά', 'error');
+            }
+        };
+
+        function drResetForm() {
+            ['dr-name', 'dr-slug', 'dr-address', 'dr-phone', 'dr-hours', 'dr-tagline', 'dr-desc'].forEach(id => { const el = document.getElementById(id); el.value = ''; delete el.dataset.touched; });
+            drShowPhoto('cover', ''); drShowPhoto('logo', '');
+            window._drEdit = null;
+            document.getElementById('dr-form-title').textContent = 'Νέο προσχέδιο (πιλοτικό)';
+            document.getElementById('dr-edit-bar').style.display = 'none';
+            document.getElementById('dr-btn').innerHTML = '📝 Δημιουργία προσχεδίου';
+        }
+        window.cancelDraftEdit = () => { drResetForm(); document.getElementById('dr-result').style.display = 'none'; };
+
+        window.editDraft = async (shopId) => {
+            const out = await drCall({ action: 'get', shop: shopId }).catch(() => ({}));
+            if (!out.ok) return showToast(out.error === 'not_draft' ? 'Έχει ήδη ενεργοποιηθεί: τα στοιχεία τα αλλάζει πλέον ο ιδιοκτήτης από το admin' : 'Σφάλμα φόρτωσης', 'error');
+            const d = out.draft;
+            drResetForm();
+            window._drEdit = shopId;
+            const set = (id, v) => { document.getElementById(id).value = v || ''; };
+            set('dr-name', d.displayName); set('dr-slug', d.slug); set('dr-address', d.address); set('dr-phone', d.phone);
+            set('dr-hours', d.hours); set('dr-tagline', d.tagline); set('dr-desc', d.description);
+            document.getElementById('dr-slug').dataset.touched = '1';
+            drShowPhoto('cover', d.cover); drShowPhoto('logo', d.logo);
+            document.getElementById('dr-form-title').textContent = 'Επεξεργασία προσχεδίου';
+            document.getElementById('dr-edit-name').textContent = d.displayName;
+            document.getElementById('dr-edit-bar').style.display = 'block';
+            document.getElementById('dr-btn').innerHTML = '💾 Αποθήκευση αλλαγών';
+            document.getElementById('dr-result').style.display = 'none';
+            document.getElementById('dr-form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
         const drDate = ms => ms ? new Date(ms).toLocaleString('el-GR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
@@ -952,6 +1032,7 @@ ${url}
                             <div>${drState(d)}</div>
                         </div>
                         <div class="shop-actions">${isDraft ? `
+                            <button class="btn-icon copy" title="Επεξεργασία" onclick="editDraft('${d.shopId}')">✏️</button>
                             <button class="btn-icon copy" title="Αντιγραφή μηνύματος για DM" onclick="copyDraftMsg(window._drafts['${d.shopId}'])">💬</button>
                             <button class="btn-icon copy" title="Άνοιγμα προεπισκόπησης" onclick="window.open(window._drafts['${d.shopId}'].url,'_blank','noopener')">↗</button>
                             <button class="btn-icon copy" title="Νέο link (το παλιό σταματά να ισχύει)" onclick="renewDraft('${d.shopId}')">🔄</button>
