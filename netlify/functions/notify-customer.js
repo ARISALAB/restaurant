@@ -107,9 +107,9 @@ exports.handler = async (event) => {
 
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;text-align:center;margin-bottom:16px;">
         <p style="color:#334155;font-size:13px;font-weight:600;margin:0 0 12px;">${txt.cal_title}</p>
-        <a href="${gcalUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_google}</a>
-        <a href="${appleUrl}" style="display:inline-block;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:10px 18px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;margin:4px;">${txt.cal_other}</a>
-        ${walletUrl ? `<div style="margin-top:10px;"><a href="${walletUrl}" style="display:inline-block;padding:8px;"><img src="https://tablereserve.gr/wallet/${L === 'el' ? 'add-el.png' : 'add-en.png'}" alt="${m.wallet_alt}" height="48" style="height:48px;width:auto;border:0;display:block;"></a></div>` : ''}
+        <a href="${gcalUrl}" style="display:block;max-width:240px;margin:0 auto 8px;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:11px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap;text-align:center;">${txt.cal_google}</a>
+        <a href="${appleUrl}" style="display:block;max-width:240px;margin:0 auto 8px;background:#fff;color:#1d4ed8;border:1px solid #bfdbfe;padding:11px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap;text-align:center;">${txt.cal_other}</a>
+        ${walletUrl ? `<div style="margin-top:12px;text-align:center;line-height:0;"><a href="${walletUrl}" style="display:inline-block;"><img src="https://tablereserve.gr/wallet/${L === 'el' ? 'add-el.png' : 'add-en.png'}" alt="${m.wallet_alt}" width="${L === 'el' ? 191 : 159}" height="44" style="display:block;width:${L === 'el' ? 191 : 159}px;max-width:100%;height:auto;border:0;"></a></div>` : ''}
       </div>
 
       <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:20px;text-align:center;">
