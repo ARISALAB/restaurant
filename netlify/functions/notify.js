@@ -2,7 +2,7 @@
 const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
-const { locationLabel, msg, shopLang, fmtDate } = require('./_shared/i18n');
+const { locationLabel, occasionLabel, msg, shopLang, fmtDate } = require('./_shared/i18n');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -40,8 +40,8 @@ exports.handler = async (event) => {
     const loc = locationLabel(booking.location, lang);
     const row = (l, v) => `
         <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:35%;">${l}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${v}</td>
+          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:34%;vertical-align:top;">${l}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;word-break:break-word;overflow-wrap:anywhere;">${v}</td>
         </tr>`;
 
     await resend.emails.send({
@@ -52,28 +52,27 @@ exports.handler = async (event) => {
 <!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
-<body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:20px;">
+<body style="font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:12px;">
   <div style="max-width:580px;margin:0 auto;">
-    <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:28px 32px;text-align:center;">
+    <div style="background:#2563eb;border-radius:12px 12px 0 0;padding:24px 20px;text-align:center;">
       <h1 style="color:#fff;margin:0;font-size:20px;font-weight:700;">${t.head}</h1>
       <p style="color:rgba(255,255,255,0.8);margin:6px 0 0;font-size:14px;">${esc(shopName)}</p>
     </div>
-    <div style="background:#fff;padding:28px 32px;">
+    <div style="background:#fff;padding:24px 20px;">
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px;margin-bottom:20px;text-align:center;">
-        <p style="margin:0;color:#1d4ed8;font-size:22px;font-weight:700;">${esc(booking.date ? fmtDate(booking.date, lang) : '-')} &bull; ${esc(booking.time || '-')}</p>
-        <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests || '-')} ${t.persons}${loc ? ' | ' + esc(loc) : ''}</p>
+        <p style="margin:0;color:#1d4ed8;font-size:16px;font-weight:600;">${esc(booking.date ? fmtDate(booking.date, lang) : '-')}</p>
+        <p style="margin:2px 0 0;color:#1d4ed8;font-size:28px;font-weight:700;line-height:1.2;">${esc(booking.time || '-')}</p>
+        <p style="margin:6px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests || '-')} ${t.persons}${loc ? ' &middot; ' + esc(loc) : ''}</p>
       </div>
-      <table style="width:100%;border-collapse:collapse;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;table-layout:fixed;">
         ${row(t.name, esc(booking.name || '-'))}
-        ${row(t.phone, esc(booking.phone || '-'))}
-        ${booking.email ? row('Email', esc(booking.email)) : ''}
-        ${booking.occasion ? row(t.occasion, esc(booking.occasion)) : ''}
+        ${row(t.phone, booking.phone ? `<a href="tel:${esc(String(booking.phone).replace(/[^\d+]/g, ''))}" style="color:#1d4ed8;text-decoration:none;">${esc(booking.phone)}</a>` : '-')}
+        ${booking.email ? row('Email', `<a href="mailto:${esc(booking.email)}" style="color:#1d4ed8;text-decoration:none;">${esc(booking.email)}</a>`) : ''}
+        ${booking.occasion ? row(t.occasion, esc(occasionLabel(booking.occasion, lang))) : ''}
         ${booking.comments ? row(t.comments, esc(booking.comments)) : ''}
       </table>
       <div style="margin-top:24px;text-align:center;">
-        <a href="https://tablereserve.gr/admin" style="display:inline-block;background:#2563eb;color:#fff;padding:13px 28px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;">
-          ${t.btn}
-        </a>
+        <a href="https://tablereserve.gr/admin" style="display:block;max-width:280px;margin:0 auto;background:#2563eb;color:#fff;padding:13px 20px;border-radius:8px;text-decoration:none;font-size:15px;font-weight:600;text-align:center;white-space:nowrap;">${t.btn}</a>
       </div>
     </div>
     <div style="background:#f8fafc;border-radius:0 0 12px 12px;padding:16px;text-align:center;border:1px solid #e2e8f0;border-top:none;">
