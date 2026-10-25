@@ -24,10 +24,7 @@ const T = {
 
 function row(label, value) {
   if (!value) return '';
-  return `<tr>
-    <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:34%;vertical-align:top;">${label}</td>
-    <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;word-break:break-word;overflow-wrap:anywhere;">${esc(value)}</td>
-  </tr>`;
+  return `<tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${label}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${esc(value)}</p></td></tr>`;
 }
 
 function buildShopEmail(kind, booking, shopName, lang) {
@@ -51,7 +48,7 @@ function buildShopEmail(kind, booking, shopName, lang) {
         <p style="margin:2px 0 0;color:${boxText};font-size:28px;font-weight:700;line-height:1.2;">${esc(b.time || '-')}</p>
         <p style="margin:6px 0 0;color:${boxSub};font-size:14px;">${esc(b.guests || '-')} ${t.guests}${b.location ? ' &middot; ' + esc(locationLabel(b.location, lang)) : ''}</p>
       </div>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;table-layout:fixed;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-top:1px solid #e2e8f0;">
         ${row(t.name, b.name || '-')}
         ${row(t.phone, b.phone || '-')}
         ${row('Email', b.email)}

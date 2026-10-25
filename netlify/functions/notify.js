@@ -39,10 +39,7 @@ exports.handler = async (event) => {
     };
     const loc = locationLabel(booking.location, lang);
     const row = (l, v) => `
-        <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:34%;vertical-align:top;">${l}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;word-break:break-word;overflow-wrap:anywhere;">${v}</td>
-        </tr>`;
+        <tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${l}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${v}</p></td></tr>`;
 
     await resend.emails.send({
       from: 'TableReserve <noreply@tablereserve.gr>',
@@ -64,7 +61,7 @@ exports.handler = async (event) => {
         <p style="margin:2px 0 0;color:#1d4ed8;font-size:28px;font-weight:700;line-height:1.2;">${esc(booking.time || '-')}</p>
         <p style="margin:6px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests || '-')} ${t.persons}${loc ? ' &middot; ' + esc(loc) : ''}</p>
       </div>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;table-layout:fixed;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-top:1px solid #e2e8f0;">
         ${row(t.name, esc(booking.name || '-'))}
         ${row(t.phone, booking.phone ? `<a href="tel:${esc(String(booking.phone).replace(/[^\d+]/g, ''))}" style="color:#1d4ed8;text-decoration:none;">${esc(booking.phone)}</a>` : '-')}
         ${booking.email ? row('Email', `<a href="mailto:${esc(booking.email)}" style="color:#1d4ed8;text-decoration:none;">${esc(booking.email)}</a>`) : ''}

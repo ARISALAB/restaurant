@@ -88,21 +88,10 @@ exports.handler = async (event) => {
         <p style="margin:4px 0 0;color:#3b82f6;font-size:14px;">${esc(booking.guests)} ${txt.persons} &bull; ${esc(shopName)}</p>
       </div>
 
-      <table style="width:100%;border-collapse:collapse;margin-bottom:24px;">
-        <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;width:40%;">${txt.location_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(locationLabel(booking.location, L)) || txt.no_pref}</td>
-        </tr>
-        ${booking.occasion ? `
-        <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${txt.occasion_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(occasionLabel(booking.occasion, L))}</td>
-        </tr>` : ''}
-        ${booking.comments ? `
-        <tr>
-          <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${txt.comments_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.comments)}</td>
-        </tr>` : ''}
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-top:1px solid #e2e8f0;margin-bottom:24px;">
+        <tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${txt.location_lbl}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${esc(locationLabel(booking.location, L)) || txt.no_pref}</p></td></tr>
+        ${booking.occasion ? `<tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${txt.occasion_lbl}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${esc(occasionLabel(booking.occasion, L))}</p></td></tr>` : ''}
+        ${booking.comments ? `<tr><td style="padding:12px 2px;border-bottom:1px solid #e2e8f0;"><p style="font-size:12px;font-weight:600;color:#64748b;margin:0 0 3px;letter-spacing:0.02em;">${txt.comments_lbl}</p><p style="font-size:15px;color:#0f172a;margin:0;word-break:break-word;overflow-wrap:anywhere;">${esc(booking.comments)}</p></td></tr>` : ''}
       </table>
 
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;text-align:center;margin-bottom:16px;">
