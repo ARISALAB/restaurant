@@ -212,4 +212,87 @@ async function shopLang(db, shop, details) {
   return normLang(d && d.lang);
 }
 
-module.exports = { LANGS, LOCALE, normLang, fmtDate, msg, locationLabel, shopLang };
+
+// Οι έτοιμες περιστάσεις (λίστα στη φόρμα) αποθηκεύονται στα ελληνικά. Εδώ μόνο για εμφάνιση.
+const OCC = {
+  "el": {
+    "birthday": "Γενέθλια",
+    "anniversary": "Επέτειος",
+    "nameday": "Ονομαστική γιορτή",
+    "romantic": "Ρομαντικό δείπνο",
+    "proposal": "Πρόταση γάμου",
+    "business": "Επαγγελματικό γεύμα",
+    "family": "Οικογενειακή γιορτή"
+  },
+  "en": {
+    "birthday": "Birthday",
+    "anniversary": "Anniversary",
+    "nameday": "Name day",
+    "romantic": "Romantic dinner",
+    "proposal": "Marriage proposal",
+    "business": "Business meal",
+    "family": "Family celebration"
+  },
+  "de": {
+    "birthday": "Geburtstag",
+    "anniversary": "Jahrestag",
+    "nameday": "Namenstag",
+    "romantic": "Romantisches Abendessen",
+    "proposal": "Heiratsantrag",
+    "business": "Geschäftsessen",
+    "family": "Familienfeier"
+  },
+  "fr": {
+    "birthday": "Anniversaire",
+    "anniversary": "Anniversaire de couple",
+    "nameday": "Fête du prénom",
+    "romantic": "Dîner romantique",
+    "proposal": "Demande en mariage",
+    "business": "Repas d'affaires",
+    "family": "Fête de famille"
+  },
+  "it": {
+    "birthday": "Compleanno",
+    "anniversary": "Anniversario",
+    "nameday": "Onomastico",
+    "romantic": "Cena romantica",
+    "proposal": "Proposta di matrimonio",
+    "business": "Pranzo di lavoro",
+    "family": "Festa di famiglia"
+  },
+  "es": {
+    "birthday": "Cumpleaños",
+    "anniversary": "Aniversario",
+    "nameday": "Santo (onomástica)",
+    "romantic": "Cena romántica",
+    "proposal": "Pedida de mano",
+    "business": "Comida de negocios",
+    "family": "Celebración familiar"
+  },
+  "tr": {
+    "birthday": "Doğum günü",
+    "anniversary": "Yıldönümü",
+    "nameday": "İsim günü",
+    "romantic": "Romantik akşam yemeği",
+    "proposal": "Evlilik teklifi",
+    "business": "İş yemeği",
+    "family": "Aile kutlaması"
+  },
+  "pt": {
+    "birthday": "Aniversário",
+    "anniversary": "Aniversário de casamento",
+    "nameday": "Dia do santo",
+    "romantic": "Jantar romântico",
+    "proposal": "Pedido de casamento",
+    "business": "Almoço de negócios",
+    "family": "Celebração familiar"
+  }
+};
+const OCC_KEY = Object.fromEntries(Object.entries(OCC.el).map(([k, v]) => [v, k]));
+function occasionLabel(value, lang) {
+  if (!value) return '';
+  const k = OCC_KEY[value];
+  return k ? (OCC[normLang(lang)] || OCC.en)[k] : value;
+}
+
+module.exports = { LANGS, LOCALE, normLang, fmtDate, msg, locationLabel, occasionLabel, shopLang };

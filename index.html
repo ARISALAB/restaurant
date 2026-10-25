@@ -924,9 +924,9 @@
     <div id="booking-modal" class="modal">
         <div class="modal-content card">
             <div class="card-title" style="margin-bottom:24px;"><div class="icon">✍️</div> <span data-i18n-key="booking_details">Στοιχεία Κράτησης</span></div>
-            <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" data-i18n-placeholder="fullname_ph"></div>
-            <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" placeholder="69XXXXXXXX"></div>
-            <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="cust-email" placeholder="name@example.com" required></div>
+            <div class="input-group"><label data-i18n-key="fullname">Ονοματεπώνυμο *</label><input type="text" id="cust-name" autocomplete="name" autocapitalize="words" enterkeyhint="next" data-i18n-placeholder="fullname_ph"></div>
+            <div class="input-group"><label data-i18n-key="phone">Τηλέφωνο *</label><input type="tel" id="cust-phone" autocomplete="tel" inputmode="tel" enterkeyhint="next" placeholder="69XXXXXXXX"></div>
+            <div class="input-group"><label data-i18n-key="email_required">Email *</label><input type="email" id="cust-email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="name@example.com" required></div>
             <div class="input-group">
                 <label data-i18n-key="location_pref">Προτίμηση Χώρου</label>
                 <select id="cust-location">
@@ -935,8 +935,11 @@
                     <option value="Δεν έχω προτίμηση" data-i18n-key="no_pref">Δεν έχω προτίμηση</option>
                 </select>
             </div>
-            <div class="input-group"><label data-i18n-key="occasion">Ειδικό Γεγονός</label><input type="text" id="cust-occasion" data-i18n-placeholder="occasion_ph"></div>
-            <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" data-i18n-placeholder="requests_ph"></textarea></div>
+            <div class="input-group"><label data-i18n-key="occasion" for="cust-occasion">Ειδικό Γεγονός</label>
+                <select id="cust-occasion" onchange="var o=document.getElementById('cust-occasion-other');o.style.display=this.value==='__other'?'block':'none';if(this.value==='__other')o.focus();"><option value="" data-i18n-key="occ_none">— Καμία —</option><option value="Γενέθλια" data-i18n-key="occ_birthday">Γενέθλια</option><option value="Επέτειος" data-i18n-key="occ_anniversary">Επέτειος</option><option value="Ονομαστική γιορτή" data-i18n-key="occ_nameday">Ονομαστική γιορτή</option><option value="Ρομαντικό δείπνο" data-i18n-key="occ_romantic">Ρομαντικό δείπνο</option><option value="Πρόταση γάμου" data-i18n-key="occ_proposal">Πρόταση γάμου</option><option value="Επαγγελματικό γεύμα" data-i18n-key="occ_business">Επαγγελματικό γεύμα</option><option value="Οικογενειακή γιορτή" data-i18n-key="occ_family">Οικογενειακή γιορτή</option><option value="__other" data-i18n-key="occ_other">Άλλο…</option></select>
+                <input type="text" id="cust-occasion-other" maxlength="120" autocomplete="off" enterkeyhint="next" data-i18n-placeholder="occ_other_ph" style="display:none;margin-top:10px;">
+            </div>
+            <div class="input-group"><label data-i18n-key="requests">Επιπλέον Αιτήματα</label><textarea id="cust-comments" rows="2" autocomplete="off" enterkeyhint="done" data-i18n-placeholder="requests_ph"></textarea></div>
             <input type="text" id="cust-website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
             <button class="btn-primary" id="btn-save" data-i18n-key="confirm_booking">✅ Επιβεβαίωση Κράτησης</button>
             <button class="btn-link" id="close-modal" data-i18n-key="cancel">Ακύρωση</button>
@@ -1051,7 +1054,7 @@
                 booking_details: "Στοιχεία Κράτησης", fullname: "Ονοματεπώνυμο *",
                 fullname_ph: "π.χ. Νίκος Παπαδόπουλος", phone: "Τηλέφωνο *", email_optional: "Email (Προαιρετικό)", email_required: "Email *",
                 location_pref: "Προτίμηση Χώρου", indoor: "Εσωτερικός Χώρος", outdoor: "Εξωτερικός Χώρος",
-                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος",
+                no_pref: "Δεν έχω προτίμηση", occasion: "Ειδικό Γεγονός", occasion_ph: "π.χ. Γενέθλια, Επέτειος", occ_none: "— Καμία —", occ_birthday: "Γενέθλια", occ_anniversary: "Επέτειος", occ_nameday: "Ονομαστική γιορτή", occ_romantic: "Ρομαντικό δείπνο", occ_proposal: "Πρόταση γάμου", occ_business: "Επαγγελματικό γεύμα", occ_family: "Οικογενειακή γιορτή", occ_other: "Άλλο…", occ_other_ph: "Γράψτε την περίσταση",
                 requests: "Επιπλέον Αιτήματα", requests_ph: "Οποιαδήποτε ειδική παραγγελία...",
                 confirm_booking: "✅ Επιβεβαίωση Κράτησης", cancel: "Ακύρωση",
                 slot_full: "Πλήρες", slot_too_many: "Δεν υπάρχουν αρκετές θέσεις για τόσα άτομα σε αυτή την ώρα", pick_date: "Επιλέξτε ημερομηνία για να δείτε τις διαθέσιμες ώρες.", day_closed: "Το κατάστημα είναι κλειστό αυτή την ημέρα. Επιλέξτε άλλη ημερομηνία.", day_full: "Όλες οι ώρες αυτής της ημέρας είναι πλήρεις. Δοκιμάστε άλλη ημερομηνία ή λιγότερα άτομα.", day_over: "Δεν υπάρχουν άλλες διαθέσιμες ώρες για σήμερα. Επιλέξτε άλλη ημερομηνία.", slot_taken_alert: "Δυστυχώς αυτή η ώρα μόλις γέμισε. Επιλέξτε άλλη ώρα.", rate_limited: "Έγιναν πολλές κρατήσεις από αυτή τη σύνδεση. Δοκιμάστε ξανά σε λίγα λεπτά ή τηλεφωνήστε στο κατάστημα.",
@@ -1126,7 +1129,7 @@
                 booking_details: "Booking Details", fullname: "Full Name *",
                 fullname_ph: "e.g. John Smith", phone: "Phone *", email_optional: "Email (Optional)", email_required: "Email *",
                 location_pref: "Seating Preference", indoor: "Indoor", outdoor: "Outdoor",
-                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary",
+                no_pref: "No preference", occasion: "Special Occasion", occasion_ph: "e.g. Birthday, Anniversary", occ_none: "— None —", occ_birthday: "Birthday", occ_anniversary: "Anniversary", occ_nameday: "Name day", occ_romantic: "Romantic dinner", occ_proposal: "Marriage proposal", occ_business: "Business meal", occ_family: "Family celebration", occ_other: "Other…", occ_other_ph: "Describe the occasion",
                 requests: "Additional Requests", requests_ph: "Any special order...",
                 confirm_booking: "✅ Confirm Reservation", cancel: "Cancel",
                 slot_full: "Full", slot_too_many: "Not enough seats left for this many guests at this time", pick_date: "Choose a date to see available times.", day_closed: "The restaurant is closed on this day. Please choose another date.", day_full: "All times on this day are fully booked. Try another date or fewer guests.", day_over: "There are no more available times today. Please choose another date.", slot_taken_alert: "Sorry, this time has just filled up. Please choose another time.", rate_limited: "Too many bookings from this connection. Please try again in a few minutes or call the restaurant.",
@@ -1198,6 +1201,16 @@
                 "no_pref": "Keine Präferenz",
                 "occasion": "Besonderer Anlass",
                 "occasion_ph": "z. B. Geburtstag, Jahrestag",
+                "occ_none": "— Keiner —",
+                "occ_birthday": "Geburtstag",
+                "occ_anniversary": "Jahrestag",
+                "occ_nameday": "Namenstag",
+                "occ_romantic": "Romantisches Abendessen",
+                "occ_proposal": "Heiratsantrag",
+                "occ_business": "Geschäftsessen",
+                "occ_family": "Familienfeier",
+                "occ_other": "Anderes…",
+                "occ_other_ph": "Anlass beschreiben",
                 "requests": "Weitere Wünsche",
                 "requests_ph": "Besondere Wünsche...",
                 "confirm_booking": "✅ Reservierung bestätigen",
@@ -1284,6 +1297,16 @@
                 "no_pref": "Pas de préférence",
                 "occasion": "Occasion spéciale",
                 "occasion_ph": "ex. Anniversaire, anniversaire de mariage",
+                "occ_none": "— Aucune —",
+                "occ_birthday": "Anniversaire",
+                "occ_anniversary": "Anniversaire de couple",
+                "occ_nameday": "Fête du prénom",
+                "occ_romantic": "Dîner romantique",
+                "occ_proposal": "Demande en mariage",
+                "occ_business": "Repas d'affaires",
+                "occ_family": "Fête de famille",
+                "occ_other": "Autre…",
+                "occ_other_ph": "Décrivez l'occasion",
                 "requests": "Demandes particulières",
                 "requests_ph": "Une demande spéciale...",
                 "confirm_booking": "✅ Confirmer la réservation",
@@ -1370,6 +1393,16 @@
                 "no_pref": "Nessuna preferenza",
                 "occasion": "Occasione speciale",
                 "occasion_ph": "es. Compleanno, anniversario",
+                "occ_none": "— Nessuna —",
+                "occ_birthday": "Compleanno",
+                "occ_anniversary": "Anniversario",
+                "occ_nameday": "Onomastico",
+                "occ_romantic": "Cena romantica",
+                "occ_proposal": "Proposta di matrimonio",
+                "occ_business": "Pranzo di lavoro",
+                "occ_family": "Festa di famiglia",
+                "occ_other": "Altro…",
+                "occ_other_ph": "Descrivi l'occasione",
                 "requests": "Altre richieste",
                 "requests_ph": "Qualche richiesta particolare...",
                 "confirm_booking": "✅ Conferma la prenotazione",
@@ -1456,6 +1489,16 @@
                 "no_pref": "Sin preferencia",
                 "occasion": "Ocasión especial",
                 "occasion_ph": "p. ej. Cumpleaños, aniversario",
+                "occ_none": "— Ninguna —",
+                "occ_birthday": "Cumpleaños",
+                "occ_anniversary": "Aniversario",
+                "occ_nameday": "Santo (onomástica)",
+                "occ_romantic": "Cena romántica",
+                "occ_proposal": "Pedida de mano",
+                "occ_business": "Comida de negocios",
+                "occ_family": "Celebración familiar",
+                "occ_other": "Otra…",
+                "occ_other_ph": "Describe la ocasión",
                 "requests": "Otras peticiones",
                 "requests_ph": "Alguna petición especial...",
                 "confirm_booking": "✅ Confirmar reserva",
@@ -1542,6 +1585,16 @@
                 "no_pref": "Fark etmez",
                 "occasion": "Özel gün",
                 "occasion_ph": "örn. Doğum günü, yıldönümü",
+                "occ_none": "— Yok —",
+                "occ_birthday": "Doğum günü",
+                "occ_anniversary": "Yıldönümü",
+                "occ_nameday": "İsim günü",
+                "occ_romantic": "Romantik akşam yemeği",
+                "occ_proposal": "Evlilik teklifi",
+                "occ_business": "İş yemeği",
+                "occ_family": "Aile kutlaması",
+                "occ_other": "Diğer…",
+                "occ_other_ph": "Özel günü yazın",
                 "requests": "Ek istekler",
                 "requests_ph": "Özel bir isteğiniz...",
                 "confirm_booking": "✅ Rezervasyonu onayla",
@@ -1628,6 +1681,16 @@
                 "no_pref": "Sem preferência",
                 "occasion": "Ocasião especial",
                 "occasion_ph": "ex. Aniversário, aniversário de casamento",
+                "occ_none": "— Nenhuma —",
+                "occ_birthday": "Aniversário",
+                "occ_anniversary": "Aniversário de casamento",
+                "occ_nameday": "Dia do santo",
+                "occ_romantic": "Jantar romântico",
+                "occ_proposal": "Pedido de casamento",
+                "occ_business": "Almoço de negócios",
+                "occ_family": "Celebração familiar",
+                "occ_other": "Outra…",
+                "occ_other_ph": "Descreva a ocasião",
                 "requests": "Outros pedidos",
                 "requests_ph": "Algum pedido especial...",
                 "confirm_booking": "✅ Confirmar reserva",
@@ -2456,7 +2519,8 @@
             const date           = document.getElementById('cust-date-only').value;
             const guests         = document.getElementById('cust-guests').value;
             const locationChoice = document.getElementById('cust-location').value;
-            const occasion       = document.getElementById('cust-occasion').value.trim();
+            const occSel         = document.getElementById('cust-occasion').value;
+            const occasion       = occSel === '__other' ? document.getElementById('cust-occasion-other').value.trim() : occSel;
             const comments       = document.getElementById('cust-comments').value.trim();
 
             if (!name || !phone || !email) return alert(t('alert_name_phone_email'));
@@ -2503,8 +2567,9 @@
             trShowDone({ id: data.bookingId, token: data.cancelToken, date, time: selectedTime, guests });
 
             // Reset form
-            ['cust-name','cust-phone','cust-email','cust-occasion','cust-comments']
+            ['cust-name','cust-phone','cust-email','cust-occasion','cust-occasion-other','cust-comments']
                 .forEach(id => document.getElementById(id).value = '');
+            document.getElementById('cust-occasion-other').style.display = 'none';
             selectedTime = null;
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             document.getElementById('open-modal').style.display = 'none';

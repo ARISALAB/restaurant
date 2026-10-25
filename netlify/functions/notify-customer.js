@@ -4,7 +4,7 @@ const { json, preflightOk } = require('./_shared/respond');
 const { locationLabel } = require('./_shared/location');
 const { googleCalendarUrl, icsUrl } = require('./_shared/calendar');
 const { shopTz } = require('./_shared/time');
-const { normLang, msg, fmtDate } = require('./_shared/i18n');
+const { normLang, msg, fmtDate, occasionLabel } = require('./_shared/i18n');
 const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -97,7 +97,7 @@ exports.handler = async (event) => {
         ${booking.occasion ? `
         <tr>
           <td style="padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;font-weight:600;color:#64748b;font-size:13px;">${txt.occasion_lbl}</td>
-          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(booking.occasion)}</td>
+          <td style="padding:10px 12px;background:#fff;border:1px solid #e2e8f0;color:#1e293b;font-size:14px;">${esc(occasionLabel(booking.occasion, L))}</td>
         </tr>` : ''}
         ${booking.comments ? `
         <tr>
