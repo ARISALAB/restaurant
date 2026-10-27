@@ -59,6 +59,12 @@
           "reminderSentAt": {
             ".validate": "newData.isNumber()"
           },
+          "reviewSentAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "reviewClickedAt": {
+            ".validate": "newData.isNumber()"
+          },
           "push": {
             ".validate": "newData.hasChildren(['endpoint', 'p256dh', 'auth'])",
             "endpoint": {
@@ -133,6 +139,17 @@
         },
         "logoPhoto": {
           ".read": true
+        },
+        "reviews": {
+          "on": {
+            ".validate": "newData.isBoolean()"
+          },
+          "link": {
+            ".validate": "newData.isString() && newData.val().length <= 400"
+          },
+          "$other": {
+            ".validate": false
+          }
         },
         "info": {
           "$field": {

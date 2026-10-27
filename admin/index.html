@@ -971,6 +971,47 @@
             .dash-url { flex-basis: 100%; }
             .dash-name { font-size: 1.2rem; white-space: normal; }
         }
+        /* ======= ΚΡΙΤΙΚΕΣ GOOGLE ======= */
+        .rv-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+        .rv-lead { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin: 0; }
+        label.rv-switch { position: relative; display: inline-block; flex-shrink: 0; width: 52px; height: 30px; margin: 2px 0 0; text-transform: none; letter-spacing: 0; cursor: pointer; }
+        .rv-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+        .rv-slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 999px; transition: background .2s; }
+        .rv-slider::before { content: ''; position: absolute; width: 24px; height: 24px; left: 3px; top: 3px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(15,23,42,.25); transition: transform .2s; }
+        .rv-switch input:checked + .rv-slider { background: #16a34a; }
+        .rv-switch input:checked + .rv-slider::before { transform: translateX(22px); }
+        .rv-switch input:focus-visible + .rv-slider { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .rv-switch input:disabled + .rv-slider { opacity: .5; cursor: not-allowed; }
+        .rv-state { display: flex; align-items: center; gap: 8px; margin: 18px 0 22px; padding: 10px 14px; border-radius: var(--radius-md); font-size: 0.86rem; font-weight: 600; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .rv-state::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
+        .rv-state.on { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+        .rv-state.on::before { background: #16a34a; }
+        .rv-state.warn { background: #fffbeb; color: #92400e; border-color: #fde68a; }
+        .rv-state.warn::before { background: #f59e0b; }
+        .rv-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+        .rv-stat { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 16px; background: #fafbfc; }
+        .rv-stat b { display: block; font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; color: var(--text-main); line-height: 1.1; }
+        .rv-stat span { display: block; margin-top: 4px; font-size: 0.8rem; color: var(--text-muted); }
+        .rv-stat small { color: #16a34a; font-weight: 700; font-size: 0.8rem; }
+        .rv-help { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-top: 6px; }
+        .rv-google { font-size: 0.82rem; color: #166534; font-weight: 600; margin-top: 6px; display: none; }
+        .rv-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+        .rv-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; font: inherit; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; color: var(--text-main); text-decoration: none; transition: border-color .15s, filter .15s; }
+        .rv-btn:hover { border-color: #94a3b8; }
+        .rv-btn.main { background: var(--primary, #2563eb); border-color: transparent; color: #fff; }
+        .rv-btn.main:hover { filter: brightness(1.08); }
+        .rv-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .rv-rules { list-style: none; margin: 0; padding: 16px 0 0; border-top: 1px solid var(--border); display: grid; gap: 8px; }
+        .rv-rules li { position: relative; padding-left: 20px; font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; }
+        .rv-rules li::before { content: ''; position: absolute; left: 4px; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #cbd5e1; }
+        .rv-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; color: var(--text-muted); }
+        .rv-tag.clicked { color: #166534; font-weight: 600; }
+        @media (max-width: 600px) {
+            .rv-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .rv-stat { padding: 12px; }
+            .rv-stat b { font-size: 1.35rem; }
+            .rv-actions .rv-btn { flex: 1 1 auto; justify-content: center; }
+        }
     </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -1151,6 +1192,7 @@
                     <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-i18n-key="reservations">Κρατήσεις</span></button>
                     <button class="admin-tab" id="atab-analytics" onclick="switchAdminTab('analytics')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n-key="analytics_tab">Analytics</span></button>
                     <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg><span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
+                    <button class="admin-tab" id="atab-reviews" onclick="switchAdminTab('reviews')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg><span data-rv="tab">Κριτικές</span></button>
                 </nav>
                 <!-- Reservations Section -->
                 <div id="asec-reservations" class="admin-section active">
@@ -1288,6 +1330,39 @@
                 </div>
 
                 <!-- Shop Profile Section -->
+                <!-- Reviews Section -->
+                <div id="asec-reviews" class="admin-section">
+                    <div class="card rv-card">
+                        <div class="rv-head">
+                            <div>
+                                <div class="card-title" style="margin-bottom:8px;"><div class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div> <span data-rv="title">Αυτόματες κριτικές Google</span></div>
+                                <p class="rv-lead" data-rv="lead"></p>
+                            </div>
+                            <label class="rv-switch"><input type="checkbox" id="rv-on" role="switch"><span class="rv-slider"></span></label>
+                        </div>
+                        <div id="rv-state" class="rv-state" aria-live="polite"></div>
+                        <div class="rv-stats">
+                            <div class="rv-stat"><b id="rv-sent">0</b><span data-rv="sent"></span></div>
+                            <div class="rv-stat"><b id="rv-clicked">0</b><span><span data-rv="clicked" style="display:inline;margin:0;"></span> <small id="rv-rate"></small></span></div>
+                        </div>
+                        <div class="input-group">
+                            <label for="rv-link" data-rv="link_label">Σύνδεσμος κριτικών Google</label>
+                            <input type="url" id="rv-link" maxlength="400" autocomplete="off" spellcheck="false" placeholder="https://g.page/r/.../review">
+                            <div class="rv-google" id="rv-google" data-rv="linked_google"></div>
+                            <div class="rv-help" data-rv="link_help"></div>
+                        </div>
+                        <div class="rv-actions">
+                            <button type="button" class="rv-btn main" id="rv-save" data-rv="save">Αποθήκευση</button>
+                            <button type="button" class="rv-btn" id="rv-test"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg><span data-rv="test">Στείλε μου δοκιμαστικό</span></button>
+                            <a class="rv-btn" id="rv-open" href="#" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg><span data-rv="open">Δοκιμή συνδέσμου</span></a>
+                        </div>
+                        <ul class="rv-rules">
+                            <li data-rv="rule1"></li>
+                            <li data-rv="rule2"></li>
+                            <li data-rv="rule3"></li>
+                        </ul>
+                    </div>
+                </div>
                 <div id="asec-profile" class="admin-section">
                     <div class="card" style="margin-bottom:20px;">
                         <div class="card-title"><div class="icon">📝</div> <span data-i18n-key="shop_info_title">Πληροφορίες Μαγαζιού</span></div>
@@ -3449,6 +3524,7 @@
             }
             const tSelect = document.getElementById('time-select');
             if (tSelect && tSelect.options.length > 0) tSelect.options[0].text = t('select_opt');
+            if (typeof rvApply === 'function') try { rvApply(); } catch (e) {}
         }
 
         // ======= TOAST =======
@@ -3645,6 +3721,7 @@
             listenToGuests(myShop);
             listenToWaitlist(myShop);
             loadShopProfile(myShop);
+            rvLoad(myShop);
             migrateShopPhotos(myShop);
             renderBilling(myShop, auth.currentUser).catch(() => {});
             renderEmbedCode();
@@ -4187,6 +4264,7 @@
                     allReservations = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 }
                 renderAll(shop);
+                rvStats();
             });
         }
 
@@ -4261,6 +4339,7 @@
                             <span class="ir">${ICO.seat}${repEsc(locationDisplay)}</span>
                             ${srcIcon ? `<span class="src-tag src-${res.source}">${srcIcon}${repEsc(t('an_' + res.source))}</span>` : ''}
                             ${showBooked ? `<span class="booked-at">${svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', 13)}${t('bk_booked_at')} ${fmtBookedAt(res.timestamp)}</span>` : ''}
+                            ${rvTag(res)}
                         </div>
                         ${res.occasion ? `<div class="occasion-tag">${repEsc(trOcc(res.occasion))}</div>` : ''}
                         ${res.comments ? `<div class="comments-box">${repEsc(res.comments)}</div>` : ''}
@@ -5308,14 +5387,279 @@
 
         // ======= ADMIN TABS =======
         window.switchAdminTab = (tab) => {
-            ['reservations','analytics','profile'].forEach(t => {
+            ['reservations','analytics','profile','reviews'].forEach(t => {
                 document.getElementById('asec-' + t).classList.remove('active');
                 document.getElementById('atab-' + t).classList.remove('active');
             });
             document.getElementById('asec-' + tab).classList.add('active');
             document.getElementById('atab-' + tab).classList.add('active');
             if (tab === 'analytics') renderAnalytics(document.getElementById('shop-title').innerText);
+            if (tab === 'reviews') rvStats();
         };
+        // ======= ΚΡΙΤΙΚΕΣ GOOGLE =======
+        // Ρυθμίσεις στο shop_profile/<shop>/reviews = { on, link }. Η αποστολή γίνεται από το reminders (το επόμενο πρωί, 11:00).
+        const RV_LAUNCH = Date.UTC(2026, 9, 27);   // όσα μαγαζιά φτιάχτηκαν από εδώ και πέρα ξεκινούν με ανοιχτό
+        const RV_TXT = {
+            el: {
+                tab: 'Κριτικές', title: 'Αυτόματες κριτικές Google',
+                lead: 'Το επόμενο πρωί, στις 11:00, κάθε πελάτης που έκλεισε με email παίρνει ένα ευχαριστώ από το μαγαζί σας και ένα κουμπί για να γράψει κριτική στη Google. Γίνεται μόνο του.',
+                state_on: 'Ενεργό · τα emails φεύγουν κάθε πρωί στις 11:00', state_off: 'Ανενεργό · δεν στέλνεται κανένα email',
+                state_nolink: 'Λείπει ο σύνδεσμος Google · δεν στέλνεται τίποτα μέχρι να τον προσθέσετε', state_draft: 'Θα ξεκινήσει μόλις ενεργοποιήσετε τις online κρατήσεις',
+                sent: 'Emails κριτικής αυτόν τον μήνα', clicked: 'Πήγαν στη Google',
+                link_label: 'Σύνδεσμος κριτικών Google', link_help: 'Στο Google Business Profile σας πατήστε «Ζητήστε κριτικές» και αντιγράψτε τον σύνδεσμο εδώ.',
+                linked_google: '✓ Το μαγαζί σας είναι ήδη συνδεδεμένο με το προφίλ του στη Google. Βάλτε σύνδεσμο μόνο αν θέλετε να χρησιμοποιηθεί άλλος.',
+                save: 'Αποθήκευση', saved: 'Ο σύνδεσμος αποθηκεύτηκε', link_bad: 'Ο σύνδεσμος δεν φαίνεται σωστός. Χρησιμοποιήστε αυτόν από το «Ζητήστε κριτικές» (g.page/r/...).',
+                test: 'Στείλε μου δοκιμαστικό', test_sent: 'Στάλθηκε στο {to}', test_wait: 'Περιμένετε ένα λεπτό πριν το επόμενο δοκιμαστικό',
+                test_nolink: 'Προσθέστε πρώτα τον σύνδεσμο Google', test_noemail: 'Δεν βρέθηκε email για το μαγαζί. Συμπληρώστε το email ειδοποιήσεων στο Προφίλ Μαγαζιού.', test_err: 'Δεν στάλθηκε. Δοκιμάστε ξανά σε λίγο.',
+                open: 'Δοκιμή συνδέσμου',
+                rule1: 'Το ίδιο μήνυμα πηγαίνει σε όλους τους πελάτες, χωρίς αντάλλαγμα. Έτσι το ζητά η Google και έτσι προστατεύεται το προφίλ σας.',
+                rule2: 'Δεν στέλνεται σε ακυρωμένες κρατήσεις και σε όσους έχετε σημειώσει «Δεν ήρθε». Κάθε πελάτης το παίρνει μία φορά ανά επίσκεψη.',
+                rule3: 'Αν ο πελάτης απαντήσει στο email, η απάντηση έρχεται στο email ειδοποιήσεών σας.',
+                tag_sent: 'Στάλθηκε αίτημα κριτικής', tag_clicked: 'Πήγε για κριτική',
+                toast_on: 'Οι αυτόματες κριτικές ενεργοποιήθηκαν', toast_off: 'Οι αυτόματες κριτικές απενεργοποιήθηκαν', err: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά.'
+            },
+            en: {
+                tab: 'Reviews', title: 'Automatic Google reviews',
+                lead: 'The next morning at 11:00, every guest who booked with an email gets a thank-you from your restaurant and a button to write a review on Google. It runs on its own.',
+                state_on: 'On · emails go out every morning at 11:00', state_off: 'Off · no emails are sent',
+                state_nolink: 'Google link missing · nothing is sent until you add it', state_draft: 'Starts as soon as you activate online bookings',
+                sent: 'Review emails this month', clicked: 'Went to Google',
+                link_label: 'Google review link', link_help: 'In your Google Business Profile, tap “Ask for reviews” and paste the link here.',
+                linked_google: '✓ Your restaurant is already linked to its Google profile. Add a link only if you want a different one used.',
+                save: 'Save', saved: 'Link saved', link_bad: 'This link doesn’t look right. Use the one from “Ask for reviews” (g.page/r/...).',
+                test: 'Send me a test', test_sent: 'Sent to {to}', test_wait: 'Please wait a minute before the next test',
+                test_nolink: 'Add the Google link first', test_noemail: 'No email found for the restaurant. Fill in the notification email in Shop Profile.', test_err: 'Not sent. Please try again shortly.',
+                open: 'Test the link',
+                rule1: 'Every guest gets the same message, with nothing offered in return. That is what Google requires, and it keeps your profile safe.',
+                rule2: 'It is not sent for cancelled bookings or for guests you marked “No-show”. Each guest gets it once per visit.',
+                rule3: 'If a guest replies to the email, the reply goes to your notification email.',
+                tag_sent: 'Review request sent', tag_clicked: 'Went to review',
+                toast_on: 'Automatic reviews turned on', toast_off: 'Automatic reviews turned off', err: 'Something went wrong. Please try again.'
+            },
+            de: {
+                tab: 'Bewertungen', title: 'Automatische Google-Bewertungen',
+                lead: 'Am nächsten Morgen um 11:00 Uhr bekommt jeder Gast, der mit E-Mail reserviert hat, ein Dankeschön von Ihrem Restaurant und einen Button, um eine Google-Bewertung zu schreiben. Das läuft von selbst.',
+                state_on: 'Aktiv · E-Mails gehen jeden Morgen um 11:00 Uhr raus', state_off: 'Aus · es werden keine E-Mails gesendet',
+                state_nolink: 'Google-Link fehlt · es wird nichts gesendet, bis Sie ihn hinzufügen', state_draft: 'Startet, sobald Sie die Online-Reservierungen aktivieren',
+                sent: 'Bewertungs-E-Mails diesen Monat', clicked: 'Zu Google gegangen',
+                link_label: 'Google-Bewertungslink', link_help: 'Tippen Sie in Ihrem Google-Unternehmensprofil auf „Nach Rezensionen fragen“ und fügen Sie den Link hier ein.',
+                linked_google: '✓ Ihr Restaurant ist bereits mit seinem Google-Profil verknüpft. Tragen Sie nur dann einen Link ein, wenn ein anderer verwendet werden soll.',
+                save: 'Speichern', saved: 'Link gespeichert', link_bad: 'Dieser Link sieht nicht richtig aus. Verwenden Sie den Link aus „Nach Rezensionen fragen“ (g.page/r/...).',
+                test: 'Test an mich senden', test_sent: 'Gesendet an {to}', test_wait: 'Bitte warten Sie eine Minute bis zum nächsten Test',
+                test_nolink: 'Fügen Sie zuerst den Google-Link hinzu', test_noemail: 'Keine E-Mail für das Restaurant gefunden. Tragen Sie die Benachrichtigungs-E-Mail im Restaurantprofil ein.', test_err: 'Nicht gesendet. Bitte versuchen Sie es gleich noch einmal.',
+                open: 'Link testen',
+                rule1: 'Alle Gäste bekommen dieselbe Nachricht, ohne Gegenleistung. So verlangt es Google, und so bleibt Ihr Profil geschützt.',
+                rule2: 'Nicht gesendet wird bei stornierten Reservierungen und bei Gästen, die Sie als „Nicht erschienen“ markiert haben. Jeder Gast bekommt sie einmal pro Besuch.',
+                rule3: 'Antwortet ein Gast auf die E-Mail, geht die Antwort an Ihre Benachrichtigungs-E-Mail.',
+                tag_sent: 'Bewertungsanfrage gesendet', tag_clicked: 'Zur Bewertung gegangen',
+                toast_on: 'Automatische Bewertungen aktiviert', toast_off: 'Automatische Bewertungen deaktiviert', err: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.'
+            },
+            fr: {
+                tab: 'Avis', title: 'Avis Google automatiques',
+                lead: 'Le lendemain matin à 11h00, chaque client qui a réservé avec un e-mail reçoit un remerciement de votre restaurant et un bouton pour laisser un avis sur Google. Tout se fait automatiquement.',
+                state_on: 'Activé · les e-mails partent chaque matin à 11h00', state_off: 'Désactivé · aucun e-mail n’est envoyé',
+                state_nolink: 'Lien Google manquant · rien n’est envoyé tant que vous ne l’ajoutez pas', state_draft: 'Démarre dès que vous activez les réservations en ligne',
+                sent: 'E-mails d’avis ce mois-ci', clicked: 'Sont allés sur Google',
+                link_label: 'Lien des avis Google', link_help: 'Dans votre fiche d’établissement Google, appuyez sur « Demander des avis » et collez le lien ici.',
+                linked_google: '✓ Votre restaurant est déjà relié à sa fiche Google. Ajoutez un lien seulement si vous voulez en utiliser un autre.',
+                save: 'Enregistrer', saved: 'Lien enregistré', link_bad: 'Ce lien ne semble pas correct. Utilisez celui de « Demander des avis » (g.page/r/...).',
+                test: 'M’envoyer un test', test_sent: 'Envoyé à {to}', test_wait: 'Attendez une minute avant le prochain test',
+                test_nolink: 'Ajoutez d’abord le lien Google', test_noemail: 'Aucun e-mail trouvé pour le restaurant. Renseignez l’e-mail de notification dans le Profil.', test_err: 'Non envoyé. Réessayez dans un instant.',
+                open: 'Tester le lien',
+                rule1: 'Tous les clients reçoivent le même message, sans contrepartie. C’est ce qu’exige Google, et cela protège votre fiche.',
+                rule2: 'Il n’est pas envoyé pour les réservations annulées ni aux clients marqués « Absent ». Chaque client le reçoit une fois par visite.',
+                rule3: 'Si un client répond à l’e-mail, la réponse arrive sur votre e-mail de notification.',
+                tag_sent: 'Demande d’avis envoyée', tag_clicked: 'Est allé laisser un avis',
+                toast_on: 'Avis automatiques activés', toast_off: 'Avis automatiques désactivés', err: 'Un problème est survenu. Réessayez.'
+            },
+            it: {
+                tab: 'Recensioni', title: 'Recensioni Google automatiche',
+                lead: 'La mattina dopo alle 11:00, ogni cliente che ha prenotato con un’email riceve un ringraziamento dal tuo locale e un pulsante per scrivere una recensione su Google. Funziona da solo.',
+                state_on: 'Attivo · le email partono ogni mattina alle 11:00', state_off: 'Disattivato · non viene inviata nessuna email',
+                state_nolink: 'Manca il link Google · non viene inviato nulla finché non lo aggiungi', state_draft: 'Parte appena attivi le prenotazioni online',
+                sent: 'Email di recensione questo mese', clicked: 'Sono andati su Google',
+                link_label: 'Link recensioni Google', link_help: 'Nel tuo Profilo dell’attività su Google tocca «Chiedi recensioni» e incolla qui il link.',
+                linked_google: '✓ Il tuo locale è già collegato al suo profilo Google. Inserisci un link solo se vuoi usarne un altro.',
+                save: 'Salva', saved: 'Link salvato', link_bad: 'Questo link non sembra corretto. Usa quello di «Chiedi recensioni» (g.page/r/...).',
+                test: 'Inviami una prova', test_sent: 'Inviata a {to}', test_wait: 'Attendi un minuto prima della prossima prova',
+                test_nolink: 'Aggiungi prima il link Google', test_noemail: 'Nessuna email trovata per il locale. Compila l’email per le notifiche nel Profilo.', test_err: 'Non inviata. Riprova tra poco.',
+                open: 'Prova il link',
+                rule1: 'Tutti i clienti ricevono lo stesso messaggio, senza nulla in cambio. È ciò che chiede Google e protegge il tuo profilo.',
+                rule2: 'Non viene inviata per le prenotazioni annullate né ai clienti segnati come «Non presentato». Ogni cliente la riceve una volta per visita.',
+                rule3: 'Se un cliente risponde all’email, la risposta arriva alla tua email per le notifiche.',
+                tag_sent: 'Richiesta di recensione inviata', tag_clicked: 'Andato a recensire',
+                toast_on: 'Recensioni automatiche attivate', toast_off: 'Recensioni automatiche disattivate', err: 'Qualcosa è andato storto. Riprova.'
+            },
+            es: {
+                tab: 'Reseñas', title: 'Reseñas de Google automáticas',
+                lead: 'A la mañana siguiente, a las 11:00, cada cliente que reservó con un email recibe un agradecimiento de tu restaurante y un botón para escribir una reseña en Google. Funciona solo.',
+                state_on: 'Activado · los emails salen cada mañana a las 11:00', state_off: 'Desactivado · no se envía ningún email',
+                state_nolink: 'Falta el enlace de Google · no se envía nada hasta que lo añadas', state_draft: 'Empieza en cuanto actives las reservas online',
+                sent: 'Emails de reseña este mes', clicked: 'Fueron a Google',
+                link_label: 'Enlace de reseñas de Google', link_help: 'En tu Perfil de Empresa de Google, pulsa «Pedir reseñas» y pega aquí el enlace.',
+                linked_google: '✓ Tu restaurante ya está vinculado a su perfil de Google. Añade un enlace solo si quieres usar otro.',
+                save: 'Guardar', saved: 'Enlace guardado', link_bad: 'Este enlace no parece correcto. Usa el de «Pedir reseñas» (g.page/r/...).',
+                test: 'Envíame una prueba', test_sent: 'Enviado a {to}', test_wait: 'Espera un minuto antes de la próxima prueba',
+                test_nolink: 'Añade primero el enlace de Google', test_noemail: 'No se encontró email del restaurante. Rellena el email de notificaciones en el Perfil.', test_err: 'No se envió. Inténtalo de nuevo en un momento.',
+                open: 'Probar el enlace',
+                rule1: 'Todos los clientes reciben el mismo mensaje, sin nada a cambio. Es lo que exige Google y así tu perfil está protegido.',
+                rule2: 'No se envía en reservas canceladas ni a clientes marcados como «No vino». Cada cliente lo recibe una vez por visita.',
+                rule3: 'Si un cliente responde al email, la respuesta llega a tu email de notificaciones.',
+                tag_sent: 'Solicitud de reseña enviada', tag_clicked: 'Fue a reseñar',
+                toast_on: 'Reseñas automáticas activadas', toast_off: 'Reseñas automáticas desactivadas', err: 'Algo salió mal. Inténtalo de nuevo.'
+            },
+            tr: {
+                tab: 'Yorumlar', title: 'Otomatik Google yorumları',
+                lead: 'Ertesi sabah saat 11:00’de, e-postayla rezervasyon yapan her misafire restoranınızdan bir teşekkür ve Google’da yorum yazması için bir buton gider. Kendiliğinden çalışır.',
+                state_on: 'Açık · e-postalar her sabah 11:00’de gider', state_off: 'Kapalı · hiç e-posta gönderilmez',
+                state_nolink: 'Google bağlantısı eksik · ekleyene kadar hiçbir şey gönderilmez', state_draft: 'Online rezervasyonları etkinleştirdiğinizde başlar',
+                sent: 'Bu ay gönderilen yorum e-postaları', clicked: 'Google’a gidenler',
+                link_label: 'Google yorum bağlantısı', link_help: 'Google İşletme Profilinizde “Yorum isteyin”e dokunun ve bağlantıyı buraya yapıştırın.',
+                linked_google: '✓ Restoranınız zaten Google profiline bağlı. Yalnızca farklı bir bağlantı kullanılmasını istiyorsanız ekleyin.',
+                save: 'Kaydet', saved: 'Bağlantı kaydedildi', link_bad: 'Bu bağlantı doğru görünmüyor. “Yorum isteyin”deki bağlantıyı kullanın (g.page/r/...).',
+                test: 'Bana deneme gönder', test_sent: '{to} adresine gönderildi', test_wait: 'Bir sonraki deneme için bir dakika bekleyin',
+                test_nolink: 'Önce Google bağlantısını ekleyin', test_noemail: 'Restoran için e-posta bulunamadı. Profilde bildirim e-postasını doldurun.', test_err: 'Gönderilemedi. Birazdan tekrar deneyin.',
+                open: 'Bağlantıyı dene',
+                rule1: 'Tüm misafirler karşılığında hiçbir şey sunulmadan aynı mesajı alır. Google bunu ister ve profiliniz böyle korunur.',
+                rule2: 'İptal edilen rezervasyonlara ve “Gelmedi” olarak işaretlediğiniz misafirlere gönderilmez. Her misafir ziyaret başına bir kez alır.',
+                rule3: 'Bir misafir e-postayı yanıtlarsa, yanıt bildirim e-postanıza gelir.',
+                tag_sent: 'Yorum isteği gönderildi', tag_clicked: 'Yoruma gitti',
+                toast_on: 'Otomatik yorumlar açıldı', toast_off: 'Otomatik yorumlar kapatıldı', err: 'Bir şeyler ters gitti. Tekrar deneyin.'
+            },
+            pt: {
+                tab: 'Avaliações', title: 'Avaliações Google automáticas',
+                lead: 'Na manhã seguinte, às 11:00, cada cliente que reservou com email recebe um agradecimento do seu restaurante e um botão para escrever uma avaliação no Google. Funciona sozinho.',
+                state_on: 'Ativo · os emails saem todas as manhãs às 11:00', state_off: 'Desativado · não é enviado nenhum email',
+                state_nolink: 'Falta o link do Google · nada é enviado até o adicionar', state_draft: 'Começa assim que ativar as reservas online',
+                sent: 'Emails de avaliação este mês', clicked: 'Foram ao Google',
+                link_label: 'Link de avaliações Google', link_help: 'No seu Perfil da Empresa no Google, toque em «Pedir avaliações» e cole aqui o link.',
+                linked_google: '✓ O seu restaurante já está ligado ao perfil no Google. Adicione um link só se quiser usar outro.',
+                save: 'Guardar', saved: 'Link guardado', link_bad: 'Este link não parece correto. Use o de «Pedir avaliações» (g.page/r/...).',
+                test: 'Enviar-me um teste', test_sent: 'Enviado para {to}', test_wait: 'Aguarde um minuto antes do próximo teste',
+                test_nolink: 'Adicione primeiro o link do Google', test_noemail: 'Não foi encontrado email do restaurante. Preencha o email de notificações no Perfil.', test_err: 'Não foi enviado. Tente de novo dentro de momentos.',
+                open: 'Testar o link',
+                rule1: 'Todos os clientes recebem a mesma mensagem, sem nada em troca. É o que o Google exige e assim o seu perfil fica protegido.',
+                rule2: 'Não é enviado em reservas canceladas nem a clientes marcados como «Não veio». Cada cliente recebe-o uma vez por visita.',
+                rule3: 'Se um cliente responder ao email, a resposta chega ao seu email de notificações.',
+                tag_sent: 'Pedido de avaliação enviado', tag_clicked: 'Foi avaliar',
+                toast_on: 'Avaliações automáticas ativadas', toast_off: 'Avaliações automáticas desativadas', err: 'Algo correu mal. Tente de novo.'
+            }
+        };
+        const rvT = (k, v) => trFmt((RV_TXT[currentLang] || RV_TXT.en)[k] ?? RV_TXT.en[k] ?? k, v);
+        let rvShop = null, rvDet = {}, rvCfg = {};
+
+        const RV_PLACE = /^[A-Za-z0-9_-]{20,200}$/;
+        function rvCleanLink(v) {
+            const s = String(v == null ? '' : v).trim();
+            if (!s || s.length > 400) return null;
+            if (RV_PLACE.test(s)) return 'https://search.google.com/local/writereview?placeid=' + s;
+            let u; try { u = new URL(s); } catch (e) { return null; }
+            if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+            const host = u.hostname.toLowerCase();
+            if (host === 'g.page' && /^\/r\/[A-Za-z0-9_-]+/.test(u.pathname)) return 'https://g.page' + u.pathname + u.search;
+            if (host === 'search.google.com' && u.pathname.startsWith('/local/writereview')) {
+                const p = u.searchParams.get('placeid');
+                return p && RV_PLACE.test(p) ? 'https://search.google.com/local/writereview?placeid=' + p : null;
+            }
+            return null;
+        }
+        const rvPlaceId = () => { const p = rvDet.google && rvDet.google.placeId; return p && RV_PLACE.test(p) ? p : null; };
+        const rvLink = () => rvCleanLink(rvCfg.link) || (rvPlaceId() ? 'https://search.google.com/local/writereview?placeid=' + rvPlaceId() : null);
+        const rvIsOn = () => (typeof rvCfg.on === 'boolean' ? rvCfg.on : (rvDet.createdAt || 0) >= RV_LAUNCH);
+
+        function rvApply() {
+            document.querySelectorAll('[data-rv]').forEach(el => { el.textContent = rvT(el.getAttribute('data-rv')); });
+            rvRender();
+            rvStats();
+        }
+
+        function rvRender() {
+            const on = rvIsOn(), link = rvLink();
+            const sw = document.getElementById('rv-on'); if (!sw) return;
+            sw.checked = on;
+            sw.setAttribute('aria-label', rvT('title'));
+            const st = document.getElementById('rv-state');
+            let cls = '', key = 'state_off';
+            if (on && !link) { cls = 'warn'; key = 'state_nolink'; }
+            else if (on && rvDet.status === 'draft') { cls = 'warn'; key = 'state_draft'; }
+            else if (on) { cls = 'on'; key = 'state_on'; }
+            st.className = 'rv-state' + (cls ? ' ' + cls : '');
+            st.textContent = rvT(key);
+            document.getElementById('rv-google').style.display = rvPlaceId() ? 'block' : 'none';
+            const open = document.getElementById('rv-open');
+            open.style.display = link ? '' : 'none';
+            if (link) open.href = link;
+            document.getElementById('rv-test').disabled = !link;
+        }
+
+        function rvStats() {
+            if (!document.getElementById('rv-sent')) return;
+            const d = new Date(), from = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+            let sent = 0, clicked = 0;
+            allReservations.forEach(r => {
+                if (r.reviewSentAt >= from) sent++;
+                if (r.reviewClickedAt >= from) clicked++;
+            });
+            document.getElementById('rv-sent').textContent = sent;
+            document.getElementById('rv-clicked').textContent = clicked;
+            document.getElementById('rv-rate').textContent = sent ? Math.round(clicked * 100 / sent) + '%' : '';
+        }
+
+        // Ένδειξη στην κάρτα κράτησης
+        function rvTag(res) {
+            if (res.reviewClickedAt) return `<span class="rv-tag clicked">${svgI('<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>', 13)}${repEsc(rvT('tag_clicked'))}</span>`;
+            if (res.reviewSentAt) return `<span class="rv-tag">${svgI('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>', 13)}${repEsc(rvT('tag_sent'))}</span>`;
+            return '';
+        }
+
+        async function rvLoad(shop) {
+            rvShop = shop; rvDet = {}; rvCfg = {};
+            try {
+                const [d, c] = await Promise.all([get(ref(db, `shop_details/${shop}`)), get(ref(db, `shop_profile/${shop}/reviews`))]);
+                rvDet = d.val() || {}; rvCfg = c.val() || {};
+            } catch (e) {}
+            if (rvShop !== shop) return;
+            document.getElementById('rv-link').value = rvCfg.link || '';
+            rvApply();
+        }
+
+        document.getElementById('rv-on').addEventListener('change', async (e) => {
+            if (!rvShop) return;
+            const on = e.target.checked;
+            try {
+                await update(ref(db, `shop_profile/${rvShop}/reviews`), { on });
+                rvCfg.on = on;
+                showToast(rvT(on ? 'toast_on' : 'toast_off'), 'success');
+            } catch (err) { e.target.checked = !on; showToast(rvT('err'), 'error'); }
+            rvRender();
+        });
+
+        document.getElementById('rv-save').addEventListener('click', async () => {
+            if (!rvShop) return;
+            const raw = document.getElementById('rv-link').value.trim();
+            const clean = raw ? rvCleanLink(raw) : null;
+            if (raw && !clean) return showToast(rvT('link_bad'), 'error');
+            try {
+                await update(ref(db, `shop_profile/${rvShop}/reviews`), { link: clean });
+                rvCfg.link = clean || undefined;
+                document.getElementById('rv-link').value = clean || '';
+                showToast(rvT('saved'), 'success');
+            } catch (e) { showToast(rvT('err'), 'error'); }
+            rvRender();
+        });
+
+        document.getElementById('rv-test').addEventListener('click', async () => {
+            const btn = document.getElementById('rv-test');
+            btn.disabled = true;
+            try {
+                const res = await fetch(`${API}/review-test`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await auth.currentUser.getIdToken() }, body: JSON.stringify({ lang: currentLang }) });
+                const out = await res.json().catch(() => ({}));
+                if (res.ok) showToast(rvT('test_sent', { to: out.to || '' }), 'success');
+                else showToast(rvT({ too_soon: 'test_wait', no_link: 'test_nolink', no_email: 'test_noemail' }[out.error] || 'test_err'), 'error');
+            } catch (e) { showToast(rvT('test_err'), 'error'); }
+            setTimeout(() => { btn.disabled = !rvLink(); }, 1500);
+        });
+
 
         window.updateCharCount = (inputId, counterId, max) => {
             document.getElementById(counterId).innerText = document.getElementById(inputId).value.length;

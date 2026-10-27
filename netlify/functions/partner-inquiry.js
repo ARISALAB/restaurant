@@ -26,7 +26,7 @@ exports.handler = async (event) => {
     await resend.emails.send({
       from: 'TableReserve <noreply@tablereserve.gr>',
       to: NOTIFY_EMAIL,
-      replyTo: email,
+      reply_to: email,
       subject: `📩 Νέα αίτηση συνεργασίας — ${shop} (${plan})`,
       html: `
 <!DOCTYPE html>

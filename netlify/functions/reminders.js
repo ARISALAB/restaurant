@@ -6,6 +6,7 @@ const { getDb } = require('./_shared/firebase');
 const { localToMs, localDay, tzOr } = require('./_shared/time');
 const { scanWaitlists } = require('./_shared/waitlist');
 const { normLang, msg, fmtDate } = require('./_shared/i18n');
+const { scanReviews } = require('./_shared/reviews');
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const PUSH_ON = !!(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
@@ -135,6 +136,8 @@ exports.handler = async () => {
     }
   }
   const wl = await scanWaitlists(db).catch(e => { console.error('[reminders] waitlist scan', e.message); return 0; });
-  console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}, waitlist ${wl}`);
-  return { statusCode: 200, body: JSON.stringify({ sent, pushed, failed }) };
+  // Αίτημα κριτικής Google, το επόμενο πρωί μετά την επίσκεψη
+  const rv = await scanReviews(db, resend, details, now).catch(e => { console.error('[reminders] reviews scan', e.message); return { sent: 0, failed: 0 }; });
+  console.log(`[reminders] email ${sent}, push ${pushed}, failed ${failed}, waitlist ${wl}, reviews ${rv.sent}/${rv.failed}`);
+  return { statusCode: 200, body: JSON.stringify({ sent, pushed, failed, reviews: rv }) };
 };
