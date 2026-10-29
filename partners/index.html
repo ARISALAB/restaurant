@@ -190,6 +190,35 @@ footer a:hover{color:var(--accent)}
 .hero{padding-top:120px}
 @media(max-width:768px){footer{padding-bottom:110px}}
 @media(max-width:480px){#navUser>span:last-child>span:last-child{display:none!important}#navUserName{max-width:120px!important}#navUser{padding:5px 12px 5px 5px!important}}
+/* ΚΟΙΝΟ ΜΕΝΟΥ */
+nav ul.tn{display:flex;gap:30px;list-style:none;align-items:center}
+nav ul.tn>li>a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;padding:8px 0;display:inline-block}
+nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--text)}
+nav ul.tn>li>a[aria-current="page"]{box-shadow:inset 0 -1px 0 var(--accent)}
+nav ul.tn>li>a span{font-size:10px;opacity:.7}
+.dd{position:relative}
+.dd-p{display:none;position:absolute;top:100%;left:-18px;min-width:290px;padding:8px;margin-top:6px;background:#131315;border:0.5px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);flex-direction:column;z-index:300}
+.dd-p::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px}
+.dd:hover .dd-p,.dd:focus-within .dd-p{display:flex}
+.dd-p a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;color:var(--text)}
+.dd-p a:hover,.dd-p a[aria-current="page"]{background:rgba(37,99,235,.12)}
+.dd-p b{display:block;font-size:13.5px;font-weight:500}
+.dd-p small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mnav{display:none;position:static}
+.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:12px;border:0.5px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{width:18px;height:1.5px;background:var(--text);border-radius:2px;transition:transform .2s,opacity .2s}
+.mnav[open] summary span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mnav-p{position:absolute;left:0;right:0;top:100%;background:#0d0d0f;border-bottom:0.5px solid rgba(255,255,255,.1);padding:10px 5% 18px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:calc(100vh - 70px);overflow:auto}
+.mnav-p a{padding:14px 4px;border-bottom:0.5px solid rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-size:16px}
+.mnav-p a:last-child{border-bottom:none;color:#6b9bff}
+.mnav-p a[aria-current="page"]{color:#6b9bff}
+@media(max-width:900px){nav ul.tn{display:none}.mnav{display:block}}
+.mnav{margin-left:10px}
+@media(max-width:480px){#navLogin{display:none}}
+/* ΤΕΛΟΣ ΚΟΙΝΟΥ ΜΕΝΟΥ */
 </style>
 <script>
 (function(){try{
@@ -210,13 +239,7 @@ footer a:hover{color:var(--accent)}
 
 <nav>
   <div class="logo">Table<em>Reserve</em></div>
-  <ul>
-    <li><a href="#how">Πώς λειτουργεί</a></li>
-    <li><a href="#benefits">Οφέλη</a></li>
-    <li><a href="#pricing">Τιμές</a></li>
-    <li><a href="#faq">Ερωτήσεις</a></li>
-    <li><a href="#contact">Επικοινωνία</a></li>
-  </ul>
+  <ul class="tn"><li><a href="#how">Πώς λειτουργεί</a></li><li class="dd"><a href="/leitourgies/" aria-haspopup="true">Λειτουργίες <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/leitourgies/katopsi-trapezion/"><b>Κάτοψη τραπεζιών</b><small>Ζωντανή σάλα και αυτόματη ανάθεση</small></a><a href="/leitourgies/ligoteres-akyroseis/"><b>Λιγότερα no-show</b><small>Υπενθυμίσεις, Wallet, λίστα αναμονής</small></a><a href="/leitourgies/"><b>Όλες οι λειτουργίες</b><small>Κρατήσεις, πελάτες, κριτικές, στατιστικά</small></a></div></li><li><a href="/times/">Τιμές</a></li><li><a href="#faq">Ερωτήσεις</a></li><li><a href="#contact">Επικοινωνία</a></li></ul>
   <div style="display:flex;align-items:center;">
   <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el" selected>ΕΛ</option><option value="/en/?lang=en">EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
   <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin?lang=el" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Σύνδεση</a><a href="#contact" class="nav-cta" id="navCta">Ξεκινήστε τώρα →</a></span>
@@ -225,6 +248,7 @@ footer a:hover{color:var(--accent)}
     <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
     <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Πίνακας διαχείρισης →</span></span>
   </a>
+  <details class="mnav"><summary aria-label="Μενού"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="#how">Πώς λειτουργεί</a><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a><a href="/leitourgies/">Όλες οι λειτουργίες</a><a href="/times/">Τιμές</a><a href="#faq">Ερωτήσεις</a><a href="#contact">Επικοινωνία</a><a href="/admin?lang=el">Σύνδεση</a></div></details>
   </div>
 </nav>
 
