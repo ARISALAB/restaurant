@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Λειτουργίες συστήματος κρατήσεων για εστιατόρια | TableReserve</title>
+<meta name="description" content="Online κρατήσεις 24/7, υπενθυμίσεις, λίστα αναμονής, κάτοψη τραπεζιών, καρτέλα πελάτη, κριτικές Google και στατιστικά. Όλα σε μία συνδρομή από €99 τον χρόνο.">
+<link rel="canonical" href="https://tablereserve.gr/leitourgies/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="el_GR">
+<meta property="og:site_name" content="TableReserve">
+<meta property="og:title" content="Λειτουργίες συστήματος κρατήσεων για εστιατόρια | TableReserve">
+<meta property="og:description" content="Online κρατήσεις 24/7, υπενθυμίσεις, λίστα αναμονής, κάτοψη τραπεζιών, καρτέλα πελάτη, κριτικές Google και στατιστικά. Όλα σε μία συνδρομή από €99 τον χρόνο.">
+<meta property="og:url" content="https://tablereserve.gr/leitourgies/">
+<meta property="og:image" content="https://tablereserve.gr/partners/assets/hero-table.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#09090a">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;--accent:#2563eb;--accent2:#1d4ed8;--accent-t:#6b9bff;--text:#ede8df;--muted:#c8c4bb;--dim:#8f8b83;--border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);--ok:#4ade80;--warn:#fbbf24;--teal:#0f766e}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+a{color:var(--accent-t)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px;border-radius:6px}
+img{max-width:100%;display:block}
+nav{position:sticky;top:0;z-index:200;padding:18px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px;backdrop-filter:blur(16px);background:rgba(9,9,10,0.86);border-bottom:0.5px solid var(--border2)}
+.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px;color:var(--text);text-decoration:none}
+.logo em{font-style:normal;color:var(--accent)}
+nav ul{display:flex;gap:30px;list-style:none}
+nav ul a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+nav ul a:hover,nav ul a[aria-current="page"]{color:var(--text)}
+nav ul a[aria-current="page"]{border-bottom:1px solid var(--accent)}
+.nav-r{display:flex;align-items:center;gap:18px}
+.nav-login{color:var(--text);font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.nav-cta{background:var(--accent);color:#fff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+.crumbs{padding:22px 6% 0;font-size:12.5px;color:var(--dim)}
+.crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.crumbs li+li::before{content:'›';margin-right:8px;color:var(--dim)}
+.crumbs a{color:var(--muted);text-decoration:none}.crumbs a:hover{color:var(--text)}
+.hero{padding:56px 6% 80px;position:relative;overflow:hidden;isolation:isolate}
+.hero-in{max-width:880px}
+.hero::after{content:'';position:absolute;right:-10%;top:-40px;width:620px;height:620px;background:radial-gradient(closest-side,rgba(37,99,235,.16),transparent);pointer-events:none;z-index:-1}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-t);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent-t)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,70px);line-height:1.06;letter-spacing:-1.5px;margin-bottom:26px;font-weight:500}
+h1 em,h2 em{font-style:italic;color:var(--accent-t)}
+.lead{font-size:18px;color:var(--muted);max-width:640px;line-height:1.75;margin-bottom:36px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-main{background:var(--accent);color:#fff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:16px 32px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-outline{border:0.5px solid rgba(237,232,223,.2);color:var(--text);font-size:15px;padding:16px 32px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s;display:inline-flex;align-items:center}
+.btn-outline:hover{border-color:var(--accent-t);color:var(--accent-t)}
+.badges{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none;margin-top:30px;font-size:14px;color:var(--muted)}
+.badges li{display:flex;align-items:center;gap:8px}.badges svg{color:var(--accent-t);flex-shrink:0}
+section{padding:96px 6%}
+section.alt{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4.2vw,50px);line-height:1.1;letter-spacing:-1.2px;margin-bottom:18px;max-width:760px;font-weight:500}
+h3{font-size:16px;font-weight:500;margin-bottom:8px}
+.sub{font-size:16px;color:var(--muted);max-width:620px;line-height:1.75}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:56px;align-items:center;margin-top:56px}
+.split.rev{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.split.rev>.copy{order:2}
+@media(max-width:900px){.split,.split.rev{grid-template-columns:minmax(0,1fr);gap:32px}.split.rev>.copy{order:0}}
+.copy p{color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:18px}
+.ticks{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.ticks li{display:flex;gap:12px;font-size:14.5px;color:var(--muted);line-height:1.6}
+.ticks li::before{content:'✓';flex-shrink:0;width:22px;height:22px;border-radius:50%;background:rgba(37,99,235,.14);color:var(--accent-t);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-top:1px}
+.ticks b{color:var(--text);font-weight:500}
+.shot{border-radius:16px;overflow:hidden;border:0.5px solid var(--border2);box-shadow:0 30px 80px rgba(0,0,0,.45);background:#fff}
+.shot-cap{font-size:12.5px;color:var(--dim);margin-top:12px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:56px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
+.step{background:var(--card);padding:34px 30px;border-right:0.5px solid var(--border2)}
+.step:last-child{border-right:none}
+@media(max-width:760px){.step{border-right:none;border-bottom:0.5px solid var(--border2)}.step:last-child{border-bottom:none}}
+.step-n{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.14);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent-t);margin-bottom:16px}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:56px}
+.card{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:28px 26px;position:relative}
+a.card{text-decoration:none;color:inherit;transition:transform .2s,border-color .2s}
+a.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.card .ic{width:42px;height:42px;border-radius:12px;background:rgba(37,99,235,.1);color:var(--accent-t);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.card .more{display:inline-block;margin-top:14px;font-size:13px;font-weight:500;color:var(--accent-t)}
+.tag{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-t);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
+.note{margin-top:28px;padding:18px 22px;border-radius:14px;background:rgba(37,99,235,.08);border:0.5px solid rgba(37,99,235,.3);font-size:14px;color:var(--muted);line-height:1.7;max-width:760px}
+.note b{color:var(--text);font-weight:500}
+.faq{max-width:780px;margin-top:40px}
+.faq details{border-bottom:0.5px solid var(--border2)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:16px;font-weight:500;color:var(--text)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--accent-t)}
+.faq summary::after{content:'+';font-size:22px;font-weight:300;color:var(--accent-t);flex-shrink:0;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);font-size:14.5px;line-height:1.75;padding:0 0 22px;max-width:700px}
+.cta-band{text-align:center;padding:96px 6%;background:radial-gradient(ellipse at center,rgba(37,99,235,.18),transparent 70%)}
+.cta-band h2{margin:0 auto 16px}
+.cta-band .sub{margin:0 auto 32px}
+.cta-band .ctas{justify-content:center}
+footer{border-top:0.5px solid var(--border2);padding:40px 6%;display:flex;flex-direction:column;gap:22px}
+.f-links{display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13.5px}
+.f-links a{color:var(--muted);text-decoration:none}.f-links a:hover{color:var(--accent-t)}
+.f-bot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
+footer p{font-size:12.5px;color:var(--dim)}
+footer p a{color:var(--dim);text-decoration:none}footer p a:hover{color:var(--accent-t)}
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:12px 18px;align-items:center;justify-content:space-between;gap:12px}
+.sticky-bar p{font-size:13px;color:var(--muted)}
+.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 22px;border-radius:40px;text-decoration:none;white-space:nowrap}
+@media(max-width:900px){nav ul{display:none}}
+@media(max-width:768px){.sticky-bar{display:flex}footer{padding-bottom:100px}section{padding:72px 6%}.hero{padding:40px 6% 64px}.lead{font-size:16.5px}}
+@media(max-width:480px){nav{padding:14px 5%}.nav-cta{display:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Αρχική", "item": "https://tablereserve.gr/"}, {"@type": "ListItem", "position": 2, "name": "Λειτουργίες", "item": "https://tablereserve.gr/leitourgies/"}]}, {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Κάτοψη τραπεζιών", "url": "https://tablereserve.gr/leitourgies/katopsi-trapezion/"}, {"@type": "ListItem", "position": 2, "name": "Λιγότερα no-show", "url": "https://tablereserve.gr/leitourgies/ligoteres-akyroseis/"}, {"@type": "ListItem", "position": 3, "name": "Online κρατήσεις 24/7"}, {"@type": "ListItem", "position": 4, "name": "Κουμπί για το site σας"}, {"@type": "ListItem", "position": 5, "name": "Καρτέλα πελάτη"}, {"@type": "ListItem", "position": 6, "name": "Τηλεφωνικές κρατήσεις και walk-in"}, {"@type": "ListItem", "position": 7, "name": "Κριτικές στο Google"}, {"@type": "ListItem", "position": 8, "name": "Στατιστικά και αναφορά PDF"}, {"@type": "ListItem", "position": 9, "name": "8 γλώσσες"}]}]}</script>
+</head>
+<body>
+<nav aria-label="Κύριο μενού">
+  <a class="logo" href="/">Table<em>Reserve</em></a>
+  <ul><li><a href="/leitourgies/" aria-current="page">Λειτουργίες</a></li><li><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a></li><li><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a></li><li><a href="/times/">Τιμές</a></li></ul>
+  <div class="nav-r"><a class="nav-login" href="/admin?lang=el">Σύνδεση</a><a class="nav-cta" href="/#contact">Ξεκινήστε δωρεάν →</a></div>
+</nav>
+<div class="crumbs" aria-label="Διαδρομή"><ol><li><a href="/">Αρχική</a></li><li><span aria-current="page">Λειτουργίες</span></li></ol></div>
+<main>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Λειτουργίες</div>
+    <h1>Ό,τι χρειάζεται ένα εστιατόριο <em>για τις κρατήσεις του</em></h1>
+    <p class="lead">Από την πρώτη online κράτηση μέχρι το τραπέζι και την κριτική στο Google. Όλα περιλαμβάνονται σε κάθε πακέτο, από €99 τον χρόνο.</p>
+    <div class="ctas"><a class="btn-main" href="/#contact">Ξεκινήστε δωρεάν →</a><a class="btn-outline" href="/times/">Δείτε τις τιμές</a></div>
+  </div>
+  <div class="grid reveal"><a class="card" href="/leitourgies/katopsi-trapezion/"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="3.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg></div><span class="tag">Νέο</span><h3>Κάτοψη τραπεζιών</h3><p>Ζωντανή εικόνα της σάλας, αυτόματη ανάθεση στο σωστό τραπέζι και ενώσεις για μεγάλες παρέες.</p><span class="more">Δείτε πώς λειτουργεί →</span></a><a class="card" href="/leitourgies/ligoteres-akyroseis/"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Λιγότερα no-show</h3><p>Υπενθύμιση 2 ώρες πριν, ειδοποίηση στο κινητό, Google Wallet, ακύρωση με ένα πάτημα και λίστα αναμονής.</p><span class="more">Δείτε πώς λειτουργεί →</span></a><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Online κρατήσεις 24/7</h3><p>Δικό σας link tablereserve.gr/το-μαγαζί-σας για Instagram, Google Maps και site, με άμεση επιβεβαίωση.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M3.5 8.5 8 20M12 8l4.5 12M20 8l-3 9M7 8h4M14 8h4"/></svg></div><h3>Κουμπί για το site σας</h3><p>Η φόρμα κράτησης μέσα στο site σας με λίγες γραμμές κώδικα, ή με το επίσημο plugin για WordPress.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></div><h3>Καρτέλα πελάτη</h3><p>Επισκέψεις, VIP, αλλεργίες και σημειώσεις. Το σύστημα αναγνωρίζει τον πελάτη από το τηλέφωνο ή το όνομα.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>Τηλεφωνικές κρατήσεις και walk-in</h3><p>Τις περνάτε σε δευτερόλεπτα, και βλέπετε τις ώρες με τις ελεύθερες θέσεις ενώ μιλάτε στο τηλέφωνο.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div><h3>Κριτικές στο Google</h3><p>Αν το ενεργοποιήσετε, το επόμενο πρωί ο πελάτης λαμβάνει αυτόματα email με αίτημα κριτικής για το μαγαζί σας.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Στατιστικά και αναφορά PDF</h3><p>Ώρες αιχμής, πηγή κρατήσεων, ακυρώσεις, no-show και τακτικοί πελάτες, σε αναφορά έτοιμη για τον λογιστή.</p></div><div class="card"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>8 γλώσσες</h3><p>Η σελίδα κράτησης, τα email και ο πίνακας διαχείρισης σε ελληνικά, αγγλικά, γερμανικά, γαλλικά, ιταλικά, ισπανικά, τουρκικά και πορτογαλικά.</p></div></div>
+</section>
+
+<section class="cta-band">
+  <div class="reveal">
+    <h2>Δοκιμάστε το στο δικό σας <em>μαγαζί</em></h2>
+    <p class="sub">14 ημέρες δωρεάν με όλες τις λειτουργίες, χωρίς κάρτα. Μετά από €99 τον χρόνο, χωρίς προμήθεια ανά κράτηση.</p>
+    <div class="ctas"><a class="btn-main" href="/#contact">Δημιουργία λογαριασμού →</a><a class="btn-outline" href="/test-restaurant?lang=el" target="_blank" rel="noopener">Δείτε live demo ↗</a></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="f-links"><a href="/">Αρχική</a><a href="/leitourgies/">Λειτουργίες</a><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a><a href="/times/">Τιμές</a><a href="/#faq">Συχνές ερωτήσεις</a><a href="/#contact">Εγγραφή</a><a href="/admin?lang=el">Σύνδεση</a></div>
+  <div class="f-bot">
+    <a class="logo" href="/">Table<em>Reserve</em></a>
+    <p>© 2026 TableReserve · AR Akron Services · Αρ. ΓΕΜΗ 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a> · <a href="/privacy?lang=el">Απόρρητο</a> · <a href="/terms?lang=el">Όροι</a></p>
+  </div>
+</footer>
+<div class="sticky-bar"><p>14 ημέρες δωρεάν</p><a href="/#contact">Ξεκινήστε →</a></div>
+<script>
+(function(){if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});return;}
+var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target);}})},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(function(el){o.observe(el)});})();
+
+</script>
+</body>
+</html>

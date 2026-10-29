@@ -25,7 +25,9 @@ const RESERVED = new Set([
   'restaurants', 'map', 'maps', 'r', 's', 'u', 'go', 'link', 'links', 'qr', 'widget',
   'tablereserve', 'table-reserve', 'arakron', 'ar-akron', 'official', 'default-store',
   'null', 'undefined', 'root', 'system', 'webmaster', 'postmaster', 'hostmaster', 'abuse',
-  'security', 'feed', 'rss', 'sitemaps', 'well-known'
+  'security', 'feed', 'rss', 'sitemaps', 'well-known',
+  // ελληνικές σελίδες του site (υπάρχουσες και πιθανές)
+  'leitourgies', 'times', 'timokatalogos', 'sygkrisi', 'odigoi', 'epikoinonia', 'katopsi', 'katopsi-trapezion'
 ]);
 
 // Ελληνικά -> λατινικά

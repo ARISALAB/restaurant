@@ -7,7 +7,9 @@
 // Υπαρκτές σελίδες/φάκελοι του site: περνάνε ανέγγιχτοι
 const PAGES = new Set([
   'admin', 'superadmin', 'partners', 'privacy', 'terms', 'site', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt',
-  'api', 'downloads', 'netlify', 'cancel', 'embed', 'index', 'claim'
+  'api', 'downloads', 'netlify', 'cancel', 'embed', 'index', 'claim',
+  // ελληνικές σελίδες του site
+  'leitourgies', 'times'
 ]);
 
 const DB = 'https://reser-dfb9a-default-rtdb.europe-west1.firebasedatabase.app';
