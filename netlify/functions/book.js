@@ -11,6 +11,20 @@ const notifyCustomer = require('./notify-customer');
 const { removeBooked } = require('./_shared/waitlist');
 const { normLang } = require('./_shared/i18n');
 const { checkDraft } = require('./_shared/drafts');
+const { autoPick } = require('./_shared/floor');
+
+// Κάτοψη ενεργή -> η κράτηση μπαίνει μόνη της σε τραπέζι. Αποτυχία εδώ δεν χαλάει την κράτηση.
+async function assignTable(db, shop, bookingId, r) {
+  try {
+    const floor = (await db.ref(`shop_floor/${shop}`).get()).val();
+    if (!floor || floor.on !== true || !floor.tables) return;
+    const list = [];
+    (await db.ref(`reservations/${shop}`).orderByChild('date').equalTo(r.date).get())
+      .forEach(c => { list.push(Object.assign({ id: c.key }, c.val())); });
+    const table = autoPick(floor, list, Object.assign({ id: bookingId }, r));
+    if (table) await db.ref(`reservations/${shop}/${bookingId}/table`).set(table);
+  } catch (e) { console.warn('[book] table assign failed', e.message); }
+}
 
 const WH_DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const HOLD_MS = 2 * 60 * 1000;          // πόσο μετράει μια «κράτηση σε εξέλιξη»
@@ -166,6 +180,8 @@ exports.handler = async (event) => {
       if (capacity) await holdRef.child(bookingId).remove().catch(() => {});
       throw e;
     }
+
+    await assignTable(db, shop, bookingId, { date, time, guests });
 
     if (isTest) {
       await db.ref(`drafts/${shop}/testBookings`).transaction(n => (n || 0) + 1).catch(() => {});

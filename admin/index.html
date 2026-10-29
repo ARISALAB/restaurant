@@ -1130,6 +1130,38 @@
         .fl-sw input:checked + span::after { transform:translateX(22px); }
         .fl-sw input:focus-visible + span { box-shadow:0 0 0 3px rgba(37,99,235,.35); }
         .fl-sw input:disabled { cursor:wait; }
+        .fl-links { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+        .fl-links line { stroke-width:6; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+        .fl-links line.j { stroke:#94a3b8; stroke-dasharray:2 7; stroke-width:4; }
+        .fl-links line.bk { stroke:#93c5fd; }
+        .fl-links line.sat { stroke:#5eead4; }
+        .fl-t { z-index:2; }
+        .fl-e { position:absolute; padding:3px; border:none; background:none; font:inherit; color:#64748b; z-index:1; }
+        .fl-e .b { width:100%; height:100%; display:flex; align-items:center; justify-content:center; gap:5px; border-radius:6px; background:#e2e8f0; border:1px dashed #cbd5e1; font-size:clamp(.58rem, 1.05vw, .74rem); font-weight:700; text-transform:uppercase; letter-spacing:.04em; overflow:hidden; white-space:nowrap; }
+        .fl-e.tall .b { flex-direction:column; }
+        .fl-e.tall .nm { writing-mode:vertical-rl; transform:rotate(180deg); }
+        .fl-e.k-wall .b { background:#475569; border:none; border-radius:3px; }
+        .fl-e.k-wall { padding:calc(100% / 48) 0; }
+        .fl-e.k-wall.tall { padding:0 calc(100% / 48); }
+        .fl-e.k-window .b { background:#e0f2fe; border:2px solid #7dd3fc; color:#0369a1; }
+        .fl-e.k-door .b { background:#fef3c7; border:1px dashed #f59e0b; color:#92400e; }
+        .fl-e.k-bar .b { background:#ede9fe; border:1px solid #c4b5fd; color:#5b21b6; }
+        .fl-e.k-kitchen .b { background:#fee2e2; border:1px solid #fca5a5; color:#991b1b; }
+        .fl-e.k-wc .b { background:#f1f5f9; border:1px solid #cbd5e1; }
+        .fl-canvas.edit .fl-e { cursor:grab; touch-action:none; }
+        .fl-canvas.edit .fl-e.drag { cursor:grabbing; z-index:5; }
+        .fl-canvas.edit .fl-e.bad .b { outline:2px solid var(--danger); }
+        .fl-e.sel .b { box-shadow:0 0 0 3px var(--primary); }
+        .fl-e:focus-visible { outline:none; } .fl-e:focus-visible .b { box-shadow:0 0 0 3px var(--primary); }
+        .fl-addel { font:inherit; font-size:.86rem; font-weight:600; color:var(--primary); padding:8px 12px; border:1px dashed #93c5fd; border-radius:10px; background:#fff; cursor:pointer; width:auto; margin:0; }
+        .fl-joins { display:flex; flex-wrap:wrap; gap:6px; }
+        .fl-joins button { min-width:40px; border:1px solid var(--border); background:#fff; font:inherit; font-size:.84rem; font-weight:700; color:#475569; padding:6px 10px; border-radius:9px; cursor:pointer; }
+        .fl-joins button.on { border-color:var(--primary); background:var(--primary-light); color:var(--primary); }
+        .fl-step { display:flex; align-items:center; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+        .fl-step button { width:40px; height:38px; border:none; background:#f8fafc; font:inherit; font-size:1.1rem; font-weight:700; color:#334155; cursor:pointer; }
+        .fl-step button:hover { background:#eef2f7; }
+        .fl-step b { flex:1; text-align:center; font-variant-numeric:tabular-nums; }
+        .fl-list .it.fl-sug { border-color:var(--primary); background:var(--primary-light); color:var(--primary); font-weight:700; gap:8px; }
     </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -1487,6 +1519,7 @@
                             <button type="button" class="rv-btn" data-add="sq"><i class="fl-shape"></i><span data-fl="add_sq"></span></button>
                             <button type="button" class="rv-btn" data-add="rd"><i class="fl-shape rd"></i><span data-fl="add_rd"></span></button>
                             <button type="button" class="rv-btn" data-add="rc"><i class="fl-shape rc"></i><span data-fl="add_rc"></span></button>
+                            <select id="fl-add-el" class="fl-addel" aria-label="Add element"><option value="" data-fl="add_el"></option><option value="bar" data-fl="el_bar"></option><option value="kitchen" data-fl="el_kitchen"></option><option value="door" data-fl="el_door"></option><option value="wc" data-fl="el_wc"></option><option value="wall" data-fl="el_wall"></option><option value="window" data-fl="el_window"></option></select>
                         </div>
                         <div class="fl-layout">
                             <div class="fl-wrap">
@@ -5454,7 +5487,8 @@
                     name, phone, email: validEmail ? email : '', date, time, guests: String(guests),
                     location: nbEl('nb-location').value, occasion: '', comments: nbEl('nb-notes').value.trim(),
                     source: nbSource, status: 'confirmed', timestamp: Date.now(), cancelToken: tok,
-                    lang: currentLang, createdBy: 'admin'
+                    lang: currentLang, createdBy: 'admin',
+                    ...(() => { const tb = flOn() ? flAutoPick({ id, date, time, guests }) : null; return tb ? { table: tb } : {}; })()
                 });
                 if (validEmail && nbEl('nb-confirm').checked) {
                     fetch(`${API}/notify-customer`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -5482,8 +5516,13 @@
                 location: nbEl('nb-location').value, comments: nbEl('nb-notes').value.trim() };
             // Νέα ώρα -> νέα υπενθύμιση
             if (date !== r.date || time !== r.time) upd.reminderSentAt = null;
-            // Άλλη μέρα -> το τραπέζι δεν ισχύει πια
-            if (date !== r.date && r.table) upd.table = null;
+            // Άλλαξε μέρα, ώρα ή άτομα: το τραπέζι μένει μόνο αν ακόμα χωράει και δεν συγκρούεται
+            if (r.table && (date !== r.date || time !== r.time || String(guests) !== String(r.guests))) {
+                const nr = Object.assign({}, r, { date, time, guests: String(guests) });
+                const ids = flTids(r);
+                const ok = date === r.date && flValidT(r) && flSeats(ids) >= guests && !flClash(nr, ids);
+                if (!ok) upd.table = flOn() ? flAutoPick(nr) : null;
+            }
             const btn = nbEl('nb-save'); btn.disabled = true;
             try {
                 await update(ref(db, `reservations/${shop}/${id}`), upd);
@@ -5854,6 +5893,16 @@
         const FL_COLS = 16, FL_ROWS = 12;
         const FL_SIZE = { sq: [2, 2], rd: [2, 2], rc: [4, 2] };
         const FL_DURS = [60, 90, 120, 150, 180, 240];
+        // Στοιχεία χώρου: shop_floor/<shop>/els/<id> = { k, z, x, y, w, h }
+        const FL_ELS = { bar: [4, 1], kitchen: [3, 2], door: [2, 1], wc: [2, 2], wall: [6, 1], window: [3, 1] };
+        const FL_EL_ICO = {
+            bar: '<path d="M8 22h8M12 11v11M5 3h14l-7 8z"/>',
+            kitchen: '<path d="M6 13.9A4 4 0 0 1 7 6a5 5 0 0 1 10 0 4 4 0 0 1 1 7.9V20H6z"/><path d="M6 17h12"/>',
+            door: '<path d="M14 3H5v18h9"/><path d="M14 3l5 2v14l-5 2z"/><circle cx="16" cy="12" r=".6"/>',
+            wc: '<circle cx="8" cy="5" r="2"/><circle cx="16" cy="5" r="2"/><path d="M6 21v-7H5l1.5-5h3L11 14h-1v7M16 9v12M14 9h4v6h-4z"/>',
+            wall: '<rect x="3" y="9" width="18" height="6" rx="1"/>',
+            window: '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M12 4v16M3 12h18"/>'
+        };
         const FL_TXT = {
             el: {
                 tab: 'Τραπέζια', live: 'Ζωντανά', edit: 'Επεξεργασία κάτοψης', now: 'Τώρα', cancel: 'Άκυρο',
@@ -5879,6 +5928,7 @@
                 assigned: 'Μπήκε στο τραπέζι {n}', removed: 'Βγήκε από το τραπέζι', saved: 'Αποθηκεύτηκε', created: 'Δημιουργήθηκαν {n} τραπέζια', err: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά.',
                 day_list: 'Κρατήσεις της ημέρας', tbl_none_day: 'Καμία κράτηση σε αυτό το τραπέζι αυτή τη μέρα.', place_here: 'Βάλτε εδώ κράτηση', remove: 'Αφαίρεση', arrived: 'Ήρθαν',
                 settings: 'Ρυθμίσεις',
+                auto_all: "Τοποθέτηση όλων αυτόματα", auto_help: "Κάθε νέα online κράτηση μπαίνει μόνη της στο μικρότερο ελεύθερο τραπέζι που χωράει την παρέα.", auto_none: "Δεν βρέθηκε ελεύθερο τραπέζι που να χωράει.", auto_done: "{n} κρατήσεις μπήκαν σε τραπέζι", auto_sug: "Πρόταση: τραπέζι {n}", joins: "Ενώσεις", join_with: "Ενώνεται με", join_help: "Για μεγάλες παρέες. Τα ενωμένα τραπέζια μετράνε μαζί, μόνο όταν χρειάζεται.", add_el: "+ Στοιχείο χώρου", el_bar: "Μπαρ", el_kitchen: "Κουζίνα", el_door: "Είσοδος", el_wc: "WC", el_wall: "Τοίχος", el_window: "Παράθυρο", el_kind: "Τύπος", el_w: "Πλάτος", el_h: "Ύψος", el_delete: "Διαγραφή στοιχείου",
                 sw_title: 'Κάτοψη τραπεζιών', sw_on: 'Ενεργή', sw_off: 'Ανενεργή', sw_on_lead: 'Βάζετε τις κρατήσεις σε τραπέζια και βλέπετε ποια είναι ελεύθερα κάθε ώρα.', sw_off_lead: 'Ενεργοποιήστε την για να βάζετε τις κρατήσεις σε τραπέζια. Οι online κρατήσεις των πελατών δεν επηρεάζονται.', sw_off_kept: 'Τα τραπέζια σας έχουν κρατηθεί και επανέρχονται μόλις την ενεργοποιήσετε.', turned_on: 'Η κάτοψη ενεργοποιήθηκε', turned_off: 'Η κάτοψη απενεργοποιήθηκε'
             },
             en: {
@@ -5905,6 +5955,7 @@
                 assigned: 'Placed on table {n}', removed: 'Removed from the table', saved: 'Saved', created: '{n} tables created', err: 'Something went wrong. Please try again.',
                 day_list: 'Bookings of the day', tbl_none_day: 'No bookings on this table on this day.', place_here: 'Place a booking here', remove: 'Remove', arrived: 'Arrived',
                 settings: 'Settings',
+                auto_all: "Place all automatically", auto_help: "Every new online booking goes by itself to the smallest free table that fits the party.", auto_none: "No free table that fits was found.", auto_done: "{n} bookings placed on a table", auto_sug: "Suggested: table {n}", joins: "Joined tables", join_with: "Joins with", join_help: "For large parties. Joined tables count together, only when needed.", add_el: "+ Room element", el_bar: "Bar", el_kitchen: "Kitchen", el_door: "Entrance", el_wc: "WC", el_wall: "Wall", el_window: "Window", el_kind: "Type", el_w: "Width", el_h: "Height", el_delete: "Delete element",
                 sw_title: 'Floor plan', sw_on: 'On', sw_off: 'Off', sw_on_lead: 'Put bookings on tables and see which tables are free at any time.', sw_off_lead: 'Turn it on to put bookings on tables. Online bookings from guests are not affected.', sw_off_kept: 'Your tables are kept and come back as soon as you turn it on.', turned_on: 'Floor plan turned on', turned_off: 'Floor plan turned off'
             },
             de: {
@@ -5931,6 +5982,7 @@
                 assigned: 'An Tisch {n} gesetzt', removed: 'Vom Tisch entfernt', saved: 'Gespeichert', created: '{n} Tische erstellt', err: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
                 day_list: 'Reservierungen des Tages', tbl_none_day: 'An diesem Tag keine Reservierungen an diesem Tisch.', place_here: 'Reservierung hierher setzen', remove: 'Entfernen', arrived: 'Angekommen',
                 settings: 'Einstellungen',
+                auto_all: "Alle automatisch platzieren", auto_help: "Jede neue Online-Reservierung kommt automatisch an den kleinsten freien Tisch, der passt.", auto_none: "Kein passender freier Tisch gefunden.", auto_done: "{n} Reservierungen einem Tisch zugewiesen", auto_sug: "Vorschlag: Tisch {n}", joins: "Verbundene Tische", join_with: "Verbindbar mit", join_help: "Für große Gruppen. Verbundene Tische zählen zusammen, nur wenn nötig.", add_el: "+ Raumelement", el_bar: "Bar", el_kitchen: "Küche", el_door: "Eingang", el_wc: "WC", el_wall: "Wand", el_window: "Fenster", el_kind: "Typ", el_w: "Breite", el_h: "Höhe", el_delete: "Element löschen",
                 sw_title: 'Tischplan', sw_on: 'Aktiv', sw_off: 'Inaktiv', sw_on_lead: 'Reservierungen Tischen zuweisen und jederzeit sehen, welche Tische frei sind.', sw_off_lead: 'Aktivieren Sie ihn, um Reservierungen Tischen zuzuweisen. Online-Reservierungen der Gäste sind davon nicht betroffen.', sw_off_kept: 'Ihre Tische bleiben gespeichert und sind wieder da, sobald Sie ihn aktivieren.', turned_on: 'Tischplan aktiviert', turned_off: 'Tischplan deaktiviert'
             },
             fr: {
@@ -5957,6 +6009,7 @@
                 assigned: 'Placée à la table {n}', removed: 'Retirée de la table', saved: 'Enregistré', created: '{n} tables créées', err: 'Une erreur est survenue. Réessayez.',
                 day_list: 'Réservations du jour', tbl_none_day: 'Aucune réservation sur cette table ce jour-là.', place_here: 'Placer une réservation ici', remove: 'Retirer', arrived: 'Arrivés',
                 settings: 'Réglages',
+                auto_all: "Tout placer automatiquement", auto_help: "Chaque nouvelle réservation en ligne va seule à la plus petite table libre adaptée au groupe.", auto_none: "Aucune table libre adaptée trouvée.", auto_done: "{n} réservations placées sur une table", auto_sug: "Suggestion : table {n}", joins: "Tables jumelées", join_with: "Se jumelle avec", join_help: "Pour les grands groupes. Les tables jumelées comptent ensemble, seulement si besoin.", add_el: "+ Élément de salle", el_bar: "Bar", el_kitchen: "Cuisine", el_door: "Entrée", el_wc: "WC", el_wall: "Mur", el_window: "Fenêtre", el_kind: "Type", el_w: "Largeur", el_h: "Hauteur", el_delete: "Supprimer l'élément",
                 sw_title: 'Plan de salle', sw_on: 'Activé', sw_off: 'Désactivé', sw_on_lead: 'Placez les réservations sur des tables et voyez à tout moment quelles tables sont libres.', sw_off_lead: 'Activez-le pour placer les réservations sur des tables. Les réservations en ligne des clients ne sont pas concernées.', sw_off_kept: 'Vos tables sont conservées et reviennent dès que vous le réactivez.', turned_on: 'Plan de salle activé', turned_off: 'Plan de salle désactivé'
             },
             it: {
@@ -5983,6 +6036,7 @@
                 assigned: 'Assegnata al tavolo {n}', removed: 'Tolta dal tavolo', saved: 'Salvato', created: '{n} tavoli creati', err: 'Qualcosa è andato storto. Riprova.',
                 day_list: 'Prenotazioni del giorno', tbl_none_day: 'Nessuna prenotazione su questo tavolo in questo giorno.', place_here: 'Metti qui una prenotazione', remove: 'Togli', arrived: 'Arrivati',
                 settings: 'Impostazioni',
+                auto_all: "Assegna tutte automaticamente", auto_help: "Ogni nuova prenotazione online va da sola al tavolo libero più piccolo adatto al gruppo.", auto_none: "Nessun tavolo libero adatto trovato.", auto_done: "{n} prenotazioni assegnate a un tavolo", auto_sug: "Suggerito: tavolo {n}", joins: "Tavoli uniti", join_with: "Si unisce con", join_help: "Per gruppi numerosi. I tavoli uniti contano insieme, solo quando serve.", add_el: "+ Elemento della sala", el_bar: "Bar", el_kitchen: "Cucina", el_door: "Ingresso", el_wc: "WC", el_wall: "Muro", el_window: "Finestra", el_kind: "Tipo", el_w: "Larghezza", el_h: "Altezza", el_delete: "Elimina elemento",
                 sw_title: 'Piantina dei tavoli', sw_on: 'Attiva', sw_off: 'Disattivata', sw_on_lead: 'Assegna le prenotazioni ai tavoli e vedi in ogni momento quali sono liberi.', sw_off_lead: 'Attivala per assegnare le prenotazioni ai tavoli. Le prenotazioni online dei clienti non cambiano.', sw_off_kept: 'I tuoi tavoli restano salvati e tornano appena la riattivi.', turned_on: 'Piantina attivata', turned_off: 'Piantina disattivata'
             },
             es: {
@@ -6009,6 +6063,7 @@
                 assigned: 'Asignada a la mesa {n}', removed: 'Quitada de la mesa', saved: 'Guardado', created: '{n} mesas creadas', err: 'Algo salió mal. Inténtalo de nuevo.',
                 day_list: 'Reservas del día', tbl_none_day: 'No hay reservas en esta mesa este día.', place_here: 'Poner una reserva aquí', remove: 'Quitar', arrived: 'Llegaron',
                 settings: 'Ajustes',
+                auto_all: "Asignar todas automáticamente", auto_help: "Cada nueva reserva online va sola a la mesa libre más pequeña que cabe el grupo.", auto_none: "No se encontró una mesa libre adecuada.", auto_done: "{n} reservas asignadas a una mesa", auto_sug: "Sugerencia: mesa {n}", joins: "Mesas unidas", join_with: "Se une con", join_help: "Para grupos grandes. Las mesas unidas cuentan juntas, solo cuando hace falta.", add_el: "+ Elemento del local", el_bar: "Barra", el_kitchen: "Cocina", el_door: "Entrada", el_wc: "Aseo", el_wall: "Pared", el_window: "Ventana", el_kind: "Tipo", el_w: "Ancho", el_h: "Alto", el_delete: "Eliminar elemento",
                 sw_title: 'Plano de mesas', sw_on: 'Activo', sw_off: 'Desactivado', sw_on_lead: 'Asigna las reservas a mesas y ve en todo momento qué mesas están libres.', sw_off_lead: 'Actívalo para asignar las reservas a mesas. Las reservas online de los clientes no se ven afectadas.', sw_off_kept: 'Tus mesas se conservan y vuelven en cuanto lo actives.', turned_on: 'Plano de mesas activado', turned_off: 'Plano de mesas desactivado'
             },
             tr: {
@@ -6035,6 +6090,7 @@
                 assigned: 'Masa {n} atandı', removed: 'Masadan çıkarıldı', saved: 'Kaydedildi', created: '{n} masa oluşturuldu', err: 'Bir şeyler ters gitti. Tekrar deneyin.',
                 day_list: 'Günün rezervasyonları', tbl_none_day: 'Bu gün bu masada rezervasyon yok.', place_here: 'Buraya rezervasyon koy', remove: 'Çıkar', arrived: 'Geldiler',
                 settings: 'Ayarlar',
+                auto_all: "Tümünü otomatik yerleştir", auto_help: "Her yeni online rezervasyon, gruba uyan en küçük boş masaya kendiliğinden yerleşir.", auto_none: "Uygun boş masa bulunamadı.", auto_done: "{n} rezervasyon masaya yerleştirildi", auto_sug: "Öneri: masa {n}", joins: "Birleşik masalar", join_with: "Birleşir", join_help: "Büyük gruplar için. Birleşik masalar yalnızca gerektiğinde birlikte sayılır.", add_el: "+ Mekân öğesi", el_bar: "Bar", el_kitchen: "Mutfak", el_door: "Giriş", el_wc: "WC", el_wall: "Duvar", el_window: "Pencere", el_kind: "Tür", el_w: "Genişlik", el_h: "Yükseklik", el_delete: "Öğeyi sil",
                 sw_title: 'Masa planı', sw_on: 'Açık', sw_off: 'Kapalı', sw_on_lead: 'Rezervasyonları masalara yerleştirin ve hangi masaların boş olduğunu her an görün.', sw_off_lead: 'Rezervasyonları masalara yerleştirmek için açın. Misafirlerin online rezervasyonları etkilenmez.', sw_off_kept: 'Masalarınız saklanır ve açtığınız anda geri gelir.', turned_on: 'Masa planı açıldı', turned_off: 'Masa planı kapatıldı'
             },
             pt: {
@@ -6061,14 +6117,15 @@
                 assigned: 'Colocada na mesa {n}', removed: 'Retirada da mesa', saved: 'Guardado', created: '{n} mesas criadas', err: 'Algo correu mal. Tente de novo.',
                 day_list: 'Reservas do dia', tbl_none_day: 'Não há reservas nesta mesa neste dia.', place_here: 'Colocar aqui uma reserva', remove: 'Retirar', arrived: 'Chegaram',
                 settings: 'Definições',
+                auto_all: "Colocar todas automaticamente", auto_help: "Cada nova reserva online vai sozinha para a mesa livre mais pequena que serve o grupo.", auto_none: "Não foi encontrada uma mesa livre adequada.", auto_done: "{n} reservas colocadas numa mesa", auto_sug: "Sugestão: mesa {n}", joins: "Mesas juntas", join_with: "Junta-se com", join_help: "Para grupos grandes. As mesas juntas contam em conjunto, só quando é preciso.", add_el: "+ Elemento da sala", el_bar: "Bar", el_kitchen: "Cozinha", el_door: "Entrada", el_wc: "WC", el_wall: "Parede", el_window: "Janela", el_kind: "Tipo", el_w: "Largura", el_h: "Altura", el_delete: "Eliminar elemento",
                 sw_title: 'Planta das mesas', sw_on: 'Ativa', sw_off: 'Desativada', sw_on_lead: 'Coloque as reservas em mesas e veja a qualquer momento quais estão livres.', sw_off_lead: 'Ative-a para colocar as reservas em mesas. As reservas online dos clientes não são afetadas.', sw_off_kept: 'As suas mesas ficam guardadas e voltam assim que a ativar.', turned_on: 'Planta ativada', turned_off: 'Planta desativada'
             }
         };
         const flT = (k, v) => trFmt((FL_TXT[currentLang] || FL_TXT.en)[k] ?? FL_TXT.en[k] ?? k, v);
         const flEl = id => document.getElementById(id);
         let flShop = null, flUnsub = null, flLoaded = false;
-        let flData = { on: false, dur: 120, zones: {}, tables: {} };
-        let flMode = 'live', flZone = null, flSel = null, flPickRes = null, flDate = '', flTime = '';
+        let flData = { on: false, dur: 120, zones: {}, tables: {}, els: {} };
+        let flMode = 'live', flZone = null, flSel = null, flSelEl = null, flPickRes = null, flDate = '', flTime = '';
 
         const flMin = s => { const m = /^(\d{1,2}):(\d{2})/.exec(String(s || '')); return m ? +m[1] * 60 + +m[2] : null; };
         const flDur = () => FL_DURS.includes(flData.dur) ? flData.dur : 120;
@@ -6081,21 +6138,62 @@
         const flZoneOf = tb => (flData.zones && flData.zones[tb.z]) ? tb.z : (flZonesList()[0] || {}).id;
         const flTablesIn = z => flTablesAll().filter(tb => flZoneOf(tb) === z)
             .sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
+        const flElsIn = z => Object.entries(flData.els || {}).map(([id, x]) => Object.assign({ id }, x)).filter(e => (((flData.zones || {})[e.z]) ? e.z : (flZonesList()[0] || {}).id) === z);
+        const flItemsIn = z => flTablesIn(z).concat(flElsIn(z));
         const flTableName = id => (flData.tables && flData.tables[id]) ? flData.tables[id].n : null;
+        // Η κράτηση κρατά τα τραπέζια ως "t1" ή, για ένωση, "t1,t2"
+        const flTids = r => String((r && r.table) || '').split(',').filter(Boolean);
+        const flHasT = (r, id) => flTids(r).includes(id);
+        const flValidT = r => { const ids = flTids(r); return ids.length > 0 && ids.every(id => flData.tables && flData.tables[id]); };
+        const flNames = ids => ids.map(flTableName).filter(Boolean).join('+');
+        const flSeats = ids => ids.reduce((n, id) => n + ((flData.tables[id] || {}).s || 0), 0);
+        const flNameCmp = (a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true });
+        // Γειτονικά ενωμένα τραπέζια: η ένωση μετράει αν είναι γραμμένη και στα δύο, στον ίδιο χώρο
+        const flJoinNb = tb => Object.keys(tb.j || {}).filter(id => { const o = flData.tables[id]; return o && flZoneOf(o) === flZoneOf(tb) && (o.j || {})[tb.id]; });
+        // Όλες οι ομάδες ενωμένων τραπεζιών (2..4) όπου κάθε τραπέζι περνά το ok()
+        function flJoinGroups(ok) {
+            const seen = new Set(), out = [];
+            const grow = set => {
+                const key = set.slice().sort().join(',');
+                if (seen.has(key)) return;
+                seen.add(key);
+                if (set.length >= 2) out.push(set.slice());
+                if (set.length >= 4) return;
+                set.forEach(id => flJoinNb(Object.assign({ id }, flData.tables[id])).forEach(n => { if (!set.includes(n) && ok(n)) grow(set.concat(n)); }));
+            };
+            flTablesAll().filter(tb => ok(tb.id)).forEach(tb => grow([tb.id]));
+            return out.map(g => g.sort((a, b) => flNameCmp(flData.tables[a], flData.tables[b])));
+        }
+        // Αυτόματη επιλογή: μικρότερο ελεύθερο τραπέζι που χωράει, αλλιώς μικρότερη ένωση. -> "t1" | "t1,t2" | null
+        // ΙΔΙΑ λογική με netlify/functions/_shared/floor.js (autoPick)
+        function flAutoPick(r) {
+            const g = parseInt(r.guests, 10) || 0;
+            if (!flHasTables() || g < 1 || flMin(r.time) === null) return null;
+            const zo = tb => ((flData.zones || {})[tb.z] || {}).o ?? 99;
+            const all = flTablesAll().filter(tb => (flData.zones || {})[tb.z]);
+            const free = id => !flClash(r, [id]);
+            const one = all.filter(tb => tb.s >= g && free(tb.id))
+                .sort((a, b) => a.s - b.s || zo(a) - zo(b) || flNameCmp(a, b))[0];
+            if (one) return one.id;
+            const grp = flJoinGroups(free).filter(x => flSeats(x) >= g)
+                .sort((a, b) => flSeats(a) - flSeats(b) || a.length - b.length || zo(flData.tables[a[0]]) - zo(flData.tables[b[0]]))[0];
+            return grp ? grp.join(',') : null;
+        }
         const flActive = r => r.status !== 'cancelled' && r.attendance !== 'noshow';
         const flDayRes = d => allReservations.filter(r => r.date === d && flActive(r));
         const flFloorActive = () => { const s = flEl('asec-floor'); return s && s.classList.contains('active'); };
 
         function listenToFloor(shop) {
             if (flUnsub) { try { flUnsub(); } catch (e) {} flUnsub = null; }
-            flShop = shop; flLoaded = false; flData = { on: false, dur: 120, zones: {}, tables: {} };
-            flSel = null; flPickRes = null; flZone = null;
+            flShop = shop; flLoaded = false; flData = { on: false, dur: 120, zones: {}, tables: {}, els: {} };
+            flSel = null; flSelEl = null; flPickRes = null; flZone = null;
             flUnsub = onValue(ref(db, 'shop_floor/' + shop), snap => {
                 if (flShop !== shop) return;
                 const v = snap.val() || {};
-                flData = { on: v.on === true, dur: v.dur || 120, zones: v.zones || {}, tables: v.tables || {} };
+                flData = { on: v.on === true, dur: v.dur || 120, zones: v.zones || {}, tables: v.tables || {}, els: v.els || {} };
                 flLoaded = true;
                 if (flSel && !flData.tables[flSel]) flSel = null;
+                if (flSelEl && !flData.els[flSelEl]) flSelEl = null;
                 flRender();
                 if (currentAdminShop === shop) renderDashboard(shop);
             }, () => { flLoaded = true; flRender(); });
@@ -6104,7 +6202,7 @@
         // Κατάσταση τραπεζιού την ώρα t (λεπτά) της ημέρας d
         function flStateOf(id, d, t) {
             const dur = flDur();
-            const list = flDayRes(d).filter(r => r.table === id && flMin(r.time) !== null)
+            const list = flDayRes(d).filter(r => flHasT(r, id) && flMin(r.time) !== null)
                 .sort((a, b) => flMin(a.time) - flMin(b.time));
             const cur = list.find(r => flMin(r.time) <= t && t < flMin(r.time) + dur);
             if (cur) return { st: cur.attendance === 'arrived' ? 'seated' : 'busy', r: cur };
@@ -6112,20 +6210,21 @@
             if (next) return { st: 'soon', r: next };
             return { st: 'free', r: null };
         }
-        // Άλλη κράτηση στο ίδιο τραπέζι που πέφτει πάνω στην r
-        function flClash(r, id) {
+        // Άλλη κράτηση σε κάποιο από τα τραπέζια ids που πέφτει πάνω στην r
+        function flClash(r, ids) {
             const s = flMin(r.time), dur = flDur();
-            if (s === null) return null;
-            return flDayRes(r.date).find(x => x.id !== r.id && x.table === id && flMin(x.time) !== null
+            ids = [].concat(ids || []);
+            if (s === null || !ids.length) return null;
+            return flDayRes(r.date).find(x => x.id !== r.id && flTids(x).some(t => ids.includes(t)) && flMin(x.time) !== null
                 && flMin(x.time) < s + dur && s < flMin(x.time) + dur) || null;
         }
 
         function flOverlaps(z, x, y, w, h, skip) {
-            return flTablesAll().some(tb => tb.id !== skip && flZoneOf(tb) === z
+            return flItemsIn(z).some(tb => tb.id !== skip
                 && x < tb.x + tb.w && tb.x < x + w && y < tb.y + tb.h && tb.y < y + h);
         }
         function flFreeSpot(z, w, h, extra) {
-            const busy = (x, y, gap) => flTablesAll().concat(extra || []).some(tb => tb.id && flZoneOf(tb) === z
+            const busy = (x, y, gap) => flItemsIn(z).concat((extra || []).filter(tb => flZoneOf(tb) === z)).some(tb => tb.id
                 && x < tb.x + tb.w + gap && tb.x < x + w + gap && y < tb.y + tb.h + gap && tb.y < y + h + gap);
             for (const gap of [1, 0]) for (let y = gap; y + h <= FL_ROWS; y++) for (let x = gap; x + w <= FL_COLS; x++) if (!busy(x, y, gap)) return { x, y };
             return null;
@@ -6212,7 +6311,15 @@
             cv.classList.toggle('edit', edit);
             const tm = flMin(flTime) ?? 0;
             const pr = flPickRes ? allReservations.find(r => r.id === flPickRes) : null;
-            cv.innerHTML = flTablesIn(flZone).map(tb => {
+            const elsHtml = flElsIn(flZone).map(e => {
+                const st = `left:${e.x / FL_COLS * 100}%;top:${e.y / FL_ROWS * 100}%;width:${e.w / FL_COLS * 100}%;height:${e.h / FL_ROWS * 100}%`;
+                const lbl = flT('el_' + e.k), tall = e.h > e.w;
+                const inner = `<span class="b">${e.k === 'wall' ? '' : svgI(FL_EL_ICO[e.k] || '', 14)}${e.k === 'wall' || (Math.max(e.w, e.h) < 2) ? '' : `<span class="nm">${repEsc(lbl)}</span>`}</span>`;
+                return edit
+                    ? `<button type="button" class="fl-e k-${e.k}${tall ? ' tall' : ''}${e.id === flSelEl ? ' sel' : ''}" style="${st}" data-eid="${repEsc(e.id)}" aria-label="${repEsc(lbl)}">${inner}</button>`
+                    : `<div class="fl-e k-${e.k}${tall ? ' tall' : ''}" style="${st}" aria-hidden="true">${inner}</div>`;
+            }).join('');
+            cv.innerHTML = elsHtml + flTablesIn(flZone).map(tb => {
                 let cls = 'fl-t ' + (tb.sh === 'rd' ? 'rd' : tb.sh);
                 let sub = flT('seats_n', { n: tb.s }), aria = flT('table_n', { n: tb.n }) + ', ' + sub;
                 if (!edit) {
@@ -6223,17 +6330,45 @@
                         sub = S.st === 'soon' ? `${S.r.time} · ${S.r.guests}` : `${S.r.time} · ${nm}`;
                         aria += ', ' + flT('lg_' + S.st) + ' ' + S.r.time + ' ' + (S.r.name || '');
                     } else aria += ', ' + flT('lg_free');
-                    if (pr) cls += S.st === 'free' && !flClash(pr, tb.id) ? ' target' : ' dim';
+                    if (pr) cls += S.st === 'free' && !flClash(pr, [tb.id]) ? ' target' : ' dim';
                 } else if (tb.id === flSel) cls += ' sel';
                 const st = `left:${tb.x / FL_COLS * 100}%;top:${tb.y / FL_ROWS * 100}%;width:${tb.w / FL_COLS * 100}%;height:${tb.h / FL_ROWS * 100}%`;
                 return `<button type="button" class="${cls}" style="${st}" data-tid="${repEsc(tb.id)}" aria-label="${repEsc(aria)}"><span class="b"><span class="nm">${repEsc(tb.n)}</span><span class="sub">${repEsc(sub)}</span></span></button>`;
             }).join('');
-            if (edit) cv.querySelectorAll('.fl-t').forEach(el => flBindDrag(el));
+            cv.insertAdjacentHTML('afterbegin', flLinks(edit, tm));
+            if (edit) cv.querySelectorAll('.fl-t, .fl-e').forEach(el => flBindDrag(el));
+        }
+        function flLinks(edit, tm) {
+            const tbs = flTablesIn(flZone), by = {}, pairs = [];
+            tbs.forEach(tb => { by[tb.id] = tb; });
+            const add = (a, b, k) => { if (by[a] && by[b] && !pairs.some(p => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a))) pairs.push([a, b, k]); };
+            if (edit) tbs.forEach(tb => flJoinNb(tb).forEach(o => add(tb.id, o, 'j')));
+            else flDayRes(flDate).forEach(r => {
+                const ids = flTids(r), s = flMin(r.time);
+                if (ids.length < 2 || s === null || !(s <= tm && tm < s + flDur())) return;
+                for (let i = 1; i < ids.length; i++) add(ids[i - 1], ids[i], r.attendance === 'arrived' ? 'sat' : 'bk');
+            });
+            if (!pairs.length) return '';
+            const c = tb => [tb.x + tb.w / 2, tb.y + tb.h / 2];
+            return `<svg class="fl-links" viewBox="0 0 ${FL_COLS} ${FL_ROWS}" preserveAspectRatio="none" aria-hidden="true">${pairs.map(([a, b, k]) => { const p = c(by[a]), q = c(by[b]); return `<line class="${k}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`; }).join('')}</svg>`;
         }
 
         function flRenderSide(edit) {
             const side = flEl('fl-side');
             if (edit) {
+                const el = flSelEl && flData.els[flSelEl];
+                if (el) {
+                    const step = (k, lbl, v) => `<div class="fl-field"><label>${repEsc(lbl)}</label><div class="fl-step"><button type="button" data-sz="${k}" data-d="-1" aria-label="−">−</button><b>${v}</b><button type="button" data-sz="${k}" data-d="1" aria-label="+">+</button></div></div>`;
+                    side.innerHTML = `<div class="fl-panel">
+                        <h4>${repEsc(flT('el_' + el.k))}</h4>
+                        <div class="fl-field"><label for="fl-el-k">${repEsc(flT('el_kind'))}</label><select id="fl-el-k">${Object.keys(FL_ELS).map(k => `<option value="${k}"${k === el.k ? ' selected' : ''}>${repEsc(flT('el_' + k))}</option>`).join('')}</select></div>
+                        <div class="fl-row2">${step('w', flT('el_w'), el.w)}${step('h', flT('el_h'), el.h)}</div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;">
+                            <button type="button" class="fl-del" id="fl-el-del">${repEsc(flT('el_delete'))}</button>
+                            <button type="button" class="rv-btn main" id="fl-el-done">${repEsc(flT('tbl_done'))}</button>
+                        </div></div>`;
+                    return;
+                }
                 const tb = flSel && flData.tables[flSel];
                 if (tb) {
                     const zones = flZonesList();
@@ -6247,6 +6382,12 @@
                             ${['sq', 'rd', 'rc'].map(s => `<button type="button" data-shape="${s}" class="${tb.sh === s ? 'on' : ''}" title="${repEsc(flT('sh_' + s))}" aria-label="${repEsc(flT('sh_' + s))}"><i class="fl-shape ${s}"></i></button>`).join('')}
                             <button type="button" data-rotate="1" title="${repEsc(flT('tbl_rotate'))}" aria-label="${repEsc(flT('tbl_rotate'))}" ${tb.w === tb.h ? 'disabled style="opacity:.4"' : ''}>${svgI('<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>', 16)}</button>
                         </div></div>
+                        ${(() => {
+                            const others = flTablesIn(flZoneOf(tb)).filter(o => o.id !== flSel);
+                            if (!others.length) return '';
+                            const nb = flJoinNb(Object.assign({ id: flSel }, tb));
+                            return `<div class="fl-field"><label>${repEsc(flT('join_with'))}</label><div class="fl-joins">${others.map(o => `<button type="button" data-join="${repEsc(o.id)}" class="${nb.includes(o.id) ? 'on' : ''}" aria-pressed="${nb.includes(o.id)}">${repEsc(o.n)}</button>`).join('')}</div><div class="help">${repEsc(flT('join_help'))}</div></div>`;
+                        })()}
                         ${zones.length > 1 ? `<div class="fl-field"><label for="fl-e-zone">${repEsc(flT('tbl_zone'))}</label><select id="fl-e-zone">${zones.map(z => `<option value="${repEsc(z.id)}"${z.id === flZoneOf(tb) ? ' selected' : ''}>${repEsc(z.n)}</option>`).join('')}</select></div>` : ''}
                         <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;">
                             <button type="button" class="fl-del" id="fl-e-del">${repEsc(flT('tbl_delete'))}</button>
@@ -6268,8 +6409,8 @@
             const all = flTablesAll();
             const free = all.filter(tb => flStateOf(tb.id, flDate, tm).st === 'free').length;
             const day = flDayRes(flDate).slice().sort((a, b) => (a.time || '').localeCompare(b.time || ''));
-            const withT = day.filter(r => r.table && flData.tables[r.table]);
-            const ua = day.filter(r => !(r.table && flData.tables[r.table]));
+            const withT = day.filter(flValidT);
+            const ua = day.filter(r => !flValidT(r));
             side.innerHTML = `<div class="fl-panel">
                     <div class="fl-count">${free}<small>${repEsc(flT('free_of', { total: all.length }))}</small></div>
                     ${day.length ? `<p class="fl-muted" style="margin-top:4px;">${repEsc(flT('assigned_of', { a: withT.length, n: day.length }))}</p>` : ''}
@@ -6277,16 +6418,21 @@
                 <div class="fl-panel"><h4>${repEsc(flT('unassigned'))}${ua.length ? ` <small>${ua.length}</small>` : ''}</h4>
                     ${!day.length ? `<p class="fl-muted">${repEsc(flT('no_bookings_day'))}</p>`
                     : !ua.length ? `<p class="fl-muted">${repEsc(flT('unassigned_none'))}</p>`
-                    : `<div class="fl-ua">${ua.map(r => `<button type="button" data-pick="${repEsc(r.id)}" class="${r.id === flPickRes ? 'on' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)}</span><em>${repEsc(r.guests)} ${repEsc(t('guests_label'))}</em></button>`).join('')}</div>`}
+                    : `<div class="fl-ua">${ua.map(r => `<button type="button" data-pick="${repEsc(r.id)}" class="${r.id === flPickRes ? 'on' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)}</span><em>${repEsc(r.guests)} ${repEsc(t('guests_label'))}</em></button>`).join('')}</div>
+                    <button type="button" class="rv-btn" id="fl-auto-all" style="width:100%;justify-content:center;margin-top:10px;">${svgI('<path d="m12 3 1.9 5.8L20 9l-4.9 3.6L16.9 19 12 15.4 7.1 19l1.8-6.4L4 9l6.1-.2z"/>', 15)}${repEsc(flT('auto_all'))}</button>
+                    <p class="fl-muted" style="margin:8px 2px 0;font-size:.78rem;">${repEsc(flT('auto_help'))}</p>`}
                 </div>`;
         }
 
         // ---------- Μετακίνηση (σύρσιμο) στην επεξεργασία ----------
         function flBindDrag(el) {
-            const id = el.dataset.tid;
+            const isEl = !!el.dataset.eid, id = isEl ? el.dataset.eid : el.dataset.tid;
+            const item = () => (isEl ? flData.els : flData.tables)[id];
+            const save = patch => isEl ? flSaveEl(id, patch) : flSaveTable(id, patch);
+            const pick = () => { if (isEl) { flSelEl = id; flSel = null; } else { flSel = id; flSelEl = null; } };
             el.addEventListener('pointerdown', e => {
                 if (flMode !== 'edit' || (e.button !== undefined && e.button !== 0)) return;
-                const tb = flData.tables[id]; if (!tb) return;
+                const tb = item(); if (!tb) return;
                 e.preventDefault();
                 const cv = flEl('fl-canvas'), rect = cv.getBoundingClientRect();
                 const cw = rect.width / FL_COLS, ch = rect.height / FL_ROWS;
@@ -6308,10 +6454,10 @@
                     el.removeEventListener('pointerup', up);
                     el.removeEventListener('pointercancel', up);
                     el.classList.remove('drag', 'bad');
-                    flSel = id;
+                    pick();
                     if (!moved) { flRender(); return; }
                     if (flOverlaps(z, nx, ny, tb.w, tb.h, id)) { showToast(flT('overlap'), 'error'); flRender(); return; }
-                    flSaveTable(id, { x: nx, y: ny });
+                    save({ x: nx, y: ny });
                 };
                 el.addEventListener('pointermove', mv);
                 el.addEventListener('pointerup', up);
@@ -6321,11 +6467,11 @@
                 const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
                 if (!d || flMode !== 'edit') return;
                 e.preventDefault();
-                const tb = flData.tables[id]; if (!tb) return;
+                const tb = item(); if (!tb) return;
                 const x = tb.x + d[0], y = tb.y + d[1];
                 if (x < 0 || y < 0 || x + tb.w > FL_COLS || y + tb.h > FL_ROWS || flOverlaps(flZoneOf(tb), x, y, tb.w, tb.h, id)) return;
-                flSel = id;
-                flSaveTable(id, { x, y }).then(() => { const n = flEl('fl-canvas').querySelector(`[data-tid="${id}"]`); if (n) n.focus(); });
+                pick();
+                save({ x, y }).then(() => { const n = flEl('fl-canvas').querySelector(`[data-${isEl ? 'eid' : 'tid'}="${id}"]`); if (n) n.focus(); });
             });
         }
 
@@ -6335,6 +6481,26 @@
             Object.assign(flData.tables[id], patch);
             flRender();
             return update(ref(db, `shop_floor/${flShop}/tables/${id}`), patch).catch(() => showToast(flT('err'), 'error'));
+        }
+        function flSaveEl(id, patch) {
+            if (!flShop || !flData.els[id]) return Promise.resolve();
+            Object.assign(flData.els[id], patch);
+            flRender();
+            return update(ref(db, `shop_floor/${flShop}/els/${id}`), patch).catch(() => showToast(flT('err'), 'error'));
+        }
+        async function flAddEl(k) {
+            if (!FL_ELS[k]) return;
+            const z = await flEnsureZone(); if (!z) return;
+            if (!flZone) flZone = z;
+            const [w, h] = FL_ELS[k];
+            const spot = flFreeSpot(flZone, w, h);
+            if (!spot) { showToast(flT('no_room'), 'error'); return; }
+            const id = flId('e');
+            const el = { k, z: flZone, x: spot.x, y: spot.y, w, h };
+            flData.els = Object.assign({}, flData.els, { [id]: el });
+            flSelEl = id; flSel = null;
+            flRender();
+            set(ref(db, `shop_floor/${flShop}/els/${id}`), el).catch(() => showToast(flT('err'), 'error'));
         }
         function flEnsureZone() {
             if (!flShop || flZonesList().length) return Promise.resolve((flZonesList()[0] || {}).id);
@@ -6353,7 +6519,7 @@
             const id = flId('t');
             const tb = { n: flNextName(), s: sh === 'rc' ? 6 : (sh === 'rd' ? 4 : 4), z: flZone, x: spot.x, y: spot.y, w, h, sh };
             flData.tables = Object.assign({}, flData.tables, { [id]: tb });
-            flSel = id;
+            flSel = id; flSelEl = null;
             flRender();
             set(ref(db, `shop_floor/${flShop}/tables/${id}`), tb).catch(() => showToast(flT('err'), 'error'));
         }
@@ -6395,18 +6561,39 @@
         }
 
         // ---------- Ανάθεση κράτησης σε τραπέζι ----------
+        // tid: "t1" | "t1,t2" | null
         async function flAssign(resId, tid) {
             const r = allReservations.find(x => x.id === resId);
             if (!r || !currentAdminShop) return false;
-            if (tid) {
-                const c = flClash(r, tid);
-                if (c && !confirm(flT('busy_q', { n: flTableName(tid), time: c.time, name: c.name || '' }))) return false;
+            const ids = String(tid || '').split(',').filter(Boolean);
+            if (ids.length) {
+                const c = flClash(r, ids);
+                if (c && !confirm(flT('busy_q', { n: flNames(ids.filter(id => flHasT(c, id))), time: c.time, name: c.name || '' }))) return false;
             }
             try {
-                await update(ref(db, `reservations/${currentAdminShop}/${resId}`), { table: tid || null });
-                showToast(tid ? flT('assigned', { n: flTableName(tid) }) : flT('removed'), 'success');
+                await update(ref(db, `reservations/${currentAdminShop}/${resId}`), { table: ids.length ? ids.join(',') : null });
+                showToast(ids.length ? flT('assigned', { n: flNames(ids) }) : flT('removed'), 'success');
                 return true;
             } catch (e) { showToast(flT('err'), 'error'); return false; }
+        }
+        // Όλες οι κρατήσεις της ημέρας χωρίς τραπέζι -> αυτόματα, με σειρά ώρας
+        async function flAutoAll() {
+            if (!currentAdminShop) return;
+            const ua = flDayRes(flDate).filter(r => !flValidT(r)).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            const upd = {}, done = [];
+            for (const r of ua) {
+                const tid = flAutoPick(r);
+                if (!tid) continue;
+                upd[`${r.id}/table`] = tid;
+                r.table = tid;           // για να το δει η επόμενη επιλογή
+                done.push(r);
+            }
+            if (!done.length) { showToast(flT('auto_none'), 'error'); return; }
+            try {
+                await update(ref(db, `reservations/${currentAdminShop}`), upd);
+                showToast(flT('auto_done', { n: done.length }), 'success');
+            } catch (e) { done.forEach(r => { r.table = null; }); showToast(flT('err'), 'error'); }
+            flRender();
         }
 
         const flModal = flEl('fl-modal');
@@ -6426,28 +6613,38 @@
             const rows = flZonesList().map(z => {
                 const tbs = flTablesIn(z.id); if (!tbs.length) return '';
                 return (flZonesList().length > 1 ? `<div class="zn">${repEsc(z.n)}</div>` : '') + tbs.map(tb => {
-                    const c = flClash(r, tb.id);
+                    const c = flClash(r, [tb.id]);
                     const st = c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>`
                         : tb.s < g ? `<span class="st small">${repEsc(flT('st_small', { s: tb.s }))}</span>`
                         : `<span class="st">${repEsc(flT('st_free'))}</span>`;
                     return `<button type="button" class="it${r.table === tb.id ? ' cur' : ''}" data-assign="${repEsc(tb.id)}"><b>${repEsc(tb.n)}</b><span>${repEsc(flT('seats_n', { n: tb.s }))}</span>${st}</button>`;
                 }).join('');
             }).join('');
+            // Ενώσεις: μόνο όσες χωράνε την παρέα και δεν χωράει κανένα μονό τραπέζι τους
+            const grps = flJoinGroups(() => true).filter(x => flSeats(x) >= g && x.every(id => flData.tables[id].s < g))
+                .sort((a, b) => flSeats(a) - flSeats(b) || a.length - b.length).slice(0, 12);
+            const joins = grps.length ? `<div class="zn">${repEsc(flT('joins'))}</div>` + grps.map(x => {
+                const c = flClash(r, x), key = x.join(',');
+                const st = c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>` : `<span class="st">${repEsc(flT('st_free'))}</span>`;
+                return `<button type="button" class="it${r.table === key ? ' cur' : ''}" data-assign="${repEsc(key)}"><b>${repEsc(flNames(x))}</b><span>${repEsc(flT('seats_n', { n: flSeats(x) }))}</span>${st}</button>`;
+            }).join('') : '';
             const none = r.table ? `<button type="button" class="it" data-assign=""><span>${repEsc(flT('no_table'))}</span></button>` : '';
+            const sug = flAutoPick(r);
+            const auto = sug && sug !== r.table ? `<button type="button" class="it fl-sug" data-assign="${repEsc(sug)}">${svgI('<path d="m12 3 1.9 5.8L20 9l-4.9 3.6L16.9 19 12 15.4 7.1 19l1.8-6.4L4 9l6.1-.2z"/>', 15)}<span>${repEsc(flT('auto_sug', { n: flNames(sug.split(',')) }))}</span></button>` : '';
             flOpenModal(flT('assign_title', { name: r.name || '' }), flT('assign_sub', { date: nbFmtDate(r.date), time: r.time || '', g: r.guests || '' }),
-                `<div class="fl-list" data-res="${repEsc(resId)}">${rows}${none}</div>`);
+                `<div class="fl-list" data-res="${repEsc(resId)}">${auto}${rows}${joins}${none}</div>`);
         };
 
         // Από την κάτοψη: τι έχει το τραπέζι σήμερα + βάλε κράτηση
         function flOpenTable(tid) {
             const tb = flData.tables[tid]; if (!tb) return;
             const day = flDayRes(flDate).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
-            const on = day.filter(r => r.table === tid);
-            const ua = day.filter(r => !(r.table && flData.tables[r.table]));
-            const onHtml = on.length ? on.map(r => `<div class="it${r.attendance === 'arrived' ? ' ok' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}</span>${r.attendance === 'arrived' ? `<span class="st">${repEsc(flT('arrived'))}</span>` : ''}<button type="button" class="x" data-unassign="${repEsc(r.id)}">${repEsc(flT('remove'))}</button></div>`).join('')
+            const on = day.filter(r => flHasT(r, tid));
+            const ua = day.filter(r => !flValidT(r));
+            const onHtml = on.length ? on.map(r => `<div class="it${r.attendance === 'arrived' ? ' ok' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}${flTids(r).length > 1 ? ' · ' + repEsc(flNames(flTids(r))) : ''}</span>${r.attendance === 'arrived' ? `<span class="st">${repEsc(flT('arrived'))}</span>` : ''}<button type="button" class="x" data-unassign="${repEsc(r.id)}">${repEsc(flT('remove'))}</button></div>`).join('')
                 : `<p class="fl-muted">${repEsc(flT('tbl_none_day'))}</p>`;
             const uaHtml = ua.length ? `<label style="display:block;font-size:.78rem;font-weight:600;color:var(--text-muted);margin:16px 0 6px;">${repEsc(flT('place_here'))}</label>
-                <div class="fl-list">${ua.map(r => { const c = flClash(r, tid); return `<button type="button" class="it" data-place="${repEsc(r.id)}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}</span>${c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>` : ''}</button>`; }).join('')}</div>` : '';
+                <div class="fl-list">${ua.map(r => { const c = flClash(r, [tid]); return `<button type="button" class="it" data-place="${repEsc(r.id)}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}</span>${c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>` : ''}</button>`; }).join('')}</div>` : '';
             flOpenModal(flT('table_n', { n: tb.n }), flT('seats_n', { n: tb.s }) + ' · ' + nbFmtDate(flDate),
                 `<label style="display:block;font-size:.78rem;font-weight:600;color:var(--text-muted);margin:0 0 6px;">${repEsc(flT('day_list'))}</label><div class="fl-list" data-tid="${repEsc(tid)}">${onHtml}</div>${uaHtml}`);
             flModal.dataset.tid = tid;
@@ -6456,14 +6653,14 @@
         // Ετικέτα στην κάρτα κράτησης (μόνο αν το μαγαζί έχει τραπέζια)
         function flChip(res, cancelled) {
             if (cancelled || !flOn() || !flHasTables()) return '';
-            const n = res.table && flTableName(res.table);
+            const n = flValidT(res) && flNames(flTids(res));
             const ico = svgI('<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M6 12v7M18 12v7"/>', 12);
             return n ? `<button type="button" class="fl-chip set" onclick="flPickFor('${res.id}')">${ico}${repEsc(flT('table_n', { n }))}</button>`
                 : `<button type="button" class="fl-chip add" onclick="flPickFor('${res.id}')">+ ${repEsc(flT('chip_add'))}</button>`;
         }
 
         // ---------- Συμβάντα ----------
-        flEl('fl-m-live').onclick = () => { flMode = 'live'; flSel = null; flRender(); };
+        flEl('fl-m-live').onclick = () => { flMode = 'live'; flSel = null; flSelEl = null; flRender(); };
         flEl('fl-m-edit').onclick = () => { flMode = 'edit'; flPickRes = null; flRender(); };
         flEl('fl-date').addEventListener('change', e => { flDate = e.target.value || todayLocal(); flTime = flDefaultTime(flDate); flPickRes = null; flRender(); });
         flEl('fl-time').addEventListener('change', e => { flTime = e.target.value; flRender(); });
@@ -6482,6 +6679,7 @@
         });
         flEl('fl-q-manual').onclick = () => { flMode = 'edit'; flRender(); };
         document.querySelectorAll('#fl-tools [data-add]').forEach(b => b.onclick = () => flAddTable(b.dataset.add));
+        flEl('fl-add-el').addEventListener('change', e => { const k = e.target.value; e.target.value = ''; if (k) flAddEl(k); });
 
         flEl('fl-zones').addEventListener('click', e => {
             const b = e.target.closest('button'); if (!b) return;
@@ -6494,7 +6692,7 @@
                 set(ref(db, `shop_floor/${flShop}/zones/${id}`), { n: name, o }).catch(() => showToast(flT('err'), 'error'));
                 return;
             }
-            flZone = b.dataset.zone; flSel = null; flRender();
+            flZone = b.dataset.zone; flSel = null; flSelEl = null; flRender();
         });
 
         flEl('fl-canvas').addEventListener('click', async e => {
@@ -6510,6 +6708,22 @@
         });
 
         flEl('fl-side').addEventListener('click', e => {
+            if (e.target.closest('#fl-auto-all')) { flAutoAll(); return; }
+            const sz = e.target.closest('[data-sz]');
+            if (sz && flSelEl) {
+                const el = flData.els[flSelEl], k = sz.dataset.sz, d = +sz.dataset.d;
+                const w = k === 'w' ? el.w + d : el.w, h = k === 'h' ? el.h + d : el.h;
+                if (w < 1 || h < 1 || w > 16 || h > 12 || el.x + w > FL_COLS || el.y + h > FL_ROWS) return;
+                if (flOverlaps(el.z, el.x, el.y, w, h, flSelEl)) return showToast(flT('overlap'), 'error');
+                return flSaveEl(flSelEl, { w, h });
+            }
+            if (e.target.id === 'fl-el-done') { flSelEl = null; flRender(); return; }
+            if (e.target.id === 'fl-el-del' && flSelEl) {
+                const id = flSelEl; flSelEl = null;
+                delete flData.els[id]; flRender();
+                remove(ref(db, `shop_floor/${flShop}/els/${id}`)).catch(() => showToast(flT('err'), 'error'));
+                return;
+            }
             const pick = e.target.closest('[data-pick]');
             if (pick) {
                 const id = pick.dataset.pick;
@@ -6541,13 +6755,27 @@
                 }
                 return flSaveTable(flSel, { w, h, x, y });
             }
+            const jb = e.target.closest('[data-join]');
+            if (jb && flSel) {
+                const a = flSel, b = jb.dataset.join, ta = flData.tables[a], tbb = flData.tables[b];
+                if (!ta || !tbb) return;
+                const on = !flJoinNb(Object.assign({ id: a }, ta)).includes(b);
+                ta.j = Object.assign({}, ta.j); tbb.j = Object.assign({}, tbb.j);
+                if (on) { ta.j[b] = true; tbb.j[a] = true; } else { delete ta.j[b]; delete tbb.j[a]; }
+                flRender();
+                update(ref(db, `shop_floor/${flShop}/tables`), { [`${a}/j/${b}`]: on || null, [`${b}/j/${a}`]: on || null })
+                    .catch(() => showToast(flT('err'), 'error'));
+                return;
+            }
             if (e.target.id === 'fl-e-done') { flSel = null; flRender(); return; }
             if (e.target.id === 'fl-e-del' && flSel) {
                 const tb = flData.tables[flSel];
                 if (!confirm(flT('tbl_del_q', { n: tb.n }))) return;
                 const id = flSel; flSel = null;
+                const upd = { [id]: null };
+                Object.keys(tb.j || {}).forEach(o => { if (flData.tables[o]) { upd[`${o}/j/${id}`] = null; if (flData.tables[o].j) delete flData.tables[o].j[id]; } });
                 delete flData.tables[id]; flRender();
-                remove(ref(db, `shop_floor/${flShop}/tables/${id}`)).catch(() => showToast(flT('err'), 'error'));
+                update(ref(db, `shop_floor/${flShop}/tables`), upd).catch(() => showToast(flT('err'), 'error'));
                 return;
             }
             if (e.target.id === 'fl-z-del') {
@@ -6555,6 +6783,7 @@
                 const z = flData.zones[flZone]; if (!z || !confirm(flT('zone_del_q', { n: z.n }))) return;
                 const upd = { ['zones/' + flZone]: null };
                 flTablesIn(flZone).forEach(tb => { upd['tables/' + tb.id] = null; });
+                flElsIn(flZone).forEach(x => { upd['els/' + x.id] = null; delete flData.els[x.id]; });
                 const zid = flZone; flZone = null;
                 update(ref(db, `shop_floor/${flShop}`), upd).catch(() => showToast(flT('err'), 'error'));
                 delete flData.zones[zid]; flRender();
@@ -6562,6 +6791,7 @@
         });
         flEl('fl-side').addEventListener('change', e => {
             const id = e.target.id;
+            if (id === 'fl-el-k' && flSelEl && FL_ELS[e.target.value]) { flSaveEl(flSelEl, { k: e.target.value }); return; }
             if (id === 'fl-e-name' && flSel) {
                 const n = e.target.value.trim().slice(0, 12);
                 if (n) flSaveTable(flSel, { n }); else e.target.value = flData.tables[flSel].n;
@@ -6573,6 +6803,9 @@
                 const sp = flOverlaps(z, tb.x, tb.y, tb.w, tb.h, flSel) ? flFreeSpot(z, tb.w, tb.h) : { x: tb.x, y: tb.y };
                 if (!sp) { e.target.value = flZoneOf(tb); return showToast(flT('no_room'), 'error'); }
                 flZone = z;
+                const jupd = {};
+                Object.keys(tb.j || {}).forEach(o => { if (flData.tables[o]) { jupd[`${o}/j/${flSel}`] = null; if (flData.tables[o].j) delete flData.tables[o].j[flSel]; } });
+                if (Object.keys(jupd).length) { jupd[`${flSel}/j`] = null; tb.j = {}; update(ref(db, `shop_floor/${flShop}/tables`), jupd).catch(() => {}); }
                 flSaveTable(flSel, { z, x: sp.x, y: sp.y });
             } else if (id === 'fl-z-name' && flZone) {
                 const n = e.target.value.trim().slice(0, 30);
