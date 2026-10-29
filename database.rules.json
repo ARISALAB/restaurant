@@ -86,6 +86,9 @@
           "cancelledBy": {
             ".validate": "newData.isString() && newData.val().length <= 20"
           },
+          "table": {
+            ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9]{2,12}$/)"
+          },
           "$other": {
             ".validate": false
           }
@@ -156,6 +159,41 @@
             ".read": "$field !== 'notificationEmail'"
           }
         }
+      }
+    },
+    "shop_floor": {
+      "$shop": {
+        ".read": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1')",
+        ".write": "auth != null && (root.child('users_to_shops').child(auth.uid).val() === $shop || auth.uid === 'cGhWqj5Mtiey6AC8CMpiUZDxAGh1')",
+        "on": {
+          ".validate": "newData.isBoolean()"
+        },
+        "dur": {
+          ".validate": "newData.isNumber() && newData.val() >= 30 && newData.val() <= 360"
+        },
+        "zones": {
+          "$z": {
+            ".validate": "$z.matches(/^[a-z0-9]{2,12}$/) && newData.hasChildren(['n'])",
+            "n": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 30" },
+            "o": { ".validate": "newData.isNumber()" },
+            "$other": { ".validate": false }
+          }
+        },
+        "tables": {
+          "$t": {
+            ".validate": "$t.matches(/^[a-z0-9]{2,12}$/) && newData.hasChildren(['n', 's', 'z', 'x', 'y', 'w', 'h', 'sh'])",
+            "n": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 12" },
+            "s": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 30" },
+            "z": { ".validate": "newData.isString() && newData.val().matches(/^[a-z0-9]{2,12}$/)" },
+            "x": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 15" },
+            "y": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 11" },
+            "w": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 6" },
+            "h": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 6" },
+            "sh": { ".validate": "newData.isString() && newData.val().matches(/^(sq|rd|rc)$/)" },
+            "$other": { ".validate": false }
+          }
+        },
+        "$other": { ".validate": false }
       }
     },
     "guests": {

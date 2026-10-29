@@ -1012,6 +1012,124 @@
             .rv-stat b { font-size: 1.35rem; }
             .rv-actions .rv-btn { flex: 1 1 auto; justify-content: center; }
         }
+
+        /* ======= ΤΡΑΠΕΖΙΑ / ΚΑΤΟΨΗ ======= */
+        .fl-top { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; margin:0 0 16px; }
+        .fl-seg { display:inline-flex; background:#e9edf4; border-radius:12px; padding:4px; gap:2px; }
+        .fl-seg button { border:none; background:none; font:inherit; font-size:.86rem; font-weight:600; color:#475569; padding:8px 14px; border-radius:9px; cursor:pointer; }
+        .fl-seg button.on { background:#fff; color:var(--primary); box-shadow:0 1px 3px rgba(15,23,42,.1); }
+        .fl-ctrl { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+        .fl-ctrl input[type=date], .fl-ctrl select { width:auto; min-width:0; margin:0; font:inherit; font-size:.88rem; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:#fff; color:var(--text-main); }
+        .fl-zones { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; align-items:center; }
+        .fl-zone { border:1px solid var(--border); background:#fff; font:inherit; font-size:.84rem; font-weight:600; color:#475569; padding:7px 14px; border-radius:999px; cursor:pointer; }
+        .fl-zone.on { background:var(--text-main); border-color:var(--text-main); color:#fff; }
+        .fl-zone.add { border-style:dashed; color:var(--primary); }
+        .fl-layout { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:16px; align-items:start; }
+        @media (max-width: 900px) { .fl-layout { grid-template-columns:minmax(0,1fr); } }
+        .fl-wrap { background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px; box-shadow:var(--shadow-sm); }
+        .fl-canvas { position:relative; width:100%; aspect-ratio:16/12; border-radius:10px; background:#f8fafc; overflow:hidden; touch-action:pan-y; user-select:none; -webkit-user-select:none; }
+        .fl-canvas.edit { background-color:#f8fafc; background-image:linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px); background-size:calc(100% / 16) calc(100% / 12); }
+        .fl-t { position:absolute; padding:4px; border:none; background:none; font:inherit; cursor:pointer; color:inherit; }
+        .fl-t .b { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; border-radius:10px; border:2px solid #cbd5e1; background:#fff; overflow:hidden; text-align:center; line-height:1.1; transition:box-shadow .15s, transform .1s; }
+        .fl-t.rd .b { border-radius:50%; }
+        .fl-t .nm { font-weight:800; font-size:clamp(.72rem, 1.6vw, 1rem); color:var(--text-main); }
+        .fl-t .sub { font-size:clamp(.58rem, 1.1vw, .74rem); color:var(--text-muted); max-width:94%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .fl-t.free .b { border-color:#86efac; background:#f0fdf4; }
+        .fl-t.soon .b { border-color:#fbbf24; background:#fffbeb; }
+        .fl-t.busy .b { border-color:#60a5fa; background:#eff6ff; }
+        .fl-t.seated .b { border-color:#0f766e; background:#0f766e; }
+        .fl-t.seated .nm, .fl-t.seated .sub { color:#fff; }
+        .fl-t.sel .b { box-shadow:0 0 0 3px var(--primary); }
+        .fl-t.target .b { box-shadow:0 0 0 3px rgba(37,99,235,.35); }
+        .fl-t.target.free .b:hover { transform:scale(1.04); }
+        .fl-t.dim { opacity:.4; }
+        .fl-canvas.edit .fl-t { cursor:grab; touch-action:none; }
+        .fl-canvas.edit .fl-t.drag { cursor:grabbing; z-index:5; }
+        .fl-canvas.edit .fl-t.drag .b { box-shadow:0 8px 20px rgba(15,23,42,.18); }
+        .fl-canvas.edit .fl-t.bad .b { border-color:var(--danger); background:#fef2f2; }
+        .fl-t:focus-visible { outline:none; }
+        .fl-t:focus-visible .b { box-shadow:0 0 0 3px var(--primary); }
+        .fl-legend { display:flex; flex-wrap:wrap; gap:14px; margin:12px 4px 2px; font-size:.8rem; color:var(--text-muted); }
+        .fl-legend span { display:inline-flex; align-items:center; gap:6px; }
+        .fl-legend i { width:12px; height:12px; border-radius:4px; border:2px solid; display:inline-block; }
+        .fl-side { display:flex; flex-direction:column; gap:12px; }
+        .fl-panel { background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px; box-shadow:var(--shadow-sm); }
+        .fl-panel h4 { font-size:.92rem; margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+        .fl-panel h4 small { font-weight:600; color:var(--text-muted); font-size:.78rem; }
+        .fl-count { font-size:1.6rem; font-weight:800; letter-spacing:-.02em; }
+        .fl-count small { font-size:.85rem; font-weight:600; color:var(--text-muted); margin-left:4px; }
+        .fl-ua { display:flex; flex-direction:column; gap:6px; max-height:360px; overflow:auto; }
+        .fl-ua button { display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:1px solid var(--border); background:#fff; border-radius:10px; padding:9px 10px; font:inherit; font-size:.85rem; cursor:pointer; color:var(--text-main); }
+        .fl-ua button:hover { border-color:#94a3b8; }
+        .fl-ua button.on { border-color:var(--primary); background:var(--primary-light); }
+        .fl-ua b { font-variant-numeric:tabular-nums; min-width:42px; }
+        .fl-ua span { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .fl-ua em { font-style:normal; color:var(--text-muted); font-size:.8rem; white-space:nowrap; }
+        .fl-muted { color:var(--text-muted); font-size:.84rem; line-height:1.5; }
+        .fl-hint { display:none; align-items:center; justify-content:space-between; gap:10px; background:var(--primary); color:#fff; border-radius:12px; padding:10px 14px; margin:0 0 12px; font-size:.88rem; font-weight:600; }
+        .fl-hint.on { display:flex; }
+        .fl-hint button { background:rgba(255,255,255,.18); border:none; color:#fff; font:inherit; font-size:.82rem; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer; }
+        .fl-tools { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 12px; }
+        .fl-tools .rv-btn { padding:8px 12px; }
+        .fl-shape { width:14px; height:14px; border:2px solid currentColor; border-radius:3px; display:inline-block; }
+        .fl-shape.rd { border-radius:50%; }
+        .fl-shape.rc { width:22px; height:10px; }
+        .fl-field { margin:0 0 12px; }
+        .fl-field label { display:block; font-size:.78rem; font-weight:600; color:var(--text-muted); margin:0 0 5px; }
+        .fl-field input, .fl-field select { width:100%; font:inherit; font-size:.92rem; padding:9px 11px; border:1px solid var(--border); border-radius:10px; background:#fff; color:var(--text-main); }
+        .fl-field .help { font-size:.76rem; color:var(--text-muted); margin-top:5px; line-height:1.45; }
+        .fl-row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:end; }
+        .fl-shapes { display:flex; gap:6px; }
+        .fl-shapes button { flex:1; display:flex; justify-content:center; align-items:center; padding:9px 0; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; color:#475569; }
+        .fl-shapes button.on { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+        .fl-del { background:none; border:none; color:var(--danger); font:inherit; font-size:.84rem; font-weight:600; cursor:pointer; padding:6px 0; }
+        .fl-empty { text-align:center; padding:36px 20px; }
+        .fl-empty h3 { font-size:1.15rem; margin:0 0 8px; }
+        .fl-empty p { color:var(--text-muted); max-width:460px; margin:0 auto 18px; line-height:1.55; font-size:.92rem; }
+        .fl-quick { display:inline-flex; flex-wrap:wrap; align-items:flex-end; justify-content:center; gap:10px; }
+        .fl-quick .fl-field { margin:0; text-align:left; }
+        .fl-quick input { width:110px; }
+        .fl-empty .fl-or { display:block; margin-top:14px; font-size:.84rem; }
+        .fl-list { display:flex; flex-direction:column; gap:6px; }
+        .fl-list .it { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:.88rem; }
+        .fl-list .it b { font-variant-numeric:tabular-nums; min-width:26px; }
+        .fl-list .it span { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .fl-list .it.ok { border-color:#99f6e4; background:#f0fdfa; }
+        .fl-list button.it { width:100%; background:#fff; font:inherit; cursor:pointer; text-align:left; color:var(--text-main); }
+        .fl-list button.it:hover { border-color:#94a3b8; }
+        .fl-list button.it.cur { border-color:var(--primary); background:var(--primary-light); }
+        .fl-list .st { font-size:.78rem; font-weight:600; white-space:nowrap; color:#15803d; }
+        .fl-list .st.busy { color:#b45309; }
+        .fl-list .st.small { color:var(--text-muted); }
+        .fl-list .zn { font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-muted); margin:8px 2px 2px; }
+        .fl-list .x { background:none; border:none; color:var(--danger); font:inherit; font-size:.8rem; font-weight:600; cursor:pointer; }
+        #fl-modal .modal-content { max-width:460px; }
+        .fl-chip { display:inline-flex; align-items:center; gap:5px; border:1px solid #cbd5e1; background:#fff; color:#334155; font:inherit; font-size:.78rem; font-weight:700; padding:3px 9px; border-radius:999px; cursor:pointer; }
+        .fl-chip.set { border-color:#0f766e; color:#0f766e; background:#f0fdfa; }
+        .fl-chip.add { border-style:dashed; color:var(--primary); border-color:#93c5fd; }
+        @media (max-width: 600px) {
+            .fl-top { flex-direction:column; align-items:stretch; }
+            .fl-seg { display:flex; } .fl-seg button { flex:1; }
+            .fl-ctrl input[type=date], .fl-ctrl select { flex:1; }
+            .fl-wrap { padding:8px; }
+            .fl-t { padding:2px; }
+            .fl-t .b { border-radius:7px; border-width:1.5px; }
+            .fl-t .sub { display:none; }
+        }
+        .fl-empty .fl-or:hover { color:var(--primary); }
+        .fl-onbar { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#fff; border:1px solid var(--border); border-radius:var(--radius-lg); padding:14px 18px; margin:0 0 16px; box-shadow:var(--shadow-sm); }
+        .fl-onbar h3 { font-size:1rem; margin:0 0 3px; display:flex; align-items:center; gap:8px; }
+        .fl-onbar p { margin:0; font-size:.86rem; color:var(--text-muted); line-height:1.5; }
+        .fl-badge { font-size:.72rem; font-weight:700; padding:2px 8px; border-radius:999px; background:#f1f5f9; color:#64748b; }
+        .fl-badge.on { background:#dcfce7; color:#15803d; }
+        .fl-sw { position:relative; flex:0 0 auto; width:52px; height:30px; cursor:pointer; }
+        .fl-sw input { position:absolute; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; }
+        .fl-sw span { position:absolute; inset:0; border-radius:999px; background:#cbd5e1; transition:background .2s; pointer-events:none; }
+        .fl-sw span::after { content:''; position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(15,23,42,.25); transition:transform .2s; }
+        .fl-sw input:checked + span { background:var(--primary); }
+        .fl-sw input:checked + span::after { transform:translateX(22px); }
+        .fl-sw input:focus-visible + span { box-shadow:0 0 0 3px rgba(37,99,235,.35); }
+        .fl-sw input:disabled { cursor:wait; }
     </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 </head>
@@ -1190,6 +1308,7 @@
                 </div>
                 <nav class="dash-tabs" aria-label="Sections">
                     <button class="admin-tab active" id="atab-reservations" onclick="switchAdminTab('reservations')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span data-i18n-key="reservations">Κρατήσεις</span></button>
+                    <button class="admin-tab" id="atab-floor" onclick="switchAdminTab('floor')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="3.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg><span data-fl="tab">Τραπέζια</span></button>
                     <button class="admin-tab" id="atab-analytics" onclick="switchAdminTab('analytics')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span data-i18n-key="analytics_tab">Analytics</span></button>
                     <button class="admin-tab" id="atab-profile" onclick="switchAdminTab('profile')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/></svg><span data-i18n-key="shop_profile">Προφίλ Μαγαζιού</span></button>
                     <button class="admin-tab" id="atab-reviews" onclick="switchAdminTab('reviews')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg><span data-rv="tab">Κριτικές</span></button>
@@ -1331,6 +1450,65 @@
 
                 <!-- Shop Profile Section -->
                 <!-- Reviews Section -->
+                <!-- Τραπέζια / Κάτοψη -->
+                <div id="asec-floor" class="admin-section">
+                    <div class="fl-onbar">
+                        <div>
+                            <h3><span data-fl="sw_title">Κάτοψη τραπεζιών</span><span class="fl-badge" id="fl-badge"></span></h3>
+                            <p id="fl-on-lead"></p>
+                        </div>
+                        <label class="fl-sw"><input type="checkbox" id="fl-on" role="switch" aria-labelledby="fl-sw-lbl"><span></span><b id="fl-sw-lbl" data-fl="sw_title" hidden>Κάτοψη τραπεζιών</b></label>
+                    </div>
+                    <div class="fl-top" id="fl-top">
+                        <div class="fl-seg" role="tablist">
+                            <button type="button" class="on" id="fl-m-live" data-fl="live">Ζωντανά</button>
+                            <button type="button" id="fl-m-edit" data-fl="edit">Επεξεργασία κάτοψης</button>
+                        </div>
+                        <div class="fl-ctrl" id="fl-ctrl">
+                            <input type="date" id="fl-date" aria-label="Date">
+                            <select id="fl-time" aria-label="Time"></select>
+                            <button type="button" class="rv-btn" id="fl-now" data-fl="now">Τώρα</button>
+                        </div>
+                    </div>
+                    <div id="fl-empty" class="card fl-empty" style="display:none;">
+                        <h3 data-fl="empty_title"></h3>
+                        <p data-fl="empty_lead"></p>
+                        <div class="fl-quick">
+                            <div class="fl-field"><label for="fl-q-n" data-fl="quick_n"></label><input type="number" id="fl-q-n" min="1" max="60" value="10" inputmode="numeric"></div>
+                            <div class="fl-field"><label for="fl-q-s" data-fl="quick_s"></label><input type="number" id="fl-q-s" min="1" max="30" value="4" inputmode="numeric"></div>
+                            <button type="button" class="rv-btn main" id="fl-q-go" data-fl="quick_go"></button>
+                        </div>
+                        <button type="button" class="btn-link fl-or" id="fl-q-manual" data-fl="or_manual"></button>
+                    </div>
+                    <div id="fl-main" style="display:none;">
+                        <div class="fl-hint" id="fl-hint" aria-live="polite"><span id="fl-hint-t"></span><button type="button" id="fl-hint-x" data-fl="cancel"></button></div>
+                        <div class="fl-zones" id="fl-zones"></div>
+                        <div class="fl-tools" id="fl-tools" style="display:none;">
+                            <button type="button" class="rv-btn" data-add="sq"><i class="fl-shape"></i><span data-fl="add_sq"></span></button>
+                            <button type="button" class="rv-btn" data-add="rd"><i class="fl-shape rd"></i><span data-fl="add_rd"></span></button>
+                            <button type="button" class="rv-btn" data-add="rc"><i class="fl-shape rc"></i><span data-fl="add_rc"></span></button>
+                        </div>
+                        <div class="fl-layout">
+                            <div class="fl-wrap">
+                                <div class="fl-canvas" id="fl-canvas"></div>
+                                <div class="fl-legend" id="fl-legend">
+                                    <span><i style="border-color:#86efac;background:#f0fdf4"></i><span data-fl="lg_free"></span></span>
+                                    <span><i style="border-color:#fbbf24;background:#fffbeb"></i><span data-fl="lg_soon"></span></span>
+                                    <span><i style="border-color:#60a5fa;background:#eff6ff"></i><span data-fl="lg_busy"></span></span>
+                                    <span><i style="border-color:#0f766e;background:#0f766e"></i><span data-fl="lg_seated"></span></span>
+                                </div>
+                            </div>
+                            <div class="fl-side" id="fl-side"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" id="fl-modal" role="dialog" aria-modal="true" aria-labelledby="fl-m-title">
+                        <div class="modal-content card" style="padding:24px;">
+                            <div class="nb-head"><h3 id="fl-m-title"></h3><button type="button" class="nb-x" id="fl-m-close" aria-label="Close">×</button></div>
+                            <p class="fl-muted" id="fl-m-sub" style="margin:-4px 0 14px;"></p>
+                            <div id="fl-m-body"></div>
+                        </div>
+                    </div>
                 <div id="asec-reviews" class="admin-section">
                     <div class="card rv-card">
                         <div class="rv-head">
@@ -3525,6 +3703,7 @@
             const tSelect = document.getElementById('time-select');
             if (tSelect && tSelect.options.length > 0) tSelect.options[0].text = t('select_opt');
             if (typeof rvApply === 'function') try { rvApply(); } catch (e) {}
+            if (typeof flApply === 'function') try { flApply(); } catch (e) {}
         }
 
         // ======= TOAST =======
@@ -3720,6 +3899,7 @@
             listenToReservations(myShop);
             listenToGuests(myShop);
             listenToWaitlist(myShop);
+            listenToFloor(myShop);
             loadShopProfile(myShop);
             rvLoad(myShop);
             migrateShopPhotos(myShop);
@@ -4273,6 +4453,7 @@
             if (document.getElementById('atab-analytics').classList.contains('active')) {
                 renderAnalytics(shop);
             }
+            if (flFloorActive()) flRender();
         }
 
         function renderDashboard(shop) {
@@ -4340,6 +4521,7 @@
                             ${srcIcon ? `<span class="src-tag src-${res.source}">${srcIcon}${repEsc(t('an_' + res.source))}</span>` : ''}
                             ${showBooked ? `<span class="booked-at">${svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', 13)}${t('bk_booked_at')} ${fmtBookedAt(res.timestamp)}</span>` : ''}
                             ${rvTag(res)}
+                            ${flChip(res, cancelled)}
                         </div>
                         ${res.occasion ? `<div class="occasion-tag">${repEsc(trOcc(res.occasion))}</div>` : ''}
                         ${res.comments ? `<div class="comments-box">${repEsc(res.comments)}</div>` : ''}
@@ -5300,6 +5482,8 @@
                 location: nbEl('nb-location').value, comments: nbEl('nb-notes').value.trim() };
             // Νέα ώρα -> νέα υπενθύμιση
             if (date !== r.date || time !== r.time) upd.reminderSentAt = null;
+            // Άλλη μέρα -> το τραπέζι δεν ισχύει πια
+            if (date !== r.date && r.table) upd.table = null;
             const btn = nbEl('nb-save'); btn.disabled = true;
             try {
                 await update(ref(db, `reservations/${shop}/${id}`), upd);
@@ -5387,7 +5571,7 @@
 
         // ======= ADMIN TABS =======
         window.switchAdminTab = (tab) => {
-            ['reservations','analytics','profile','reviews'].forEach(t => {
+            ['reservations','floor','analytics','profile','reviews'].forEach(t => {
                 document.getElementById('asec-' + t).classList.remove('active');
                 document.getElementById('atab-' + t).classList.remove('active');
             });
@@ -5395,6 +5579,7 @@
             document.getElementById('atab-' + tab).classList.add('active');
             if (tab === 'analytics') renderAnalytics(document.getElementById('shop-title').innerText);
             if (tab === 'reviews') rvStats();
+            if (tab === 'floor') flRender();
         };
         // ======= ΚΡΙΤΙΚΕΣ GOOGLE =======
         // Ρυθμίσεις στο shop_profile/<shop>/reviews = { on, link }. Η αποστολή γίνεται από το reminders (το επόμενο πρωί, 11:00).
@@ -5660,6 +5845,764 @@
             setTimeout(() => { btn.disabled = !rvLink(); }, 1500);
         });
 
+
+
+        // ======= ΤΡΑΠΕΖΙΑ / ΚΑΤΟΨΗ =======
+        // shop_floor/<shop> = { dur, zones: { id: { n, o } }, tables: { id: { n, s, z, x, y, w, h, sh } } }
+        // Η κράτηση κρατά το id του τραπεζιού στο πεδίο «table». Η online διαθεσιμότητα ΔΕΝ αλλάζει:
+        // τα τραπέζια τα βάζει το προσωπικό. Η κάτοψη είναι προαιρετική ανά κατάστημα.
+        const FL_COLS = 16, FL_ROWS = 12;
+        const FL_SIZE = { sq: [2, 2], rd: [2, 2], rc: [4, 2] };
+        const FL_DURS = [60, 90, 120, 150, 180, 240];
+        const FL_TXT = {
+            el: {
+                tab: 'Τραπέζια', live: 'Ζωντανά', edit: 'Επεξεργασία κάτοψης', now: 'Τώρα', cancel: 'Άκυρο',
+                empty_title: 'Φτιάξτε την κάτοψή σας', empty_lead: 'Ορίστε μία φορά τα τραπέζια σας. Μετά βάζετε κάθε κράτηση σε τραπέζι με ένα πάτημα και βλέπετε ποια είναι ελεύθερα κάθε ώρα.',
+                quick_n: 'Πόσα τραπέζια;', quick_s: 'Θέσεις ανά τραπέζι', quick_go: 'Δημιουργία', or_manual: 'ή σχεδιάστε την κάτοψη από την αρχή',
+                add_sq: 'Τετράγωνο', add_rd: 'Στρογγυλό', add_rc: 'Μακρόστενο',
+                lg_free: 'Ελεύθερο', lg_soon: 'Κράτηση σύντομα', lg_busy: 'Κρατημένο', lg_seated: 'Ήρθαν',
+                zone_default: 'Σάλα', zone_add: 'Νέος χώρος', zone_name_q: 'Όνομα χώρου (π.χ. Βεράντα)', zone_name: 'Όνομα χώρου', zone_delete: 'Διαγραφή χώρου',
+                zone_del_q: 'Να διαγραφεί ο χώρος «{n}» μαζί με τα τραπέζια του;', zone_last: 'Πρέπει να μείνει τουλάχιστον ένας χώρος.',
+                tbl_help: 'Πατήστε ένα τραπέζι για να αλλάξετε όνομα, θέσεις ή σχήμα. Σύρετέ το για να το μετακινήσετε.',
+                tbl_name: 'Όνομα ή αριθμός', tbl_seats: 'Θέσεις', tbl_shape: 'Σχήμα', tbl_rotate: 'Περιστροφή', tbl_zone: 'Χώρος',
+                tbl_delete: 'Διαγραφή τραπεζιού', tbl_del_q: 'Να διαγραφεί το τραπέζι {n};', tbl_done: 'Τέλος',
+                sh_sq: 'Τετράγωνο', sh_rd: 'Στρογγυλό', sh_rc: 'Μακρόστενο',
+                no_room: 'Δεν υπάρχει ελεύθερη θέση σε αυτόν τον χώρο. Μετακινήστε ή διαγράψτε κάποιο τραπέζι.', overlap: 'Εκεί υπάρχει ήδη τραπέζι.',
+                dur: 'Διάρκεια κράτησης', dur_help: 'Για πόση ώρα μετά την ώρα της κράτησης θεωρείται πιασμένο το τραπέζι.', min: 'λεπτά',
+                free_of: 'ελεύθερα από {total}', assigned_of: '{a} από {n} κρατήσεις της ημέρας έχουν τραπέζι',
+                unassigned: 'Χωρίς τραπέζι', unassigned_none: 'Όλες οι κρατήσεις της ημέρας έχουν τραπέζι.', no_bookings_day: 'Δεν υπάρχουν κρατήσεις αυτή τη μέρα.',
+                pick_hint: 'Πατήστε ένα τραπέζι για: {name} · {time} · {g} άτ.', closed_day: 'Κλειστά',
+                seats_n: '{n} θέσεις', table_n: 'Τραπέζι {n}', chip_add: 'Τραπέζι',
+                assign_title: 'Τραπέζι για {name}', assign_sub: '{date} · {time} · {g} άτομα',
+                st_free: 'Ελεύθερο', st_busy: '{time} · {name}', st_small: '{s} θέσεις', no_table: 'Χωρίς τραπέζι',
+                busy_q: 'Το τραπέζι {n} έχει ήδη κράτηση στις {time} ({name}). Να μπει και αυτή;',
+                assigned: 'Μπήκε στο τραπέζι {n}', removed: 'Βγήκε από το τραπέζι', saved: 'Αποθηκεύτηκε', created: 'Δημιουργήθηκαν {n} τραπέζια', err: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά.',
+                day_list: 'Κρατήσεις της ημέρας', tbl_none_day: 'Καμία κράτηση σε αυτό το τραπέζι αυτή τη μέρα.', place_here: 'Βάλτε εδώ κράτηση', remove: 'Αφαίρεση', arrived: 'Ήρθαν',
+                settings: 'Ρυθμίσεις',
+                sw_title: 'Κάτοψη τραπεζιών', sw_on: 'Ενεργή', sw_off: 'Ανενεργή', sw_on_lead: 'Βάζετε τις κρατήσεις σε τραπέζια και βλέπετε ποια είναι ελεύθερα κάθε ώρα.', sw_off_lead: 'Ενεργοποιήστε την για να βάζετε τις κρατήσεις σε τραπέζια. Οι online κρατήσεις των πελατών δεν επηρεάζονται.', sw_off_kept: 'Τα τραπέζια σας έχουν κρατηθεί και επανέρχονται μόλις την ενεργοποιήσετε.', turned_on: 'Η κάτοψη ενεργοποιήθηκε', turned_off: 'Η κάτοψη απενεργοποιήθηκε'
+            },
+            en: {
+                tab: 'Tables', live: 'Live', edit: 'Edit floor plan', now: 'Now', cancel: 'Cancel',
+                empty_title: 'Set up your floor plan', empty_lead: 'Add your tables once. Then put each booking on a table with one tap and see which tables are free at any time.',
+                quick_n: 'How many tables?', quick_s: 'Seats per table', quick_go: 'Create', or_manual: 'or draw the floor plan from scratch',
+                add_sq: 'Square', add_rd: 'Round', add_rc: 'Long',
+                lg_free: 'Free', lg_soon: 'Booked soon', lg_busy: 'Booked', lg_seated: 'Arrived',
+                zone_default: 'Dining room', zone_add: 'New area', zone_name_q: 'Area name (e.g. Terrace)', zone_name: 'Area name', zone_delete: 'Delete area',
+                zone_del_q: 'Delete the area “{n}” and its tables?', zone_last: 'At least one area is needed.',
+                tbl_help: 'Tap a table to change its name, seats or shape. Drag it to move it.',
+                tbl_name: 'Name or number', tbl_seats: 'Seats', tbl_shape: 'Shape', tbl_rotate: 'Rotate', tbl_zone: 'Area',
+                tbl_delete: 'Delete table', tbl_del_q: 'Delete table {n}?', tbl_done: 'Done',
+                sh_sq: 'Square', sh_rd: 'Round', sh_rc: 'Long',
+                no_room: 'There is no free space left in this area. Move or delete a table.', overlap: 'There is already a table there.',
+                dur: 'Booking length', dur_help: 'How long a table counts as taken after the booking time.', min: 'minutes',
+                free_of: 'free of {total}', assigned_of: '{a} of {n} bookings today have a table',
+                unassigned: 'Without a table', unassigned_none: 'Every booking of the day has a table.', no_bookings_day: 'No bookings on this day.',
+                pick_hint: 'Tap a table for: {name} · {time} · {g} ppl', closed_day: 'Closed',
+                seats_n: '{n} seats', table_n: 'Table {n}', chip_add: 'Table',
+                assign_title: 'Table for {name}', assign_sub: '{date} · {time} · {g} guests',
+                st_free: 'Free', st_busy: '{time} · {name}', st_small: '{s} seats', no_table: 'No table',
+                busy_q: 'Table {n} already has a booking at {time} ({name}). Add this one too?',
+                assigned: 'Placed on table {n}', removed: 'Removed from the table', saved: 'Saved', created: '{n} tables created', err: 'Something went wrong. Please try again.',
+                day_list: 'Bookings of the day', tbl_none_day: 'No bookings on this table on this day.', place_here: 'Place a booking here', remove: 'Remove', arrived: 'Arrived',
+                settings: 'Settings',
+                sw_title: 'Floor plan', sw_on: 'On', sw_off: 'Off', sw_on_lead: 'Put bookings on tables and see which tables are free at any time.', sw_off_lead: 'Turn it on to put bookings on tables. Online bookings from guests are not affected.', sw_off_kept: 'Your tables are kept and come back as soon as you turn it on.', turned_on: 'Floor plan turned on', turned_off: 'Floor plan turned off'
+            },
+            de: {
+                tab: 'Tische', live: 'Live', edit: 'Tischplan bearbeiten', now: 'Jetzt', cancel: 'Abbrechen',
+                empty_title: 'Tischplan einrichten', empty_lead: 'Legen Sie Ihre Tische einmal an. Danach setzen Sie jede Reservierung mit einem Tipp an einen Tisch und sehen jederzeit, welche Tische frei sind.',
+                quick_n: 'Wie viele Tische?', quick_s: 'Plätze pro Tisch', quick_go: 'Erstellen', or_manual: 'oder den Tischplan selbst zeichnen',
+                add_sq: 'Quadratisch', add_rd: 'Rund', add_rc: 'Lang',
+                lg_free: 'Frei', lg_soon: 'Bald reserviert', lg_busy: 'Reserviert', lg_seated: 'Angekommen',
+                zone_default: 'Gastraum', zone_add: 'Neuer Bereich', zone_name_q: 'Name des Bereichs (z. B. Terrasse)', zone_name: 'Name des Bereichs', zone_delete: 'Bereich löschen',
+                zone_del_q: 'Bereich „{n}“ mit allen Tischen löschen?', zone_last: 'Mindestens ein Bereich wird benötigt.',
+                tbl_help: 'Tippen Sie auf einen Tisch, um Name, Plätze oder Form zu ändern. Ziehen Sie ihn, um ihn zu verschieben.',
+                tbl_name: 'Name oder Nummer', tbl_seats: 'Plätze', tbl_shape: 'Form', tbl_rotate: 'Drehen', tbl_zone: 'Bereich',
+                tbl_delete: 'Tisch löschen', tbl_del_q: 'Tisch {n} löschen?', tbl_done: 'Fertig',
+                sh_sq: 'Quadratisch', sh_rd: 'Rund', sh_rc: 'Lang',
+                no_room: 'In diesem Bereich ist kein Platz mehr frei. Verschieben oder löschen Sie einen Tisch.', overlap: 'Dort steht bereits ein Tisch.',
+                dur: 'Dauer einer Reservierung', dur_help: 'Wie lange ein Tisch nach der Reservierungszeit als belegt gilt.', min: 'Minuten',
+                free_of: 'frei von {total}', assigned_of: '{a} von {n} Reservierungen des Tages haben einen Tisch',
+                unassigned: 'Ohne Tisch', unassigned_none: 'Alle Reservierungen des Tages haben einen Tisch.', no_bookings_day: 'An diesem Tag gibt es keine Reservierungen.',
+                pick_hint: 'Tippen Sie auf einen Tisch für: {name} · {time} · {g} Pers.', closed_day: 'Geschlossen',
+                seats_n: '{n} Plätze', table_n: 'Tisch {n}', chip_add: 'Tisch',
+                assign_title: 'Tisch für {name}', assign_sub: '{date} · {time} · {g} Personen',
+                st_free: 'Frei', st_busy: '{time} · {name}', st_small: '{s} Plätze', no_table: 'Kein Tisch',
+                busy_q: 'Tisch {n} hat um {time} bereits eine Reservierung ({name}). Diese auch hinzufügen?',
+                assigned: 'An Tisch {n} gesetzt', removed: 'Vom Tisch entfernt', saved: 'Gespeichert', created: '{n} Tische erstellt', err: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
+                day_list: 'Reservierungen des Tages', tbl_none_day: 'An diesem Tag keine Reservierungen an diesem Tisch.', place_here: 'Reservierung hierher setzen', remove: 'Entfernen', arrived: 'Angekommen',
+                settings: 'Einstellungen',
+                sw_title: 'Tischplan', sw_on: 'Aktiv', sw_off: 'Inaktiv', sw_on_lead: 'Reservierungen Tischen zuweisen und jederzeit sehen, welche Tische frei sind.', sw_off_lead: 'Aktivieren Sie ihn, um Reservierungen Tischen zuzuweisen. Online-Reservierungen der Gäste sind davon nicht betroffen.', sw_off_kept: 'Ihre Tische bleiben gespeichert und sind wieder da, sobald Sie ihn aktivieren.', turned_on: 'Tischplan aktiviert', turned_off: 'Tischplan deaktiviert'
+            },
+            fr: {
+                tab: 'Tables', live: 'En direct', edit: 'Modifier le plan de salle', now: 'Maintenant', cancel: 'Annuler',
+                empty_title: 'Créez votre plan de salle', empty_lead: 'Ajoutez vos tables une seule fois. Ensuite, placez chaque réservation sur une table en un geste et voyez à tout moment quelles tables sont libres.',
+                quick_n: 'Combien de tables ?', quick_s: 'Places par table', quick_go: 'Créer', or_manual: 'ou dessinez le plan vous-même',
+                add_sq: 'Carrée', add_rd: 'Ronde', add_rc: 'Longue',
+                lg_free: 'Libre', lg_soon: 'Réservée bientôt', lg_busy: 'Réservée', lg_seated: 'Arrivés',
+                zone_default: 'Salle', zone_add: 'Nouvel espace', zone_name_q: 'Nom de l’espace (ex. Terrasse)', zone_name: 'Nom de l’espace', zone_delete: 'Supprimer l’espace',
+                zone_del_q: 'Supprimer l’espace « {n} » et ses tables ?', zone_last: 'Il faut au moins un espace.',
+                tbl_help: 'Touchez une table pour changer son nom, ses places ou sa forme. Faites-la glisser pour la déplacer.',
+                tbl_name: 'Nom ou numéro', tbl_seats: 'Places', tbl_shape: 'Forme', tbl_rotate: 'Pivoter', tbl_zone: 'Espace',
+                tbl_delete: 'Supprimer la table', tbl_del_q: 'Supprimer la table {n} ?', tbl_done: 'Terminé',
+                sh_sq: 'Carrée', sh_rd: 'Ronde', sh_rc: 'Longue',
+                no_room: 'Il n’y a plus de place libre dans cet espace. Déplacez ou supprimez une table.', overlap: 'Il y a déjà une table à cet endroit.',
+                dur: 'Durée d’une réservation', dur_help: 'Combien de temps une table reste occupée après l’heure de réservation.', min: 'minutes',
+                free_of: 'libres sur {total}', assigned_of: '{a} réservations du jour sur {n} ont une table',
+                unassigned: 'Sans table', unassigned_none: 'Toutes les réservations du jour ont une table.', no_bookings_day: 'Aucune réservation ce jour-là.',
+                pick_hint: 'Touchez une table pour : {name} · {time} · {g} pers.', closed_day: 'Fermé',
+                seats_n: '{n} places', table_n: 'Table {n}', chip_add: 'Table',
+                assign_title: 'Table pour {name}', assign_sub: '{date} · {time} · {g} personnes',
+                st_free: 'Libre', st_busy: '{time} · {name}', st_small: '{s} places', no_table: 'Sans table',
+                busy_q: 'La table {n} a déjà une réservation à {time} ({name}). Ajouter celle-ci aussi ?',
+                assigned: 'Placée à la table {n}', removed: 'Retirée de la table', saved: 'Enregistré', created: '{n} tables créées', err: 'Une erreur est survenue. Réessayez.',
+                day_list: 'Réservations du jour', tbl_none_day: 'Aucune réservation sur cette table ce jour-là.', place_here: 'Placer une réservation ici', remove: 'Retirer', arrived: 'Arrivés',
+                settings: 'Réglages',
+                sw_title: 'Plan de salle', sw_on: 'Activé', sw_off: 'Désactivé', sw_on_lead: 'Placez les réservations sur des tables et voyez à tout moment quelles tables sont libres.', sw_off_lead: 'Activez-le pour placer les réservations sur des tables. Les réservations en ligne des clients ne sont pas concernées.', sw_off_kept: 'Vos tables sont conservées et reviennent dès que vous le réactivez.', turned_on: 'Plan de salle activé', turned_off: 'Plan de salle désactivé'
+            },
+            it: {
+                tab: 'Tavoli', live: 'In tempo reale', edit: 'Modifica la pianta', now: 'Adesso', cancel: 'Annulla',
+                empty_title: 'Crea la pianta della sala', empty_lead: 'Aggiungi i tuoi tavoli una volta sola. Poi metti ogni prenotazione su un tavolo con un tocco e vedi in ogni momento quali tavoli sono liberi.',
+                quick_n: 'Quanti tavoli?', quick_s: 'Posti per tavolo', quick_go: 'Crea', or_manual: 'oppure disegna la pianta da zero',
+                add_sq: 'Quadrato', add_rd: 'Rotondo', add_rc: 'Lungo',
+                lg_free: 'Libero', lg_soon: 'Prenotato a breve', lg_busy: 'Prenotato', lg_seated: 'Arrivati',
+                zone_default: 'Sala', zone_add: 'Nuova area', zone_name_q: 'Nome dell’area (es. Terrazza)', zone_name: 'Nome dell’area', zone_delete: 'Elimina area',
+                zone_del_q: 'Eliminare l’area «{n}» con i suoi tavoli?', zone_last: 'Serve almeno un’area.',
+                tbl_help: 'Tocca un tavolo per cambiarne nome, posti o forma. Trascinalo per spostarlo.',
+                tbl_name: 'Nome o numero', tbl_seats: 'Posti', tbl_shape: 'Forma', tbl_rotate: 'Ruota', tbl_zone: 'Area',
+                tbl_delete: 'Elimina tavolo', tbl_del_q: 'Eliminare il tavolo {n}?', tbl_done: 'Fatto',
+                sh_sq: 'Quadrato', sh_rd: 'Rotondo', sh_rc: 'Lungo',
+                no_room: 'In quest’area non c’è più spazio libero. Sposta o elimina un tavolo.', overlap: 'Lì c’è già un tavolo.',
+                dur: 'Durata della prenotazione', dur_help: 'Per quanto tempo dopo l’orario della prenotazione il tavolo risulta occupato.', min: 'minuti',
+                free_of: 'liberi su {total}', assigned_of: '{a} prenotazioni su {n} di oggi hanno un tavolo',
+                unassigned: 'Senza tavolo', unassigned_none: 'Tutte le prenotazioni del giorno hanno un tavolo.', no_bookings_day: 'Nessuna prenotazione in questo giorno.',
+                pick_hint: 'Tocca un tavolo per: {name} · {time} · {g} pers.', closed_day: 'Chiuso',
+                seats_n: '{n} posti', table_n: 'Tavolo {n}', chip_add: 'Tavolo',
+                assign_title: 'Tavolo per {name}', assign_sub: '{date} · {time} · {g} persone',
+                st_free: 'Libero', st_busy: '{time} · {name}', st_small: '{s} posti', no_table: 'Nessun tavolo',
+                busy_q: 'Il tavolo {n} ha già una prenotazione alle {time} ({name}). Aggiungere anche questa?',
+                assigned: 'Assegnata al tavolo {n}', removed: 'Tolta dal tavolo', saved: 'Salvato', created: '{n} tavoli creati', err: 'Qualcosa è andato storto. Riprova.',
+                day_list: 'Prenotazioni del giorno', tbl_none_day: 'Nessuna prenotazione su questo tavolo in questo giorno.', place_here: 'Metti qui una prenotazione', remove: 'Togli', arrived: 'Arrivati',
+                settings: 'Impostazioni',
+                sw_title: 'Piantina dei tavoli', sw_on: 'Attiva', sw_off: 'Disattivata', sw_on_lead: 'Assegna le prenotazioni ai tavoli e vedi in ogni momento quali sono liberi.', sw_off_lead: 'Attivala per assegnare le prenotazioni ai tavoli. Le prenotazioni online dei clienti non cambiano.', sw_off_kept: 'I tuoi tavoli restano salvati e tornano appena la riattivi.', turned_on: 'Piantina attivata', turned_off: 'Piantina disattivata'
+            },
+            es: {
+                tab: 'Mesas', live: 'En directo', edit: 'Editar el plano', now: 'Ahora', cancel: 'Cancelar',
+                empty_title: 'Crea el plano de tu sala', empty_lead: 'Añade tus mesas una sola vez. Después pon cada reserva en una mesa con un toque y mira en cualquier momento qué mesas están libres.',
+                quick_n: '¿Cuántas mesas?', quick_s: 'Plazas por mesa', quick_go: 'Crear', or_manual: 'o dibuja el plano desde cero',
+                add_sq: 'Cuadrada', add_rd: 'Redonda', add_rc: 'Alargada',
+                lg_free: 'Libre', lg_soon: 'Reservada pronto', lg_busy: 'Reservada', lg_seated: 'Llegaron',
+                zone_default: 'Salón', zone_add: 'Nueva zona', zone_name_q: 'Nombre de la zona (p. ej. Terraza)', zone_name: 'Nombre de la zona', zone_delete: 'Eliminar zona',
+                zone_del_q: '¿Eliminar la zona «{n}» y sus mesas?', zone_last: 'Hace falta al menos una zona.',
+                tbl_help: 'Toca una mesa para cambiar su nombre, plazas o forma. Arrástrala para moverla.',
+                tbl_name: 'Nombre o número', tbl_seats: 'Plazas', tbl_shape: 'Forma', tbl_rotate: 'Girar', tbl_zone: 'Zona',
+                tbl_delete: 'Eliminar mesa', tbl_del_q: '¿Eliminar la mesa {n}?', tbl_done: 'Listo',
+                sh_sq: 'Cuadrada', sh_rd: 'Redonda', sh_rc: 'Alargada',
+                no_room: 'No queda espacio libre en esta zona. Mueve o elimina una mesa.', overlap: 'Ahí ya hay una mesa.',
+                dur: 'Duración de la reserva', dur_help: 'Cuánto tiempo después de la hora de la reserva cuenta la mesa como ocupada.', min: 'minutos',
+                free_of: 'libres de {total}', assigned_of: '{a} de {n} reservas del día tienen mesa',
+                unassigned: 'Sin mesa', unassigned_none: 'Todas las reservas del día tienen mesa.', no_bookings_day: 'No hay reservas este día.',
+                pick_hint: 'Toca una mesa para: {name} · {time} · {g} pers.', closed_day: 'Cerrado',
+                seats_n: '{n} plazas', table_n: 'Mesa {n}', chip_add: 'Mesa',
+                assign_title: 'Mesa para {name}', assign_sub: '{date} · {time} · {g} personas',
+                st_free: 'Libre', st_busy: '{time} · {name}', st_small: '{s} plazas', no_table: 'Sin mesa',
+                busy_q: 'La mesa {n} ya tiene una reserva a las {time} ({name}). ¿Añadir también esta?',
+                assigned: 'Asignada a la mesa {n}', removed: 'Quitada de la mesa', saved: 'Guardado', created: '{n} mesas creadas', err: 'Algo salió mal. Inténtalo de nuevo.',
+                day_list: 'Reservas del día', tbl_none_day: 'No hay reservas en esta mesa este día.', place_here: 'Poner una reserva aquí', remove: 'Quitar', arrived: 'Llegaron',
+                settings: 'Ajustes',
+                sw_title: 'Plano de mesas', sw_on: 'Activo', sw_off: 'Desactivado', sw_on_lead: 'Asigna las reservas a mesas y ve en todo momento qué mesas están libres.', sw_off_lead: 'Actívalo para asignar las reservas a mesas. Las reservas online de los clientes no se ven afectadas.', sw_off_kept: 'Tus mesas se conservan y vuelven en cuanto lo actives.', turned_on: 'Plano de mesas activado', turned_off: 'Plano de mesas desactivado'
+            },
+            tr: {
+                tab: 'Masalar', live: 'Canlı', edit: 'Salon planını düzenle', now: 'Şimdi', cancel: 'İptal',
+                empty_title: 'Salon planınızı oluşturun', empty_lead: 'Masalarınızı bir kez ekleyin. Sonra her rezervasyonu tek dokunuşla bir masaya koyun ve hangi masaların boş olduğunu her an görün.',
+                quick_n: 'Kaç masa?', quick_s: 'Masa başına kişi', quick_go: 'Oluştur', or_manual: 'ya da planı sıfırdan çizin',
+                add_sq: 'Kare', add_rd: 'Yuvarlak', add_rc: 'Uzun',
+                lg_free: 'Boş', lg_soon: 'Yakında rezerve', lg_busy: 'Rezerve', lg_seated: 'Geldiler',
+                zone_default: 'Salon', zone_add: 'Yeni alan', zone_name_q: 'Alan adı (ör. Teras)', zone_name: 'Alan adı', zone_delete: 'Alanı sil',
+                zone_del_q: '“{n}” alanı masalarıyla birlikte silinsin mi?', zone_last: 'En az bir alan gerekli.',
+                tbl_help: 'Adını, kişi sayısını veya şeklini değiştirmek için bir masaya dokunun. Taşımak için sürükleyin.',
+                tbl_name: 'Ad veya numara', tbl_seats: 'Kişi', tbl_shape: 'Şekil', tbl_rotate: 'Döndür', tbl_zone: 'Alan',
+                tbl_delete: 'Masayı sil', tbl_del_q: '{n} numaralı masa silinsin mi?', tbl_done: 'Tamam',
+                sh_sq: 'Kare', sh_rd: 'Yuvarlak', sh_rc: 'Uzun',
+                no_room: 'Bu alanda boş yer kalmadı. Bir masayı taşıyın veya silin.', overlap: 'Orada zaten bir masa var.',
+                dur: 'Rezervasyon süresi', dur_help: 'Rezervasyon saatinden sonra masanın ne kadar süre dolu sayılacağı.', min: 'dakika',
+                free_of: '{total} masadan boş', assigned_of: 'Günün {n} rezervasyonundan {a} tanesinin masası var',
+                unassigned: 'Masasız', unassigned_none: 'Günün tüm rezervasyonlarının masası var.', no_bookings_day: 'Bu gün rezervasyon yok.',
+                pick_hint: 'Şunun için bir masaya dokunun: {name} · {time} · {g} kişi', closed_day: 'Kapalı',
+                seats_n: '{n} kişilik', table_n: 'Masa {n}', chip_add: 'Masa',
+                assign_title: '{name} için masa', assign_sub: '{date} · {time} · {g} kişi',
+                st_free: 'Boş', st_busy: '{time} · {name}', st_small: '{s} kişilik', no_table: 'Masa yok',
+                busy_q: 'Masa {n} için saat {time} rezervasyonu zaten var ({name}). Bu da eklensin mi?',
+                assigned: 'Masa {n} atandı', removed: 'Masadan çıkarıldı', saved: 'Kaydedildi', created: '{n} masa oluşturuldu', err: 'Bir şeyler ters gitti. Tekrar deneyin.',
+                day_list: 'Günün rezervasyonları', tbl_none_day: 'Bu gün bu masada rezervasyon yok.', place_here: 'Buraya rezervasyon koy', remove: 'Çıkar', arrived: 'Geldiler',
+                settings: 'Ayarlar',
+                sw_title: 'Masa planı', sw_on: 'Açık', sw_off: 'Kapalı', sw_on_lead: 'Rezervasyonları masalara yerleştirin ve hangi masaların boş olduğunu her an görün.', sw_off_lead: 'Rezervasyonları masalara yerleştirmek için açın. Misafirlerin online rezervasyonları etkilenmez.', sw_off_kept: 'Masalarınız saklanır ve açtığınız anda geri gelir.', turned_on: 'Masa planı açıldı', turned_off: 'Masa planı kapatıldı'
+            },
+            pt: {
+                tab: 'Mesas', live: 'Ao vivo', edit: 'Editar a planta', now: 'Agora', cancel: 'Cancelar',
+                empty_title: 'Crie a planta da sua sala', empty_lead: 'Adicione as suas mesas uma vez. Depois coloque cada reserva numa mesa com um toque e veja a qualquer momento que mesas estão livres.',
+                quick_n: 'Quantas mesas?', quick_s: 'Lugares por mesa', quick_go: 'Criar', or_manual: 'ou desenhe a planta de raiz',
+                add_sq: 'Quadrada', add_rd: 'Redonda', add_rc: 'Comprida',
+                lg_free: 'Livre', lg_soon: 'Reservada em breve', lg_busy: 'Reservada', lg_seated: 'Chegaram',
+                zone_default: 'Sala', zone_add: 'Nova zona', zone_name_q: 'Nome da zona (ex. Esplanada)', zone_name: 'Nome da zona', zone_delete: 'Eliminar zona',
+                zone_del_q: 'Eliminar a zona «{n}» e as suas mesas?', zone_last: 'É preciso pelo menos uma zona.',
+                tbl_help: 'Toque numa mesa para mudar o nome, os lugares ou a forma. Arraste-a para a mover.',
+                tbl_name: 'Nome ou número', tbl_seats: 'Lugares', tbl_shape: 'Forma', tbl_rotate: 'Rodar', tbl_zone: 'Zona',
+                tbl_delete: 'Eliminar mesa', tbl_del_q: 'Eliminar a mesa {n}?', tbl_done: 'Concluir',
+                sh_sq: 'Quadrada', sh_rd: 'Redonda', sh_rc: 'Comprida',
+                no_room: 'Já não há espaço livre nesta zona. Mova ou elimine uma mesa.', overlap: 'Já existe uma mesa nesse lugar.',
+                dur: 'Duração da reserva', dur_help: 'Durante quanto tempo após a hora da reserva a mesa conta como ocupada.', min: 'minutos',
+                free_of: 'livres de {total}', assigned_of: '{a} de {n} reservas do dia têm mesa',
+                unassigned: 'Sem mesa', unassigned_none: 'Todas as reservas do dia têm mesa.', no_bookings_day: 'Não há reservas neste dia.',
+                pick_hint: 'Toque numa mesa para: {name} · {time} · {g} pess.', closed_day: 'Fechado',
+                seats_n: '{n} lugares', table_n: 'Mesa {n}', chip_add: 'Mesa',
+                assign_title: 'Mesa para {name}', assign_sub: '{date} · {time} · {g} pessoas',
+                st_free: 'Livre', st_busy: '{time} · {name}', st_small: '{s} lugares', no_table: 'Sem mesa',
+                busy_q: 'A mesa {n} já tem uma reserva às {time} ({name}). Adicionar também esta?',
+                assigned: 'Colocada na mesa {n}', removed: 'Retirada da mesa', saved: 'Guardado', created: '{n} mesas criadas', err: 'Algo correu mal. Tente de novo.',
+                day_list: 'Reservas do dia', tbl_none_day: 'Não há reservas nesta mesa neste dia.', place_here: 'Colocar aqui uma reserva', remove: 'Retirar', arrived: 'Chegaram',
+                settings: 'Definições',
+                sw_title: 'Planta das mesas', sw_on: 'Ativa', sw_off: 'Desativada', sw_on_lead: 'Coloque as reservas em mesas e veja a qualquer momento quais estão livres.', sw_off_lead: 'Ative-a para colocar as reservas em mesas. As reservas online dos clientes não são afetadas.', sw_off_kept: 'As suas mesas ficam guardadas e voltam assim que a ativar.', turned_on: 'Planta ativada', turned_off: 'Planta desativada'
+            }
+        };
+        const flT = (k, v) => trFmt((FL_TXT[currentLang] || FL_TXT.en)[k] ?? FL_TXT.en[k] ?? k, v);
+        const flEl = id => document.getElementById(id);
+        let flShop = null, flUnsub = null, flLoaded = false;
+        let flData = { on: false, dur: 120, zones: {}, tables: {} };
+        let flMode = 'live', flZone = null, flSel = null, flPickRes = null, flDate = '', flTime = '';
+
+        const flMin = s => { const m = /^(\d{1,2}):(\d{2})/.exec(String(s || '')); return m ? +m[1] * 60 + +m[2] : null; };
+        const flDur = () => FL_DURS.includes(flData.dur) ? flData.dur : 120;
+        const flId = p => p + Math.random().toString(36).slice(2, 8).padEnd(6, '0');
+        const flZonesList = () => Object.entries(flData.zones || {}).map(([id, z]) => Object.assign({ id }, z))
+            .sort((a, b) => (a.o || 0) - (b.o || 0) || String(a.n).localeCompare(String(b.n)));
+        const flTablesAll = () => Object.entries(flData.tables || {}).map(([id, x]) => Object.assign({ id }, x));
+        const flHasTables = () => flTablesAll().length > 0;
+        const flOn = () => flData.on === true;
+        const flZoneOf = tb => (flData.zones && flData.zones[tb.z]) ? tb.z : (flZonesList()[0] || {}).id;
+        const flTablesIn = z => flTablesAll().filter(tb => flZoneOf(tb) === z)
+            .sort((a, b) => String(a.n).localeCompare(String(b.n), undefined, { numeric: true }));
+        const flTableName = id => (flData.tables && flData.tables[id]) ? flData.tables[id].n : null;
+        const flActive = r => r.status !== 'cancelled' && r.attendance !== 'noshow';
+        const flDayRes = d => allReservations.filter(r => r.date === d && flActive(r));
+        const flFloorActive = () => { const s = flEl('asec-floor'); return s && s.classList.contains('active'); };
+
+        function listenToFloor(shop) {
+            if (flUnsub) { try { flUnsub(); } catch (e) {} flUnsub = null; }
+            flShop = shop; flLoaded = false; flData = { on: false, dur: 120, zones: {}, tables: {} };
+            flSel = null; flPickRes = null; flZone = null;
+            flUnsub = onValue(ref(db, 'shop_floor/' + shop), snap => {
+                if (flShop !== shop) return;
+                const v = snap.val() || {};
+                flData = { on: v.on === true, dur: v.dur || 120, zones: v.zones || {}, tables: v.tables || {} };
+                flLoaded = true;
+                if (flSel && !flData.tables[flSel]) flSel = null;
+                flRender();
+                if (currentAdminShop === shop) renderDashboard(shop);
+            }, () => { flLoaded = true; flRender(); });
+        }
+
+        // Κατάσταση τραπεζιού την ώρα t (λεπτά) της ημέρας d
+        function flStateOf(id, d, t) {
+            const dur = flDur();
+            const list = flDayRes(d).filter(r => r.table === id && flMin(r.time) !== null)
+                .sort((a, b) => flMin(a.time) - flMin(b.time));
+            const cur = list.find(r => flMin(r.time) <= t && t < flMin(r.time) + dur);
+            if (cur) return { st: cur.attendance === 'arrived' ? 'seated' : 'busy', r: cur };
+            const next = list.find(r => flMin(r.time) > t && flMin(r.time) < t + dur);
+            if (next) return { st: 'soon', r: next };
+            return { st: 'free', r: null };
+        }
+        // Άλλη κράτηση στο ίδιο τραπέζι που πέφτει πάνω στην r
+        function flClash(r, id) {
+            const s = flMin(r.time), dur = flDur();
+            if (s === null) return null;
+            return flDayRes(r.date).find(x => x.id !== r.id && x.table === id && flMin(x.time) !== null
+                && flMin(x.time) < s + dur && s < flMin(x.time) + dur) || null;
+        }
+
+        function flOverlaps(z, x, y, w, h, skip) {
+            return flTablesAll().some(tb => tb.id !== skip && flZoneOf(tb) === z
+                && x < tb.x + tb.w && tb.x < x + w && y < tb.y + tb.h && tb.y < y + h);
+        }
+        function flFreeSpot(z, w, h, extra) {
+            const busy = (x, y, gap) => flTablesAll().concat(extra || []).some(tb => tb.id && flZoneOf(tb) === z
+                && x < tb.x + tb.w + gap && tb.x < x + w + gap && y < tb.y + tb.h + gap && tb.y < y + h + gap);
+            for (const gap of [1, 0]) for (let y = gap; y + h <= FL_ROWS; y++) for (let x = gap; x + w <= FL_COLS; x++) if (!busy(x, y, gap)) return { x, y };
+            return null;
+        }
+        function flNextName() {
+            let max = 0;
+            flTablesAll().forEach(tb => { const n = parseInt(tb.n, 10); if (String(n) === String(tb.n) && n > max) max = n; });
+            return String(max + 1);
+        }
+
+        // ---------- Ώρες για τη ζωντανή προβολή ----------
+        function flDefaultTime(d) {
+            const slots = nbSlotsFor(d) || [];
+            if (d === todayLocal()) {
+                const n = new Date(), now = n.getHours() * 60 + n.getMinutes();
+                const s = slots.find(x => flMin(x) + 30 > now);
+                return s || fromMinH(now - now % 15);
+            }
+            return slots.find(x => x >= '19:00') || slots[0] || '20:00';
+        }
+        function flFillTimes() {
+            const sel = flEl('fl-time'); if (!sel) return;
+            const slots = nbSlotsFor(flDate);
+            const set = new Set(slots || []);
+            if (flTime) set.add(flTime);
+            flDayRes(flDate).forEach(r => { if (/^\d{2}:\d{2}$/.test(r.time || '')) set.add(r.time); });
+            const opts = [...set].sort();
+            sel.innerHTML = (slots === null ? `<option value="" disabled>${repEsc(flT('closed_day'))}</option>` : '')
+                + opts.map(s => `<option value="${s}">${s}</option>`).join('');
+            if (flTime) sel.value = flTime;
+        }
+
+        // ---------- Σχεδίαση ----------
+        function flApply() {
+            document.querySelectorAll('[data-fl]').forEach(el => { el.textContent = flT(el.getAttribute('data-fl')); });
+            flRender();
+        }
+
+        function flRender() {
+            if (!flFloorActive() || !flEl('fl-canvas')) return;
+            const zones = flZonesList(), has = flHasTables();
+            if (!flZone || !(flData.zones || {})[flZone]) flZone = (zones[0] || {}).id || null;
+            if (!flDate) flDate = todayLocal();
+            if (!flTime) flTime = flDefaultTime(flDate);
+            const on = flOn();
+            const sw = flEl('fl-on'); sw.checked = on; sw.disabled = !flLoaded;
+            const badge = flEl('fl-badge'); badge.textContent = flLoaded ? flT(on ? 'sw_on' : 'sw_off') : ''; badge.classList.toggle('on', on);
+            flEl('fl-on-lead').textContent = !flLoaded ? '' : on ? flT('sw_on_lead') : (has ? flT('sw_off_lead') + ' ' + flT('sw_off_kept') : flT('sw_off_lead'));
+            flEl('fl-top').style.display = on ? '' : 'none';
+            if (!on) { flEl('fl-empty').style.display = 'none'; flEl('fl-main').style.display = 'none'; return; }
+            const edit = flMode === 'edit';
+            flEl('fl-m-live').classList.toggle('on', !edit);
+            flEl('fl-m-edit').classList.toggle('on', edit);
+            flEl('fl-ctrl').style.display = edit || !has ? 'none' : '';
+            const showEmpty = flLoaded && !has && !edit;
+            flEl('fl-empty').style.display = showEmpty ? '' : 'none';
+            flEl('fl-main').style.display = showEmpty || !flLoaded ? 'none' : '';
+            if (showEmpty || !flLoaded) return;
+            if (edit && !zones.length) { flEnsureZone(); return; }
+            flEl('fl-date').value = flDate;
+            flFillTimes();
+            flEl('fl-tools').style.display = edit ? '' : 'none';
+            flEl('fl-legend').style.display = edit ? 'none' : '';
+            const pr = flPickRes && allReservations.find(r => r.id === flPickRes);
+            if (flPickRes && (!pr || edit)) flPickRes = null;
+            flEl('fl-hint').classList.toggle('on', !!(flPickRes && !edit));
+            if (flPickRes && pr) flEl('fl-hint-t').textContent = flT('pick_hint', { name: pr.name || '', time: pr.time || '', g: pr.guests || '' });
+            flRenderZones(zones, edit);
+            flRenderCanvas(edit);
+            flRenderSide(edit);
+        }
+
+        function flRenderZones(zones, edit) {
+            const box = flEl('fl-zones');
+            const show = zones.length > 1 || edit;
+            box.style.display = show ? '' : 'none';
+            if (!show) return;
+            box.innerHTML = zones.map(z => `<button type="button" class="fl-zone${z.id === flZone ? ' on' : ''}" data-zone="${repEsc(z.id)}">${repEsc(z.n)}</button>`).join('')
+                + (edit ? `<button type="button" class="fl-zone add" data-zone-add="1">+ ${repEsc(flT('zone_add'))}</button>` : '');
+        }
+
+        function flRenderCanvas(edit) {
+            const cv = flEl('fl-canvas');
+            cv.classList.toggle('edit', edit);
+            const tm = flMin(flTime) ?? 0;
+            const pr = flPickRes ? allReservations.find(r => r.id === flPickRes) : null;
+            cv.innerHTML = flTablesIn(flZone).map(tb => {
+                let cls = 'fl-t ' + (tb.sh === 'rd' ? 'rd' : tb.sh);
+                let sub = flT('seats_n', { n: tb.s }), aria = flT('table_n', { n: tb.n }) + ', ' + sub;
+                if (!edit) {
+                    const S = flStateOf(tb.id, flDate, tm);
+                    cls += ' ' + S.st;
+                    if (S.r) {
+                        const nm = String(S.r.name || '').split(' ')[0];
+                        sub = S.st === 'soon' ? `${S.r.time} · ${S.r.guests}` : `${S.r.time} · ${nm}`;
+                        aria += ', ' + flT('lg_' + S.st) + ' ' + S.r.time + ' ' + (S.r.name || '');
+                    } else aria += ', ' + flT('lg_free');
+                    if (pr) cls += S.st === 'free' && !flClash(pr, tb.id) ? ' target' : ' dim';
+                } else if (tb.id === flSel) cls += ' sel';
+                const st = `left:${tb.x / FL_COLS * 100}%;top:${tb.y / FL_ROWS * 100}%;width:${tb.w / FL_COLS * 100}%;height:${tb.h / FL_ROWS * 100}%`;
+                return `<button type="button" class="${cls}" style="${st}" data-tid="${repEsc(tb.id)}" aria-label="${repEsc(aria)}"><span class="b"><span class="nm">${repEsc(tb.n)}</span><span class="sub">${repEsc(sub)}</span></span></button>`;
+            }).join('');
+            if (edit) cv.querySelectorAll('.fl-t').forEach(el => flBindDrag(el));
+        }
+
+        function flRenderSide(edit) {
+            const side = flEl('fl-side');
+            if (edit) {
+                const tb = flSel && flData.tables[flSel];
+                if (tb) {
+                    const zones = flZonesList();
+                    side.innerHTML = `<div class="fl-panel">
+                        <h4>${repEsc(flT('table_n', { n: tb.n }))}</h4>
+                        <div class="fl-row2">
+                            <div class="fl-field"><label for="fl-e-name">${repEsc(flT('tbl_name'))}</label><input id="fl-e-name" maxlength="12" value="${repEsc(tb.n)}"></div>
+                            <div class="fl-field"><label for="fl-e-seats">${repEsc(flT('tbl_seats'))}</label><input id="fl-e-seats" type="number" min="1" max="30" inputmode="numeric" value="${repEsc(tb.s)}"></div>
+                        </div>
+                        <div class="fl-field"><label>${repEsc(flT('tbl_shape'))}</label><div class="fl-shapes">
+                            ${['sq', 'rd', 'rc'].map(s => `<button type="button" data-shape="${s}" class="${tb.sh === s ? 'on' : ''}" title="${repEsc(flT('sh_' + s))}" aria-label="${repEsc(flT('sh_' + s))}"><i class="fl-shape ${s}"></i></button>`).join('')}
+                            <button type="button" data-rotate="1" title="${repEsc(flT('tbl_rotate'))}" aria-label="${repEsc(flT('tbl_rotate'))}" ${tb.w === tb.h ? 'disabled style="opacity:.4"' : ''}>${svgI('<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>', 16)}</button>
+                        </div></div>
+                        ${zones.length > 1 ? `<div class="fl-field"><label for="fl-e-zone">${repEsc(flT('tbl_zone'))}</label><select id="fl-e-zone">${zones.map(z => `<option value="${repEsc(z.id)}"${z.id === flZoneOf(tb) ? ' selected' : ''}>${repEsc(z.n)}</option>`).join('')}</select></div>` : ''}
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:4px;">
+                            <button type="button" class="fl-del" id="fl-e-del">${repEsc(flT('tbl_delete'))}</button>
+                            <button type="button" class="rv-btn main" id="fl-e-done">${repEsc(flT('tbl_done'))}</button>
+                        </div></div>`;
+                    return;
+                }
+                const z = (flData.zones || {})[flZone] || {};
+                side.innerHTML = `<div class="fl-panel"><p class="fl-muted">${repEsc(flT('tbl_help'))}</p></div>
+                    <div class="fl-panel"><h4>${repEsc(flT('settings'))}</h4>
+                        <div class="fl-field"><label for="fl-z-name">${repEsc(flT('zone_name'))}</label><input id="fl-z-name" maxlength="30" value="${repEsc(z.n || '')}"></div>
+                        <div class="fl-field"><label for="fl-dur">${repEsc(flT('dur'))}</label><select id="fl-dur">${FL_DURS.map(m => `<option value="${m}"${m === flDur() ? ' selected' : ''}>${m} ${repEsc(flT('min'))}</option>`).join('')}</select><div class="help">${repEsc(flT('dur_help'))}</div></div>
+                        ${flZonesList().length > 1 ? `<button type="button" class="fl-del" id="fl-z-del">${repEsc(flT('zone_delete'))}</button>` : ''}
+                    </div>`;
+                return;
+            }
+            // Ζωντανά: ελεύθερα τώρα + κρατήσεις χωρίς τραπέζι
+            const tm = flMin(flTime) ?? 0;
+            const all = flTablesAll();
+            const free = all.filter(tb => flStateOf(tb.id, flDate, tm).st === 'free').length;
+            const day = flDayRes(flDate).slice().sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            const withT = day.filter(r => r.table && flData.tables[r.table]);
+            const ua = day.filter(r => !(r.table && flData.tables[r.table]));
+            side.innerHTML = `<div class="fl-panel">
+                    <div class="fl-count">${free}<small>${repEsc(flT('free_of', { total: all.length }))}</small></div>
+                    ${day.length ? `<p class="fl-muted" style="margin-top:4px;">${repEsc(flT('assigned_of', { a: withT.length, n: day.length }))}</p>` : ''}
+                </div>
+                <div class="fl-panel"><h4>${repEsc(flT('unassigned'))}${ua.length ? ` <small>${ua.length}</small>` : ''}</h4>
+                    ${!day.length ? `<p class="fl-muted">${repEsc(flT('no_bookings_day'))}</p>`
+                    : !ua.length ? `<p class="fl-muted">${repEsc(flT('unassigned_none'))}</p>`
+                    : `<div class="fl-ua">${ua.map(r => `<button type="button" data-pick="${repEsc(r.id)}" class="${r.id === flPickRes ? 'on' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)}</span><em>${repEsc(r.guests)} ${repEsc(t('guests_label'))}</em></button>`).join('')}</div>`}
+                </div>`;
+        }
+
+        // ---------- Μετακίνηση (σύρσιμο) στην επεξεργασία ----------
+        function flBindDrag(el) {
+            const id = el.dataset.tid;
+            el.addEventListener('pointerdown', e => {
+                if (flMode !== 'edit' || (e.button !== undefined && e.button !== 0)) return;
+                const tb = flData.tables[id]; if (!tb) return;
+                e.preventDefault();
+                const cv = flEl('fl-canvas'), rect = cv.getBoundingClientRect();
+                const cw = rect.width / FL_COLS, ch = rect.height / FL_ROWS;
+                const offX = (e.clientX - rect.left) / cw - tb.x, offY = (e.clientY - rect.top) / ch - tb.y;
+                const z = flZoneOf(tb);
+                let nx = tb.x, ny = tb.y, moved = false;
+                try { el.setPointerCapture(e.pointerId); } catch (err) {}
+                el.classList.add('drag');
+                const mv = ev => {
+                    const x = Math.max(0, Math.min(FL_COLS - tb.w, Math.round((ev.clientX - rect.left) / cw - offX)));
+                    const y = Math.max(0, Math.min(FL_ROWS - tb.h, Math.round((ev.clientY - rect.top) / ch - offY)));
+                    if (x === nx && y === ny) return;
+                    nx = x; ny = y; moved = true;
+                    el.style.left = (x / FL_COLS * 100) + '%'; el.style.top = (y / FL_ROWS * 100) + '%';
+                    el.classList.toggle('bad', flOverlaps(z, x, y, tb.w, tb.h, id));
+                };
+                const up = () => {
+                    el.removeEventListener('pointermove', mv);
+                    el.removeEventListener('pointerup', up);
+                    el.removeEventListener('pointercancel', up);
+                    el.classList.remove('drag', 'bad');
+                    flSel = id;
+                    if (!moved) { flRender(); return; }
+                    if (flOverlaps(z, nx, ny, tb.w, tb.h, id)) { showToast(flT('overlap'), 'error'); flRender(); return; }
+                    flSaveTable(id, { x: nx, y: ny });
+                };
+                el.addEventListener('pointermove', mv);
+                el.addEventListener('pointerup', up);
+                el.addEventListener('pointercancel', up);
+            });
+            el.addEventListener('keydown', e => {
+                const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+                if (!d || flMode !== 'edit') return;
+                e.preventDefault();
+                const tb = flData.tables[id]; if (!tb) return;
+                const x = tb.x + d[0], y = tb.y + d[1];
+                if (x < 0 || y < 0 || x + tb.w > FL_COLS || y + tb.h > FL_ROWS || flOverlaps(flZoneOf(tb), x, y, tb.w, tb.h, id)) return;
+                flSel = id;
+                flSaveTable(id, { x, y }).then(() => { const n = flEl('fl-canvas').querySelector(`[data-tid="${id}"]`); if (n) n.focus(); });
+            });
+        }
+
+        // ---------- Αποθήκευση ----------
+        function flSaveTable(id, patch) {
+            if (!flShop || !flData.tables[id]) return Promise.resolve();
+            Object.assign(flData.tables[id], patch);
+            flRender();
+            return update(ref(db, `shop_floor/${flShop}/tables/${id}`), patch).catch(() => showToast(flT('err'), 'error'));
+        }
+        function flEnsureZone() {
+            if (!flShop || flZonesList().length) return Promise.resolve((flZonesList()[0] || {}).id);
+            const z = { n: flT('zone_default'), o: 0 };
+            flData.zones = { main: z };
+            flZone = 'main';
+            flRender();
+            return set(ref(db, `shop_floor/${flShop}/zones/main`), z).then(() => 'main').catch(() => { showToast(flT('err'), 'error'); return null; });
+        }
+        async function flAddTable(sh) {
+            const z = await flEnsureZone(); if (!z) return;
+            if (!flZone) flZone = z;
+            const [w, h] = FL_SIZE[sh] || FL_SIZE.sq;
+            const spot = flFreeSpot(flZone, w, h);
+            if (!spot) { showToast(flT('no_room'), 'error'); return; }
+            const id = flId('t');
+            const tb = { n: flNextName(), s: sh === 'rc' ? 6 : (sh === 'rd' ? 4 : 4), z: flZone, x: spot.x, y: spot.y, w, h, sh };
+            flData.tables = Object.assign({}, flData.tables, { [id]: tb });
+            flSel = id;
+            flRender();
+            set(ref(db, `shop_floor/${flShop}/tables/${id}`), tb).catch(() => showToast(flT('err'), 'error'));
+        }
+        async function flQuick() {
+            const n = Math.max(1, Math.min(60, parseInt(flEl('fl-q-n').value, 10) || 0));
+            const s = Math.max(1, Math.min(30, parseInt(flEl('fl-q-s').value, 10) || 4));
+            if (!flShop || !n) return;
+            const sh = s > 6 ? 'rc' : 'sq';
+            const [w, h] = FL_SIZE[sh];
+            const upd = {}, zones = Object.assign({}, flData.zones);
+            const extra = [];
+            let zid = flZonesList()[0] ? flZonesList()[0].id : null, zcount = flZonesList().length;
+            if (!zid) { zid = 'main'; zones.main = { n: flT('zone_default'), o: 0 }; upd['zones/main'] = zones.main; zcount = 1; }
+            const saved = flData.zones; flData.zones = zones;
+            let num = parseInt(flNextName(), 10);
+            for (let i = 0; i < n; i++) {
+                let spot = flFreeSpot(zid, w, h, extra);
+                if (!spot) {
+                    zcount++;
+                    zid = flId('z');
+                    zones[zid] = { n: flT('zone_default') + ' ' + zcount, o: zcount - 1 };
+                    upd['zones/' + zid] = zones[zid];
+                    spot = flFreeSpot(zid, w, h, extra);
+                    if (!spot) break;
+                }
+                const id = flId('t');
+                const tb = { n: String(num++), s, z: zid, x: spot.x, y: spot.y, w, h, sh };
+                extra.push(Object.assign({ id }, tb));
+                upd['tables/' + id] = tb;
+            }
+            flData.zones = saved;
+            const btn = flEl('fl-q-go'); btn.disabled = true;
+            try {
+                await update(ref(db, `shop_floor/${flShop}`), upd);
+                showToast(flT('created', { n: extra.length }), 'success');
+                flMode = 'live';
+            } catch (e) { showToast(flT('err'), 'error'); }
+            finally { btn.disabled = false; }
+        }
+
+        // ---------- Ανάθεση κράτησης σε τραπέζι ----------
+        async function flAssign(resId, tid) {
+            const r = allReservations.find(x => x.id === resId);
+            if (!r || !currentAdminShop) return false;
+            if (tid) {
+                const c = flClash(r, tid);
+                if (c && !confirm(flT('busy_q', { n: flTableName(tid), time: c.time, name: c.name || '' }))) return false;
+            }
+            try {
+                await update(ref(db, `reservations/${currentAdminShop}/${resId}`), { table: tid || null });
+                showToast(tid ? flT('assigned', { n: flTableName(tid) }) : flT('removed'), 'success');
+                return true;
+            } catch (e) { showToast(flT('err'), 'error'); return false; }
+        }
+
+        const flModal = flEl('fl-modal');
+        function flOpenModal(title, sub, body) {
+            flEl('fl-m-title').textContent = title;
+            flEl('fl-m-sub').textContent = sub || '';
+            flEl('fl-m-sub').style.display = sub ? '' : 'none';
+            flEl('fl-m-body').innerHTML = body;
+            flModal.classList.add('open');
+        }
+        const flCloseModal = () => flModal.classList.remove('open');
+
+        // Από την κάρτα κράτησης: λίστα τραπεζιών με την κατάστασή τους εκείνη την ώρα
+        window.flPickFor = (resId) => {
+            const r = allReservations.find(x => x.id === resId); if (!r) return;
+            const g = parseInt(r.guests, 10) || 0;
+            const rows = flZonesList().map(z => {
+                const tbs = flTablesIn(z.id); if (!tbs.length) return '';
+                return (flZonesList().length > 1 ? `<div class="zn">${repEsc(z.n)}</div>` : '') + tbs.map(tb => {
+                    const c = flClash(r, tb.id);
+                    const st = c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>`
+                        : tb.s < g ? `<span class="st small">${repEsc(flT('st_small', { s: tb.s }))}</span>`
+                        : `<span class="st">${repEsc(flT('st_free'))}</span>`;
+                    return `<button type="button" class="it${r.table === tb.id ? ' cur' : ''}" data-assign="${repEsc(tb.id)}"><b>${repEsc(tb.n)}</b><span>${repEsc(flT('seats_n', { n: tb.s }))}</span>${st}</button>`;
+                }).join('');
+            }).join('');
+            const none = r.table ? `<button type="button" class="it" data-assign=""><span>${repEsc(flT('no_table'))}</span></button>` : '';
+            flOpenModal(flT('assign_title', { name: r.name || '' }), flT('assign_sub', { date: nbFmtDate(r.date), time: r.time || '', g: r.guests || '' }),
+                `<div class="fl-list" data-res="${repEsc(resId)}">${rows}${none}</div>`);
+        };
+
+        // Από την κάτοψη: τι έχει το τραπέζι σήμερα + βάλε κράτηση
+        function flOpenTable(tid) {
+            const tb = flData.tables[tid]; if (!tb) return;
+            const day = flDayRes(flDate).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+            const on = day.filter(r => r.table === tid);
+            const ua = day.filter(r => !(r.table && flData.tables[r.table]));
+            const onHtml = on.length ? on.map(r => `<div class="it${r.attendance === 'arrived' ? ' ok' : ''}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}</span>${r.attendance === 'arrived' ? `<span class="st">${repEsc(flT('arrived'))}</span>` : ''}<button type="button" class="x" data-unassign="${repEsc(r.id)}">${repEsc(flT('remove'))}</button></div>`).join('')
+                : `<p class="fl-muted">${repEsc(flT('tbl_none_day'))}</p>`;
+            const uaHtml = ua.length ? `<label style="display:block;font-size:.78rem;font-weight:600;color:var(--text-muted);margin:16px 0 6px;">${repEsc(flT('place_here'))}</label>
+                <div class="fl-list">${ua.map(r => { const c = flClash(r, tid); return `<button type="button" class="it" data-place="${repEsc(r.id)}"><b>${repEsc(r.time)}</b><span>${repEsc(r.name)} · ${repEsc(r.guests)} ${repEsc(t('guests_label'))}</span>${c ? `<span class="st busy">${repEsc(flT('st_busy', { time: c.time, name: String(c.name || '').split(' ')[0] }))}</span>` : ''}</button>`; }).join('')}</div>` : '';
+            flOpenModal(flT('table_n', { n: tb.n }), flT('seats_n', { n: tb.s }) + ' · ' + nbFmtDate(flDate),
+                `<label style="display:block;font-size:.78rem;font-weight:600;color:var(--text-muted);margin:0 0 6px;">${repEsc(flT('day_list'))}</label><div class="fl-list" data-tid="${repEsc(tid)}">${onHtml}</div>${uaHtml}`);
+            flModal.dataset.tid = tid;
+        }
+
+        // Ετικέτα στην κάρτα κράτησης (μόνο αν το μαγαζί έχει τραπέζια)
+        function flChip(res, cancelled) {
+            if (cancelled || !flOn() || !flHasTables()) return '';
+            const n = res.table && flTableName(res.table);
+            const ico = svgI('<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M6 12v7M18 12v7"/>', 12);
+            return n ? `<button type="button" class="fl-chip set" onclick="flPickFor('${res.id}')">${ico}${repEsc(flT('table_n', { n }))}</button>`
+                : `<button type="button" class="fl-chip add" onclick="flPickFor('${res.id}')">+ ${repEsc(flT('chip_add'))}</button>`;
+        }
+
+        // ---------- Συμβάντα ----------
+        flEl('fl-m-live').onclick = () => { flMode = 'live'; flSel = null; flRender(); };
+        flEl('fl-m-edit').onclick = () => { flMode = 'edit'; flPickRes = null; flRender(); };
+        flEl('fl-date').addEventListener('change', e => { flDate = e.target.value || todayLocal(); flTime = flDefaultTime(flDate); flPickRes = null; flRender(); });
+        flEl('fl-time').addEventListener('change', e => { flTime = e.target.value; flRender(); });
+        flEl('fl-now').onclick = () => { flDate = todayLocal(); flTime = flDefaultTime(flDate); flRender(); };
+        flEl('fl-hint-x').onclick = () => { flPickRes = null; flRender(); };
+        flEl('fl-q-go').onclick = flQuick;
+        flEl('fl-on').addEventListener('change', e => {
+            if (!flShop) return;
+            const on = e.target.checked;
+            flData.on = on; flMode = 'live'; flSel = null; flPickRes = null;
+            flRender();
+            if (currentAdminShop) renderDashboard(currentAdminShop);
+            set(ref(db, `shop_floor/${flShop}/on`), on)
+                .then(() => showToast(flT(on ? 'turned_on' : 'turned_off'), 'success'))
+                .catch(() => { flData.on = !on; flRender(); if (currentAdminShop) renderDashboard(currentAdminShop); showToast(flT('err'), 'error'); });
+        });
+        flEl('fl-q-manual').onclick = () => { flMode = 'edit'; flRender(); };
+        document.querySelectorAll('#fl-tools [data-add]').forEach(b => b.onclick = () => flAddTable(b.dataset.add));
+
+        flEl('fl-zones').addEventListener('click', e => {
+            const b = e.target.closest('button'); if (!b) return;
+            if (b.dataset.zoneAdd) {
+                const name = (prompt(flT('zone_name_q')) || '').trim().slice(0, 30);
+                if (!name) return;
+                const id = flId('z'), o = flZonesList().reduce((m, z) => Math.max(m, z.o || 0), 0) + 1;
+                flData.zones = Object.assign({}, flData.zones, { [id]: { n: name, o } });
+                flZone = id; flSel = null; flRender();
+                set(ref(db, `shop_floor/${flShop}/zones/${id}`), { n: name, o }).catch(() => showToast(flT('err'), 'error'));
+                return;
+            }
+            flZone = b.dataset.zone; flSel = null; flRender();
+        });
+
+        flEl('fl-canvas').addEventListener('click', async e => {
+            if (flMode === 'edit') return;
+            const b = e.target.closest('.fl-t'); if (!b) return;
+            const tid = b.dataset.tid;
+            if (flPickRes) {
+                const id = flPickRes;
+                if (await flAssign(id, tid)) { flPickRes = null; flRender(); }
+                return;
+            }
+            flOpenTable(tid);
+        });
+
+        flEl('fl-side').addEventListener('click', e => {
+            const pick = e.target.closest('[data-pick]');
+            if (pick) {
+                const id = pick.dataset.pick;
+                flPickRes = flPickRes === id ? null : id;
+                const r = allReservations.find(x => x.id === id);
+                if (flPickRes && r && r.time) flTime = r.time;
+                flRender();
+                return;
+            }
+            const shape = e.target.closest('[data-shape]');
+            if (shape && flSel) {
+                const tb = flData.tables[flSel], sh = shape.dataset.shape;
+                let [w, h] = FL_SIZE[sh];
+                if (sh === 'rc' && tb.h > tb.w) [w, h] = [h, w];
+                const x = Math.min(tb.x, FL_COLS - w), y = Math.min(tb.y, FL_ROWS - h);
+                if (flOverlaps(flZoneOf(tb), x, y, w, h, flSel)) {
+                    const sp = flFreeSpot(flZoneOf(tb), w, h); if (!sp) return showToast(flT('no_room'), 'error');
+                    return flSaveTable(flSel, { sh, w, h, x: sp.x, y: sp.y });
+                }
+                return flSaveTable(flSel, { sh, w, h, x, y });
+            }
+            if (e.target.closest('[data-rotate]') && flSel) {
+                const tb = flData.tables[flSel];
+                const w = tb.h, h = tb.w;
+                let x = Math.min(tb.x, FL_COLS - w), y = Math.min(tb.y, FL_ROWS - h);
+                if (flOverlaps(flZoneOf(tb), x, y, w, h, flSel)) {
+                    const sp = flFreeSpot(flZoneOf(tb), w, h); if (!sp) return showToast(flT('no_room'), 'error');
+                    x = sp.x; y = sp.y;
+                }
+                return flSaveTable(flSel, { w, h, x, y });
+            }
+            if (e.target.id === 'fl-e-done') { flSel = null; flRender(); return; }
+            if (e.target.id === 'fl-e-del' && flSel) {
+                const tb = flData.tables[flSel];
+                if (!confirm(flT('tbl_del_q', { n: tb.n }))) return;
+                const id = flSel; flSel = null;
+                delete flData.tables[id]; flRender();
+                remove(ref(db, `shop_floor/${flShop}/tables/${id}`)).catch(() => showToast(flT('err'), 'error'));
+                return;
+            }
+            if (e.target.id === 'fl-z-del') {
+                const zs = flZonesList(); if (zs.length < 2) return showToast(flT('zone_last'), 'error');
+                const z = flData.zones[flZone]; if (!z || !confirm(flT('zone_del_q', { n: z.n }))) return;
+                const upd = { ['zones/' + flZone]: null };
+                flTablesIn(flZone).forEach(tb => { upd['tables/' + tb.id] = null; });
+                const zid = flZone; flZone = null;
+                update(ref(db, `shop_floor/${flShop}`), upd).catch(() => showToast(flT('err'), 'error'));
+                delete flData.zones[zid]; flRender();
+            }
+        });
+        flEl('fl-side').addEventListener('change', e => {
+            const id = e.target.id;
+            if (id === 'fl-e-name' && flSel) {
+                const n = e.target.value.trim().slice(0, 12);
+                if (n) flSaveTable(flSel, { n }); else e.target.value = flData.tables[flSel].n;
+            } else if (id === 'fl-e-seats' && flSel) {
+                const s = Math.max(1, Math.min(30, parseInt(e.target.value, 10) || 0));
+                if (s) flSaveTable(flSel, { s });
+            } else if (id === 'fl-e-zone' && flSel) {
+                const tb = flData.tables[flSel], z = e.target.value;
+                const sp = flOverlaps(z, tb.x, tb.y, tb.w, tb.h, flSel) ? flFreeSpot(z, tb.w, tb.h) : { x: tb.x, y: tb.y };
+                if (!sp) { e.target.value = flZoneOf(tb); return showToast(flT('no_room'), 'error'); }
+                flZone = z;
+                flSaveTable(flSel, { z, x: sp.x, y: sp.y });
+            } else if (id === 'fl-z-name' && flZone) {
+                const n = e.target.value.trim().slice(0, 30);
+                if (!n) { e.target.value = (flData.zones[flZone] || {}).n || ''; return; }
+                flData.zones[flZone].n = n; flRender();
+                update(ref(db, `shop_floor/${flShop}/zones/${flZone}`), { n }).then(() => showToast(flT('saved'), 'success')).catch(() => showToast(flT('err'), 'error'));
+            } else if (id === 'fl-dur') {
+                const d = parseInt(e.target.value, 10);
+                if (!FL_DURS.includes(d)) return;
+                flData.dur = d;
+                set(ref(db, `shop_floor/${flShop}/dur`), d).then(() => showToast(flT('saved'), 'success')).catch(() => showToast(flT('err'), 'error'));
+            }
+        });
+
+        flEl('fl-m-body').addEventListener('click', async e => {
+            const a = e.target.closest('[data-assign]');
+            if (a) {
+                const resId = a.closest('[data-res]').dataset.res;
+                if (await flAssign(resId, a.dataset.assign || null)) flCloseModal();
+                return;
+            }
+            const p = e.target.closest('[data-place]');
+            if (p) { const tid = flModal.dataset.tid; if (await flAssign(p.dataset.place, tid)) flOpenTable(tid); return; }
+            const u = e.target.closest('[data-unassign]');
+            if (u) { const tid = flModal.dataset.tid; if (await flAssign(u.dataset.unassign, null)) flOpenTable(tid); }
+        });
+        flEl('fl-m-close').onclick = flCloseModal;
+        flModal.addEventListener('click', e => { if (e.target === flModal) flCloseModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && flModal.classList.contains('open')) flCloseModal(); });
+        flApply();
 
         window.updateCharCount = (inputId, counterId, max) => {
             document.getElementById(counterId).innerText = document.getElementById(inputId).value.length;

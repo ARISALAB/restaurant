@@ -22,7 +22,8 @@ exports.handler = async () => {
       [`shop_details/${shopId}`]: null,
       [`slot_holds/${shopId}`]: null,
       [`guests/${shopId}`]: null,
-      [`waitlist/${shopId}`]: null
+      [`waitlist/${shopId}`]: null,
+      [`shop_floor/${shopId}`]: null
     };
     uids.forEach(uid => { upd[`users_to_shops/${uid}`] = null; upd[`signup_meta/${uid}`] = null; });
     await db.ref().update(upd);
