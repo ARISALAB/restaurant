@@ -63,8 +63,12 @@ class TableReserveBooking extends HTMLElement {
   }
 
   connectedCallback() {
+    // Το Wix δίνει στο widget σταθερό ύψος (αυτό που ορίζει ο ιδιοκτήτης στον Editor) και δεν
+    // το μεγαλώνει. Γεμίζουμε αυτό το ύψος και η φόρμα κυλάει μέσα στο iframe.
     this.style.display = 'block';
-    this.style.overflow = 'visible';
+    this.style.height = '100%';
+    this.style.minHeight = '560px';
+    this.style.overflow = 'hidden';
     window.addEventListener('message', this._onMessage);
     if (this._started) return;
     this._started = true;
@@ -126,28 +130,22 @@ class TableReserveBooking extends HTMLElement {
     f.src = ORIGIN + '/?shop=' + encodeURIComponent(shop) + '&embed=1&src=site' + (LANGS.test(lang) ? '&lang=' + lang : '');
     f.title = 'Online reservations';
     f.setAttribute('allow', 'clipboard-write');
-    f.style.cssText = 'width:100%;border:0;display:block;min-height:620px;height:620px;background:transparent;color-scheme:normal;';
+    f.style.cssText = 'width:100%;height:100%;min-height:560px;border:0;display:block;background:transparent;color-scheme:normal;';
+    f.setAttribute('scrolling', 'yes');
     this._frame = f;
     this.replaceChildren(f);
   }
 
-  // Ίδιο πρωτόκολλο με το embed.js: η σελίδα κράτησης στέλνει το ύψος της
+  // Η σελίδα κράτησης στέλνει ύψος/scroll (ίδιο πρωτόκολλο με το embed.js). Εδώ δεν αλλάζουμε
+  // ύψος (κυλάει μέσα στο iframe)· μόνο φέρνουμε τη φόρμα στην οθόνη όταν ανοίγει το επόμενο βήμα.
   _onMessage(e) {
     const f = this._frame;
     if (!f || e.origin !== ORIGIN || !e.data || e.data.source !== 'tablereserve' || f.contentWindow !== e.source) return;
-    if (e.data.type === 'height' && e.data.height > 0) {
-      const hn = Math.min(Math.ceil(e.data.height), 4000);
-      if (Math.abs(hn - (f._trH || 0)) < 2) return;
-      f._trH = hn;
-      f.style.height = hn + 'px';
-      f.style.minHeight = hn + 'px';
-      // Το ίδιο το στοιχείο παίρνει ρητό ύψος, ώστε το Wix να μεγαλώσει το κουτί του widget
-      // και να σπρώξει πιο κάτω ό,τι υπάρχει από κάτω (αλλιώς κόβει στο αρχικό ύψος).
-      this.style.height = hn + 'px';
-      this.style.minHeight = hn + 'px';
-    } else if (e.data.type === 'scrollTop') {
-      const top = f.getBoundingClientRect().top + window.pageYOffset - 16;
-      window.scrollTo({ top, behavior: 'smooth' });
+    if (e.data.type === 'scrollTop') {
+      const r = f.getBoundingClientRect();
+      if (r.top < 0 || r.top > window.innerHeight * 0.4) {
+        window.scrollTo({ top: r.top + window.pageYOffset - 16, behavior: 'smooth' });
+      }
     }
   }
 }

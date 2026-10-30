@@ -2570,7 +2570,8 @@
             new MutationObserver(sendHeight).observe(document.getElementById('done-modal'), { attributes: true, attributeFilter: ['class'] });
             new MutationObserver(sendHeight).observe(document.getElementById('wl-modal'), { attributes: true, attributeFilter: ['class'] });
             modal.addEventListener('transitionend', sendHeight);
-            document.getElementById('open-modal').addEventListener('click', () => { setTimeout(() => { sendHeight(); post({ type: 'scrollTop' }); }, 30); });
+            // Όταν το iframe έχει σταθερό ύψος και κυλάει μέσα του (π.χ. widget Wix), το επόμενο βήμα ξεκινά από πάνω
+            document.getElementById('open-modal').addEventListener('click', () => { setTimeout(() => { try { window.scrollTo(0, 0); } catch (e) {} sendHeight(); post({ type: 'scrollTop' }); }, 30); });
             trOnLoad(sendHeight);
             setTimeout(sendHeight, 800);
         }
