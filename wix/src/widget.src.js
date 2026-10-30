@@ -64,6 +64,7 @@ class TableReserveBooking extends HTMLElement {
 
   connectedCallback() {
     this.style.display = 'block';
+    this.style.overflow = 'visible';
     window.addEventListener('message', this._onMessage);
     if (this._started) return;
     this._started = true;
@@ -140,6 +141,10 @@ class TableReserveBooking extends HTMLElement {
       f._trH = hn;
       f.style.height = hn + 'px';
       f.style.minHeight = hn + 'px';
+      // Το ίδιο το στοιχείο παίρνει ρητό ύψος, ώστε το Wix να μεγαλώσει το κουτί του widget
+      // και να σπρώξει πιο κάτω ό,τι υπάρχει από κάτω (αλλιώς κόβει στο αρχικό ύψος).
+      this.style.height = hn + 'px';
+      this.style.minHeight = hn + 'px';
     } else if (e.data.type === 'scrollTop') {
       const top = f.getBoundingClientRect().top + window.pageYOffset - 16;
       window.scrollTo({ top, behavior: 'smooth' });
