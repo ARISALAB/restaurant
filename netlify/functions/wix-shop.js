@@ -5,11 +5,26 @@
 //   από το dashboard: { instance: "<?instance= του iframe>" }
 // -> { connected:false } | { connected:true, shop, slug, name, url, owner }
 const { getDb } = require('./_shared/firebase');
-const { json, preflightOk } = require('./_shared/respond');
+const { json } = require('./_shared/respond');
+
+// Το widget καλείται από το site του πελάτη στο Wix και το Wix προσθέτει δικά του headers
+// (Authorization, x-wix-linguist κ.ά.). Επιτρέπουμε ό,τι ζητήσει ο browser στο preflight.
+function cors(event, res) {
+  const asked = event.headers['access-control-request-headers'] || event.headers['Access-Control-Request-Headers'];
+  res.headers = Object.assign({}, res.headers, {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': asked || 'Content-Type, Authorization',
+    'Access-Control-Max-Age': '600',
+  });
+  return res;
+}
 const { wixIdentify } = require('./_shared/wix');
 
-exports.handler = async (event) => {
-  if (event.httpMethod === 'OPTIONS') return preflightOk();
+exports.handler = async (event) => cors(event, await handle(event));
+
+async function handle(event) {
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 204, body: '' };
   if (event.httpMethod !== 'POST') return json(405, { error: 'method_not_allowed' });
 
   let b = {};
@@ -37,4 +52,4 @@ exports.handler = async (event) => {
     console.error('[wix-shop]', e);
     return json(500, { error: 'server_error' });
   }
-};
+}
