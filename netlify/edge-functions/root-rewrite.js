@@ -7,7 +7,7 @@
 // Υπαρκτές σελίδες/φάκελοι του site: περνάνε ανέγγιχτοι
 const PAGES = new Set([
   'admin', 'superadmin', 'partners', 'privacy', 'terms', 'site', 'en', 'de', 'fr', 'it', 'es', 'tr', 'pt',
-  'api', 'downloads', 'netlify', 'cancel', 'embed', 'index', 'claim',
+  'api', 'downloads', 'netlify', 'cancel', 'embed', 'index', 'claim', 'wix',
   // ελληνικές σελίδες του site
   'leitourgies', 'times'
 ]);

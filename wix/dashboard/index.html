@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TableReserve</title>
+<!-- Σελίδα της εφαρμογής TableReserve μέσα στον πίνακα ελέγχου του Wix (Dashboard Page, iframe).
+     Το Wix τη φορτώνει με ?instance=...&locale=... -->
+<style>
+  :root { --blue:#2563eb; --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --bg:#f4f6fb; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink); background:var(--bg); }
+  .wrap { max-width:880px; margin:0 auto; padding:28px 20px 48px; }
+  header { display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+  header img { width:44px; height:44px; border-radius:10px; }
+  header h1 { font-size:22px; margin:0; }
+  header p { margin:2px 0 0; color:var(--muted); font-size:14px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:16px; }
+  .card h2 { font-size:17px; margin:0 0 6px; }
+  .card p { margin:0 0 14px; color:var(--muted); }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  @media (max-width:640px){ .grid { grid-template-columns:1fr; } }
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; border-radius:999px; padding:11px 20px;
+         font:600 14px/1 inherit; font-family:inherit; cursor:pointer; text-decoration:none; }
+  .btn-primary { background:var(--blue); color:#fff; }
+  .btn-ghost { background:#fff; color:var(--blue); border:1px solid #bfdbfe; }
+  .btn-danger { background:#fff; color:#b91c1c; border:1px solid #fecaca; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .ok { display:inline-flex; align-items:center; gap:6px; background:#dcfce7; color:#166534; font-weight:600; font-size:13px; padding:4px 10px; border-radius:999px; }
+  .url { display:flex; gap:8px; margin:6px 0 16px; }
+  .url input { flex:1; min-width:0; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font:inherit; color:var(--ink); background:#f8fafc; }
+  ol { margin:0; padding-left:20px; color:var(--muted); }
+  ol li { margin:4px 0; }
+  .note { font-size:13px; color:var(--muted); margin-top:10px; }
+  .waiting { display:none; margin-top:12px; font-size:14px; color:var(--blue); }
+  .spin { width:16px; height:16px; border:2px solid #bfdbfe; border-top-color:var(--blue); border-radius:50%; animation:s 0.8s linear infinite; display:inline-block; vertical-align:-3px; margin-right:6px; }
+  @keyframes s { to { transform:rotate(360deg); } }
+  #err { display:none; background:#fef2f2; color:#991b1b; border-color:#fecaca; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="/favicon.svg" alt="">
+    <div>
+      <h1>TableReserve</h1>
+      <p data-t="tagline"></p>
+    </div>
+  </header>
+
+  <div class="card" id="loading"><span class="spin"></span><span data-t="loading"></span></div>
+  <div class="card" id="err"></div>
+
+  <!-- Δεν έχει συνδεθεί ακόμα -->
+  <section id="v-connect" hidden>
+    <div class="grid">
+      <div class="card">
+        <h2 data-t="have_title"></h2>
+        <p data-t="have_body"></p>
+        <button class="btn btn-primary" id="btn-connect" data-t="have_btn"></button>
+        <div class="waiting" id="waiting"><span class="spin"></span><span data-t="waiting"></span></div>
+      </div>
+      <div class="card">
+        <h2 data-t="new_title"></h2>
+        <p data-t="new_body"></p>
+        <a class="btn btn-ghost" id="btn-signup" target="_blank" rel="noopener" data-t="new_btn"></a>
+        <p class="note" data-t="new_note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Συνδεδεμένο -->
+  <section id="v-connected" hidden>
+    <div class="card">
+      <span class="ok">✓ <span data-t="connected"></span></span>
+      <h2 style="margin-top:12px" id="shop-name"></h2>
+      <p data-t="link_label" style="margin:0"></p>
+      <div class="url"><input id="shop-url" readonly><button class="btn btn-ghost" id="btn-copy" data-t="copy"></button></div>
+      <div class="row">
+        <a class="btn btn-primary" href="https://tablereserve.gr/admin/" target="_blank" rel="noopener" data-t="open_admin"></a>
+        <a class="btn btn-ghost" id="btn-view" target="_blank" rel="noopener" data-t="view_page"></a>
+      </div>
+    </div>
+    <div class="card">
+      <h2 data-t="add_title"></h2>
+      <ol>
+        <li data-t="add_1"></li>
+        <li data-t="add_2"></li>
+        <li data-t="add_3"></li>
+        <li data-t="add_4"></li>
+      </ol>
+    </div>
+    <div class="card">
+      <h2 data-t="disc_title"></h2>
+      <p data-t="disc_body"></p>
+      <div class="row">
+        <button class="btn btn-danger" id="btn-disc" data-t="disc_btn"></button>
+        <button class="btn btn-danger" id="btn-disc-yes" hidden data-t="disc_yes"></button>
+        <button class="btn btn-ghost" id="btn-disc-no" hidden data-t="cancel"></button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var qs = new URLSearchParams(location.search);
+  var INSTANCE = qs.get('instance') || '';
+  var L = ((qs.get('locale') || navigator.language || 'en').slice(0, 2).toLowerCase() === 'el') ? 'el' : 'en';
+  var API = '/.netlify/functions';
+
+  var T = {
+    en: {
+      tagline: 'Commission-free table reservations for your restaurant',
+      loading: 'Loading…',
+      have_title: 'I already use TableReserve',
+      have_body: 'Sign in to your TableReserve account in a new tab and connect your restaurant to this site.',
+      have_btn: 'Connect my restaurant',
+      waiting: 'Waiting for you to confirm in the other tab…',
+      new_title: 'I’m new to TableReserve',
+      new_body: 'Create your restaurant account: opening hours, tables and booking rules in a few minutes.',
+      new_btn: 'Create a free account',
+      new_note: 'When your account is ready, come back here and click “Connect my restaurant”.',
+      connected: 'Connected',
+      link_label: 'Your booking page',
+      copy: 'Copy', copied: 'Copied',
+      open_admin: 'Open TableReserve admin',
+      view_page: 'View booking page',
+      add_title: 'Add the booking form to your site',
+      add_1: 'Open your site in the Editor.',
+      add_2: 'Click Add Elements (+) and go to App Widgets.',
+      add_3: 'Drag “TableReserve Booking” onto the page where guests should book.',
+      add_4: 'Publish your site. Bookings arrive in your TableReserve admin.',
+      disc_title: 'Disconnect',
+      disc_body: 'The booking form on this site stops showing your restaurant. Your bookings stay safe in TableReserve.',
+      disc_btn: 'Disconnect this site', disc_yes: 'Yes, disconnect', cancel: 'Cancel',
+      err_token: 'This page couldn’t verify your Wix site. Reload the page and try again.',
+      err_server: 'Something went wrong. Please try again in a minute.',
+      err_popup: 'Your browser blocked the new tab. Allow pop-ups for this page and try again.'
+    },
+    el: {
+      tagline: 'Κρατήσεις τραπεζιών χωρίς προμήθεια για το κατάστημά σας',
+      loading: 'Φόρτωση…',
+      have_title: 'Έχω ήδη TableReserve',
+      have_body: 'Συνδεθείτε στον λογαριασμό σας σε νέα καρτέλα και συνδέστε το κατάστημα με αυτό το site.',
+      have_btn: 'Σύνδεση καταστήματος',
+      waiting: 'Περιμένουμε την επιβεβαίωση στην άλλη καρτέλα…',
+      new_title: 'Είμαι νέος στο TableReserve',
+      new_body: 'Δημιουργήστε λογαριασμό για το κατάστημά σας: ωράριο, τραπέζια και κανόνες κρατήσεων σε λίγα λεπτά.',
+      new_btn: 'Δωρεάν λογαριασμός',
+      new_note: 'Όταν είναι έτοιμος ο λογαριασμός, γυρίστε εδώ και πατήστε «Σύνδεση καταστήματος».',
+      connected: 'Συνδεδεμένο',
+      link_label: 'Η σελίδα κρατήσεών σας',
+      copy: 'Αντιγραφή', copied: 'Αντιγράφηκε',
+      open_admin: 'Άνοιγμα admin TableReserve',
+      view_page: 'Προβολή σελίδας κρατήσεων',
+      add_title: 'Βάλτε τη φόρμα κράτησης στο site σας',
+      add_1: 'Ανοίξτε το site σας στον Editor.',
+      add_2: 'Πατήστε Προσθήκη στοιχείων (+) και πηγαίνετε στα App Widgets.',
+      add_3: 'Σύρετε το «TableReserve Booking» στη σελίδα όπου θέλετε να κλείνουν τραπέζι.',
+      add_4: 'Δημοσιεύστε το site. Οι κρατήσεις έρχονται στο admin του TableReserve.',
+      disc_title: 'Αποσύνδεση',
+      disc_body: 'Η φόρμα κράτησης σε αυτό το site δεν θα δείχνει πια το κατάστημά σας. Οι κρατήσεις σας μένουν στο TableReserve.',
+      disc_btn: 'Αποσύνδεση site', disc_yes: 'Ναι, αποσύνδεση', cancel: 'Άκυρο',
+      err_token: 'Δεν μπορέσαμε να επαληθεύσουμε το site Wix. Ανανεώστε τη σελίδα και δοκιμάστε ξανά.',
+      err_server: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε ένα λεπτό.',
+      err_popup: 'Ο browser μπλόκαρε τη νέα καρτέλα. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.'
+    }
+  };
+  var t = function (k) { return (T[L] && T[L][k]) || T.en[k] || k; };
+  document.documentElement.lang = L;
+  document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = t(el.getAttribute('data-t')); });
+  document.getElementById('btn-signup').href = 'https://tablereserve.gr/' + (L === 'el' ? '' : 'en/') + '?ref=wix#signupWrap';
+
+  var $ = function (id) { return document.getElementById(id); };
+  function showErr(msg) { var e = $('err'); e.textContent = msg; e.style.display = 'block'; }
+  function view(name) {
+    $('loading').hidden = true; $('loading').style.display = 'none';
+    $('v-connect').hidden = name !== 'connect';
+    $('v-connected').hidden = name !== 'connected';
+  }
+
+  function post(fn, body) {
+    return fetch(API + '/' + fn, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    }).then(function (r) { return r.json().then(function (d) { d._status = r.status; return d; }); });
+  }
+
+  var pollTimer = null;
+  function render(d) {
+    if (d._status === 401) { view(''); showErr(t('err_token')); return; }
+    if (d.error) { view(''); showErr(t('err_server')); return; }
+    $('err').style.display = 'none';
+    if (d.connected) {
+      stopPoll();
+      $('shop-name').textContent = d.name;
+      $('shop-url').value = d.url;
+      $('btn-view').href = d.url;
+      view('connected');
+    } else {
+      view('connect');
+    }
+  }
+  function load() { return post('wix-shop', { instance: INSTANCE }).then(render).catch(function () { view(''); showErr(t('err_server')); }); }
+
+  function stopPoll() { if (pollTimer) clearInterval(pollTimer); pollTimer = null; $('waiting').style.display = 'none'; }
+  function startPoll() {
+    stopPoll();
+    $('waiting').style.display = 'block';
+    var until = Date.now() + 15 * 60 * 1000;
+    pollTimer = setInterval(function () {
+      if (Date.now() > until) { stopPoll(); return; }
+      post('wix-shop', { instance: INSTANCE }).then(function (d) { if (d.connected) render(d); }).catch(function () {});
+    }, 3000);
+  }
+
+  $('btn-connect').onclick = function () {
+    var w = window.open('https://tablereserve.gr/wix/connect/?lang=' + L + '#i=' + encodeURIComponent(INSTANCE), '_blank');
+    if (!w) { showErr(t('err_popup')); return; }
+    startPoll();
+  };
+  window.addEventListener('focus', function () { if (pollTimer) load(); });
+
+  $('btn-copy').onclick = function () {
+    var i = $('shop-url'); i.select();
+    var done = function () { $('btn-copy').textContent = t('copied'); setTimeout(function () { $('btn-copy').textContent = t('copy'); }, 1500); };
+    if (navigator.clipboard) navigator.clipboard.writeText(i.value).then(done, function () { document.execCommand('copy'); done(); });
+    else { document.execCommand('copy'); done(); }
+  };
+
+  $('btn-disc').onclick = function () { $('btn-disc').hidden = true; $('btn-disc-yes').hidden = false; $('btn-disc-no').hidden = false; };
+  $('btn-disc-no').onclick = function () { $('btn-disc').hidden = false; $('btn-disc-yes').hidden = true; $('btn-disc-no').hidden = true; };
+  $('btn-disc-yes').onclick = function () {
+    $('btn-disc-yes').disabled = true;
+    post('wix-connect', { action: 'disconnect', instance: INSTANCE }).then(function (d) {
+      $('btn-disc-yes').disabled = false; $('btn-disc-no').onclick();
+      if (d.ok) view('connect'); else showErr(d._status === 401 ? t('err_token') : t('err_server'));
+    }).catch(function () { $('btn-disc-yes').disabled = false; showErr(t('err_server')); });
+  };
+
+  if (!INSTANCE) { view(''); showErr(t('err_token')); return; }
+  load();
+})();
+</script>
+</body>
+</html>
