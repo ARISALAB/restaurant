@@ -23,6 +23,14 @@ const client = createClient({
   host: site.host({ applicationId: APP_ID }),
 });
 
+// Το Wix δίνει το access token λίγο μετά τη φόρτωση (στο δημοσιευμένο site συχνά αργότερα
+// απ' ό,τι στον Editor). Περιμένουμε να έρθει πριν ρωτήσουμε το TableReserve.
+const injectToken = client.auth.getAccessTokenInjector();
+let markTokenReady;
+const tokenReady = new Promise(res => { markTokenReady = res; });
+const sleep = ms => new Promise(res => setTimeout(res, ms));
+const log = (...a) => { try { console.info('[TableReserve]', ...a); } catch (e) {} };
+
 const TXT = {
   en: {
     loading: 'Loading reservations…',
@@ -45,7 +53,11 @@ class TableReserveBooking extends HTMLElement {
   constructor() {
     super();
     // Το Wix καλεί αυτή τη συνάρτηση για να δώσει access token στον client
-    this.accessTokenListener = client.auth.getAccessTokenInjector();
+    this.accessTokenListener = (...args) => {
+      const out = injectToken(...args);
+      markTokenReady();
+      return out;
+    };
     this._frame = null;
     this._onMessage = this._onMessage.bind(this);
   }
@@ -64,8 +76,11 @@ class TableReserveBooking extends HTMLElement {
   }
 
   async _load() {
+    await Promise.race([tokenReady, sleep(6000)]);
     let d = null;
-    for (let attempt = 0; attempt < 2 && !d; attempt++) {
+    const waits = [0, 600, 1200, 2500, 4000, 6000];
+    for (let i = 0; i < waits.length && !d; i++) {
+      if (waits[i]) await sleep(waits[i]);
       try {
         const r = await client.fetchWithAuth(ORIGIN + '/.netlify/functions/wix-shop', {
           method: 'POST',
@@ -73,10 +88,12 @@ class TableReserveBooking extends HTMLElement {
           body: '{}',
         });
         if (r.ok) d = await r.json();
+        else log('wix-shop', r.status, 'attempt', i + 1);
       } catch (e) {
-        await new Promise(res => setTimeout(res, 800));
+        log('wix-shop failed', (e && e.message) || e, 'attempt', i + 1);
       }
     }
+    log('result', d && { connected: d.connected, shop: d.shop });
     if (d && d.connected && d.shop) this._mountFrame(d.shop);
     else this._box('setup');
   }
