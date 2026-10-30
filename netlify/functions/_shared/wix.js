@@ -20,6 +20,19 @@ const ID_RE = /^[A-Za-z0-9-]{8,64}$/;
 
 const b64url = s => Buffer.from(String(s).replace(/-/g, '+').replace(/_/g, '/'), 'base64');
 
+// Το παλιό ?instance= έχει μέσα permissions/uid. Μόνο ως ένδειξη, αφού το token
+// έχει ήδη επαληθευτεί από το Token Info: 'owner' | 'visitor' | null
+function legacyPerm(token) {
+  const i = token.indexOf('.');
+  if (i < 1) return null;
+  try {
+    const p = JSON.parse(b64url(token.slice(i + 1)).toString('utf8'));
+    if (p.permissions === 'OWNER' || (p.uid && p.uid === p.siteOwnerId)) return 'owner';
+    if (p.permissions !== undefined && p.permissions !== 'OWNER' && !p.uid) return 'visitor';
+    return null;
+  } catch { return null; }
+}
+
 // Εφεδρικά: τοπικός έλεγχος της υπογραφής του ?instance= με το App Secret
 function verifySigned(token) {
   const secret = process.env.WIX_APP_SECRET;
@@ -58,8 +71,12 @@ async function wixIdentify(raw) {
       if (d.clientId && d.clientId !== APP_ID) return null;
       if (!ID_RE.test(d.instanceId || '')) return null;
       const subj = String(d.subjectType || '').toUpperCase();
-      // Ιδιοκτήτης/συνεργάτης του site στο dashboard, όχι επισκέπτης ή μέλος του site
-      const owner = subj === 'USER' || subj === 'APP';
+      // Επισκέπτες και μέλη του site (από το widget) δεν μπορούν να συνδέσουν/αποσυνδέσουν.
+      // Οτιδήποτε άλλο έρχεται από τον πίνακα ελέγχου του Wix, που ανοίγει μόνο ο ιδιοκτήτης
+      // και οι συνεργάτες του site.
+      const visitor = /VISITOR|MEMBER|ANONYMOUS/.test(subj) || legacyPerm(token) === 'visitor';
+      const owner = !visitor;
+      console.log('[wix] token-info', JSON.stringify({ subjectType: d.subjectType || null, owner }));
       return { instanceId: d.instanceId, siteId: d.siteId || null, owner };
     }
     console.warn('[wix] token-info', r.status);
