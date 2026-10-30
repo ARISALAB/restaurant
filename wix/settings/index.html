@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TableReserve settings</title>
+<!-- Settings panel του widget «TableReserve Booking» στον Editor του Wix.
+     Όλες οι ρυθμίσεις του καταστήματος γίνονται στο admin του TableReserve, οπότε εδώ δίνουμε μόνο οδηγίες. -->
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; padding:18px 16px; font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:#0f172a; background:#fff; }
+  h1 { font-size:16px; margin:0 0 8px; }
+  p { margin:0 0 12px; color:#475569; }
+  ol { margin:0 0 14px; padding-left:18px; color:#475569; }
+  li { margin:4px 0; }
+  a.btn { display:block; text-align:center; background:#2563eb; color:#fff; text-decoration:none; font-weight:600; border-radius:999px; padding:10px 14px; margin-top:8px; }
+  a.ghost { background:#fff; color:#2563eb; border:1px solid #bfdbfe; }
+</style>
+</head>
+<body>
+  <h1 data-t="title"></h1>
+  <p data-t="body"></p>
+  <ol>
+    <li data-t="s1"></li>
+    <li data-t="s2"></li>
+  </ol>
+  <a class="btn" href="https://tablereserve.gr/admin/" target="_blank" rel="noopener" data-t="admin"></a>
+  <a class="btn ghost" href="https://tablereserve.gr/" target="_blank" rel="noopener" data-t="help"></a>
+<script>
+  (function () {
+    var qs = new URLSearchParams(location.search);
+    var L = ((qs.get('locale') || navigator.language || 'en').slice(0, 2).toLowerCase() === 'el') ? 'el' : 'en';
+    var T = {
+      en: { title: 'TableReserve Booking', body: 'This widget shows the booking form of the restaurant connected to this site.',
+            s1: 'Connect your restaurant in the Wix dashboard: Apps → TableReserve.', s2: 'Opening hours, tables, languages and booking rules are set in your TableReserve admin.',
+            admin: 'Open TableReserve admin', help: 'About TableReserve' },
+      el: { title: 'TableReserve Booking', body: 'Το widget δείχνει τη φόρμα κράτησης του καταστήματος που έχει συνδεθεί με αυτό το site.',
+            s1: 'Συνδέστε το κατάστημα στον πίνακα ελέγχου του Wix: Εφαρμογές → TableReserve.', s2: 'Ωράριο, τραπέζια, γλώσσες και κανόνες κρατήσεων ρυθμίζονται στο admin του TableReserve.',
+            admin: 'Άνοιγμα admin TableReserve', help: 'Σχετικά με το TableReserve' }
+    };
+    document.documentElement.lang = L;
+    document.querySelectorAll('[data-t]').forEach(function (el) { el.textContent = T[L][el.getAttribute('data-t')]; });
+  })();
+</script>
+</body>
+</html>
