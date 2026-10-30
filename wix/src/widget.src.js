@@ -67,7 +67,7 @@ class TableReserveBooking extends HTMLElement {
     // το μεγαλώνει. Γεμίζουμε αυτό το ύψος και η φόρμα κυλάει μέσα στο iframe.
     this.style.display = 'block';
     this.style.height = '100%';
-    this.style.minHeight = '560px';
+    this.style.minHeight = '480px';
     this.style.overflow = 'hidden';
     window.addEventListener('message', this._onMessage);
     if (this._started) return;
@@ -130,7 +130,9 @@ class TableReserveBooking extends HTMLElement {
     f.src = ORIGIN + '/?shop=' + encodeURIComponent(shop) + '&embed=1&src=site' + (LANGS.test(lang) ? '&lang=' + lang : '');
     f.title = 'Online reservations';
     f.setAttribute('allow', 'clipboard-write');
-    f.style.cssText = 'width:100%;height:100%;min-height:560px;border:0;display:block;background:transparent;color-scheme:normal;';
+    // Ποτέ ψηλότερο από την οθόνη (αφήνουμε χώρο για header του site), ώστε να φαίνεται
+    // ολόκληρο, μαζί με το κουμπί «Συνέχεια» στο κάτω μέρος.
+    f.style.cssText = 'width:100%;height:100%;min-height:480px;max-height:calc(100vh - 140px);border:0;display:block;background:transparent;color-scheme:normal;';
     f.setAttribute('scrolling', 'yes');
     this._frame = f;
     this.replaceChildren(f);
