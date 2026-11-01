@@ -190,6 +190,35 @@ footer a:hover{color:var(--accent)}
 .hero{padding-top:120px}
 @media(max-width:768px){footer{padding-bottom:110px}}
 @media(max-width:480px){#navUser>span:last-child>span:last-child{display:none!important}#navUserName{max-width:120px!important}#navUser{padding:5px 12px 5px 5px!important}}
+/* SHARED MENU */
+nav ul.tn{display:flex;gap:30px;list-style:none;align-items:center}
+nav ul.tn>li>a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;padding:8px 0;display:inline-block}
+nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--text)}
+nav ul.tn>li>a[aria-current="page"]{box-shadow:inset 0 -1px 0 var(--accent)}
+nav ul.tn>li>a span{font-size:10px;opacity:.7}
+.dd{position:relative}
+.dd-p{display:none;position:absolute;top:100%;left:-18px;min-width:290px;padding:8px;margin-top:6px;background:#131315;border:0.5px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);flex-direction:column;z-index:300}
+.dd-p::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px}
+.dd:hover .dd-p,.dd:focus-within .dd-p{display:flex}
+.dd-p a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;color:var(--text)}
+.dd-p a:hover,.dd-p a[aria-current="page"]{background:rgba(37,99,235,.12)}
+.dd-p b{display:block;font-size:13.5px;font-weight:500}
+.dd-p small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mnav{display:none;position:static}
+.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:12px;border:0.5px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{width:18px;height:1.5px;background:var(--text);border-radius:2px;transition:transform .2s,opacity .2s}
+.mnav[open] summary span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mnav-p{position:absolute;left:0;right:0;top:100%;background:#0d0d0f;border-bottom:0.5px solid rgba(255,255,255,.1);padding:10px 5% 18px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:calc(100vh - 70px);overflow:auto}
+.mnav-p a{padding:14px 4px;border-bottom:0.5px solid rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-size:16px}
+.mnav-p a:last-child{border-bottom:none;color:#6b9bff}
+.mnav-p a[aria-current="page"]{color:#6b9bff}
+@media(max-width:900px){nav ul.tn{display:none}.mnav{display:block}}
+.mnav{margin-left:10px}
+@media(max-width:480px){#navLogin{display:none}}
+/* END SHARED MENU */
 </style>
 <script>try{localStorage.setItem('tr_lang','en')}catch(e){}</script>
 </head>
@@ -197,13 +226,7 @@ footer a:hover{color:var(--accent)}
 
 <nav>
   <div class="logo">Table<em>Reserve</em></div>
-  <ul>
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#benefits">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <ul class="tn"><li><a href="#how">How it works</a></li><li class="dd"><a href="/en/features/" aria-haspopup="true">Features <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/en/features/online-bookings/"><b>Online bookings</b><small>Link, website button, Google Maps</small></a><a href="/en/features/phone-bookings/"><b>Phone bookings and walk-ins</b><small>A new booking in seconds</small></a><a href="/en/features/floor-plan/"><b>Table floor plan</b><small>Live dining room and auto-assignment</small></a><a href="/en/features/fewer-no-shows/"><b>Fewer no-shows</b><small>Reminders, Wallet, waitlist</small></a><a href="/en/features/guests-and-analytics/"><b>Guests and analytics</b><small>Guest profiles, charts, PDF report</small></a><a href="/en/features/google-reviews/"><b>Google reviews</b><small>Automatic review request every morning</small></a><a href="/en/features/languages/"><b>8 languages</b><small>For tourists and restaurants abroad</small></a><a href="/en/features/"><b>All features</b><small>Everything the subscription includes</small></a></div></li><li><a href="/en/pricing/">Pricing</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact</a></li></ul>
   <div style="display:flex;align-items:center;">
   <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el">ΕΛ</option><option value="/en/?lang=en" selected>EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
   <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin?lang=en" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Log in</a><a href="#contact" class="nav-cta" id="navCta">Get started →</a></span>
@@ -212,7 +235,8 @@ footer a:hover{color:var(--accent)}
     <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
     <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Dashboard →</span></span>
   </a>
-  </div>
+    <details class="mnav"><summary aria-label="Menu"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="#how">How it works</a><a href="/en/features/online-bookings/">Online bookings</a><a href="/en/features/phone-bookings/">Phone bookings and walk-ins</a><a href="/en/features/floor-plan/">Table floor plan</a><a href="/en/features/fewer-no-shows/">Fewer no-shows</a><a href="/en/features/guests-and-analytics/">Guests and analytics</a><a href="/en/features/google-reviews/">Google reviews</a><a href="/en/features/languages/">8 languages</a><a href="/en/features/">All features</a><a href="/en/pricing/">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><a href="/admin?lang=en">Log in</a></div></details>
+        </div>
 </nav>
 
 <section class="hero">
@@ -274,19 +298,21 @@ footer a:hover{color:var(--accent)}
     <p class="section-sub">Designed by someone with 25 years in hospitality, for the problems you face every day</p>
   </div>
   <div class="benefits-grid reveal">
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Every booking in one book</h3><p>Online, phone and walk-in bookings together. Times show free seats, so you can answer on the phone right away</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Recognises your guests</h3><p>Type a phone number or name and see visits, VIP status, allergies and notes before they reach the table</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Reminders & fewer no-shows</h3><p>Automatic email 2 hours before, with address and directions, plus a notification on the guest’s phone. Mark “Arrived / No-show” and track your no-show rate</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Every booking in one book</h3><p>Online, phone and walk-in bookings together. Times show free seats, so you can answer on the phone right away. <a href="/en/features/phone-bookings/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Recognises your guests</h3><p>Type a phone number or name and see visits, VIP status, allergies and notes before they reach the table. <a href="/en/features/guests-and-analytics/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Reminders & fewer no-shows</h3><p>Automatic email 2 hours before, with address and directions, plus a notification on the guest’s phone. Mark “Arrived / No-show” and track your no-show rate. <a href="/en/features/fewer-no-shows/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="3.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg></div><h3>Table floor plan</h3><p>A live view of your dining room, and every booking automatically placed at the right table, with joined tables for large groups. <a href="/en/features/floor-plan/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
     <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Waitlist</h3><p>When a time slot fills up, guests join the waitlist instead of leaving. If a booking is cancelled, they automatically get a “Table available” email</p></div>
     <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><path d="M16 14h.01"/></svg></div><h3>Bookings in Google Wallet</h3><p>One tap saves the booking to the guest’s phone, with your logo, time, party size and address</p></div>
     <div class="benefit"><span class="b-new">New</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></div><h3>Notifications & calendar</h3><p>Push notification on the guest’s phone and add-to-calendar for Google, Apple or Outlook. Included in your plan</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Know where bookings come from</h3><p>Google, website, social, phone or walk-in: see which channel brings you guests</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>PDF report with findings</h3><p>Peak hours and days, cancellations, no-shows and regulars, in a report ready for your partner or accountant</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Tourists book in their own language</h3><p>The booking page opens automatically in the language of their phone, and the confirmation and reminder arrive in the same language. Greek, English, German, French, Italian, Spanish, Turkish, Portuguese.</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Your own booking link</h3><p>tablereserve.gr/your-restaurant for Instagram, your website and Google Maps. Guests book with one click</p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Know where bookings come from</h3><p>Google, website, social, phone or walk-in: see which channel brings you guests. <a href="/en/features/online-bookings/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>PDF report with findings</h3><p>Peak hours and days, cancellations, no-shows and regulars, in a report ready for your partner or accountant. <a href="/en/features/guests-and-analytics/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Tourists book in their own language</h3><p>The booking page opens automatically in the language of their phone, and the confirmation and reminder arrive in the same language. Greek, English, German, French, Italian, Spanish, Turkish, Portuguese. <a href="/en/features/languages/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
+    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Your own booking link</h3><p>tablereserve.gr/your-restaurant for Instagram, your website and Google Maps. Guests book with one click. <a href="/en/features/online-bookings/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">See how →</a></p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>On your phone, in real time</h3><p>Every booking and change appears instantly, on your phone, tablet or computer</p></div>
     <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Smart cancellations</h3><p>Guests cancel on their own up to 2 hours before and you are notified instantly. Cancellations stay in your statistics</p></div>
   </div>
+  <p class="reveal" style="margin-top:34px"><a href="/en/features/" class="btn-outline">All features in detail →</a></p>
 </section>
 
 <section class="cost" id="cost">
@@ -334,7 +360,7 @@ footer a:hover{color:var(--accent)}
   <div class="reveal">
     <div class="eyebrow">Pricing</div>
     <h2>Simple, transparent<br>pricing</h2>
-    <p class="section-sub">Start with a 14-day free trial. Quarterly €39 · Semi-annual €69 · Annual €99, every feature included</p>
+    <p class="section-sub">Start with a 14-day free trial. Quarterly €39 · Semi-annual €69 · Annual €99, every feature included. <a href="/en/pricing/" style="color:var(--accent);text-decoration:none;font-weight:500">Pricing and comparison in detail →</a></p>
     <div style="display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:10px 18px;border-radius:40px;background:rgba(37,99,235,.10);border:0.5px solid rgba(37,99,235,.35);color:var(--text);font-size:13px;line-height:1.4"><span style="color:var(--accent);font-size:15px">★</span><strong style="font-weight:600">Founding partner pricing</strong><span style="color:var(--muted)">· locked in for as long as your subscription stays active</span></div>
   </div>
   <div class="pricing-grid reveal" style="max-width:1000px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
@@ -499,6 +525,7 @@ footer a:hover{color:var(--accent)}
 <footer>
   <div class="logo">Table<em style="font-style:normal;color:var(--accent)">Reserve</em></div>
   <p>© 2026 TableReserve · AR Akron Services · G.E.MI. 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
+  <p><a href="/en/features/">Features</a> · <a href="/en/features/floor-plan/">Table floor plan</a> · <a href="/en/features/fewer-no-shows/">Fewer no-shows</a> · <a href="/en/pricing/">Pricing</a></p>
   <p><a href="/privacy?lang=en">Privacy Policy</a> · <a href="/terms?lang=en">Terms of Service</a> · <a href="https://www.facebook.com/tablereserve" target="_blank" rel="noopener">Facebook</a></p>
   <a href="https://partners.tourist.com/booking-software" target="_blank" rel="noopener"><img src="https://partners.tourist.com/img/badges/listed-on-tourist.svg" width="160" height="35" alt="Listed on Tourist.com" loading="lazy"></a>
 </footer>

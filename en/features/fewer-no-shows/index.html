@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reduce restaurant no-shows: reminders and waitlist | TableReserve</title>
+<meta name="description" content="Automatic reminder 2 hours before, phone notification, Google Wallet pass, one-tap cancellation and a waitlist that helps fill cancelled tables. No charge per message.">
+<link rel="canonical" href="https://tablereserve.gr/en/features/fewer-no-shows/">
+<link rel="alternate" hreflang="el" href="https://tablereserve.gr/leitourgies/ligoteres-akyroseis/">
+<link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/features/fewer-no-shows/">
+<link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/leitourgies/ligoteres-akyroseis/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="TableReserve">
+<meta property="og:title" content="Reduce restaurant no-shows: reminders and waitlist | TableReserve">
+<meta property="og:description" content="Automatic reminder 2 hours before, phone notification, Google Wallet pass, one-tap cancellation and a waitlist that helps fill cancelled tables. No charge per message.">
+<meta property="og:url" content="https://tablereserve.gr/en/features/fewer-no-shows/">
+<meta property="og:image" content="https://tablereserve.gr/partners/assets/hero-table.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#09090a">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;--accent:#2563eb;--accent2:#1d4ed8;--accent-t:#6b9bff;--text:#ede8df;--muted:#c8c4bb;--dim:#8f8b83;--border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);--ok:#4ade80;--warn:#fbbf24;--teal:#0f766e}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+a{color:var(--accent-t)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px;border-radius:6px}
+img{max-width:100%;height:auto;display:block}
+nav{position:sticky;top:0;z-index:200;padding:18px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px;backdrop-filter:blur(16px);background:rgba(9,9,10,0.86);border-bottom:0.5px solid var(--border2)}
+.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px;color:var(--text);text-decoration:none}
+.logo em{font-style:normal;color:var(--accent)}
+.nav-r{display:flex;align-items:center;gap:18px}
+.nav-login{color:var(--text);font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.nav-cta{background:var(--accent);color:#fff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+.crumbs{padding:22px 6% 0;font-size:12.5px;color:var(--dim)}
+.crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.crumbs li+li::before{content:'›';margin-right:8px;color:var(--dim)}
+.crumbs a{color:var(--muted);text-decoration:none}.crumbs a:hover{color:var(--text)}
+.hero{padding:56px 6% 80px;position:relative;overflow:hidden;isolation:isolate}
+.hero-in{max-width:880px}
+.hero::after{content:'';position:absolute;right:-10%;top:-40px;width:620px;height:620px;background:radial-gradient(closest-side,rgba(37,99,235,.16),transparent);pointer-events:none;z-index:-1}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-t);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent-t)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,70px);line-height:1.06;letter-spacing:-1.5px;margin-bottom:26px;font-weight:500}
+h1 em,h2 em{font-style:italic;color:var(--accent-t)}
+.lead{font-size:18px;color:var(--muted);max-width:640px;line-height:1.75;margin-bottom:36px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-main{background:var(--accent);color:#fff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:16px 32px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-outline{border:0.5px solid rgba(237,232,223,.2);color:var(--text);font-size:15px;padding:16px 32px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s;display:inline-flex;align-items:center}
+.btn-outline:hover{border-color:var(--accent-t);color:var(--accent-t)}
+.badges{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none;margin-top:30px;font-size:14px;color:var(--muted)}
+.badges li{display:flex;align-items:center;gap:8px}.badges svg{color:var(--accent-t);flex-shrink:0}
+section{padding:96px 6%}
+section.alt{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4.2vw,50px);line-height:1.1;letter-spacing:-1.2px;margin-bottom:18px;max-width:760px;font-weight:500}
+h3{font-size:16px;font-weight:500;margin-bottom:8px}
+.sub{font-size:16px;color:var(--muted);max-width:620px;line-height:1.75}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:56px;align-items:center;margin-top:56px}
+.split.rev{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.split.rev>.copy{order:2}
+@media(max-width:900px){.split,.split.rev{grid-template-columns:minmax(0,1fr);gap:32px}.split.rev>.copy{order:0}}
+.copy p{color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:18px}
+.ticks{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.ticks li{display:flex;gap:12px;font-size:14.5px;color:var(--muted);line-height:1.6}
+.ticks li::before{content:'✓';flex-shrink:0;width:22px;height:22px;border-radius:50%;background:rgba(37,99,235,.14);color:var(--accent-t);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-top:1px}
+.ticks b{color:var(--text);font-weight:500}
+.shot{border-radius:16px;overflow:hidden;border:0.5px solid var(--border2);box-shadow:0 30px 80px rgba(0,0,0,.45);background:#fff}
+.shot-cap{font-size:12.5px;color:var(--dim);margin-top:12px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:56px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
+.step{background:var(--card);padding:34px 30px;border-right:0.5px solid var(--border2)}
+.step:last-child{border-right:none}
+@media(max-width:760px){.step{border-right:none;border-bottom:0.5px solid var(--border2)}.step:last-child{border-bottom:none}}
+.step-n{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.14);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent-t);margin-bottom:16px}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:56px}
+.card{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:28px 26px;position:relative}
+a.card{text-decoration:none;color:inherit;transition:transform .2s,border-color .2s}
+a.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.card .ic{width:42px;height:42px;border-radius:12px;background:rgba(37,99,235,.1);color:var(--accent-t);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.card .more{display:inline-block;margin-top:14px;font-size:13px;font-weight:500;color:var(--accent-t)}
+.tag{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-t);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
+.note{margin-top:28px;padding:18px 22px;border-radius:14px;background:rgba(37,99,235,.08);border:0.5px solid rgba(37,99,235,.3);font-size:14px;color:var(--muted);line-height:1.7;max-width:760px}
+.note b{color:var(--text);font-weight:500}
+.faq{max-width:780px;margin-top:40px}
+.faq details{border-bottom:0.5px solid var(--border2)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:16px;font-weight:500;color:var(--text)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--accent-t)}
+.faq summary::after{content:'+';font-size:22px;font-weight:300;color:var(--accent-t);flex-shrink:0;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);font-size:14.5px;line-height:1.75;padding:0 0 22px;max-width:700px}
+.cta-band{text-align:center;padding:96px 6%;background:radial-gradient(ellipse at center,rgba(37,99,235,.18),transparent 70%)}
+.cta-band h2{margin:0 auto 16px}
+.cta-band .sub{margin:0 auto 32px}
+.cta-band .ctas{justify-content:center}
+footer{border-top:0.5px solid var(--border2);padding:40px 6%;display:flex;flex-direction:column;gap:22px}
+.f-links{display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13.5px}
+.f-links a{color:var(--muted);text-decoration:none}.f-links a:hover{color:var(--accent-t)}
+.f-bot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
+footer p{font-size:12.5px;color:var(--dim)}
+footer p a{color:var(--dim);text-decoration:none}footer p a:hover{color:var(--accent-t)}
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:12px 18px;align-items:center;justify-content:space-between;gap:12px}
+.sticky-bar p{font-size:13px;color:var(--muted)}
+.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 22px;border-radius:40px;text-decoration:none;white-space:nowrap}
+
+@media(max-width:768px){.sticky-bar{display:flex}footer{padding-bottom:100px}section{padding:72px 6%}.hero{padding:40px 6% 64px}.lead{font-size:16.5px}}
+@media(max-width:600px){nav{padding:14px 5%}.nav-cta{display:none}}
+@media(max-width:900px){.nav-login{display:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+nav ul.tn{display:flex;gap:30px;list-style:none;align-items:center}
+nav ul.tn>li>a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;padding:8px 0;display:inline-block}
+nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--text)}
+nav ul.tn>li>a[aria-current="page"]{box-shadow:inset 0 -1px 0 var(--accent)}
+nav ul.tn>li>a span{font-size:10px;opacity:.7}
+.dd{position:relative}
+.dd-p{display:none;position:absolute;top:100%;left:-18px;min-width:290px;padding:8px;margin-top:6px;background:#131315;border:0.5px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);flex-direction:column;z-index:300}
+.dd-p::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px}
+.dd:hover .dd-p,.dd:focus-within .dd-p{display:flex}
+.dd-p a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;color:var(--text)}
+.dd-p a:hover,.dd-p a[aria-current="page"]{background:rgba(37,99,235,.12)}
+.dd-p b{display:block;font-size:13.5px;font-weight:500}
+.dd-p small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mnav{display:none;position:static}
+.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:12px;border:0.5px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{width:18px;height:1.5px;background:var(--text);border-radius:2px;transition:transform .2s,opacity .2s}
+.mnav[open] summary span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mnav-p{position:absolute;left:0;right:0;top:100%;background:#0d0d0f;border-bottom:0.5px solid rgba(255,255,255,.1);padding:10px 5% 18px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:calc(100vh - 70px);overflow:auto}
+.mnav-p a{padding:14px 4px;border-bottom:0.5px solid rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-size:16px}
+.mnav-p a:last-child{border-bottom:none;color:var(--accent-t,#6b9bff)}
+.mnav-p a[aria-current="page"]{color:var(--accent-t,#6b9bff)}
+@media(max-width:900px){nav ul.tn{display:none}.mnav{display:block}}
+
+.tl{list-style:none;margin-top:56px;max-width:860px;position:relative}
+.tl::before{content:'';position:absolute;left:21px;top:10px;bottom:10px;width:1px;background:linear-gradient(var(--accent),rgba(37,99,235,.15))}
+.tl li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:22px;padding:0 0 34px;position:relative}
+.tl li:last-child{padding-bottom:0}
+.tl .dot{width:44px;height:44px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--accent-t);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.tl time{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-t);margin:2px 0 6px}
+.tl p{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:640px}
+.mock{background:#fff;color:#0f172a;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.45);overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:460px;margin:0 auto;width:100%}
+.mock-top{background:#2563eb;color:#fff;padding:18px 22px;font-weight:600;font-size:15px}
+.mock-b{padding:20px 22px;font-size:14px;line-height:1.6;color:#334155}
+.mock-b h4{font-size:17px;color:#0f172a;margin:0 0 4px}
+.mock-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:13.5px}
+.mock-row span{color:#64748b}
+.mock-btns{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.mock-btns i{font-style:normal;font-size:12.5px;font-weight:600;padding:8px 12px;border-radius:9px;border:1px solid #cbd5e1;color:#334155}
+.mock-btns i.p{background:#2563eb;border-color:#2563eb;color:#fff}
+.phone{max-width:360px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
+.notif{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border:0.5px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center}
+.notif .ap{width:38px;height:38px;border-radius:10px;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px}
+.notif b{display:block;font-size:13.5px;font-weight:600}
+.notif small{display:block;font-size:12.5px;color:var(--muted);line-height:1.45}
+.notif em{font-style:normal;font-size:11px;color:var(--dim);float:right}
+.pass{border-radius:18px;background:linear-gradient(150deg,#1e3a8a,#2563eb);padding:20px;color:#fff;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.pass .pn{font-size:12px;opacity:.8;letter-spacing:.1em;text-transform:uppercase}
+.pass .pt{font-family:'Playfair Display',serif;font-size:24px;margin:4px 0 14px}
+.pass .pg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:12px}
+.pass .pg span{opacity:.75;display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.pass .pg b{font-size:15px;font-weight:600}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://tablereserve.gr/en/"}, {"@type": "ListItem", "position": 2, "name": "Features", "item": "https://tablereserve.gr/en/features/"}, {"@type": "ListItem", "position": 3, "name": "Fewer no-shows", "item": "https://tablereserve.gr/en/features/fewer-no-shows/"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "When does the guest receive the reminder?", "acceptedAnswer": {"@type": "Answer", "text": "Two hours before the booking time. The email contains the time, party size, the address with map directions and the restaurant’s phone number, and asks the guest to let you know if they can no longer come. If the guest allowed it, they also receive a phone notification at the same time."}}, {"@type": "Question", "name": "Does the guest need to download an app?", "acceptedAnswer": {"@type": "Answer", "text": "No. The phone notification, the Google Wallet pass and the calendar entry are all added from the booking confirmation page, with one tap."}}, {"@type": "Question", "name": "Is there a charge per reminder?", "acceptedAnswer": {"@type": "Answer", "text": "No. Emails, phone notifications, Google Wallet and calendar entries are included in the subscription, however many bookings you get."}}, {"@type": "Question", "name": "Until when can the guest cancel?", "acceptedAnswer": {"@type": "Answer", "text": "Guests cancel by themselves, with one tap from the confirmation email, up to 2 hours before. You are notified immediately and the cancellation is recorded in your analytics, so you can see how many bookings are cancelled and when."}}, {"@type": "Question", "name": "What happens when a booking is cancelled?", "acceptedAnswer": {"@type": "Answer", "text": "Guests who joined the waitlist for that day automatically receive an email that a table is available, with a button to book. Whoever books first gets the table, without you having to call anyone."}}, {"@type": "Question", "name": "Do phone bookings get a reminder too?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if you enter the guest’s email when adding the booking. Online bookings always have an email, so all of them get the reminder."}}, {"@type": "Question", "name": "In which language are the messages sent?", "acceptedAnswer": {"@type": "Answer", "text": "In the language the guest booked in: English, Greek, German, French, Italian, Spanish, Turkish or Portuguese. So tourists understand what you are telling them too."}}, {"@type": "Question", "name": "How do I know whether no-shows have gone down?", "acceptedAnswer": {"@type": "Answer", "text": "At the end of the evening, mark each booking “Arrived” or “No-show”. Your analytics show the no-show rate and cancellations per period, and you can download them as a PDF report."}}]}]}</script>
+</head>
+<body>
+<nav aria-label="Main menu">
+  <a class="logo" href="/en/">Table<em>Reserve</em></a>
+  <ul class="tn"><li><a href="/en/#how">How it works</a></li><li class="dd"><a href="/en/features/" aria-current="page" aria-haspopup="true">Features <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/en/features/online-bookings/"><b>Online bookings</b><small>Link, website button, Google Maps</small></a><a href="/en/features/phone-bookings/"><b>Phone bookings and walk-ins</b><small>A new booking in seconds</small></a><a href="/en/features/floor-plan/"><b>Table floor plan</b><small>Live dining room and auto-assignment</small></a><a href="/en/features/fewer-no-shows/" aria-current="page"><b>Fewer no-shows</b><small>Reminders, Wallet, waitlist</small></a><a href="/en/features/guests-and-analytics/"><b>Guests and analytics</b><small>Guest profiles, charts, PDF report</small></a><a href="/en/features/google-reviews/"><b>Google reviews</b><small>Automatic review request every morning</small></a><a href="/en/features/languages/"><b>8 languages</b><small>For tourists and restaurants abroad</small></a><a href="/en/features/"><b>All features</b><small>Everything the subscription includes</small></a></div></li><li><a href="/en/pricing/">Pricing</a></li><li><a href="/en/#faq">FAQ</a></li><li><a href="/en/#contact">Contact</a></li></ul>
+  <div class="nav-r"><a class="nav-login" href="/admin?lang=en">Log in</a><a class="nav-cta" href="/en/#contact">Start free →</a><details class="mnav"><summary aria-label="Menu"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="/en/#how">How it works</a><a href="/en/features/online-bookings/">Online bookings</a><a href="/en/features/phone-bookings/">Phone bookings and walk-ins</a><a href="/en/features/floor-plan/">Table floor plan</a><a href="/en/features/fewer-no-shows/" aria-current="page">Fewer no-shows</a><a href="/en/features/guests-and-analytics/">Guests and analytics</a><a href="/en/features/google-reviews/">Google reviews</a><a href="/en/features/languages/">8 languages</a><a href="/en/features/">All features</a><a href="/en/pricing/">Pricing</a><a href="/en/#faq">FAQ</a><a href="/en/#contact">Contact</a><a href="/admin?lang=en">Log in</a></div></details></div>
+</nav>
+<div class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/en/">Home</a></li><li><a href="/en/features/">Features</a></li><li><span aria-current="page">Fewer no-shows</span></li></ol></div>
+<main>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Fewer no-shows</div>
+    <h1>Guests remember their booking. <em>Tables do not stay empty.</em></h1>
+    <p class="lead">Every booking automatically comes with a reminder 2 hours before, a phone notification, a Google Wallet pass and one-tap cancellation. If someone cancels, the waitlist helps fill the table by itself.</p>
+    <div class="ctas"><a class="btn-main" href="/en/#contact">Start free →</a><a class="btn-outline" href="/test-restaurant?lang=en" target="_blank" rel="noopener">See the live demo ↗</a></div>
+    <ul class="badges"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>No charge per message</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>No app for the guest</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>In the guest’s language</li></ul>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="reveal">
+    <div class="eyebrow">What happens automatically</div>
+    <h2>From the booking <em>to the table</em></h2>
+    <p class="sub">You do none of the following. It all happens by itself, for every online booking and every phone booking that has an email.</p>
+  </div>
+  <ol class="tl reveal">
+    <li><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></div><div><time>As soon as they book</time><h3>Confirmation, and the booking on their phone</h3><p>The guest receives a confirmation email and, with one tap, adds the booking to Google Wallet or their calendar (Google, Apple, Outlook). You get a notification about the new booking.</p></div></li>
+    <li><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><div><time>2 hours before</time><h3>Reminder by email and on the phone</h3><p>An email with the time, party size, address, map directions and phone number, plus a notification on the phone screen for guests who turned it on.</p></div></li>
+    <li><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><time>If they cannot come</time><h3>One-tap cancellation, not a silent absence</h3><p>The guest cancels with one tap from the confirmation email, up to 2 hours before. You know straight away that the table is free, instead of holding it for someone who will not come.</p></div></li>
+    <li><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></div><div><time>As soon as a table frees up</time><h3>The waitlist is notified</h3><p>Guests who were waiting for that day receive a “Table available” email with a booking button. Whoever books first gets it.</p></div></li>
+    <li><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><div><time>At the end of the evening</time><h3>Measure the result</h3><p>Mark “Arrived” or “No-show” and see the no-show rate and cancellations in your analytics and in the PDF report.</p></div></li>
+  </ol>
+</section>
+
+<section>
+  <div class="split">
+    <div class="copy reveal">
+      <div class="eyebrow">Reminder</div>
+      <h2>An email that <em>gets read</em></h2>
+      <p>The reminder contains only what the guest needs to come: when, where, how to get there and how to reach you. If they cannot come, it asks them to let you know, so you can give the table to someone else.</p>
+      <ul class="ticks">
+        <li><span><b>In the guest’s language,</b> in 8 languages, with no setup on your side.</span></li>
+        <li><span><b>With your restaurant’s name</b> and your own contact details.</span></li>
+        <li><span><b>Map directions</b> and a phone number with one tap.</span></li>
+      </ul>
+    </div>
+    <div class="mock reveal" role="img" aria-label="Example booking reminder email">
+      <div class="mock-top">Booking reminder</div>
+      <div class="mock-b">
+        <h4>We look forward to seeing you in 2 hours</h4>
+        <p style="margin:0 0 10px">Hello Maria, your booking at Taverna To Steki:</p>
+        <div class="mock-row"><span>Time</span><b>21:00</b></div>
+        <div class="mock-row"><span>Guests</span><b>4</b></div>
+        <div class="mock-row"><span>Address</span><b>Adrianou 12, Plaka</b></div>
+        <div class="mock-btns"><i class="p">Map directions</i><i>Call</i></div><p style="margin:14px 0 0;font-size:12.5px;color:#64748b">If you can no longer make it, please let the restaurant know so they can give the table to someone else.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="split rev">
+    <div class="copy reveal">
+      <div class="eyebrow">On the guest’s phone</div>
+      <h2>The booking <em>does not get lost</em> in their inbox</h2>
+      <p>Many guests do not open emails. That is why the booking also goes where they look every day: on their phone screen, in Google Wallet and in their calendar.</p>
+      <ul class="ticks">
+        <li><span><b>Phone notification</b> 2 hours before, without downloading an app.</span></li>
+        <li><span><b>Google Wallet pass</b> with your logo, time, party size and address.</span></li>
+        <li><span><b>Add to calendar</b> for Google, Apple or Outlook, so their phone reminds them by itself.</span></li>
+      </ul>
+    </div>
+    <div class="phone reveal" role="img" aria-label="Example phone notification and Google Wallet pass">
+      <div class="notif"><div class="ap">T</div><div><em>now</em><b>Taverna To Steki</b><small>We look forward to seeing you at 21:00 for 4 guests. Tap for directions.</small></div></div>
+      <div class="pass"><div class="pn">Booking</div><div class="pt">Taverna To Steki</div><div class="pg"><div><span>Date</span><b>Fri 14/11</b></div><div><span>Time</span><b>21:00</b></div><div><span>Guests</span><b>4</b></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="eyebrow">FAQ</div>
+    <h2>Reminders, cancellations <em>and the waitlist</em></h2>
+  </div>
+  <div class="faq"><details><summary>When does the guest receive the reminder?</summary><p>Two hours before the booking time. The email contains the time, party size, the address with map directions and the restaurant’s phone number, and asks the guest to let you know if they can no longer come. If the guest allowed it, they also receive a phone notification at the same time.</p></details><details><summary>Does the guest need to download an app?</summary><p>No. The phone notification, the Google Wallet pass and the calendar entry are all added from the booking confirmation page, with one tap.</p></details><details><summary>Is there a charge per reminder?</summary><p>No. Emails, phone notifications, Google Wallet and calendar entries are included in the subscription, however many bookings you get.</p></details><details><summary>Until when can the guest cancel?</summary><p>Guests cancel by themselves, with one tap from the confirmation email, up to 2 hours before. You are notified immediately and the cancellation is recorded in your analytics, so you can see how many bookings are cancelled and when.</p></details><details><summary>What happens when a booking is cancelled?</summary><p>Guests who joined the waitlist for that day automatically receive an email that a table is available, with a button to book. Whoever books first gets the table, without you having to call anyone.</p></details><details><summary>Do phone bookings get a reminder too?</summary><p>Yes, if you enter the guest’s email when adding the booking. Online bookings always have an email, so all of them get the reminder.</p></details><details><summary>In which language are the messages sent?</summary><p>In the language the guest booked in: English, Greek, German, French, Italian, Spanish, Turkish or Portuguese. So tourists understand what you are telling them too.</p></details><details><summary>How do I know whether no-shows have gone down?</summary><p>At the end of the evening, mark each booking “Arrived” or “No-show”. Your analytics show the no-show rate and cancellations per period, and you can download them as a PDF report.</p></details></div>
+  <div class="note reveal"><b>See also:</b> <a href="/en/features/floor-plan/">the table floor plan with automatic assignment</a> and <a href="/en/pricing/">what the subscription includes</a>.</div>
+</section>
+
+<section class="cta-band">
+  <div class="reveal">
+    <h2>Try it in your own <em>restaurant</em></h2>
+    <p class="sub">14 days free with every feature, no card required. Then from €99 a year, with no commission per booking.</p>
+    <div class="ctas"><a class="btn-main" href="/en/#contact">Create an account →</a><a class="btn-outline" href="/test-restaurant?lang=en" target="_blank" rel="noopener">See the live demo ↗</a></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="f-links"><a href="/en/">Home</a><a href="/en/features/">Features</a><a href="/en/features/online-bookings/">Online bookings</a><a href="/en/features/phone-bookings/">Phone bookings and walk-ins</a><a href="/en/features/floor-plan/">Table floor plan</a><a href="/en/features/fewer-no-shows/">Fewer no-shows</a><a href="/en/features/guests-and-analytics/">Guests and analytics</a><a href="/en/features/google-reviews/">Google reviews</a><a href="/en/features/languages/">8 languages</a><a href="/en/pricing/">Pricing</a><a href="/en/#faq">FAQ</a><a href="/en/#contact">Sign up</a><a href="/admin?lang=en">Log in</a></div>
+  <div class="f-bot">
+    <a class="logo" href="/en/">Table<em>Reserve</em></a>
+    <p>© 2026 TableReserve · AR Akron Services · G.E.MI. 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a> · <a href="/privacy?lang=en">Privacy</a> · <a href="/terms?lang=en">Terms</a></p>
+  </div>
+</footer>
+<div class="sticky-bar"><p>14 days free</p><a href="/en/#contact">Start →</a></div>
+<script>
+(function(){if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});return;}
+var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target);}})},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(function(el){o.observe(el)});})();
+
+</script>
+</body>
+</html>

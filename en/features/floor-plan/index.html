@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant table floor plan with automatic assignment | TableReserve</title>
+<meta name="description" content="Draw your tables once and every booking goes to the right table automatically. Live floor plan, joined tables for large groups, multiple areas. Included in every plan.">
+<link rel="canonical" href="https://tablereserve.gr/en/features/floor-plan/">
+<link rel="alternate" hreflang="el" href="https://tablereserve.gr/leitourgies/katopsi-trapezion/">
+<link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/features/floor-plan/">
+<link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/leitourgies/katopsi-trapezion/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="TableReserve">
+<meta property="og:title" content="Restaurant table floor plan with automatic assignment | TableReserve">
+<meta property="og:description" content="Draw your tables once and every booking goes to the right table automatically. Live floor plan, joined tables for large groups, multiple areas. Included in every plan.">
+<meta property="og:url" content="https://tablereserve.gr/en/features/floor-plan/">
+<meta property="og:image" content="https://tablereserve.gr/leitourgies/assets/katopsi-zontani.webp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#09090a">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;--accent:#2563eb;--accent2:#1d4ed8;--accent-t:#6b9bff;--text:#ede8df;--muted:#c8c4bb;--dim:#8f8b83;--border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);--ok:#4ade80;--warn:#fbbf24;--teal:#0f766e}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+a{color:var(--accent-t)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px;border-radius:6px}
+img{max-width:100%;height:auto;display:block}
+nav{position:sticky;top:0;z-index:200;padding:18px 6%;display:flex;align-items:center;justify-content:space-between;gap:20px;backdrop-filter:blur(16px);background:rgba(9,9,10,0.86);border-bottom:0.5px solid var(--border2)}
+.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px;color:var(--text);text-decoration:none}
+.logo em{font-style:normal;color:var(--accent)}
+.nav-r{display:flex;align-items:center;gap:18px}
+.nav-login{color:var(--text);font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.nav-cta{background:var(--accent);color:#fff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;white-space:nowrap;transition:background .2s,transform .15s}
+.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
+.crumbs{padding:22px 6% 0;font-size:12.5px;color:var(--dim)}
+.crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.crumbs li+li::before{content:'›';margin-right:8px;color:var(--dim)}
+.crumbs a{color:var(--muted);text-decoration:none}.crumbs a:hover{color:var(--text)}
+.hero{padding:56px 6% 80px;position:relative;overflow:hidden;isolation:isolate}
+.hero-in{max-width:880px}
+.hero::after{content:'';position:absolute;right:-10%;top:-40px;width:620px;height:620px;background:radial-gradient(closest-side,rgba(37,99,235,.16),transparent);pointer-events:none;z-index:-1}
+.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-t);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent-t)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,70px);line-height:1.06;letter-spacing:-1.5px;margin-bottom:26px;font-weight:500}
+h1 em,h2 em{font-style:italic;color:var(--accent-t)}
+.lead{font-size:18px;color:var(--muted);max-width:640px;line-height:1.75;margin-bottom:36px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-main{background:var(--accent);color:#fff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:16px 32px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
+.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
+.btn-outline{border:0.5px solid rgba(237,232,223,.2);color:var(--text);font-size:15px;padding:16px 32px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s;display:inline-flex;align-items:center}
+.btn-outline:hover{border-color:var(--accent-t);color:var(--accent-t)}
+.badges{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none;margin-top:30px;font-size:14px;color:var(--muted)}
+.badges li{display:flex;align-items:center;gap:8px}.badges svg{color:var(--accent-t);flex-shrink:0}
+section{padding:96px 6%}
+section.alt{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4.2vw,50px);line-height:1.1;letter-spacing:-1.2px;margin-bottom:18px;max-width:760px;font-weight:500}
+h3{font-size:16px;font-weight:500;margin-bottom:8px}
+.sub{font-size:16px;color:var(--muted);max-width:620px;line-height:1.75}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:56px;align-items:center;margin-top:56px}
+.split.rev{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}
+.split.rev>.copy{order:2}
+@media(max-width:900px){.split,.split.rev{grid-template-columns:minmax(0,1fr);gap:32px}.split.rev>.copy{order:0}}
+.copy p{color:var(--muted);font-size:15px;line-height:1.75;margin-bottom:18px}
+.ticks{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.ticks li{display:flex;gap:12px;font-size:14.5px;color:var(--muted);line-height:1.6}
+.ticks li::before{content:'✓';flex-shrink:0;width:22px;height:22px;border-radius:50%;background:rgba(37,99,235,.14);color:var(--accent-t);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;margin-top:1px}
+.ticks b{color:var(--text);font-weight:500}
+.shot{border-radius:16px;overflow:hidden;border:0.5px solid var(--border2);box-shadow:0 30px 80px rgba(0,0,0,.45);background:#fff}
+.shot-cap{font-size:12.5px;color:var(--dim);margin-top:12px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:56px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
+.step{background:var(--card);padding:34px 30px;border-right:0.5px solid var(--border2)}
+.step:last-child{border-right:none}
+@media(max-width:760px){.step{border-right:none;border-bottom:0.5px solid var(--border2)}.step:last-child{border-bottom:none}}
+.step-n{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.14);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent-t);margin-bottom:16px}
+.step p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:56px}
+.card{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:28px 26px;position:relative}
+a.card{text-decoration:none;color:inherit;transition:transform .2s,border-color .2s}
+a.card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.card p{font-size:13.5px;color:var(--muted);line-height:1.7}
+.card .ic{width:42px;height:42px;border-radius:12px;background:rgba(37,99,235,.1);color:var(--accent-t);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.card .more{display:inline-block;margin-top:14px;font-size:13px;font-weight:500;color:var(--accent-t)}
+.tag{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-t);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
+.note{margin-top:28px;padding:18px 22px;border-radius:14px;background:rgba(37,99,235,.08);border:0.5px solid rgba(37,99,235,.3);font-size:14px;color:var(--muted);line-height:1.7;max-width:760px}
+.note b{color:var(--text);font-weight:500}
+.faq{max-width:780px;margin-top:40px}
+.faq details{border-bottom:0.5px solid var(--border2)}
+.faq summary{list-style:none;cursor:pointer;padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:16px;font-weight:500;color:var(--text)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{color:var(--accent-t)}
+.faq summary::after{content:'+';font-size:22px;font-weight:300;color:var(--accent-t);flex-shrink:0;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);font-size:14.5px;line-height:1.75;padding:0 0 22px;max-width:700px}
+.cta-band{text-align:center;padding:96px 6%;background:radial-gradient(ellipse at center,rgba(37,99,235,.18),transparent 70%)}
+.cta-band h2{margin:0 auto 16px}
+.cta-band .sub{margin:0 auto 32px}
+.cta-band .ctas{justify-content:center}
+footer{border-top:0.5px solid var(--border2);padding:40px 6%;display:flex;flex-direction:column;gap:22px}
+.f-links{display:flex;flex-wrap:wrap;gap:10px 28px;font-size:13.5px}
+.f-links a{color:var(--muted);text-decoration:none}.f-links a:hover{color:var(--accent-t)}
+.f-bot{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px}
+footer p{font-size:12.5px;color:var(--dim)}
+footer p a{color:var(--dim);text-decoration:none}footer p a:hover{color:var(--accent-t)}
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:12px 18px;align-items:center;justify-content:space-between;gap:12px}
+.sticky-bar p{font-size:13px;color:var(--muted)}
+.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 22px;border-radius:40px;text-decoration:none;white-space:nowrap}
+
+@media(max-width:768px){.sticky-bar{display:flex}footer{padding-bottom:100px}section{padding:72px 6%}.hero{padding:40px 6% 64px}.lead{font-size:16.5px}}
+@media(max-width:600px){nav{padding:14px 5%}.nav-cta{display:none}}
+@media(max-width:900px){.nav-login{display:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+nav ul.tn{display:flex;gap:30px;list-style:none;align-items:center}
+nav ul.tn>li>a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;padding:8px 0;display:inline-block}
+nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--text)}
+nav ul.tn>li>a[aria-current="page"]{box-shadow:inset 0 -1px 0 var(--accent)}
+nav ul.tn>li>a span{font-size:10px;opacity:.7}
+.dd{position:relative}
+.dd-p{display:none;position:absolute;top:100%;left:-18px;min-width:290px;padding:8px;margin-top:6px;background:#131315;border:0.5px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);flex-direction:column;z-index:300}
+.dd-p::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px}
+.dd:hover .dd-p,.dd:focus-within .dd-p{display:flex}
+.dd-p a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;color:var(--text)}
+.dd-p a:hover,.dd-p a[aria-current="page"]{background:rgba(37,99,235,.12)}
+.dd-p b{display:block;font-size:13.5px;font-weight:500}
+.dd-p small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mnav{display:none;position:static}
+.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:12px;border:0.5px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mnav summary::-webkit-details-marker{display:none}
+.mnav summary span{width:18px;height:1.5px;background:var(--text);border-radius:2px;transition:transform .2s,opacity .2s}
+.mnav[open] summary span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.mnav[open] summary span:nth-child(2){opacity:0}
+.mnav[open] summary span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mnav-p{position:absolute;left:0;right:0;top:100%;background:#0d0d0f;border-bottom:0.5px solid rgba(255,255,255,.1);padding:10px 5% 18px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:calc(100vh - 70px);overflow:auto}
+.mnav-p a{padding:14px 4px;border-bottom:0.5px solid rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-size:16px}
+.mnav-p a:last-child{border-bottom:none;color:var(--accent-t,#6b9bff)}
+.mnav-p a[aria-current="page"]{color:var(--accent-t,#6b9bff)}
+@media(max-width:900px){nav ul.tn{display:none}.mnav{display:block}}
+
+.demo{background:var(--card);border:0.5px solid var(--border2);border-radius:20px;padding:22px;margin-top:48px;max-width:760px}
+.demo-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.demo-head b{font-weight:500;font-size:14px}
+.demo-lg{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted)}
+.demo-lg span{display:inline-flex;align-items:center;gap:6px}
+.demo-lg i{width:11px;height:11px;border-radius:3px;display:inline-block;border:1.5px solid}
+.demo-floor{position:relative;aspect-ratio:16/9;border-radius:14px;background-color:#0e0e10;background-image:linear-gradient(to right,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.04) 1px,transparent 1px);background-size:6.25% 11.11%}
+.dt{position:absolute;padding:3px;border:none;background:none;font:inherit;color:inherit;cursor:pointer}
+.dt span{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:10px;border:2px solid #4ade80;background:rgba(74,222,128,.08);transition:background .2s,border-color .2s,transform .12s;line-height:1.15}
+.dt.rd span{border-radius:50%}
+.dt b{font-weight:600;font-size:clamp(11px,1.7vw,15px)}
+.dt small{font-size:clamp(9px,1.2vw,11px);color:var(--muted)}
+.dt:hover span{transform:scale(1.04)}
+.dt.seated span{background:#0f766e;border-color:#0f766e}
+.dt.seated small{color:#ccfbf1}
+.dt.booked span{background:rgba(96,165,250,.12);border-color:#60a5fa}
+.de{position:absolute;padding:3px;pointer-events:none}
+.de span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:7px;font-size:clamp(8px,1.1vw,10.5px);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.de.bar span{background:rgba(167,139,250,.14);border:1px solid rgba(167,139,250,.5);color:#c4b5fd}
+.de.door span{background:rgba(251,191,36,.1);border:1px dashed rgba(251,191,36,.6);color:#fcd34d}
+.demo-hint{font-size:12.5px;color:var(--dim);margin-top:12px}
+.dlink{position:absolute;height:3px;background:#0f766e;pointer-events:none}
+@media(max-width:520px){.dt small{display:none}.dt span{border-width:1.5px;border-radius:7px}.demo{padding:16px}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://tablereserve.gr/en/"}, {"@type": "ListItem", "position": 2, "name": "Features", "item": "https://tablereserve.gr/en/features/"}, {"@type": "ListItem", "position": 3, "name": "Table floor plan", "item": "https://tablereserve.gr/en/features/floor-plan/"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need an architect’s drawing for the floor plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. Enter how many tables you have and how many seats each one has, and the floor plan builds itself. Then drag the tables to where they really are. For most restaurants this takes a few minutes."}}, {"@type": "Question", "name": "How does the system choose a table for each booking?", "acceptedAnswer": {"@type": "Answer", "text": "It places the booking at the smallest free table that fits the party, so a table for six is not taken by two people. If the party does not fit any single table, it looks for the smallest table join you have set. If it finds none, the booking stays in the “No table” list and you place it yourself."}}, {"@type": "Question", "name": "What about large groups?", "acceptedAnswer": {"@type": "Answer", "text": "You set which tables can be joined, for example 3 with 4 and 4 with 5. When a booking for 10 comes in, the system reserves the join 3+4+5 as one table. A booking can use up to 4 joined tables."}}, {"@type": "Question", "name": "Can I change the table the system chose?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, with two taps. From the booking card or from the floor plan itself, choose another table or join. The list shows next to each table whether it is free or which booking has it at that time."}}, {"@type": "Question", "name": "Can I have a dining room, a terrace and a garden?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Each area has its own floor plan and its own tables, and you switch areas with one tap. You can also add elements such as the bar, kitchen, entrance, toilets, windows and walls, so the floor plan looks like your restaurant."}}, {"@type": "Question", "name": "Does it affect guests’ online bookings?", "acceptedAnswer": {"@type": "Answer", "text": "No. The booking page works as before and guests do not see the floor plan. The floor plan organises the room for your staff: every new booking is placed at a table automatically and you see the picture of the evening."}}, {"@type": "Question", "name": "Can guests choose a specific table?", "acceptedAnswer": {"@type": "Answer", "text": "No, and that is intentional. The restaurant decides the table, as with most booking systems, so that nobody “locks” the best table early and leaves gaps in the room."}}, {"@type": "Question", "name": "Does it work on tablets and phones?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Both the live floor plan and the editor work with touch on tablets and phones, and update in real time on every device in the restaurant."}}, {"@type": "Question", "name": "Does it cost extra?", "acceptedAnswer": {"@type": "Answer", "text": "No. The floor plan is included in every plan, together with all other features. You turn it on or off with one switch, and your tables stay saved."}}]}]}</script>
+</head>
+<body>
+<nav aria-label="Main menu">
+  <a class="logo" href="/en/">Table<em>Reserve</em></a>
+  <ul class="tn"><li><a href="/en/#how">How it works</a></li><li class="dd"><a href="/en/features/" aria-current="page" aria-haspopup="true">Features <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/en/features/online-bookings/"><b>Online bookings</b><small>Link, website button, Google Maps</small></a><a href="/en/features/phone-bookings/"><b>Phone bookings and walk-ins</b><small>A new booking in seconds</small></a><a href="/en/features/floor-plan/" aria-current="page"><b>Table floor plan</b><small>Live dining room and auto-assignment</small></a><a href="/en/features/fewer-no-shows/"><b>Fewer no-shows</b><small>Reminders, Wallet, waitlist</small></a><a href="/en/features/guests-and-analytics/"><b>Guests and analytics</b><small>Guest profiles, charts, PDF report</small></a><a href="/en/features/google-reviews/"><b>Google reviews</b><small>Automatic review request every morning</small></a><a href="/en/features/languages/"><b>8 languages</b><small>For tourists and restaurants abroad</small></a><a href="/en/features/"><b>All features</b><small>Everything the subscription includes</small></a></div></li><li><a href="/en/pricing/">Pricing</a></li><li><a href="/en/#faq">FAQ</a></li><li><a href="/en/#contact">Contact</a></li></ul>
+  <div class="nav-r"><a class="nav-login" href="/admin?lang=en">Log in</a><a class="nav-cta" href="/en/#contact">Start free →</a><details class="mnav"><summary aria-label="Menu"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="/en/#how">How it works</a><a href="/en/features/online-bookings/">Online bookings</a><a href="/en/features/phone-bookings/">Phone bookings and walk-ins</a><a href="/en/features/floor-plan/" aria-current="page">Table floor plan</a><a href="/en/features/fewer-no-shows/">Fewer no-shows</a><a href="/en/features/guests-and-analytics/">Guests and analytics</a><a href="/en/features/google-reviews/">Google reviews</a><a href="/en/features/languages/">8 languages</a><a href="/en/features/">All features</a><a href="/en/pricing/">Pricing</a><a href="/en/#faq">FAQ</a><a href="/en/#contact">Contact</a><a href="/admin?lang=en">Log in</a></div></details></div>
+</nav>
+<div class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/en/">Home</a></li><li><a href="/en/features/">Features</a></li><li><span aria-current="page">Table floor plan</span></li></ol></div>
+<main>
+
+<section class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Table floor plan</div>
+    <h1>Your dining room on screen, <em>table by table</em></h1>
+    <p class="lead">Draw your tables once. Every new booking goes to the right table by itself, and your staff see live which tables are free, which are booked and where guests are already seated.</p>
+    <div class="ctas"><a class="btn-main" href="/en/#contact">Start free →</a><a class="btn-outline" href="/test-restaurant?lang=en" target="_blank" rel="noopener">See the live demo ↗</a></div>
+    <ul class="badges"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Included in your plan</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>On tablet and phone</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>8 languages</li></ul>
+  </div>
+  <div class="demo reveal" aria-label="Demo floor plan">
+    <div class="demo-head"><b>Tap a table</b>
+      <div class="demo-lg"><span><i style="border-color:#4ade80;background:rgba(74,222,128,.1)"></i>Free</span><span><i style="border-color:#0f766e;background:#0f766e"></i>Seated</span><span><i style="border-color:#60a5fa;background:rgba(96,165,250,.12)"></i>Booked</span></div>
+    </div>
+    <div class="demo-floor"><button type="button" class="dt seated" data-s="seated" style="left:6.250%;top:11.111%;width:12.500%;height:22.222%" aria-label="Table 1: seated"><span><b>1</b><small>seated</small></span></button><button type="button" class="dt free" data-s="free" style="left:25.000%;top:11.111%;width:12.500%;height:22.222%" aria-label="Table 2: free"><span><b>2</b><small>free</small></span></button><button type="button" class="dt seated" data-s="seated" style="left:43.750%;top:11.111%;width:12.500%;height:22.222%" aria-label="Table 3: seated"><span><b>3</b><small>seated</small></span></button><button type="button" class="dt seated" data-s="seated" style="left:62.500%;top:11.111%;width:12.500%;height:22.222%" aria-label="Table 4: seated"><span><b>4</b><small>seated</small></span></button><div class="dlink" style="left:56.25%;top:22.2%;width:6.25%;transform:translateY(-50%)"></div><button type="button" class="dt booked" data-s="booked" style="left:6.250%;top:44.444%;width:25.000%;height:22.222%" aria-label="Table 5: 21:00"><span><b>5</b><small>21:00</small></span></button><button type="button" class="dt rd free" data-s="free" style="left:37.500%;top:44.444%;width:12.500%;height:22.222%" aria-label="Table 6: free"><span><b>6</b><small>free</small></span></button><button type="button" class="dt rd booked" data-s="booked" style="left:56.250%;top:44.444%;width:12.500%;height:22.222%" aria-label="Table 7: 21:00"><span><b>7</b><small>21:00</small></span></button><button type="button" class="dt free" data-s="free" style="left:6.250%;top:77.778%;width:25.000%;height:22.222%" aria-label="Table 8: free"><span><b>8</b><small>free</small></span></button><button type="button" class="dt rd free" data-s="free" style="left:37.500%;top:77.778%;width:12.500%;height:22.222%" aria-label="Table 9: free"><span><b>9</b><small>free</small></span></button><div class="de bar" style="left:81.250%;top:11.111%;width:12.500%;height:55.556%" aria-hidden="true"><span>Bar</span></div><div class="de door" style="left:75.000%;top:77.778%;width:18.750%;height:11.111%" aria-hidden="true"><span>Entrance</span></div></div>
+    <p class="demo-hint">This is how it changes in the restaurant too: free, seated, booked, with one tap. Tables 3 and 4 are joined for a party of 8.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="split">
+    <div class="copy reveal">
+      <div class="eyebrow">Live floor plan</div>
+      <h2>You know the answer <em>before you pick up the phone</em></h2>
+      <p>Choose a day and time and see the whole room in colour. When someone asks “do you have a table for four at nine?”, the answer is already in front of you.</p>
+      <ul class="ticks">
+        <li><span><b>Four states.</b> Free, booked soon, booked, seated.</span></li>
+        <li><span><b>How many are free</b> at that time, in a single number.</span></li>
+        <li><span><b>“No table” list</b> for bookings that have not been placed yet.</span></li>
+        <li><span><b>Tap a table</b> to see all its bookings for the evening.</span></li>
+      </ul>
+    </div>
+    <figure class="reveal"><div class="shot"><img src="/leitourgies/assets/katopsi-zontani.webp" width="1400" height="768" alt="Live floor plan in TableReserve: tables coloured by status, joined tables, bar, kitchen and a list of bookings without a table" loading="lazy" decoding="async"></div><figcaption class="shot-cap">The live floor plan as your staff see it</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <div class="split rev">
+    <div class="copy reveal">
+      <div class="eyebrow">Automatic assignment</div>
+      <h2>Every booking <em>at the right table</em>, by itself</h2>
+      <p>As soon as an online booking comes in, or a phone booking from your staff, the system places it at the smallest free table that fits the party. That way a table for six is not taken by a couple.</p>
+      <ul class="ticks">
+        <li><span><b>Large groups:</b> if the party does not fit one table, it uses the table joins you have set.</span></li>
+        <li><span><b>A suggestion with one tap</b> on every booking, and next to each table whether it is free or who has it.</span></li>
+        <li><span><b>“Place all automatically”</b> for bookings made before you turned on the floor plan.</span></li>
+        <li><span><b>You have the final say.</b> Change the table whenever you like.</span></li>
+      </ul>
+    </div>
+    <figure class="reveal" style="max-width:420px;margin:0 auto;width:100%"><div class="shot"><img src="/leitourgies/assets/katopsi-protasi.webp" width="700" height="1038" alt="Choosing a table for a party of 4, with the system’s suggestion and the status of each table" loading="lazy" decoding="async"></div><figcaption class="shot-cap">A table suggestion for a party of 4</figcaption></figure>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="reveal">
+    <div class="eyebrow">In a few minutes</div>
+    <h2>From paper to screen <em>in three steps</em></h2>
+    <p class="sub">You do not need drawings or technical skills. Every change is saved instantly.</p>
+  </div>
+  <div class="steps reveal">
+    <div class="step"><div class="step-n">01</div><h3>Enter your tables</h3><p>“12 tables, 4 seats” and tap Create. The floor plan builds itself, then you change positions, names and shapes (square, round, long).</p></div>
+    <div class="step"><div class="step-n">02</div><h3>Put them in place</h3><p>Drag them to where they really are, add areas (dining room, terrace, garden) and elements such as the bar, kitchen, entrance and toilets.</p></div>
+    <div class="step"><div class="step-n">03</div><h3>Set table joins</h3><p>Choose which tables can be joined for large groups. Turn on the floor plan with one switch and from then on it works by itself.</p></div>
+  </div>
+  <figure class="reveal" style="margin-top:48px"><div class="shot"><img src="/leitourgies/assets/katopsi-epexergasia.webp" width="1400" height="730" alt="Floor plan editor: tables on a grid, table joins shown with a dashed line, bar, kitchen, entrance, toilets and table settings" loading="lazy" decoding="async"></div><figcaption class="shot-cap">The floor plan editor: table 4 joins table 3 and table 5</figcaption></figure>
+</section>
+
+<section>
+  <div class="reveal">
+    <div class="eyebrow">FAQ</div>
+    <h2>What restaurateurs ask <em>about the floor plan</em></h2>
+  </div>
+  <div class="faq"><details><summary>Do I need an architect’s drawing for the floor plan?</summary><p>No. Enter how many tables you have and how many seats each one has, and the floor plan builds itself. Then drag the tables to where they really are. For most restaurants this takes a few minutes.</p></details><details><summary>How does the system choose a table for each booking?</summary><p>It places the booking at the smallest free table that fits the party, so a table for six is not taken by two people. If the party does not fit any single table, it looks for the smallest table join you have set. If it finds none, the booking stays in the “No table” list and you place it yourself.</p></details><details><summary>What about large groups?</summary><p>You set which tables can be joined, for example 3 with 4 and 4 with 5. When a booking for 10 comes in, the system reserves the join 3+4+5 as one table. A booking can use up to 4 joined tables.</p></details><details><summary>Can I change the table the system chose?</summary><p>Yes, with two taps. From the booking card or from the floor plan itself, choose another table or join. The list shows next to each table whether it is free or which booking has it at that time.</p></details><details><summary>Can I have a dining room, a terrace and a garden?</summary><p>Yes. Each area has its own floor plan and its own tables, and you switch areas with one tap. You can also add elements such as the bar, kitchen, entrance, toilets, windows and walls, so the floor plan looks like your restaurant.</p></details><details><summary>Does it affect guests’ online bookings?</summary><p>No. The booking page works as before and guests do not see the floor plan. The floor plan organises the room for your staff: every new booking is placed at a table automatically and you see the picture of the evening.</p></details><details><summary>Can guests choose a specific table?</summary><p>No, and that is intentional. The restaurant decides the table, as with most booking systems, so that nobody “locks” the best table early and leaves gaps in the room.</p></details><details><summary>Does it work on tablets and phones?</summary><p>Yes. Both the live floor plan and the editor work with touch on tablets and phones, and update in real time on every device in the restaurant.</p></details><details><summary>Does it cost extra?</summary><p>No. The floor plan is included in every plan, together with all other features. You turn it on or off with one switch, and your tables stay saved.</p></details></div>
+  <div class="note reveal"><b>See also:</b> <a href="/en/features/fewer-no-shows/">how reminders and the waitlist reduce no-shows</a> and <a href="/en/pricing/">what the subscription includes</a>.</div>
+</section>
+
+<section class="cta-band">
+  <div class="reveal">
+    <h2>Try it in your own <em>restaurant</em></h2>
+    <p class="sub">14 days free with every feature, no card required. Then from €99 a year, with no commission per booking.</p>
+    <div class="ctas"><a class="btn-main" href="/en/#contact">Create an account →</a><a class="btn-outline" href="/test-restaurant?lang=en" target="_blank" rel="noopener">See the live demo ↗</a></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="f-links"><a href="/en/">Home</a><a href="/en/features/">Features</a><a href="/en/features/online-bookings/">Online bookings</a><a href="/en/features/phone-bookings/">Phone bookings and walk-ins</a><a href="/en/features/floor-plan/">Table floor plan</a><a href="/en/features/fewer-no-shows/">Fewer no-shows</a><a href="/en/features/guests-and-analytics/">Guests and analytics</a><a href="/en/features/google-reviews/">Google reviews</a><a href="/en/features/languages/">8 languages</a><a href="/en/pricing/">Pricing</a><a href="/en/#faq">FAQ</a><a href="/en/#contact">Sign up</a><a href="/admin?lang=en">Log in</a></div>
+  <div class="f-bot">
+    <a class="logo" href="/en/">Table<em>Reserve</em></a>
+    <p>© 2026 TableReserve · AR Akron Services · G.E.MI. 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a> · <a href="/privacy?lang=en">Privacy</a> · <a href="/terms?lang=en">Terms</a></p>
+  </div>
+</footer>
+<div class="sticky-bar"><p>14 days free</p><a href="/en/#contact">Start →</a></div>
+<script>
+(function(){if(!('IntersectionObserver' in window)){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in')});return;}
+var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target);}})},{threshold:.08});
+document.querySelectorAll('.reveal').forEach(function(el){o.observe(el)});})();
+
+(function(){var st=['free','seated','booked'],lb={free:'free',seated:'seated',booked:'21:00'};
+document.querySelectorAll('.dt').forEach(function(b){b.addEventListener('click',function(){var c=st.indexOf(b.dataset.s);var n=st[(c+1)%3];b.dataset.s=n;b.className='dt'+(b.classList.contains('rd')?' rd':'')+' '+n;b.querySelector('small').textContent=lb[n];b.setAttribute('aria-label','Table '+b.querySelector('b').textContent+': '+lb[n]);});});})();
+
+</script>
+</body>
+</html>
