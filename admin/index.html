@@ -3849,8 +3849,9 @@
             if (active && daysLeft > 0) {
                 box.style.cssText += 'display:block; background:#ecfdf5; border:1px solid #a7f3d0; color:#065f46;';
                 document.getElementById('billing-text').textContent = trFmt(t('bill_active'), { date: dateStr });
-                if (d.lemonPortalUrl) {
-                    const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
+                const portal = d.lemonPortalUrl || (d.billingSource === 'wix' ? d.wixManageUrl : '');
+                if (portal) {
+                    const a = document.createElement('a'); a.href = portal; a.target = '_blank'; a.rel = 'noopener';
                     a.textContent = t('bill_manage');
                     a.style.cssText = 'color:#065f46; font-weight:600;'; plansEl.appendChild(a);
                 }
@@ -3863,8 +3864,9 @@
                 document.getElementById('billing-text').textContent = d.billingStatus === 'cancelled'
                     ? trFmt(t('bill_cancelled'), { date: dateStr })
                     : trFmt(t('bill_pastdue'), { date: dateStr });
-                if (d.lemonPortalUrl) {
-                    const a = document.createElement('a'); a.href = d.lemonPortalUrl; a.target = '_blank'; a.rel = 'noopener';
+                const portal = d.lemonPortalUrl || (d.billingSource === 'wix' ? d.wixManageUrl : '');
+                if (portal) {
+                    const a = document.createElement('a'); a.href = portal; a.target = '_blank'; a.rel = 'noopener';
                     a.textContent = d.billingStatus === 'cancelled'
                         ? t('bill_resume')
                         : t('bill_update_card');
@@ -3883,6 +3885,14 @@
                 : !isTrial ? trFmt(t('bill_ends'), { n: daysLeft, days: dayWord(daysLeft), date: dateStr })
                 : trFmt(t('bill_trial'), { n: daysLeft, days: dayWord(daysLeft), date: dateStr });
 
+            // Κατάστημα συνδεδεμένο με site Wix: μπορεί να πληρώσει και μέσα από το Wix
+            if (d.wixUpgradeUrl) {
+                const w = document.createElement('a');
+                w.href = d.wixUpgradeUrl; w.target = '_blank'; w.rel = 'noopener';
+                w.textContent = currentLang === 'el' ? 'Αγορά μέσω Wix' : 'Buy via Wix';
+                w.style.cssText = 'background:#fff; color:#2563eb; border:1px solid #bfdbfe; padding:10px 16px; border-radius:10px; font-weight:600; text-decoration:none; font-size:0.9rem;';
+                plansEl.appendChild(w);
+            }
             let links = {};
             try { links = await (await fetch('/billing.json', { cache: 'no-store' })).json(); } catch (e) {}
             PLANS.forEach(pl => {

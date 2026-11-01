@@ -83,6 +83,14 @@
         <a class="btn btn-ghost" id="btn-view" target="_blank" rel="noopener" data-t="view_page"></a>
       </div>
     </div>
+    <div class="card" id="plan-card" hidden>
+      <h2 data-t="plan_title"></h2>
+      <p id="plan-text" style="margin:0 0 14px"></p>
+      <div class="row">
+        <a class="btn btn-primary" id="btn-upgrade" target="_blank" rel="noopener" data-t="upgrade"></a>
+        <a class="btn btn-ghost" id="btn-manage" target="_blank" rel="noopener" data-t="manage" hidden></a>
+      </div>
+    </div>
     <div class="card">
       <h2 data-t="add_title"></h2>
       <ol>
@@ -139,7 +147,15 @@
       disc_btn: 'Disconnect this site', disc_yes: 'Yes, disconnect', cancel: 'Cancel',
       err_token: 'This page couldn’t verify your Wix site. Reload the page and try again.',
       err_server: 'Something went wrong. Please try again in a minute.',
-      err_popup: 'Your browser blocked the new tab. Allow pop-ups for this page and try again.'
+      err_popup: 'Your browser blocked the new tab. Allow pop-ups for this page and try again.',
+      plan_title: 'Your plan',
+      plan_active: 'Premium is active until {date}. Online bookings are on.',
+      plan_cancelled: 'Your plan was cancelled and stays active until {date}.',
+      plan_trial: 'Free trial until {date}. Upgrade to keep online bookings running after that.',
+      plan_expired: 'Your plan has ended and online bookings are paused. Upgrade to turn them back on.',
+      plan_pastdue: 'There is a problem with your last payment. Please check your billing in Wix.',
+      plan_other: 'Your TableReserve subscription is active until {date}.',
+      upgrade: 'Upgrade', manage: 'Manage plan'
     },
     el: {
       tagline: 'Κρατήσεις τραπεζιών χωρίς προμήθεια για το κατάστημά σας',
@@ -167,7 +183,15 @@
       disc_btn: 'Αποσύνδεση site', disc_yes: 'Ναι, αποσύνδεση', cancel: 'Άκυρο',
       err_token: 'Δεν μπορέσαμε να επαληθεύσουμε το site Wix. Ανανεώστε τη σελίδα και δοκιμάστε ξανά.',
       err_server: 'Κάτι πήγε στραβά. Δοκιμάστε ξανά σε ένα λεπτό.',
-      err_popup: 'Ο browser μπλόκαρε τη νέα καρτέλα. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.'
+      err_popup: 'Ο browser μπλόκαρε τη νέα καρτέλα. Επιτρέψτε τα αναδυόμενα παράθυρα και δοκιμάστε ξανά.',
+      plan_title: 'Το πακέτο σας',
+      plan_active: 'Το Premium είναι ενεργό έως {date}. Οι online κρατήσεις λειτουργούν.',
+      plan_cancelled: 'Το πακέτο ακυρώθηκε και ισχύει έως {date}.',
+      plan_trial: 'Δωρεάν δοκιμή έως {date}. Αναβαθμίστε για να συνεχίσουν οι online κρατήσεις μετά.',
+      plan_expired: 'Το πακέτο έληξε και οι online κρατήσεις είναι σε παύση. Αναβαθμίστε για να ξαναλειτουργήσουν.',
+      plan_pastdue: 'Υπάρχει πρόβλημα με την τελευταία πληρωμή. Ελέγξτε τη χρέωση στο Wix.',
+      plan_other: 'Η συνδρομή σας στο TableReserve είναι ενεργή έως {date}.',
+      upgrade: 'Αναβάθμιση', manage: 'Διαχείριση πακέτου'
     }
   };
   var t = function (k) { return (T[L] && T[L][k]) || T.en[k] || k; };
@@ -199,11 +223,33 @@
       $('shop-name').textContent = d.name;
       $('shop-url').value = d.url;
       $('btn-view').href = d.url;
+      renderPlan(d.billing);
       view('connected');
     } else {
       view('connect');
     }
   }
+  function renderPlan(b) {
+    if (!b) { $('plan-card').hidden = true; return; }
+    var now = Date.now(), until = b.paidUntil || 0, live = until > now;
+    var date = until ? new Date(until).toLocaleDateString(L === 'el' ? 'el-GR' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    var key;
+    if (!live) key = 'plan_expired';
+    else if (b.source === 'wix' && b.status === 'cancelled') key = 'plan_cancelled';
+    else if (b.source === 'wix' && b.status === 'past_due') key = 'plan_pastdue';
+    else if (b.source === 'wix') key = b.status === 'trial' ? 'plan_trial' : 'plan_active';
+    else if (!b.status || b.status === 'trial') key = 'plan_trial';
+    else key = 'plan_other';
+    $('plan-text').textContent = t(key).replace('{date}', date);
+    var paidInWix = b.source === 'wix' && live && b.status !== 'trial';
+    var paidElsewhere = b.source !== 'wix' && live && b.status && b.status !== 'trial';
+    $('btn-upgrade').href = b.upgradeUrl;
+    $('btn-upgrade').hidden = paidInWix || paidElsewhere;
+    $('btn-manage').href = b.manageUrl;
+    $('btn-manage').hidden = b.source !== 'wix';
+    $('plan-card').hidden = false;
+  }
+
   function load() { return post('wix-shop', { instance: INSTANCE }).then(render).catch(function () { view(''); showErr(t('err_server')); }); }
 
   function stopPoll() { if (pollTimer) clearInterval(pollTimer); pollTimer = null; $('waiting').style.display = 'none'; }
@@ -222,7 +268,9 @@
     if (!w) { showErr(t('err_popup')); return; }
     startPoll();
   };
-  window.addEventListener('focus', function () { if (pollTimer) load(); });
+  // Μετά από αγορά/αλλαγή πακέτου σε άλλη καρτέλα ή επιστροφή στη σελίδα: ανανέωση
+  var lastFocus = 0;
+  window.addEventListener('focus', function () { if (Date.now() - lastFocus > 4000) { lastFocus = Date.now(); load(); } });
 
   $('btn-copy').onclick = function () {
     var i = $('shop-url'); i.select();

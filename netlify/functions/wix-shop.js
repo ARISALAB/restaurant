@@ -19,7 +19,7 @@ function cors(event, res) {
   });
   return res;
 }
-const { wixIdentify } = require('./_shared/wix');
+const { wixIdentify, syncWixBilling, upgradeUrl, manageUrl } = require('./_shared/wix');
 
 exports.handler = async (event) => cors(event, await handle(event));
 
@@ -37,17 +37,31 @@ async function handle(event) {
   try {
     const link = (await db.ref(`wix_sites/${who.instanceId}`).get()).val();
     if (!link || !link.shop) return json(200, { connected: false, owner: who.owner });
-    const d = (await db.ref(`shop_details/${link.shop}`).get()).val();
+    let d = (await db.ref(`shop_details/${link.shop}`).get()).val();
     if (!d || d.status === 'closed') return json(200, { connected: false, owner: who.owner });
     const slug = d.slug || null;
-    return json(200, {
+    const out = {
       connected: true,
       owner: who.owner,
       shop: link.shop,
       slug,
       name: d.displayName || link.shop,
       url: 'https://tablereserve.gr/' + (slug || ('?shop=' + encodeURIComponent(link.shop))),
-    });
+    };
+    // Μόνο για τον ιδιοκτήτη (dashboard): συγχρονισμός συνδρομής Wix και στοιχεία χρέωσης
+    if (who.owner) {
+      const sync = await syncWixBilling(db, who.instanceId, link.shop).catch(e => { console.warn('[wix-shop] sync', e && e.message); return null; });
+      if (sync) d = (await db.ref(`shop_details/${link.shop}`).get()).val() || d;
+      out.billing = {
+        paidUntil: d.paidUntil || null,
+        status: d.billingStatus || null,
+        source: d.billingSource || null,
+        wixPaid: sync ? sync.paid : null,
+        upgradeUrl: upgradeUrl(who.instanceId),
+        manageUrl: manageUrl(who.instanceId),
+      };
+    }
+    return json(200, out);
   } catch (e) {
     console.error('[wix-shop]', e);
     return json(500, { error: 'server_error' });

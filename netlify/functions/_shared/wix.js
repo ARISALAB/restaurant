@@ -87,3 +87,109 @@ async function wixIdentify(raw) {
 }
 
 module.exports = { APP_ID, wixIdentify };
+
+// ───────────────────────── Χρέωση μέσω Wix ─────────────────────────
+// Ο ιδιοκτήτης αγοράζει πλάνο στο Wix (App Market). Διαβάζουμε την κατάσταση από το Wix
+// (Get App Instance) και ενημερώνουμε το paidUntil του καταστήματος, όπως κάνει το Lemon Squeezy.
+// Χρειάζεται: WIX_APP_SECRET στο Netlify και permission «Manage Your App» στο Wix.
+
+const GRACE_MS = 3 * 24 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+const upgradeUrl = (instanceId) => `https://www.wix.com/apps/upgrade/${APP_ID}?appInstanceId=${encodeURIComponent(instanceId)}`;
+const manageUrl = (instanceId) => `https://www.wix.com/my-account/app/${APP_ID}/${encodeURIComponent(instanceId)}`;
+
+async function postJson(url, body) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 7000);
+  try {
+    const r = await fetch(url, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body), signal: ctrl.signal,
+    });
+    const d = await r.json().catch(() => ({}));
+    return { ok: r.ok, status: r.status, d };
+  } finally { clearTimeout(timer); }
+}
+
+// Access token της εφαρμογής για συγκεκριμένο site
+async function wixAppToken(instanceId) {
+  const secret = process.env.WIX_APP_SECRET;
+  if (!secret || !ID_RE.test(instanceId || '')) return null;
+  const base = { grant_type: 'client_credentials', client_id: APP_ID, client_secret: secret };
+  let r = await postJson('https://www.wixapis.com/oauth2/token', { ...base, instance_id: instanceId });
+  if (!r.ok) r = await postJson('https://www.wixapis.com/oauth2/token', { ...base, instanceId });
+  if (!r.ok || !r.d.access_token) { console.warn('[wix] app token', r.status); return null; }
+  return r.d.access_token;
+}
+
+async function wixInstanceInfo(instanceId) {
+  const token = await wixAppToken(instanceId);
+  if (!token) return null;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 7000);
+  try {
+    const r = await fetch('https://www.wixapis.com/apps/v1/instance', { headers: { Authorization: token }, signal: ctrl.signal });
+    if (!r.ok) { console.warn('[wix] get instance', r.status); return null; }
+    return await r.json();
+  } catch (e) {
+    console.warn('[wix] get instance failed', e && e.message);
+    return null;
+  } finally { clearTimeout(timer); }
+}
+
+// Συγχρονίζει τη συνδρομή Wix -> shop_details/<shop>. Μόνο παρατείνει (δεν κόβει πληρωμή του Lemon).
+// -> { paid, isFree, paidUntil, billingStatus } ή null αν δεν ήταν δυνατό να ρωτήσουμε το Wix
+async function syncWixBilling(db, instanceId, shop) {
+  const info = await wixInstanceInfo(instanceId);
+  if (!info || !info.instance) return null;
+  const inst = info.instance;
+  const now = Date.now();
+  const ref = db.ref(`shop_details/${shop}`);
+  const d = (await ref.get()).val() || {};
+  const base = {
+    wixInstanceId: instanceId,
+    wixUpgradeUrl: upgradeUrl(instanceId),
+    wixManageUrl: manageUrl(instanceId),
+  };
+
+  if (inst.isFree !== false) {
+    await ref.update(base);
+    return { paid: false, isFree: true, paidUntil: d.paidUntil || null, billingStatus: d.billingStatus || null };
+  }
+
+  const b = inst.billing || {};
+  const exp = Date.parse(b.expirationDate || '');
+  const trial = b.freeTrialInfo || {};
+  const trialEnd = Date.parse(trial.endDate || '');
+  let until, status;
+  if (!isNaN(exp) && exp > now) {
+    until = exp + (b.autoRenewing === false ? 0 : GRACE_MS);
+    status = b.autoRenewing === false ? 'cancelled' : 'active';
+  } else if (isNaN(exp) && /IN_PROGRESS|ACTIVE/i.test(String(trial.status || ''))) {
+    until = !isNaN(trialEnd) ? trialEnd : now + 14 * DAY_MS;
+    status = 'trial';
+  } else if (!isNaN(exp)) {
+    // Έληξε αλλά το Wix το δείχνει ακόμα πληρωμένο: πρόβλημα πληρωμής, μικρό περιθώριο
+    until = now + GRACE_MS;
+    status = 'past_due';
+  } else {
+    // Μηνιαία πλάνα δεν έχουν expirationDate: ο καθημερινός συγχρονισμός παρατείνει όσο είναι πληρωμένο
+    until = now + GRACE_MS;
+    status = 'active';
+  }
+
+  const update = { ...base, wixPackage: b.packageName || '', billingUpdatedAt: now };
+  // Δεν πειράζουμε ενεργή συνδρομή Lemon που ισχύει περισσότερο
+  if (!d.paidUntil || until >= d.paidUntil || d.billingSource === 'wix') {
+    update.paidUntil = Math.max(until, d.billingSource === 'wix' ? 0 : (d.paidUntil || 0));
+    update.billingStatus = status;
+    update.billingSource = 'wix';
+  }
+  await ref.update(update);
+  return { paid: true, isFree: false, paidUntil: update.paidUntil || d.paidUntil || null, billingStatus: update.billingStatus || d.billingStatus || null };
+}
+
+module.exports.syncWixBilling = syncWixBilling;
+module.exports.upgradeUrl = upgradeUrl;
+module.exports.manageUrl = manageUrl;

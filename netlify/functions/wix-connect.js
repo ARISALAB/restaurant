@@ -13,7 +13,7 @@
 const admin = require('firebase-admin');
 const { getDb } = require('./_shared/firebase');
 const { json, preflightOk } = require('./_shared/respond');
-const { wixIdentify } = require('./_shared/wix');
+const { wixIdentify, syncWixBilling, upgradeUrl, manageUrl } = require('./_shared/wix');
 
 async function callerShop(db, event) {
   const h = event.headers.authorization || event.headers.Authorization || '';
@@ -45,7 +45,14 @@ exports.handler = async (event) => {
   const db = getDb();
   try {
     if (action === 'disconnect') {
+      const link = (await db.ref(`wix_sites/${who.instanceId}`).get()).val();
       await db.ref(`wix_sites/${who.instanceId}`).remove();
+      if (link && link.shop) {
+        const cur = (await db.ref(`shop_details/${link.shop}/wixInstanceId`).get()).val();
+        if (cur === who.instanceId) {
+          await db.ref(`shop_details/${link.shop}`).update({ wixInstanceId: null, wixUpgradeUrl: null, wixManageUrl: null });
+        }
+      }
       return json(200, { ok: true });
     }
 
@@ -61,6 +68,12 @@ exports.handler = async (event) => {
         siteId: who.siteId,
         connectedAt: Date.now(),
       });
+      await db.ref(`shop_details/${c.shop}`).update({
+        wixInstanceId: who.instanceId,
+        wixUpgradeUrl: upgradeUrl(who.instanceId),
+        wixManageUrl: manageUrl(who.instanceId),
+      });
+      await syncWixBilling(db, who.instanceId, c.shop).catch(e => console.warn('[wix-connect] sync', e && e.message));
       return json(200, { ok: true, shop: c.shop, name: c.name });
     }
     return json(400, { error: 'bad_action' });

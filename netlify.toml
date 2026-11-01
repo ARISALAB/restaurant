@@ -8,3 +8,5 @@
   schedule = "@daily"
 [functions."reminders"]
   schedule = "*/15 * * * *"
+[functions."wix-sync"]
+  schedule = "@daily"
