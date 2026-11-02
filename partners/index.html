@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TableReserve — Online Κρατήσεις για Εστιατόρια</title>
-<meta name="description" content="Σύστημα online κρατήσεων για εστιατόρια. Κρατήσεις 24/7, email επιβεβαίωσης, χωρίς προμήθεια ανά κράτηση. Δωρεάν δοκιμή 14 ημερών.">
+<title>TableReserve — Σύστημα online κρατήσεων για εστιατόρια, χωρίς προμήθεια</title>
+<meta name="description" content="Online και τηλεφωνικές κρατήσεις σε ένα βιβλίο, υπενθυμίσεις 2 ώρες πριν, λίστα αναμονής, κάτοψη τραπεζιών και καρτέλα πελάτη. Σταθερή τιμή €99 τον χρόνο, χωρίς προμήθεια. Δωρεάν δοκιμή 14 ημερών.">
 <link rel="canonical" href="https://tablereserve.gr/">
 <meta name="facebook-domain-verification" content="dbt7lgqrqqn4fqi6ebc48e0fmmvs5m" />
+<meta property="og:title" content="TableReserve — Online κρατήσεις για εστιατόρια, χωρίς προμήθεια">
+<meta property="og:description" content="Το βιβλίο κρατήσεων του μαγαζιού σας, online. €99 τον χρόνο, 14 ημέρες δωρεάν.">
+<meta property="og:url" content="https://tablereserve.gr/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f5f1e8">
 <link rel="alternate" hreflang="el" href="https://tablereserve.gr/">
 <link rel="alternate" hreflang="en" href="https://tablereserve.gr/en/">
 <link rel="alternate" hreflang="de" href="https://tablereserve.gr/de/">
@@ -18,208 +23,290 @@
 <link rel="alternate" hreflang="x-default" href="https://tablereserve.gr/en/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Syne:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;0,7..72,600;1,7..72,400&family=Commissioner:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#09090a;--bg2:#111113;--bg3:#161618;--card:#131315;
-  --accent:#2563eb;--accent2:#1d4ed8;
-  --text:#ede8df;--muted:#c8c4bb;
-  --border:rgba(37,99,235,0.14);--border2:rgba(255,255,255,0.07);
+  --paper:#f5f1e8;--paper2:#ece6d9;--card:#fffdf8;
+  --ink:#1c1b19;--ink2:#57534b;--ink3:#8a857a;
+  --rule:#d8d0bf;--rule2:#e6dfd1;
+  --accent:#a3391f;--accent2:#862c15;--accentbg:#f3e2d9;
+  --ok:#3c6a4a;--okbg:#e2ecdf;--warn:#9a6a12;--warnbg:#f5ead2;
+  --serif:'Literata',Georgia,serif;--sans:'Commissioner',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;
+  --wrap:1180px;--pad:clamp(20px,5vw,48px);
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-weight:300;line-height:1.65;overflow-x:hidden}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--pad)}
+h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;line-height:1.12}
+h2{font-size:clamp(30px,4vw,44px);max-width:24ch}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.lead{font-size:18px;color:var(--ink2);max-width:58ch}
+section{padding:96px 0;border-top:1px solid var(--rule)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px/1 var(--sans);padding:15px 24px;border-radius:6px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .15s,border-color .15s,color .15s}
+.btn-main{background:var(--ink);color:var(--paper)}
+.btn-main:hover{background:#000}
+.btn-line{border-color:var(--ink);color:var(--ink);background:transparent}
+.btn-line:hover{background:var(--ink);color:var(--paper)}
+.tlink{color:var(--accent);font-weight:500;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px}
+.tlink:hover{color:var(--accent2)}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:20px 6%;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(16px);background:rgba(9,9,10,0.82);border-bottom:0.5px solid var(--border2)}
-.logo{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.3px}
-.logo em{font-style:normal;color:var(--accent)}
-nav ul{display:flex;gap:36px;list-style:none}
-nav ul a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s}
-nav ul a:hover{color:var(--text)}
-.nav-cta{background:var(--accent);color:#ffffff;font-size:13px;font-weight:500;padding:10px 22px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s}
-.nav-cta:hover{background:var(--accent2);transform:translateY(-1px)}
-
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:90px 6% 10vh;position:relative;overflow:hidden}
-.hero-copy{position:relative;z-index:2;max-width:640px}
-.hero-photo{position:absolute;left:50%;top:50%;height:108%;aspect-ratio:2/1;transform:translate(-50%,-50%) scale(1);background-image:url('/partners/assets/hero-table.jpg');background-size:cover;background-position:center;animation:kenBurns 26s ease-in-out infinite alternate;overflow:hidden}
-@keyframes kenBurns{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.09)}}
-.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,10,.1) 0%,rgba(9,9,10,.2) 60%,var(--bg) 98%),linear-gradient(90deg,rgba(9,9,10,.78) 0%,rgba(9,9,10,.3) 45%,rgba(9,9,10,0) 72%)}
-
-.hero-label{font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:28px;opacity:0;animation:fadeUp .7s .2s forwards}
-.hero-label::before{content:'';width:28px;height:1px;background:var(--accent)}
-.hero h1{font-family:'Playfair Display',serif;font-size:clamp(44px,8vw,94px);line-height:1.04;letter-spacing:-2px;margin-bottom:30px;max-width:860px;opacity:0;animation:fadeUp .8s .35s forwards}
-.hero h1 em{font-style:italic;color:var(--accent)}
-.hero p{font-size:17px;color:var(--muted);max-width:500px;line-height:1.78;margin-bottom:48px;opacity:0;animation:fadeUp .8s .5s forwards}
-.hero-badges{display:flex;flex-wrap:wrap;gap:10px 24px;list-style:none;margin:30px 0 0;padding:0;font-size:14px;color:var(--muted);opacity:0;animation:fadeUp .8s .8s forwards}.hero-badges li{display:flex;align-items:center;gap:8px}.hero-badges svg{color:var(--accent);flex-shrink:0}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .65s forwards}
-.btn-main{background:var(--accent);color:#ffffff;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;padding:17px 36px;border-radius:40px;text-decoration:none;transition:background .2s,transform .15s;display:inline-flex;align-items:center;gap:8px}
-.btn-main:hover{background:var(--accent2);transform:translateY(-2px)}
-.btn-outline{border:0.5px solid rgba(237,232,223,.15);color:var(--text);font-size:15px;padding:17px 36px;border-radius:40px;text-decoration:none;transition:border-color .2s,color .2s,transform .15s;display:inline-flex;align-items:center}
-.btn-outline:hover{border-color:rgba(37,99,235,.4);color:var(--accent);transform:translateY(-2px)}
-.hero-scroll{position:absolute;bottom:40px;right:6%;writing-mode:vertical-rl;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;opacity:0;animation:fadeIn 1s 1.2s forwards}
-.hero-scroll::after{content:'';width:1px;height:50px;background:var(--muted);animation:scrollPulse 2s ease-in-out infinite}
-@keyframes scrollPulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.3;transform:scaleY(.5)}}
-
-/* STATS */
-.stats{background:var(--bg2);border-top:0.5px solid var(--border2);border-bottom:0.5px solid var(--border2);display:grid;grid-template-columns:repeat(4,1fr)}
-.stat{padding:36px 28px;border-right:0.5px solid var(--border2);text-align:center}
-.stat:last-child{border-right:none}
-.stat-n{font-family:'Playfair Display',serif;font-size:48px;line-height:1;color:var(--accent);margin-bottom:6px}
-.stat-l{font-size:12px;color:var(--muted);letter-spacing:.06em}
-
-/* SECTIONS */
-section{padding:110px 6%}
-.eyebrow{font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:18px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
-h2{font-family:'Playfair Display',serif;font-size:clamp(30px,4.5vw,56px);line-height:1.09;letter-spacing:-1.5px;margin-bottom:20px;max-width:700px}
-.section-sub{font-size:16px;color:var(--muted);max-width:500px;line-height:1.75}
-
-/* HOW */
-.how{background:var(--bg2)}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:70px;border:0.5px solid var(--border2);border-radius:18px;overflow:hidden}
-.step{background:var(--card);padding:40px 32px;border-right:0.5px solid var(--border2);position:relative;overflow:hidden;transition:background .25s}
-.step:last-child{border-right:none}
-.step:hover{background:#1a1a1c}
-.step::before{content:attr(data-n);position:absolute;bottom:-10px;right:16px;font-family:'Playfair Display',serif;font-size:80px;color:rgba(37,99,235,.06);line-height:1;pointer-events:none}
-.step-dot{width:32px;height:32px;border-radius:50%;background:rgba(37,99,235,.12);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--accent)}
-.step h3{font-size:15px;font-weight:500;margin-bottom:10px;margin-top:14px}
-.step p{font-size:13px;color:var(--muted);line-height:1.7}
-
-/* BENEFITS */
-.benefits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:70px}
-@media(min-width:900px){.benefits-grid{grid-template-columns:repeat(3,1fr)}}
-.benefit{background:var(--card);border:0.5px solid var(--border2);border-radius:16px;padding:30px 26px;transition:transform .2s,border-color .2s}
-.benefit:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 8px 32px rgba(37,99,235,.15)}
-.b-icon{width:44px;height:44px;border-radius:12px;background:rgba(37,99,235,.08);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:18px}
-.benefit h3{font-size:15px;font-weight:500;margin-bottom:8px}
-.benefit p{font-size:13px;color:var(--muted);line-height:1.7}
-
-/* PRICING */
-.pricing{background:var(--bg2)}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:70px;max-width:820px}
-.price-card{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:36px 30px;position:relative;transition:border-color .2s}
-.price-card.hot{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
-.hot-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--accent);color:#ffffff;font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:4px 16px;border-radius:40px;white-space:nowrap}
-.plan-name{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
-.plan-price{font-family:'Playfair Display',serif;font-size:54px;line-height:1;margin-bottom:4px}
-.plan-price sup{font-size:22px;vertical-align:super;font-family:'Syne',sans-serif;font-weight:300}
-.plan-price sub{font-size:16px;font-family:'Syne',sans-serif;font-weight:300;color:var(--muted)}
-.plan-desc{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
-.plan-features{list-style:none;margin-bottom:30px}
-.plan-features li{font-size:13px;color:var(--muted);padding:9px 0;border-bottom:0.5px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:10px}
-.plan-features li::before{content:'✓';color:var(--accent);font-weight:500;flex-shrink:0}
-.plan-features li.dim{color:rgba(107,104,96,.45)}
-.plan-features li.dim::before{content:'–';color:rgba(107,104,96,.35)}
-.btn-plan{display:block;text-align:center;padding:14px;border-radius:40px;font-size:14px;font-weight:500;font-family:'Syne',sans-serif;text-decoration:none;transition:all .2s}
-.btn-plan-g{border:0.5px solid rgba(37,99,235,.3);color:var(--accent)}
-.btn-plan-g:hover{background:rgba(37,99,235,.08)}
-.btn-plan-s{background:var(--accent);color:#ffffff}
-.btn-plan-s:hover{background:var(--accent2)}
-
-/* FORM */
-.form-wrap{max-width:620px;background:var(--card);border:0.5px solid var(--border2);border-radius:22px;padding:52px 44px;margin-top:70px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.fg{margin-bottom:20px}
-label{display:block;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-input,select,textarea{width:100%;background:rgba(255,255,255,.035);border:0.5px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;font-size:14px;font-family:'Syne',sans-serif;font-weight:300;color:var(--text);outline:none;transition:border-color .2s,background .2s}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);background:rgba(37,99,235,.04)}
-select option{background:#161618}
-textarea{resize:vertical;min-height:90px}
-.btn-submit{width:100%;background:var(--accent);color:#ffffff;border:none;padding:18px;border-radius:40px;font-size:15px;font-weight:500;font-family:'Syne',sans-serif;cursor:pointer;transition:background .2s,transform .15s;margin-top:6px}
-.btn-submit:hover{background:var(--accent2);transform:translateY(-2px)}
-.form-note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
-
-/* FOOTER */
-footer{background:var(--bg);border-top:0.5px solid var(--border2);padding:36px 6%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
-footer p{font-size:13px;color:var(--muted)}
-footer a{color:var(--muted);text-decoration:none}
-footer a:hover{color:var(--accent)}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
-.reveal.in{opacity:1;transform:translateY(0)}
-
-.faq{max-width:760px}
-.faq-item{border-bottom:0.5px solid var(--border2)}
-.faq-q{width:100%;text-align:left;background:none;border:none;padding:24px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;color:var(--text);font-family:'Syne',sans-serif;font-size:16px;font-weight:500}
-.faq-q:hover{color:var(--accent)}
-.faq-icon{flex-shrink:0;width:22px;height:22px;position:relative}
-.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--accent);top:50%;left:50%;transform:translate(-50%,-50%)}
-.faq-icon::before{width:14px;height:1.5px}
-.faq-icon::after{width:1.5px;height:14px;transition:transform .25s ease}
-.faq-item.open .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scale(0)}
-.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
-.faq-item.open .faq-a{max-height:420px}
-.faq-a p{color:var(--muted);font-size:14px;line-height:1.7;padding:0 0 24px}
-
-.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(9,9,10,0.95);backdrop-filter:blur(12px);border-top:0.5px solid var(--border2);padding:14px 20px;align-items:center;justify-content:space-between;gap:12px}.sticky-bar p{font-size:13px;color:var(--muted)}.sticky-bar a{background:var(--accent);color:#fff;font-size:14px;font-weight:500;padding:11px 24px;border-radius:40px;text-decoration:none;white-space:nowrap;flex-shrink:0}@media(max-width:768px){nav ul{display:none}.stats{grid-template-columns:1fr 1fr}.stat{border-bottom:0.5px solid var(--border2)}.form-row{grid-template-columns:1fr}.form-wrap{padding:32px 24px}.hero-scroll{display:none}.sticky-bar{display:flex}}
-/* NEW BADGE + COST */
-.benefit{position:relative}
-.b-new{position:absolute;top:22px;right:22px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.4);padding:3px 9px;border-radius:40px}
-.cost{border-top:0.5px solid var(--border2)}
-.cost-wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;margin-top:70px;align-items:stretch}
-@media(max-width:860px){.cost-wrap{grid-template-columns:1fr}}
-.cost-wrap>*{min-width:0}.cost-calc label,.cost-points li{overflow-wrap:break-word;hyphens:auto}.nav-cta,#navLogin{white-space:nowrap}@media(max-width:480px){nav{padding:16px 5%}#navCta{display:none}nav select{margin-right:12px!important}}
-.cost-calc,.cost-points{background:var(--card);border:0.5px solid var(--border2);border-radius:18px;padding:34px 30px}
-.cost-calc h3,.cost-points h3{font-size:15px;font-weight:500;margin-bottom:22px}
-.cc-row{margin-bottom:22px}
-.cc-row label{text-transform:none;letter-spacing:0;font-weight:300;display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);margin-bottom:10px}
-.cc-row label b{color:var(--text);font-weight:500;white-space:nowrap}
-.cc-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
-.cc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
-.cc-box{border-radius:14px;padding:18px 16px;border:0.5px solid var(--border2);background:var(--bg3)}
-.cc-box.us{border-color:var(--accent);background:linear-gradient(160deg,#0c1428 0%,#111113 100%)}
-.cc-box small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;line-height:1.4}
-.cc-box strong{font-family:'Playfair Display',serif;font-size:32px;font-weight:400;line-height:1}
-.cc-box.us strong{color:var(--accent)}
-.cc-box span{display:block;font-size:12px;color:var(--muted);margin-top:6px}
-.cc-save{margin-top:16px;font-size:14px;color:var(--text);line-height:1.6}
-.cc-save b{color:var(--accent);font-weight:600}
-.cc-note{margin-top:14px;font-size:11.5px;color:var(--muted);opacity:.75;line-height:1.6}
-.cost-points ul{list-style:none}
-.cost-points li{display:flex;gap:14px;padding:14px 0;border-bottom:0.5px solid rgba(255,255,255,.05);font-size:13.5px;color:var(--muted);line-height:1.65}
-.cost-points li:last-child{border-bottom:none}
-.cost-points li b{display:block;color:var(--text);font-weight:500;margin-bottom:2px}
-.cost-points li i{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:rgba(37,99,235,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;margin-top:2px}
-
-/* Κινητό: η κάτω μπάρα δεν κρύβει το footer, το μενού δεν ψηλώνει με τον λογαριασμό, ο τίτλος δεν κρύβεται κάτω από το μενού */
-#navUser>span:last-child>span{white-space:nowrap}
-.hero{padding-top:120px}
-@media(max-width:768px){footer{padding-bottom:110px}}
-@media(max-width:480px){#navUser>span:last-child>span:last-child{display:none!important}#navUserName{max-width:120px!important}#navUser{padding:5px 12px 5px 5px!important}}
-/* ΚΟΙΝΟ ΜΕΝΟΥ */
-nav ul.tn{display:flex;gap:30px;list-style:none;align-items:center}
-nav ul.tn>li>a{font-size:13px;color:var(--muted);text-decoration:none;letter-spacing:.04em;transition:color .2s;padding:8px 0;display:inline-block}
-nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--text)}
-nav ul.tn>li>a[aria-current="page"]{box-shadow:inset 0 -1px 0 var(--accent)}
-nav ul.tn>li>a span{font-size:10px;opacity:.7}
+nav{position:sticky;top:0;z-index:200;background:rgba(245,241,232,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav-in{max-width:var(--wrap);margin:0 auto;padding:14px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative}
+.logo{font-family:var(--serif);font-size:22px;font-weight:600;letter-spacing:-.02em;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:9px}
+.logo-mark{width:26px;height:26px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center}
+.logo-mark::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.nav-cta{background:var(--ink);color:var(--paper);font:600 14px/1 var(--sans);padding:11px 16px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.nav-cta:hover{background:#000}
+#navLogin{white-space:nowrap}
+.lang{appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2357534b' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 8px center;color:var(--ink2);font:500 12px var(--mono);border:1px solid var(--rule);border-radius:6px;padding:6px 24px 6px 9px;margin-right:16px;cursor:pointer}
+nav ul.tn{display:flex;gap:26px;list-style:none;align-items:center}
+nav ul.tn>li>a{font-size:14px;color:var(--ink2);text-decoration:none;padding:8px 0;display:inline-block}
+nav ul.tn>li>a:hover,nav ul.tn>li>a[aria-current="page"]{color:var(--ink)}
+nav ul.tn>li>a span{font-size:10px;opacity:.6}
 .dd{position:relative}
-.dd-p{display:none;position:absolute;top:100%;left:-18px;min-width:290px;padding:8px;margin-top:6px;background:#131315;border:0.5px solid rgba(255,255,255,.1);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.55);flex-direction:column;z-index:300}
+.dd-p{display:none;position:absolute;top:100%;left:-16px;min-width:300px;padding:8px;margin-top:6px;background:var(--card);border:1px solid var(--rule);border-radius:8px;box-shadow:0 18px 40px rgba(28,27,25,.12);flex-direction:column;z-index:300}
 .dd-p::before{content:'';position:absolute;left:0;right:0;top:-14px;height:14px}
 .dd:hover .dd-p,.dd:focus-within .dd-p{display:flex}
-.dd-p a{display:block;padding:11px 14px;border-radius:10px;text-decoration:none;color:var(--text)}
-.dd-p a:hover,.dd-p a[aria-current="page"]{background:rgba(37,99,235,.12)}
-.dd-p b{display:block;font-size:13.5px;font-weight:500}
-.dd-p small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.mnav{display:none;position:static}
-.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:12px;border:0.5px solid rgba(255,255,255,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.dd-p a{display:block;padding:10px 12px;border-radius:6px;text-decoration:none;color:var(--ink)}
+.dd-p a:hover,.dd-p a[aria-current="page"]{background:var(--paper2)}
+.dd-p b{display:block;font-size:14px;font-weight:600}
+.dd-p small{display:block;font-size:12.5px;color:var(--ink3);margin-top:1px}
+.mnav{display:none;position:static;margin-left:10px}
+.mnav summary{list-style:none;cursor:pointer;width:42px;height:42px;border-radius:6px;border:1px solid var(--rule);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .mnav summary::-webkit-details-marker{display:none}
-.mnav summary span{width:18px;height:1.5px;background:var(--text);border-radius:2px;transition:transform .2s,opacity .2s}
+.mnav summary span{width:18px;height:1.5px;background:var(--ink);transition:transform .2s,opacity .2s}
 .mnav[open] summary span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
 .mnav[open] summary span:nth-child(2){opacity:0}
 .mnav[open] summary span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
-.mnav-p{position:absolute;left:0;right:0;top:100%;background:#0d0d0f;border-bottom:0.5px solid rgba(255,255,255,.1);padding:10px 5% 18px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.6);max-height:calc(100vh - 70px);overflow:auto}
-.mnav-p a{padding:14px 4px;border-bottom:0.5px solid rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-size:16px}
-.mnav-p a:last-child{border-bottom:none;color:#6b9bff}
-.mnav-p a[aria-current="page"]{color:#6b9bff}
+.mnav-p{position:absolute;left:0;right:0;top:100%;background:var(--paper);border-bottom:1px solid var(--rule);padding:6px var(--pad) 18px;display:flex;flex-direction:column;box-shadow:0 24px 40px rgba(28,27,25,.12);max-height:calc(100vh - 70px);overflow:auto}
+.mnav-p a{padding:13px 2px;border-bottom:1px solid var(--rule2);color:var(--ink);text-decoration:none;font-size:16px}
+.mnav-p a:last-child{border-bottom:none;color:var(--accent);font-weight:600}
+#navUser>span:last-child>span{white-space:nowrap}
+
+/* HERO */
+.hero{padding:72px 0 88px;border-top:none}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:center}
+.hero h1{font-size:clamp(40px,5.6vw,68px);line-height:1.04;letter-spacing:-.025em;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--accent);font-weight:400}
+.hero .lead{margin-bottom:32px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero-terms{margin-top:22px;font-size:14px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none}
+.hero-terms li{display:flex;align-items:center;gap:7px}
+.hero-terms li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent)}
+
+/* Book mock */
+.book{background:var(--card);border:1px solid var(--rule);border-radius:10px;box-shadow:0 1px 0 var(--rule),0 30px 60px -20px rgba(28,27,25,.22);overflow:hidden;font-size:14px}
+.book-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--rule2);gap:10px}
+.book-top b{font-family:var(--serif);font-size:17px;font-weight:600}
+.book-top small{display:block;color:var(--ink3);font-size:12.5px}
+.seg{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden;font-size:12.5px;flex-shrink:0}
+.seg span{padding:5px 11px;color:var(--ink2)}
+.seg span.on{background:var(--ink);color:var(--paper)}
+.book-sum{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--rule2);background:var(--paper)}
+.book-sum div{padding:10px 18px;border-right:1px solid var(--rule2)}
+.book-sum div:last-child{border-right:none}
+.book-sum strong{display:block;font-family:var(--mono);font-size:17px;font-weight:500}
+.book-sum span{font-size:12px;color:var(--ink3)}
+.row{display:grid;grid-template-columns:52px 1fr auto;gap:14px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--rule2)}
+.row:last-child{border-bottom:none}
+.t{font-family:var(--mono);font-size:13.5px;color:var(--ink)}
+.who b{font-weight:600}
+.who small{display:block;color:var(--ink3);font-size:12.5px;margin-top:1px}
+.who .note{color:var(--accent)}
+.pax{font-family:var(--mono);font-size:12.5px;color:var(--ink2);margin-left:6px;font-weight:400}
+.tag{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.tag.ok{background:var(--okbg);color:var(--ok)}
+.tag.wait{background:var(--warnbg);color:var(--warn)}
+.tag.new{background:var(--accentbg);color:var(--accent)}
+.book-foot{padding:10px 18px;background:var(--paper);border-top:1px solid var(--rule2);font-size:12.5px;color:var(--ink2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.book-foot i{font-style:normal;font-family:var(--mono)}
+
+/* Proof strip */
+.strip{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper2);padding:0}
+.strip .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.strip p{padding:22px 24px 22px 0;font-size:15px;color:var(--ink2)}
+.strip p+p{padding-left:24px;border-left:1px solid var(--rule)}
+.strip b{color:var(--ink);font-weight:600}
+
+/* Timeline */
+.day{margin-top:56px;border-top:1px solid var(--ink)}
+.ev{display:grid;grid-template-columns:150px 1fr 220px;gap:32px;padding:28px 0;border-bottom:1px solid var(--rule)}
+.ev-time{font-family:var(--mono);font-size:15px;color:var(--accent);padding-top:3px}
+.ev-time small{display:block;color:var(--ink3);font-size:12px;margin-top:3px}
+.ev h3{font-size:22px;margin-bottom:8px}
+.ev p{color:var(--ink2);max-width:60ch}
+.ev-link{font-size:14px;padding-top:6px;text-align:right}
+
+/* Menu list */
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 64px;margin-top:48px}
+.mi{display:flex;align-items:baseline;gap:10px;padding:15px 0;border-bottom:1px solid var(--rule2)}
+.mi b{font-weight:500}
+.mi small{display:block;color:var(--ink3);font-size:13.5px;font-weight:400}
+.mi .dots{flex:1;border-bottom:1.5px dotted var(--ink3);transform:translateY(-4px);min-width:20px}
+.mi .inc{font-family:var(--mono);font-size:12.5px;color:var(--ok);white-space:nowrap}
+
+/* Cost / receipt */
+.cost-grid{display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:start;margin-top:8px}
+.cost-copy ul{list-style:none;margin-top:30px}
+.cost-copy li{padding:16px 0;border-top:1px solid var(--rule)}
+.cost-copy li b{display:block;font-weight:600;margin-bottom:2px}
+.cost-copy li span{color:var(--ink2);font-size:15px}
+.receipt{background:var(--card);border:1px solid var(--rule);padding:28px 26px 24px;font-family:var(--mono);font-size:13.5px;position:relative;box-shadow:0 20px 40px -24px rgba(28,27,25,.25)}
+.receipt::after{content:'';position:absolute;left:-1px;right:-1px;bottom:-9px;height:10px;background:linear-gradient(-45deg,transparent 6px,var(--card) 0) 0 0/12px 10px repeat-x,linear-gradient(45deg,transparent 6px,var(--card) 0) 0 0/12px 10px repeat-x}
+.rc-h{text-align:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);padding-bottom:14px;border-bottom:1px dashed var(--ink3);margin-bottom:18px}
+.rc-row{margin-bottom:18px}
+.rc-row label{display:flex;justify-content:space-between;gap:12px;color:var(--ink2);font-size:12.5px;margin-bottom:8px;font-family:var(--sans)}
+.rc-row label b{color:var(--ink);font-family:var(--mono);font-weight:500}
+.rc-row input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+.rc-line{display:flex;justify-content:space-between;gap:10px;padding:8px 0}
+.rc-line span,.rc-total span{font-family:var(--sans)}
+.rc-line.strike strong{text-decoration:line-through;text-decoration-color:var(--accent);color:var(--ink2);font-weight:400}
+.rc-line strong{font-weight:500}
+.rc-sep{border-top:1px dashed var(--ink3);margin:10px 0}
+.rc-total{display:flex;justify-content:space-between;gap:10px;padding:10px 0 2px;font-size:15px}
+.rc-total b{color:var(--accent);font-size:20px;font-weight:500}
+.rc-note{margin-top:14px;font-family:var(--sans);font-size:12px;color:var(--ink3);line-height:1.5}
+
+/* Founder */
+.founder{background:var(--ink);color:var(--paper);border-top:none}
+.founder .kicker{color:#b3ab9b}
+.founder-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+.founder h2{color:var(--paper)}
+.founder blockquote{font-family:var(--serif);font-size:clamp(19px,2vw,23px);line-height:1.55;color:#ebe5d8}
+.founder blockquote p+p{margin-top:18px}
+.sig{margin-top:28px;font-size:14px;color:#b3ab9b;font-family:var(--sans)}
+.sig b{display:block;color:var(--paper);font-size:16px;font-weight:600}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border-top:1px solid var(--ink)}
+.step{padding:26px 28px 6px 0}
+.step+.step{padding-left:28px;border-left:1px solid var(--rule)}
+.step .n{font-family:var(--mono);color:var(--accent);font-size:13px;margin-bottom:14px}
+.step h3{font-size:21px;margin-bottom:8px}
+.step p{color:var(--ink2);font-size:15px}
+
+/* Pricing */
+.founding{display:inline-flex;gap:8px;align-items:center;margin-top:22px;padding:8px 14px;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:14px;background:var(--accentbg)}
+.founding b{font-weight:600}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--card)}
+.price-card{padding:32px 28px;position:relative;display:flex;flex-direction:column}
+.price-card+.price-card{border-left:1px solid var(--rule)}
+.price-card.hot{background:var(--ink);color:var(--paper)}
+.plan-name{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px;display:flex;justify-content:space-between;gap:8px}
+.hot .plan-name{color:#b3ab9b}
+.hot-badge{color:var(--paper);background:var(--accent);padding:2px 8px;border-radius:4px;letter-spacing:.02em;text-transform:none;font-family:var(--sans);font-weight:600;font-size:12px}
+.plan-price{font-family:var(--serif);font-size:56px;line-height:1;font-weight:500;letter-spacing:-.02em}
+.plan-price small{font-family:var(--sans);font-size:15px;color:var(--ink3);font-weight:400;letter-spacing:0;margin-left:4px}
+.hot .plan-price small{color:#b3ab9b}
+.plan-desc{font-size:14.5px;color:var(--ink2);margin:14px 0 26px;flex:1}
+.hot .plan-desc{color:#d6cfc1}
+.btn-plan{display:block;text-align:center;padding:14px;border-radius:6px;font:600 15px/1 var(--sans);text-decoration:none;border:1px solid var(--ink);color:var(--ink)}
+.btn-plan:hover{background:var(--ink);color:var(--paper)}
+.hot .btn-plan{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.hot .btn-plan:hover{background:#fff}
+.included{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:var(--ink2);list-style:none}
+.included li::before{content:'✓ ';color:var(--ok);font-weight:600}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px}
+.faq{border-top:1px solid var(--ink)}
+.faq-item{border-bottom:1px solid var(--rule)}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:20px 0;display:flex;justify-content:space-between;align-items:center;gap:20px;cursor:pointer;color:var(--ink);font:500 17px/1.4 var(--sans)}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{flex-shrink:0;width:18px;height:18px;position:relative}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:currentColor;top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-icon::before{width:12px;height:1.5px}
+.faq-icon::after{width:1.5px;height:12px;transition:transform .2s}
+.faq-item.open .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scale(0)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:480px}
+.faq-a p{color:var(--ink2);font-size:15.5px;line-height:1.7;padding:0 0 22px;max-width:62ch}
+.faq-a a{color:var(--accent)}
+
+/* Signup */
+.signup{background:var(--paper2)}
+.signup-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+.signup-points{list-style:none;margin-top:28px}
+.signup-points li{padding:12px 0;border-top:1px solid var(--rule);color:var(--ink2);font-size:15px}
+.signup-points li b{color:var(--ink);font-weight:600}
+.form-wrap{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:36px 32px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{margin-bottom:16px}
+.form-wrap label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.form-wrap input,.form-wrap select{width:100%;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:12px 13px;font:400 15px var(--sans);color:var(--ink);outline:none;transition:border-color .15s,box-shadow .15s}
+.form-wrap input:focus,.form-wrap select:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(28,27,25,.08)}
+.form-wrap input::placeholder{color:#aaa395}
+.btn-submit{width:100%;background:var(--accent);color:#fff;border:none;padding:16px;border-radius:6px;font:600 16px/1 var(--sans);cursor:pointer;transition:background .15s;margin-top:4px}
+.btn-submit:hover{background:var(--accent2)}
+.btn-submit:disabled{opacity:.6;cursor:default}
+.form-note{font-size:13px;color:var(--ink2);text-align:center;margin-top:16px}
+.form-note a{color:var(--accent)}
+#googleBtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:1px solid var(--rule);padding:13px;border-radius:6px;font:500 15px var(--sans);cursor:pointer;margin:0 0 6px}
+#googleBtn:hover{border-color:var(--ink3)}
+
+/* Footer */
+footer{background:var(--ink);color:#b3ab9b;padding:48px 0 40px;font-size:14px}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:40px;align-items:start}
+footer .logo{color:var(--paper);margin-bottom:12px}
+footer .logo-mark{border-color:var(--paper)}
+footer a{color:#d6cfc1;text-decoration:none}
+footer a:hover{color:#fff}
+footer h4{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#8a857a;margin-bottom:12px}
+footer ul{list-style:none}
+footer li{padding:3px 0}
+.legal{margin-top:36px;padding-top:20px;border-top:1px solid #34322e;font-size:12.5px;color:#8a857a}
+
+.sticky-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(245,241,232,.97);backdrop-filter:blur(8px);border-top:1px solid var(--rule);padding:12px 18px;align-items:center;justify-content:space-between;gap:12px}
+.sticky-bar p{font-size:13.5px;color:var(--ink2)}
+.sticky-bar p b{color:var(--ink)}
+.sticky-bar a{background:var(--ink);color:var(--paper);font:600 14px/1 var(--sans);padding:12px 16px;border-radius:6px;text-decoration:none;white-space:nowrap}
+
+/* Responsive */
+@media(max-width:1000px){
+  .hero-grid,.cost-grid,.founder-grid,.faq-grid,.signup-grid{grid-template-columns:1fr;gap:44px}
+  .ev{grid-template-columns:110px 1fr;gap:20px}
+  .ev-link{grid-column:2;text-align:left;padding-top:0}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
 @media(max-width:900px){nav ul.tn{display:none}.mnav{display:block}}
-.mnav{margin-left:10px}
-@media(max-width:480px){#navLogin{display:none}}
-/* ΤΕΛΟΣ ΚΟΙΝΟΥ ΜΕΝΟΥ */
+@media(max-width:768px){
+  section{padding:68px 0}
+  .hero{padding:40px 0 60px}
+  .strip .wrap{grid-template-columns:1fr}
+  .strip p,.strip p+p{padding:14px 0;border-left:none}
+  .strip p+p{border-top:1px solid var(--rule)}
+  .ev{grid-template-columns:1fr;gap:6px;padding:22px 0}
+  .ev-link{grid-column:1}
+  .menu-grid{grid-template-columns:1fr}
+  .mi .inc{font-size:0}.mi .inc::after{content:"✓";font-size:15px}
+  .steps{grid-template-columns:1fr}
+  .step,.step+.step{padding:22px 0;border-left:none}
+  .step+.step{border-top:1px solid var(--rule)}
+  .pricing-grid{grid-template-columns:1fr}
+  .price-card+.price-card{border-left:none;border-top:1px solid var(--rule)}
+  .form-row{grid-template-columns:1fr}
+  .form-wrap{padding:26px 20px}
+  .sticky-bar{display:flex}
+  footer{padding-bottom:110px}
+  .book-sum div{padding:9px 12px}
+  .row{grid-template-columns:46px 1fr auto;gap:10px;padding:10px 12px}
+  .book-top,.book-foot{padding-left:12px;padding-right:12px}
+}
+@media(max-width:480px){
+  #navCta,#navLogin{display:none}
+  .lang{margin-right:6px}
+  #navUser>span:last-child>span:last-child{display:none!important}
+  #navUserName{max-width:110px!important}
+  #navUser{padding:4px 10px 4px 4px!important}
+  .foot-grid{grid-template-columns:1fr}
+  .hero-ctas .btn{width:100%}
+}
 </style>
 <script>
 (function(){try{
@@ -239,119 +326,132 @@ nav ul.tn>li>a span{font-size:10px;opacity:.7}
 <body>
 
 <nav>
-  <div class="logo">Table<em>Reserve</em></div>
-  <ul class="tn"><li><a href="#how">Πώς λειτουργεί</a></li><li class="dd"><a href="/leitourgies/" aria-haspopup="true">Λειτουργίες <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/leitourgies/online-kratiseis/"><b>Online κρατήσεις</b><small>Link, κουμπί για το site, Google Maps</small></a><a href="/leitourgies/tilefonikes-kratiseis/"><b>Τηλεφωνικές και walk-in</b><small>Νέα κράτηση σε δευτερόλεπτα</small></a><a href="/leitourgies/katopsi-trapezion/"><b>Κάτοψη τραπεζιών</b><small>Ζωντανή σάλα και αυτόματη ανάθεση</small></a><a href="/leitourgies/ligoteres-akyroseis/"><b>Λιγότερα no-show</b><small>Υπενθυμίσεις, Wallet, λίστα αναμονής</small></a><a href="/leitourgies/pelates-statistika/"><b>Πελάτες και στατιστικά</b><small>Καρτέλα πελάτη, γραφήματα, αναφορά PDF</small></a><a href="/leitourgies/kritikes-google/"><b>Κριτικές Google</b><small>Αυτόματο αίτημα κριτικής κάθε πρωί</small></a><a href="/leitourgies/glosses/"><b>8 γλώσσες</b><small>Για τουρίστες και μαγαζιά στο εξωτερικό</small></a><a href="/leitourgies/"><b>Όλες οι λειτουργίες</b><small>Όλα όσα περιλαμβάνει η συνδρομή</small></a></div></li><li><a href="/times/">Τιμές</a></li><li><a href="#faq">Ερωτήσεις</a></li><li><a href="#contact">Επικοινωνία</a></li></ul>
+ <div class="nav-in">
+  <a href="/" class="logo" aria-label="TableReserve"><span class="logo-mark" aria-hidden="true"></span>TableReserve</a>
+  <ul class="tn"><li><a href="#vradia">Πώς δουλεύει</a></li><li class="dd"><a href="/leitourgies/" aria-haspopup="true">Λειτουργίες <span aria-hidden="true">▾</span></a><div class="dd-p"><a href="/leitourgies/online-kratiseis/"><b>Online κρατήσεις</b><small>Link, κουμπί για το site, Google Maps</small></a><a href="/leitourgies/tilefonikes-kratiseis/"><b>Τηλεφωνικές και walk-in</b><small>Νέα κράτηση σε δευτερόλεπτα</small></a><a href="/leitourgies/katopsi-trapezion/"><b>Κάτοψη τραπεζιών</b><small>Ζωντανή σάλα και αυτόματη ανάθεση</small></a><a href="/leitourgies/ligoteres-akyroseis/"><b>Λιγότερα no-show</b><small>Υπενθυμίσεις, Wallet, λίστα αναμονής</small></a><a href="/leitourgies/pelates-statistika/"><b>Πελάτες και στατιστικά</b><small>Καρτέλα πελάτη, γραφήματα, αναφορά PDF</small></a><a href="/leitourgies/kritikes-google/"><b>Κριτικές Google</b><small>Αυτόματο αίτημα κριτικής κάθε πρωί</small></a><a href="/leitourgies/glosses/"><b>8 γλώσσες</b><small>Για τουρίστες και μαγαζιά στο εξωτερικό</small></a><a href="/leitourgies/"><b>Όλες οι λειτουργίες</b><small>Όλα όσα περιλαμβάνει η συνδρομή</small></a></div></li><li><a href="/times/">Τιμές</a></li><li><a href="#faq">Ερωτήσεις</a></li><li><a href="#contact">Επικοινωνία</a></li></ul>
   <div style="display:flex;align-items:center;">
-  <select aria-label="Language" onchange="location.href=this.value" style="appearance:none;-webkit-appearance:none;background:transparent url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23c8c4bb' stroke-width='1.5'/%3E%3C/svg%3E&quot;) no-repeat right 9px center;color:var(--muted);font:600 12px Syne,sans-serif;border:0.5px solid var(--border2);border-radius:20px;padding:5px 24px 5px 10px;margin-right:14px;cursor:pointer;"><option value="/?lang=el" selected>ΕΛ</option><option value="/en/?lang=en">EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
-  <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin?lang=el" id="navLogin" style="color:var(--text);font-size:13px;font-weight:500;text-decoration:none;">Σύνδεση</a><a href="#contact" class="nav-cta" id="navCta">Ξεκινήστε τώρα →</a></span>
-  <a href="/admin?lang=el" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-size:13px;font-weight:500;padding:5px 16px 5px 5px;border:0.5px solid var(--border2);border-radius:40px;">
-    <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
-    <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:none;align-items:center;justify-content:center;font-weight:600;"></span>
-    <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--muted);font-weight:400;">Πίνακας διαχείρισης →</span></span>
-  </a>
-  <details class="mnav"><summary aria-label="Μενού"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="#how">Πώς λειτουργεί</a><a href="/leitourgies/online-kratiseis/">Online κρατήσεις</a><a href="/leitourgies/tilefonikes-kratiseis/">Τηλεφωνικές και walk-in</a><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a><a href="/leitourgies/pelates-statistika/">Πελάτες και στατιστικά</a><a href="/leitourgies/kritikes-google/">Κριτικές Google</a><a href="/leitourgies/glosses/">8 γλώσσες</a><a href="/leitourgies/">Όλες οι λειτουργίες</a><a href="/times/">Τιμές</a><a href="#faq">Ερωτήσεις</a><a href="#contact">Επικοινωνία</a><a href="/admin?lang=el">Σύνδεση</a></div></details>
-        </div>
+   <select class="lang" aria-label="Language" onchange="location.href=this.value"><option value="/?lang=el" selected>ΕΛ</option><option value="/en/?lang=en">EN</option><option value="/de/?lang=de">DE</option><option value="/fr/?lang=fr">FR</option><option value="/it/?lang=it">IT</option><option value="/es/?lang=es">ES</option><option value="/tr/?lang=tr">TR</option><option value="/pt/?lang=pt">PT</option></select>
+   <span id="navGuest" style="display:flex;align-items:center;gap:18px;"><a href="/admin?lang=el" id="navLogin" style="color:var(--ink);font-size:14px;font-weight:500;text-decoration:none;">Σύνδεση</a><a href="#contact" class="nav-cta" id="navCta">Δοκιμή 14 ημερών</a></span>
+   <a href="/admin?lang=el" id="navUser" style="display:none;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-size:13px;font-weight:500;padding:4px 14px 4px 4px;border:1px solid var(--rule);border-radius:40px;background:var(--card);">
+     <img id="navUserPhoto" src="" alt="" referrerpolicy="no-referrer" style="width:30px;height:30px;border-radius:50%;object-fit:cover;display:none;">
+     <span id="navUserInitial" style="width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--paper);display:none;align-items:center;justify-content:center;font-weight:600;"></span>
+     <span><span id="navUserName" style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="display:block;font-size:11px;color:var(--ink3);font-weight:400;">Πίνακας διαχείρισης</span></span>
+   </a>
+   <details class="mnav"><summary aria-label="Μενού"><span></span><span></span><span></span></summary><div class="mnav-p"><a href="#vradia">Πώς δουλεύει</a><a href="/leitourgies/online-kratiseis/">Online κρατήσεις</a><a href="/leitourgies/tilefonikes-kratiseis/">Τηλεφωνικές και walk-in</a><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a><a href="/leitourgies/pelates-statistika/">Πελάτες και στατιστικά</a><a href="/leitourgies/kritikes-google/">Κριτικές Google</a><a href="/leitourgies/glosses/">8 γλώσσες</a><a href="/leitourgies/">Όλες οι λειτουργίες</a><a href="/times/">Τιμές</a><a href="#faq">Ερωτήσεις</a><a href="#contact">Επικοινωνία</a><a href="/admin?lang=el">Σύνδεση</a></div></details>
+  </div>
+ </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-photo"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-copy">
-    <div class="hero-label">Για εστιατόρια &amp; καφέ</div>
-    <h1>Online κρατήσεις<br>για το μαγαζί σας,<br><em>χωρίς κόπο</em></h1>
-    <p>Online και τηλεφωνικές κρατήσεις σε ένα σημείο, υπενθυμίσεις που μειώνουν τα no-show, λίστα αναμονής και καρτέλα για κάθε πελάτη. 14 ημέρες δωρεάν, μετά από €39/τρίμηνο</p>
-    <div class="hero-ctas">
-      <a href="#contact" class="btn-main">Ξεκινήστε τώρα →</a>
-      <a href="/test-restaurant?lang=el" target="_blank" rel="noopener" class="btn-outline">Δείτε live demo ↗</a>
-    </div>
-    <ul class="hero-badges"><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>8 γλώσσες</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Άμεση επιβεβαίωση</li><li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>Χωρίς προμήθεια ανά κράτηση</li></ul>
+ <div class="wrap hero-grid">
+  <div>
+   <p class="kicker">Για εστιατόρια, ταβέρνες και καφέ</p>
+   <h1>Το βιβλίο κρατήσεων του μαγαζιού σας, <em>online.</em></h1>
+   <p class="lead">Online, τηλεφωνικές και walk-in κρατήσεις σε μία λίστα. Ο πελάτης παίρνει υπενθύμιση 2 ώρες πριν, εσείς βλέπετε ποιος έρχεται και πού θα καθίσει. Μία σταθερή τιμή, χωρίς προμήθεια ανά άτομο.</p>
+   <div class="hero-ctas">
+    <a href="#contact" class="btn btn-main">Ξεκινήστε δωρεάν</a>
+    <a href="/test-restaurant?lang=el" target="_blank" rel="noopener" class="btn btn-line">Δείτε μια σελίδα κράτησης</a>
+   </div>
+   <ul class="hero-terms"><li>14 ημέρες δωρεάν</li><li>Χωρίς κάρτα</li><li>Μετά €99 τον χρόνο</li></ul>
   </div>
-  <div class="hero-scroll">Scroll</div>
+
+  <div class="book" role="img" aria-label="Παράδειγμα από τη λίστα κρατήσεων του TableReserve">
+   <div class="book-top">
+    <div><b>Παρασκευή 6 Νοεμβρίου</b><small>Βραδινή βάρδια</small></div>
+    <div class="seg" aria-hidden="true"><span class="on">Λίστα</span><span>Κάτοψη</span></div>
+   </div>
+   <div class="book-sum">
+    <div><strong>24</strong><span>κρατήσεις</span></div>
+    <div><strong>81</strong><span>άτομα</span></div>
+    <div><strong>3</strong><span>σε αναμονή</span></div>
+   </div>
+   <div class="row"><span class="t">19:30</span><div class="who"><b>Παπαδόπουλος</b><span class="pax">4 άτ.</span><small>Google Maps · Τραπέζι 7</small></div><span class="tag ok">Ήρθε</span></div>
+   <div class="row"><span class="t">20:00</span><div class="who"><b>Müller</b><span class="pax">2 άτ.</span><small>Σελίδα κράτησης · στα γερμανικά</small></div><span class="tag ok">Επιβεβαιωμένη</span></div>
+   <div class="row"><span class="t">20:30</span><div class="who"><b>Κωνσταντίνου</b><span class="pax">6 άτ.</span><small class="note">7η επίσκεψη · αλλεργία σε ξηρούς καρπούς</small></div><span class="tag ok">Επιβεβαιωμένη</span></div>
+   <div class="row"><span class="t">21:00</span><div class="who"><b>Ρήγα</b><span class="pax">3 άτ.</span><small>Instagram · Τραπέζια 3+4</small></div><span class="tag new">Νέα</span></div>
+   <div class="row"><span class="t">21:30</span><div class="who"><b>Σταύρου</b><span class="pax">4 άτ.</span><small>Λίστα αναμονής · ειδοποιήθηκε</small></div><span class="tag wait">Αναμονή</span></div>
+   <div class="book-foot"><span>Υπενθυμίσεις σήμερα: <i>21</i> στάλθηκαν</span><span>No-show μήνα: <i>3,1%</i></span></div>
+  </div>
+ </div>
 </section>
 
-<div class="stats reveal">
-  <div class="stat"><div class="stat-n">3'</div><div class="stat-l">Χρόνος εγκατάστασης</div></div>
-  <div class="stat"><div class="stat-n">€99</div><div class="stat-l">Χρονιαία συνδρομή</div></div>
-  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Online κρατήσεις</div></div>
-  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Αυτόματα emails</div></div>
+<div class="strip">
+ <div class="wrap">
+  <p><b>Χωρίς προμήθεια.</b> Ίδια τιμή για 10 ή 10.000 κρατήσεις.</p>
+  <p><b>Οι πελάτες είναι δικοί σας.</b> Η σελίδα κράτησης δείχνει μόνο το δικό σας μαγαζί.</p>
+  <p><b>8 γλώσσες.</b> Ο τουρίστας κλείνει και παίρνει email στη γλώσσα του.</p>
+ </div>
 </div>
 
-<section class="how" id="how">
-  <div class="reveal">
-    <div class="eyebrow">Πώς λειτουργεί</div>
-    <h2>Από εγγραφή σε live<br>κρατήσεις σε 4 βήματα</h2>
+<!-- ΜΙΑ ΒΡΑΔΙΑ -->
+<section id="vradia">
+ <div class="wrap">
+  <p class="kicker">Πώς δουλεύει στην πράξη</p>
+  <h2>Μια Παρασκευή στο μαγαζί, με το TableReserve</h2>
+  <p class="lead" style="margin-top:16px">Όχι λίστα με features. Αυτό που γίνεται πραγματικά, από το πρωί μέχρι την επόμενη μέρα.</p>
+
+  <div class="day">
+   <div class="ev"><div class="ev-time">11:40</div><div><h3>Κράτηση από το Instagram, πριν ανοίξετε</h3><p>Μια παρέα τεσσάρων πατάει το link στο bio σας και κλείνει για τις 21:00. Παίρνει αμέσως email επιβεβαίωσης. Εσείς τη βλέπετε στο κινητό, μαζί με το από πού ήρθε.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/online-kratiseis/">Online κρατήσεις</a></div></div>
+   <div class="ev"><div class="ev-time">13:15</div><div><h3>Χτυπάει το τηλέφωνο</h3><p>Γράφετε δύο γράμματα από το όνομα και το σύστημα βρίσκει τον πελάτη από την προηγούμενη φορά. Βλέπετε ποιες ώρες έχουν ακόμα θέση και απαντάτε χωρίς να ψάχνετε τετράδιο.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/tilefonikes-kratiseis/">Τηλεφωνικές κρατήσεις</a></div></div>
+   <div class="ev"><div class="ev-time">18:00</div><div><h3>Φεύγουν οι υπενθυμίσεις</h3><p>Όσοι έχουν κράτηση στις 20:00 παίρνουν email με διεύθυνση και τηλέφωνο, και ειδοποίηση στο κινητό αν την έχουν ενεργοποιήσει. Όποιος δεν μπορεί να έρθει, ακυρώνει με ένα πάτημα αντί να μην εμφανιστεί.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a></div></div>
+   <div class="ev"><div class="ev-time">19:10</div><div><h3>Μια ακύρωση δεν μένει άδειο τραπέζι</h3><p>Η ώρα 21:30 ήταν γεμάτη και τρεις παρέες είχαν γραφτεί σε αναμονή. Με την ακύρωση, ο πρώτος παίρνει αυτόματα email ότι ελευθερώθηκε τραπέζι.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/ligoteres-akyroseis/">Λίστα αναμονής</a></div></div>
+   <div class="ev"><div class="ev-time">20:30</div><div><h3>Φτάνει ο κ. Κωνσταντίνου</h3><p>Στην καρτέλα του: έβδομη επίσκεψη, αλλεργία σε ξηρούς καρπούς, προτιμά τη βεράντα. Η κράτηση του είναι ήδη στο σωστό τραπέζι στην κάτοψη, ενωμένο για έξι άτομα.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/katopsi-trapezion/">Κάτοψη</a> · <a class="tlink" href="/leitourgies/pelates-statistika/">Πελάτες</a></div></div>
+   <div class="ev"><div class="ev-time">10:00<small>Σάββατο</small></div><div><h3>Ζητάει κριτική στο Google για εσάς</h3><p>Όσοι ήρθαν χθες βράδυ παίρνουν ένα σύντομο email που τους ζητά να γράψουν κριτική. Εσείς δεν χρειάζεται να θυμηθείτε τίποτα.</p></div><div class="ev-link"><a class="tlink" href="/leitourgies/kritikes-google/">Κριτικές Google</a></div></div>
   </div>
-  <div class="steps reveal">
-    <div class="step" data-n="01">
-      <div class="step-dot">01</div>
-      <h3>Εγγραφή &amp; ρύθμιση</h3>
-      <p>Συμπληρώνετε τα στοιχεία του καταστήματος, ώρες λειτουργίας και διαθέσιμα τραπέζια. Έτοιμο σε λεπτά</p>
-    </div>
-    <div class="step" data-n="02">
-      <div class="step-dot">02</div>
-      <h3>Μοιραστείτε τον σύνδεσμο</h3>
-      <p>Παίρνετε μοναδικό link (tablereserve.gr/το-μαγαζί-σας) για Instagram bio, Google Maps, website</p>
-    </div>
-    <div class="step" data-n="03">
-      <div class="step-dot">03</div>
-      <h3>Δέχεστε κρατήσεις αυτόματα</h3>
-      <p>Οι πελάτες κλείνουν τραπέζι online, λαμβάνουν αυτόματο email. Εσείς τα βλέπετε όλα στο admin panel</p>
-    </div>
-    <div class="step" data-n="04">
-      <div class="step-dot">04</div>
-      <h3>Google ορατότητα</h3>
-      <p>Προσθέτετε τον σύνδεσμο κράτησης στο Google Business Profile σας — οι πελάτες κλείνουν τραπέζι με ένα κλικ από το Google Maps</p>
-    </div>
-  </div>
+ </div>
 </section>
 
+<!-- ΜΕΝΟΥ ΛΕΙΤΟΥΡΓΙΩΝ -->
 <section id="benefits">
-  <div class="reveal">
-    <div class="eyebrow">Γιατί TableReserve</div>
-    <h2>Όλα όσα έχετε ανάγκη,<br>τίποτα που δεν χρειάζεστε</h2>
-    <p class="section-sub">Σχεδιασμένο από άνθρωπο με 25 χρόνια στην εστίαση, για τα προβλήματα που ζείτε κάθε μέρα</p>
+ <div class="wrap">
+  <p class="kicker">Στη συνδρομή</p>
+  <h2>Ό,τι χρειάζεται μια σάλα. Όλα μέσα στην τιμή.</h2>
+  <div class="menu-grid">
+   <div>
+    <div class="mi"><div><b>Απεριόριστες κρατήσεις</b><small>Online, τηλεφωνικές και walk-in</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Κάτοψη τραπεζιών</b><small>Αυτόματη ανάθεση, ενώσεις για μεγάλες παρέες</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Καρτέλα πελάτη</b><small>Επισκέψεις, VIP, αλλεργίες, σημειώσεις</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Υπενθύμιση 2 ώρες πριν</b><small>Email και ειδοποίηση στο κινητό</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Λίστα αναμονής</b><small>Αυτόματο email όταν ελευθερωθεί τραπέζι</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+   </div>
+   <div>
+    <div class="mi"><div><b>Google Wallet και ημερολόγιο</b><small>Η κράτηση στο κινητό του πελάτη</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Σελίδα κράτησης σε 8 γλώσσες</b><small>Ανοίγει στη γλώσσα του κινητού</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Δικό σας link και κουμπί</b><small>Για Instagram, site και Google Maps</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Στατιστικά και αναφορά PDF</b><small>Ώρες αιχμής, no-show, πηγές, τακτικοί</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+    <div class="mi"><div><b>Αίτημα κριτικής Google</b><small>Κάθε πρωί, σε όσους ήρθαν χθες</small></div><span class="dots"></span><span class="inc">περιλαμβάνεται</span></div>
+   </div>
   </div>
-  <div class="benefits-grid reveal">
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path d="M9 7h7M9 11h5"/></svg></div><h3>Όλες οι κρατήσεις σε ένα βιβλίο</h3><p>Online, τηλεφωνικές και walk-in κρατήσεις μαζί. Οι ώρες εμφανίζονται με τις ελεύθερες θέσεις, ώστε να απαντάτε αμέσως στο τηλέφωνο. <a href="/leitourgies/tilefonikes-kratiseis/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="m16 3 1.2 2.4L20 6l-2 1.8.5 2.7-2.5-1.3"/></svg></div><h3>Αναγνωρίζει τον πελάτη σας</h3><p>Γράφετε το τηλέφωνο ή το όνομα και βλέπετε επισκέψεις, VIP, αλλεργίες και σημειώσεις, πριν καν φτάσει στο τραπέζι. <a href="/leitourgies/pelates-statistika/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Υπενθύμιση & λιγότερα no-show</h3><p>Αυτόματο email 2 ώρες πριν με διεύθυνση και οδηγίες, και ειδοποίηση στο κινητό του πελάτη. Σημειώνετε «Ήρθε / Δεν ήρθε» και βλέπετε το ποσοστό no-show. <a href="/leitourgies/ligoteres-akyroseis/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><span class="b-new">Νέο</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="3.5"/><rect x="3" y="14" width="18" height="7" rx="1.5"/></svg></div><h3>Κάτοψη τραπεζιών</h3><p>Ζωντανή εικόνα της σάλας και κάθε κράτηση αυτόματα στο σωστό τραπέζι, με ενώσεις για μεγάλες παρέες. <a href="/leitourgies/katopsi-trapezion/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><span class="b-new">Νέο</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><h3>Λίστα αναμονής</h3><p>Όταν γεμίζει μια ώρα, ο πελάτης γράφεται σε αναμονή αντί να φύγει. Αν ακυρωθεί κράτηση, λαμβάνει αυτόματα email «Ελευθερώθηκε τραπέζι»</p></div>
-    <div class="benefit"><span class="b-new">Νέο</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H5a2 2 0 0 1 0-4h13v4"/><path d="M3 5v14a2 2 0 0 0 2 2h15V7"/><path d="M16 14h.01"/></svg></div><h3>Η κράτηση στο Google Wallet</h3><p>Με ένα κουμπί ο πελάτης αποθηκεύει την κράτηση στο κινητό του, με το λογότυπό σας, ώρα, άτομα και διεύθυνση</p></div>
-    <div class="benefit"><span class="b-new">Νέο</span><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></div><h3>Ειδοποίηση & ημερολόγιο</h3><p>Push ειδοποίηση στο κινητό και προσθήκη στο ημερολόγιο Google, Apple ή Outlook. Περιλαμβάνεται στη συνδρομή</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div><h3>Από πού έρχονται οι κρατήσεις</h3><p>Google, site, social, τηλέφωνο ή walk-in: ξέρετε ποιο κανάλι σάς φέρνει πελάτες. <a href="/leitourgies/online-kratiseis/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div><h3>Αναφορά PDF με ευρήματα</h3><p>Ώρες και μέρες αιχμής, ακυρώσεις, no-show και τακτικοί πελάτες, σε αναφορά έτοιμη για τον συνέταιρο ή τον λογιστή. <a href="/leitourgies/pelates-statistika/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Οι τουρίστες κλείνουν στη γλώσσα τους</h3><p>Η σελίδα κράτησης ανοίγει αυτόματα στη γλώσσα του κινητού τους και η επιβεβαίωση και η υπενθύμιση φτάνουν στην ίδια γλώσσα. Ελληνικά, Αγγλικά, Γερμανικά, Γαλλικά, Ιταλικά, Ισπανικά, Τουρκικά, Πορτογαλικά. <a href="/leitourgies/glosses/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div><h3>Το δικό σας link κρατήσεων</h3><p>tablereserve.gr/το-μαγαζί-σας για Instagram, site και Google Maps. Οι πελάτες κλείνουν τραπέζι με ένα κλικ. <a href="/leitourgies/online-kratiseis/" style="color:var(--accent);text-decoration:none;font-weight:500;white-space:nowrap">Δείτε πώς →</a></p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>Από το κινητό, σε πραγματικό χρόνο</h3><p>Όλες οι κρατήσεις και οι αλλαγές εμφανίζονται αμέσως, στο κινητό, στο tablet ή στον υπολογιστή</p></div>
-    <div class="benefit"><div class="b-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></div><h3>Έξυπνες ακυρώσεις</h3><p>Ο πελάτης ακυρώνει μόνος του έως 2 ώρες πριν και εσείς ειδοποιείστε αμέσως. Οι ακυρώσεις μένουν στα στατιστικά</p></div>
-  </div>
-  <p class="reveal" style="margin-top:34px"><a href="/leitourgies/" class="btn-outline">Όλες οι λειτουργίες αναλυτικά →</a></p>
+  <p style="margin-top:32px"><a href="/leitourgies/" class="tlink">Όλες οι λειτουργίες αναλυτικά</a></p>
+ </div>
 </section>
 
+<!-- ΚΟΣΤΟΣ -->
 <section class="cost" id="cost">
-  <div class="reveal">
-    <div class="eyebrow">Κόστος</div>
-    <h2>Πάγια τιμή,<br>όχι προμήθεια ανά άτομο</h2>
-    <p class="section-sub">Πολλές πλατφόρμες κρατήσεων χρεώνουν για κάθε άτομο που έρχεται μέσω αυτών. Όσο καλύτερα πάει το μαγαζί, τόσο περισσότερα πληρώνετε. Υπολογίστε τη διαφορά</p>
+ <div class="wrap cost-grid">
+  <div class="cost-copy">
+   <p class="kicker">Κόστος</p>
+   <h2>Πάγια τιμή, όχι προμήθεια σε κάθε άτομο</h2>
+   <p class="lead" style="margin-top:16px">Πολλές πλατφόρμες κρατήσεων χρεώνουν για κάθε άτομο που έρχεται μέσω αυτών. Όσο καλύτερα πάει το μαγαζί, τόσο περισσότερα πληρώνετε. Εδώ η τιμή είναι μία.</p>
+   <ul>
+    <li><b>Χωρίς δέσμευση</b><span>14 ημέρες δωρεάν, μετά διαλέγετε περίοδο και ακυρώνετε όποτε θέλετε.</span></li>
+    <li><b>Χωρίς χρεώσεις ανά υπενθύμιση</b><span>Email, ειδοποίηση στο κινητό και ημερολόγιο είναι μέσα στη συνδρομή.</span></li>
+    <li><b>Χωρίς κόστος εγκατάστασης</b><span>Ρυθμίζετε μόνοι σας ώρες και τραπέζια, από το κινητό.</span></li>
+   </ul>
   </div>
-  <div class="cost-wrap reveal">
-    <div class="cost-calc">
-      <h3>Υπολογιστής κόστους</h3>
-      <div class="cc-row"><label for="ccGuests">Άτομα από online κρατήσεις τον μήνα <b id="ccGuestsV">300</b></label><input type="range" id="ccGuests" min="50" max="2000" step="50" value="300"></div>
-      <div class="cc-row"><label for="ccFee">Χρέωση ανά άτομο σε πλατφόρμα με προμήθεια <b id="ccFeeV">€2,00</b></label><input type="range" id="ccFee" min="0.5" max="4" step="0.25" value="2"></div>
-      <div class="cc-out">
-        <div class="cc-box"><small>Με προμήθεια ανά άτομο</small><strong id="ccThem">—</strong><span>τον χρόνο</span></div>
-        <div class="cc-box us"><small>TableReserve, χρονιαίο</small><strong>€99</strong><span>τον χρόνο</span></div>
-      </div>
-      <p class="cc-save">Διαφορά: <b id="ccDiff">—</b> τον χρόνο, που μένουν στο μαγαζί σας</p>
-      <p class="cc-note">Οι τιμές είναι ενδεικτικές για σύγκριση. Ελέγξτε τον τιμοκατάλογο της πλατφόρμας που χρησιμοποιείτε</p>
-    </div>
-    <div class="cost-points">
-      <h3>Τι περιλαμβάνει η τιμή</h3>
-      <ul><li><i>✓</i><div><b>Χωρίς προμήθεια</b>Ούτε ανά κράτηση ούτε ανά άτομο. Από 10 έως 10.000 κρατήσεις, η τιμή μένει ίδια</div></li><li><i>✓</i><div><b>Οι πελάτες είναι δικοί σας</b>Η σελίδα κράτησης δείχνει μόνο το δικό σας μαγαζί, όχι προτάσεις για άλλα εστιατόρια</div></li><li><i>✓</i><div><b>Υπενθυμίσεις μέσα στη συνδρομή</b>Email, ειδοποίηση στο κινητό και ημερολόγιο, χωρίς επιπλέον κόστος</div></li><li><i>✓</i><div><b>Χωρίς δέσμευση</b>14 ημέρες δωρεάν, μετά επιλέγετε περίοδο και ακυρώνετε όποτε θέλετε</div></li></ul>
-    </div>
+  <div class="receipt" aria-label="Υπολογιστής κόστους">
+   <div class="rc-h">Λογαριασμός · ετήσιο κόστος</div>
+   <div class="rc-row"><label for="ccGuests">Άτομα από online κρατήσεις τον μήνα <b id="ccGuestsV">300</b></label><input type="range" id="ccGuests" min="50" max="2000" step="50" value="300"></div>
+   <div class="rc-row"><label for="ccFee">Χρέωση ανά άτομο σε πλατφόρμα με προμήθεια <b id="ccFeeV">€2,00</b></label><input type="range" id="ccFee" min="0.5" max="4" step="0.25" value="2"></div>
+   <div class="rc-sep"></div>
+   <div class="rc-line strike"><span>Με προμήθεια ανά άτομο</span><strong id="ccThem">—</strong></div>
+   <div class="rc-line"><span>TableReserve, χρονιαίο</span><strong>€99</strong></div>
+   <div class="rc-sep"></div>
+   <div class="rc-total"><span>Μένουν στο μαγαζί</span><b id="ccDiff">—</b></div>
+   <p class="rc-note">Ενδεικτικές τιμές για σύγκριση. Ελέγξτε τον τιμοκατάλογο της πλατφόρμας που χρησιμοποιείτε.</p>
   </div>
+ </div>
 </section>
 
 <script>
@@ -370,227 +470,169 @@ nav ul.tn>li>a span{font-size:10px;opacity:.7}
 })();
 </script>
 
-<section class="pricing" id="pricing">
-  <div class="reveal">
-    <div class="eyebrow">Τιμολόγηση</div>
-    <h2>Απλό, διαφανές<br>τιμολόγιο</h2>
-    <p class="section-sub">Ξεκινήστε με 14 ημέρες δωρεάν δοκιμή. Τρίμηνο €39 · Εξάμηνο €69 · Χρονιαίο €99, όλα με πλήρεις υπηρεσίες. <a href="/times/" style="color:var(--accent);text-decoration:none;font-weight:500">Τιμές και σύγκριση αναλυτικά →</a></p>
-    <div style="display:inline-flex;align-items:center;gap:10px;margin-top:26px;padding:10px 18px;border-radius:40px;background:rgba(37,99,235,.10);border:0.5px solid rgba(37,99,235,.35);color:var(--text);font-size:13px;line-height:1.4"><span style="color:var(--accent);font-size:15px">★</span><strong style="font-weight:600">Τιμή πρώτων συνεργατών</strong><span style="color:var(--muted)">· κλειδωμένη για όσο παραμένει ενεργή η συνδρομή σας</span></div>
+<!-- ΙΔΡΥΤΗΣ -->
+<section class="founder" id="about">
+ <div class="wrap founder-grid">
+  <div>
+   <p class="kicker">Ποιος το φτιάχνει</p>
+   <h2>Φτιαγμένο από άνθρωπο της σάλας, όχι της διαφήμισης</h2>
   </div>
-  <div class="pricing-grid reveal" style="max-width:1000px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
-    <div class="price-card">
-      <div class="plan-name">Τρίμηνο</div>
-      <div class="plan-price"><sup>€</sup>39<sub>/3μηνο</sub></div>
-      <p class="plan-desc">Όλες οι υπηρεσίες, με χρέωση ανά 3 μήνες</p>
-      <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
-        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
-        <li>Καρτέλα πελάτη με σημειώσεις</li>
-        <li>Λίστα αναμονής με αυτόματη ειδοποίηση</li>
-        <li>Google Wallet, push &amp; ημερολόγιο</li>
-        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
-        <li>Στατιστικά &amp; αναφορές PDF</li>
-        <li>Δικό σας link &amp; Google Maps</li>
-        <li>Πλήρης support</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-plan-g" data-plan="quarter" onclick="setPlan('Τρίμηνο — €39')">Επιλογή τριμήνου</a>
-    </div>
-    <div class="price-card">
-      <div class="plan-name">Εξάμηνο</div>
-      <div class="plan-price"><sup>€</sup>69<sub>/6μηνο</sub></div>
-      <p class="plan-desc">Εξάμηνη συνδρομή με όλες τις υπηρεσίες — εξοικονομείστε €9 vs τρίμηνο</p>
-      <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
-        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
-        <li>Καρτέλα πελάτη με σημειώσεις</li>
-        <li>Λίστα αναμονής με αυτόματη ειδοποίηση</li>
-        <li>Google Wallet, push &amp; ημερολόγιο</li>
-        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
-        <li>Στατιστικά &amp; αναφορές PDF</li>
-        <li>Δικό σας link &amp; Google Maps</li>
-        <li>Πλήρης support</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-plan-g" data-plan="half" onclick="setPlan('Εξάμηνο — €69')">Επιλογή εξαμήνου</a>
-    </div>
-    <div class="price-card hot">
-      <div class="hot-badge">Πιο συμφέρον</div>
-      <div class="plan-name">Χρονιαίο</div>
-      <div class="plan-price"><sup>€</sup>99<sub>/χρόνο</sub></div>
-      <p class="plan-desc">Εξοικονομείστε €57 vs τρίμηνο — μόλις €8.25/μήνα για όλες τις υπηρεσίες</p>
-      <ul class="plan-features">
-        <li>Απεριόριστες κρατήσεις, online &amp; τηλεφωνικές</li>
-        <li>Email επιβεβαίωσης &amp; υπενθύμισης</li>
-        <li>Καρτέλα πελάτη με σημειώσεις</li>
-        <li>Λίστα αναμονής με αυτόματη ειδοποίηση</li>
-        <li>Google Wallet, push &amp; ημερολόγιο</li>
-        <li>Μέτρηση no-show &amp; πηγής κρατήσεων</li>
-        <li>Στατιστικά &amp; αναφορές PDF</li>
-        <li>Δικό σας link &amp; Google Maps</li>
-        <li>Πλήρης support</li>
-      </ul>
-      <a href="#contact" class="btn-plan btn-plan-s" data-plan="year" onclick="setPlan('Χρονιαίο — €99')">Επιλογή χρονιαίου</a>
-    </div>
+  <div>
+   <blockquote>
+    <p>Δούλεψα 25 χρόνια σε εστιατόρια, τα 15 σε θέσεις διεύθυνσης, σε Αθήνα, Βέροια και Αλεξανδρούπολη. Ξέρω τι σημαίνει τετράδιο κρατήσεων δίπλα στο τηλέφωνο, παρέα που δεν ήρθε ποτέ και άδειο τραπέζι Σάββατο βράδυ.</p>
+    <p>Το TableReserve το έφτιαξα για να κάνει αυτή τη δουλειά καλά, με όσο λιγότερα κουμπιά γίνεται και με μία σταθερή τιμή. Αν έχετε ερώτηση, μου γράφετε και απαντάω εγώ.</p>
+   </blockquote>
+   <div class="sig"><b>Αριστείδης Αλαμπουρινός</b>Ιδρυτής · AR Akron Services · <a href="mailto:info@tablereserve.gr" style="color:#ebe5d8">info@tablereserve.gr</a></div>
   </div>
+ </div>
 </section>
 
+<!-- ΒΗΜΑΤΑ -->
+<section id="how">
+ <div class="wrap">
+  <p class="kicker">Ξεκίνημα</p>
+  <h2>Από την εγγραφή στην πρώτη κράτηση</h2>
+  <div class="steps">
+   <div class="step"><div class="n">01</div><h3>Γράφεστε</h3><p>Όνομα καταστήματος, email και κωδικός, ή με τον λογαριασμό Google. Χωρίς κάρτα.</p></div>
+   <div class="step"><div class="n">02</div><h3>Βάζετε ώρες και τραπέζια</h3><p>Ωράριο, χωρητικότητα και, αν θέλετε, την κάτοψη της σάλας. Όλα αλλάζουν όποτε χρειαστεί.</p></div>
+   <div class="step"><div class="n">03</div><h3>Μοιράζεστε το link</h3><p>tablereserve.gr/το-μαγαζί-σας στο Instagram, στο site και στο Google Business Profile, για κράτηση από το Google Maps.</p></div>
+  </div>
+ </div>
+</section>
+
+<!-- ΤΙΜΕΣ -->
+<section id="pricing">
+ <div class="wrap">
+  <p class="kicker">Τιμές</p>
+  <h2>Ίδιες λειτουργίες σε όλα τα πακέτα. Αλλάζει μόνο η διάρκεια.</h2>
+  <div class="founding"><b>Τιμή πρώτων συνεργατών</b> · μένει ίδια όσο η συνδρομή σας είναι ενεργή</div>
+  <div class="pricing-grid">
+   <div class="price-card">
+    <div class="plan-name"><span>Τρίμηνο</span></div>
+    <div class="plan-price">€39<small>/ 3 μήνες</small></div>
+    <p class="plan-desc">Για να το δοκιμάσετε μια σεζόν χωρίς μεγάλη δέσμευση.</p>
+    <a href="#contact" class="btn-plan" data-plan="quarter" onclick="setPlan('Τρίμηνο — €39')">Επιλογή τριμήνου</a>
+   </div>
+   <div class="price-card">
+    <div class="plan-name"><span>Εξάμηνο</span></div>
+    <div class="plan-price">€69<small>/ 6 μήνες</small></div>
+    <p class="plan-desc">€9 λιγότερα από δύο τρίμηνα.</p>
+    <a href="#contact" class="btn-plan" data-plan="half" onclick="setPlan('Εξάμηνο — €69')">Επιλογή εξαμήνου</a>
+   </div>
+   <div class="price-card hot">
+    <div class="plan-name"><span>Χρονιαίο</span><span class="hot-badge">Συμφέρει</span></div>
+    <div class="plan-price">€99<small>/ χρόνο</small></div>
+    <p class="plan-desc">Περίπου €8,25 τον μήνα. €57 λιγότερα από τέσσερα τρίμηνα.</p>
+    <a href="#contact" class="btn-plan" data-plan="year" onclick="setPlan('Χρονιαίο — €99')">Επιλογή χρονιαίου</a>
+   </div>
+  </div>
+  <ul class="included">
+   <li>Απεριόριστες κρατήσεις</li><li>Υπενθυμίσεις και λίστα αναμονής</li><li>Κάτοψη τραπεζιών</li><li>Καρτέλα πελάτη</li><li>Wallet, push, ημερολόγιο</li><li>Στατιστικά και PDF</li><li>8 γλώσσες</li><li>Υποστήριξη με email</li>
+  </ul>
+  <p style="margin-top:22px;font-size:15px;color:var(--ink2)">Όλα ξεκινούν με 14 ημέρες δωρεάν. <a href="/times/" class="tlink">Τιμές αναλυτικά</a></p>
+ </div>
+</section>
+
+<!-- FAQ -->
 <section id="faq">
-  <div class="reveal">
-    <div class="eyebrow">Συχνές ερωτήσεις</div>
-    <h2>Έχετε απορίες;<br>Απαντάμε εδώ</h2>
+ <div class="wrap faq-grid">
+  <div>
+   <p class="kicker">Ερωτήσεις</p>
+   <h2>Αυτά ρωτάνε συνήθως οι ιδιοκτήτες</h2>
+   <p class="lead" style="margin-top:16px;font-size:16px">Κάτι άλλο; Γράψτε στο <a class="tlink" href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
   </div>
-  <div class="faq reveal">
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Πόσο γρήγορα ξεκινάω<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Συνήθως μέσα σε λίγα λεπτά από τη στιγμή που συμπληρώνετε τα στοιχεία του καταστήματός σας — ώρες λειτουργίας, τραπέζια και έτοιμο το μοναδικό σας link κράτησης</p></div>
-    </div>
-      <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Πόσο κοστίζει η πρώτη εγκατάσταση<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Καμία χρέωση. Η εγκατάσταση είναι δωρεάν και έχετε 14 ημέρες δοκιμή με όλες τις υπηρεσίες πριν επιλέξετε πακέτο</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να κάνω αλλαγές μόνος μου αργότερα<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Φυσικά. Μέσα από το admin panel διαχειρίζεστε εύκολα και γρήγορα κάθε αλλαγή — ώρες λειτουργίας, τραπέζια, στοιχεία καταστήματος — χωρίς να χρειάζεται να επικοινωνήσετε μαζί μας</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να περνάω και τις τηλεφωνικές κρατήσεις<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ναι. Με το «Νέα κράτηση» καταχωρίζετε τηλεφωνικές κρατήσεις και walk-in σε λίγα δευτερόλεπτα. Αν ο πελάτης έχει ξαναέρθει, το σύστημα τον αναγνωρίζει από το τηλέφωνο ή το όνομα και συμπληρώνει τα στοιχεία του</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Στέλνει υπενθυμίσεις στους πελάτες<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ναι. Κάθε πελάτης με email λαμβάνει αυτόματα υπενθύμιση 2 ώρες πριν την κράτηση, με διεύθυνση, οδηγίες και το τηλέφωνο του καταστήματος. Όσοι το επιτρέψουν λαμβάνουν και ειδοποίηση στο κινητό, και μπορούν να βάλουν την κράτηση στο ημερολόγιο ή στο Google Wallet. Έτσι μειώνονται τα no-show, και το βλέπετε στα στατιστικά</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν γεμίσει μια ώρα<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ο πελάτης δεν χάνεται: γράφεται στη λίστα αναμονής για την ώρα που θέλει και εσείς λαμβάνετε email. Αν ακυρωθεί κράτηση, το σύστημα του στέλνει αυτόματα email ότι ελευθερώθηκε τραπέζι, και όλη η λίστα φαίνεται στο admin panel</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορεί ο πελάτης να έχει την κράτηση στο κινητό του<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ναι. Μετά την κράτηση βλέπει κουμπιά για Google Wallet και για προσθήκη στο ημερολόγιο (Google, Apple, Outlook). Η κάρτα στο Wallet έχει το λογότυπό σας, την ώρα, τα άτομα και τη διεύθυνση, χωρίς καμία ρύθμιση από εσάς</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Πού αλλού μπορώ να βάλω το κουμπί κράτησης<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Παντού: Instagram, Google Maps, Facebook, το site σας. Μπορείτε επίσης να καταχωρίσετε δωρεάν το κατάστημά σας στο <a href="https://partners.tourist.com/how-to-get-direct-bookings" target="_blank" rel="noopener" style="color:var(--accent)">Tourist.com</a>, τον οδηγό για ταξιδιώτες, χωρίς προμήθεια. Στο partner dashboard, καρτέλα «Direct booking», επικολλάτε το link κράτησής σας από το TableReserve και εμφανίζεται κουμπί «Book online» που στέλνει τους ταξιδιώτες κατευθείαν σε εσάς. Οι προσφορές για μέλη του Tourist.com είναι προαιρετικές</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Χρειάζομαι τεχνικές γνώσεις<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Όχι καθόλου. Το admin panel είναι σχεδιασμένο για να το χρησιμοποιεί κανείς από το κινητό, χωρίς καμία τεχνική εμπειρία</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Μπορώ να αλλάξω πλάνο αργότερα<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Ναι. Αλλάζετε ή ακυρώνετε τη συνδρομή σας όποτε θέλετε από τον πίνακα διαχείρισης</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν λήξει η συνδρομή μου<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Η συνδρομή ανανεώνεται αυτόματα. Αν την ακυρώσετε, μένει ενεργή μέχρι το τέλος της περιόδου που πληρώσατε και μετά οι online κρατήσεις μπαίνουν σε παύση</p></div>
-    </div>
-    <div class="faq-item">
-      <button class="faq-q" onclick="toggleFaq(this)">Δουλεύει σε κινητό και υπολογιστή<span class="faq-icon"></span></button>
-      <div class="faq-a"><p>Τόσο η σελίδα κράτησης όσο και το admin panel λειτουργούν άψογα σε κινητό, tablet και υπολογιστή</p></div>
-    </div>
+  <div class="faq">
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Πόσο γρήγορα ξεκινάω;<span class="faq-icon"></span></button><div class="faq-a"><p>Μόλις συμπληρώσετε ώρες λειτουργίας και τραπέζια, έχετε έτοιμο το link κράτησης. Συνήθως είναι θέμα λίγων λεπτών.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Υπάρχει κόστος εγκατάστασης;<span class="faq-icon"></span></button><div class="faq-a"><p>Όχι. Η εγκατάσταση είναι δωρεάν και έχετε 14 ημέρες δοκιμή με όλες τις λειτουργίες πριν διαλέξετε πακέτο.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Μπορώ να κάνω αλλαγές μόνος μου;<span class="faq-icon"></span></button><div class="faq-a"><p>Ναι. Ώρες, τραπέζια και στοιχεία καταστήματος τα αλλάζετε από τον πίνακα διαχείρισης, χωρίς να χρειαστεί να μας πάρετε.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Περνάω και τις τηλεφωνικές κρατήσεις;<span class="faq-icon"></span></button><div class="faq-a"><p>Ναι. Με το «Νέα κράτηση» καταχωρίζετε τηλεφωνικές και walk-in σε λίγα δευτερόλεπτα. Αν ο πελάτης έχει ξαναέρθει, το σύστημα τον βρίσκει από το τηλέφωνο ή το όνομα και συμπληρώνει τα στοιχεία του.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Πώς γίνονται οι υπενθυμίσεις;<span class="faq-icon"></span></button><div class="faq-a"><p>Κάθε πελάτης με email παίρνει αυτόματα υπενθύμιση 2 ώρες πριν, με διεύθυνση, οδηγίες και το τηλέφωνο του καταστήματος. Όσοι το επιτρέψουν παίρνουν και ειδοποίηση στο κινητό, και μπορούν να βάλουν την κράτηση στο ημερολόγιο ή στο Google Wallet.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν γεμίσει μια ώρα;<span class="faq-icon"></span></button><div class="faq-a"><p>Ο πελάτης γράφεται στη λίστα αναμονής για την ώρα που θέλει και εσείς παίρνετε email. Αν ακυρωθεί κράτηση, του στέλνεται αυτόματα email ότι ελευθερώθηκε τραπέζι.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Πού αλλού μπαίνει το κουμπί κράτησης;<span class="faq-icon"></span></button><div class="faq-a"><p>Instagram, Google Maps, Facebook και το site σας. Μπορείτε επίσης να καταχωρίσετε δωρεάν το κατάστημα στο <a href="https://partners.tourist.com/how-to-get-direct-bookings" target="_blank" rel="noopener">Tourist.com</a>, τον οδηγό για ταξιδιώτες, χωρίς προμήθεια: στην καρτέλα «Direct booking» επικολλάτε το link σας και εμφανίζεται κουμπί «Book online» που στέλνει τους ταξιδιώτες κατευθείαν σε εσάς.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Χρειάζομαι τεχνικές γνώσεις;<span class="faq-icon"></span></button><div class="faq-a"><p>Όχι. Ο πίνακας διαχείρισης είναι φτιαγμένος για χρήση από το κινητό, μέσα στη βάρδια.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Μπορώ να αλλάξω πακέτο αργότερα;<span class="faq-icon"></span></button><div class="faq-a"><p>Ναι. Αλλάζετε ή ακυρώνετε τη συνδρομή όποτε θέλετε από τον πίνακα διαχείρισης.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Τι γίνεται όταν λήξει η συνδρομή;<span class="faq-icon"></span></button><div class="faq-a"><p>Η συνδρομή ανανεώνεται αυτόματα. Αν την ακυρώσετε, μένει ενεργή μέχρι το τέλος της περιόδου που πληρώσατε και μετά οι online κρατήσεις μπαίνουν σε παύση.</p></div></div>
+    <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Δουλεύει σε κινητό, tablet και υπολογιστή;<span class="faq-icon"></span></button><div class="faq-a"><p>Ναι, και η σελίδα κράτησης και ο πίνακας διαχείρισης. Οι αλλαγές φαίνονται αμέσως σε όλες τις συσκευές.</p></div></div>
   </div>
+ </div>
 </section>
 
-<section id="contact">
-  <div class="reveal">
-    <div class="eyebrow">Εγγραφή</div>
-    <h2>Ξεκινήστε σήμερα —<br>δημιουργήστε λογαριασμό</h2>
-    <p class="section-sub">Δημιουργήστε τον λογαριασμό του καταστήματός σας σε δύο λεπτά και πάρτε αμέσως το δικό σας link κρατήσεων. Δωρεάν για 14 ημέρες, χωρίς κάρτα.</p>
+<!-- ΕΓΓΡΑΦΗ -->
+<section id="contact" class="signup">
+ <div class="wrap signup-grid">
+  <div>
+   <p class="kicker">Εγγραφή</p>
+   <h2>Ξεκινήστε σήμερα. Δημιουργήστε λογαριασμό</h2>
+   <p class="lead" style="margin-top:16px">Ο λογαριασμός του καταστήματος φτιάχνεται σε δύο λεπτά και το link κρατήσεων είναι έτοιμο αμέσως.</p>
+   <ul class="signup-points">
+    <li><b>14 ημέρες δωρεάν</b> με όλες τις λειτουργίες</li>
+    <li><b>Χωρίς κάρτα</b> για τη δοκιμή</li>
+    <li><b>Από €39</b> μετά, ή €99 τον χρόνο</li>
+   </ul>
   </div>
-  <div class="form-wrap reveal" id="signupWrap">
+  <div class="form-wrap" id="signupWrap">
     <form id="partnerForm" novalidate>
       <input type="hidden" name="plan" id="selectedPlan" value="">
       <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
-      <div class="plan-chip" id="planChip" style="display:none;margin-bottom:20px;padding:10px 16px;border-radius:10px;background:rgba(37,99,235,.1);border:0.5px solid rgba(37,99,235,.3);color:var(--accent);font-size:13px;font-weight:500;">
-        ✓ Επιλεγμένο πλάνο: <span id="planChipText"></span>
-        <a href="#pricing" style="color:var(--muted);text-decoration:underline;margin-left:8px;font-weight:400;">αλλαγή</a>
+      <div class="plan-chip" id="planChip" style="display:none;margin-bottom:18px;padding:10px 14px;border-radius:6px;background:var(--accentbg);border:1px solid var(--accent);color:var(--accent);font-size:14px;font-weight:500;">
+        Επιλεγμένο πακέτο: <span id="planChipText"></span>
+        <a href="#pricing" style="color:var(--ink2);text-decoration:underline;margin-left:8px;font-weight:400;">αλλαγή</a>
       </div>
       <div class="form-row">
-        <div class="fg"><label for="f-shop">Όνομα καταστήματος</label><input id="f-shop" type="text" name="shopName" placeholder="π.χ. Taverna Plaka" maxlength="80" required></div>
+        <div class="fg"><label for="f-shop">Όνομα καταστήματος</label><input id="f-shop" type="text" name="shopName" placeholder="π.χ. Ταβέρνα Πλάκα" maxlength="80" required></div>
         <div class="fg"><label for="f-type">Τύπος επιχείρησης</label>
           <select id="f-type" name="type"><option value="">Επιλέξτε...</option><option>Εστιατόριο</option><option>Ταβέρνα</option><option>Καφέ / Bistro</option><option>Μπαρ</option><option>Άλλο</option></select>
         </div>
       </div>
-      <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font-size:13px;font-weight:400;line-height:1.5;margin:4px 0 18px;cursor:pointer;">
+      <label for="f-terms" style="display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:400;line-height:1.5;margin:2px 0 18px;cursor:pointer;color:var(--ink2);">
         <input id="f-terms" type="checkbox" name="acceptTerms" style="width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);" required>
         <span>Αποδέχομαι τους <a href="/terms?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Όρους Χρήσης</a> και την <a href="/privacy?lang=el" target="_blank" rel="noopener" style="color:var(--accent);">Πολιτική Απορρήτου</a></span>
       </label>
-      <button type="button" id="googleBtn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1f1f1f;border:none;padding:15px;border-radius:40px;font-size:15px;font-weight:500;font-family:inherit;cursor:pointer;margin:0 0 6px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Εγγραφή με Google</span></button>
-      <p style="font-size:12px;color:var(--muted);text-align:center;margin:0 0 18px;">Χωρίς κωδικό και χωρίς email επιβεβαίωσης.</p>
-      <div style="display:flex;align-items:center;gap:12px;margin:0 0 22px;color:var(--muted);font-size:12px;"><span style="flex:1;height:0.5px;background:var(--border2);"></span>ή με email<span style="flex:1;height:0.5px;background:var(--border2);"></span></div>
+      <button type="button" id="googleBtn"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span>Εγγραφή με Google</span></button>
+      <p style="font-size:12.5px;color:var(--ink3);text-align:center;margin:0 0 18px;">Χωρίς κωδικό και χωρίς email επιβεβαίωσης.</p>
+      <div style="display:flex;align-items:center;gap:12px;margin:0 0 20px;color:var(--ink3);font-size:13px;"><span style="flex:1;height:1px;background:var(--rule);"></span>ή με email<span style="flex:1;height:1px;background:var(--rule);"></span></div>
       <div class="form-row">
         <div class="fg"><label for="f-email">Email</label><input id="f-email" type="email" name="email" placeholder="info@to-magazi-sas.gr" autocomplete="email" required></div>
         <div class="fg"><label for="f-phone">Τηλέφωνο</label><input id="f-phone" type="tel" name="phone" placeholder="69XXXXXXXX" autocomplete="tel"></div>
       </div>
       <div class="fg"><label for="f-pass">Κωδικός</label><input id="f-pass" type="password" name="password" placeholder="Τουλάχιστον 8 χαρακτήρες" minlength="8" autocomplete="new-password" required></div>
-      <p id="formError" role="alert" style="display:none;color:#f87171;font-size:13px;margin:0 0 12px;"></p>
-      <button type="submit" class="btn-submit" id="submitBtn">Δημιουργία λογαριασμού →</button>
-      <p class="form-note">Έχετε ήδη λογαριασμό; <a href="/admin?lang=el" style="color:var(--accent);">Σύνδεση</a> · Ερωτήσεις; <a href="mailto:info@tablereserve.gr" style="color:var(--accent);">info@tablereserve.gr</a></p>
+      <p id="formError" role="alert" style="display:none;color:#b42318;font-size:14px;margin:0 0 12px;"></p>
+      <button type="submit" class="btn-submit" id="submitBtn">Δημιουργία λογαριασμού</button>
+      <p class="form-note">Έχετε ήδη λογαριασμό; <a href="/admin?lang=el">Σύνδεση</a></p>
     </form>
     <div id="signedInBox" style="display:none;text-align:center;">
-      <div style="font-size:15px;color:var(--muted);margin:0 0 8px;">Είστε συνδεδεμένος ως</div>
+      <div style="font-size:15px;color:var(--ink2);margin:0 0 8px;">Είστε συνδεδεμένος ως</div>
       <div id="signedInName" style="font-size:20px;font-weight:600;margin:0 0 22px;"></div>
-      <a href="/admin?lang=el" class="btn-main">Πίνακας διαχείρισης →</a>
+      <a href="/admin?lang=el" class="btn btn-main">Πίνακας διαχείρισης</a>
     </div>
     <div id="signupDone" style="display:none;text-align:center;">
-      <div style="font-size:42px;margin-bottom:14px;">✉️</div>
-      <h3 style="font-size:22px;margin:0 0 12px;">Ελέγξτε το email σας</h3>
-      <p style="color:var(--muted);font-size:15px;line-height:1.6;margin:0 0 22px;">Στείλαμε σύνδεσμο επιβεβαίωσης στο <strong id="doneEmail" style="color:var(--text);"></strong>. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας. Αν δεν το βρίσκετε, κοιτάξτε και στα ανεπιθύμητα.</p>
-      <a href="/admin?lang=el" class="btn-main">Μετάβαση στη σύνδεση →</a>
+      <h3 style="font-size:24px;margin:0 0 12px;">Ελέγξτε το email σας</h3>
+      <p style="color:var(--ink2);font-size:15px;line-height:1.6;margin:0 0 22px;">Στείλαμε σύνδεσμο επιβεβαίωσης στο <strong id="doneEmail" style="color:var(--ink);"></strong>. Πατήστε τον για να ενεργοποιηθεί το κατάστημά σας. Αν δεν το βρίσκετε, κοιτάξτε και στα ανεπιθύμητα.</p>
+      <a href="/admin?lang=el" class="btn btn-main">Μετάβαση στη σύνδεση</a>
     </div>
   </div>
+ </div>
 </section>
 
 <footer>
-  <div class="logo">Table<em style="font-style:normal;color:var(--accent)">Reserve</em></div>
-  <p>© 2026 TableReserve · AR Akron Services · Αρ. ΓΕΜΗ 161479309000 · <a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
-  <p><a href="/leitourgies/">Λειτουργίες</a> · <a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a> · <a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a> · <a href="/times/">Τιμές</a></p>
-  <p><a href="/privacy?lang=el">Πολιτική Απορρήτου</a> · <a href="/terms?lang=el">Όροι Χρήσης</a> · <a href="https://www.facebook.com/tablereserve" target="_blank" rel="noopener">Facebook</a></p>
-  <a href="https://partners.tourist.com/booking-software" target="_blank" rel="noopener"><img src="https://partners.tourist.com/img/badges/listed-on-tourist.svg" width="160" height="35" alt="Listed on Tourist.com" loading="lazy"></a>
+ <div class="wrap">
+  <div class="foot-grid">
+   <div>
+    <a href="/" class="logo"><span class="logo-mark" aria-hidden="true"></span>TableReserve</a>
+    <p>Σύστημα online κρατήσεων για εστιατόρια, ταβέρνες και καφέ.<br><a href="mailto:info@tablereserve.gr">info@tablereserve.gr</a></p>
+   </div>
+   <div><h4>Προϊόν</h4><ul><li><a href="/leitourgies/">Λειτουργίες</a></li><li><a href="/leitourgies/katopsi-trapezion/">Κάτοψη τραπεζιών</a></li><li><a href="/leitourgies/ligoteres-akyroseis/">Λιγότερα no-show</a></li><li><a href="/times/">Τιμές</a></li></ul></div>
+   <div><h4>Εταιρεία</h4><ul><li><a href="/privacy?lang=el">Πολιτική Απορρήτου</a></li><li><a href="/terms?lang=el">Όροι Χρήσης</a></li><li><a href="https://www.facebook.com/tablereserve" target="_blank" rel="noopener">Facebook</a></li></ul></div>
+   <div><a href="https://partners.tourist.com/booking-software" target="_blank" rel="noopener"><img src="https://partners.tourist.com/img/badges/listed-on-tourist.svg" width="160" height="35" alt="Listed on Tourist.com" loading="lazy"></a></div>
+  </div>
+  <p class="legal">© 2026 TableReserve · AR Akron Services · Αρ. ΓΕΜΗ 161479309000</p>
+ </div>
 </footer>
 
-<script>
-const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('in')}),{threshold:.1})
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))
-</script>
-
-<!-- STICKY MOBILE BAR -->
 <div class="sticky-bar">
-  <p>Από €39 — όλες οι υπηρεσίες</p>
-  <a href="#contact">Ξεκινήστε τώρα →</a>
+  <p><b>14 ημέρες δωρεάν</b> · μετά €99/χρόνο</p>
+  <a href="#contact">Ξεκινήστε</a>
 </div>
-
-<script>
-// Counter animation for stats
-function animateCounter(el, target, suffix='') {
-  const isText = isNaN(target);
-  if (isText) return; // skip non-numeric like "24/7"
-  let start = 0;
-  const duration = 1800;
-  const step = timestamp => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(ease * target) + suffix;
-    if (progress < 1) requestAnimationFrame(step);
-    else el.textContent = target + suffix;
-  };
-  requestAnimationFrame(step);
-}
-
-const statObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target;
-    const text = el.textContent;
-    if (text === "3'") { animateCounter(el, 3, "'"); }
-    else if (text === '1') { animateCounter(el, 1, ''); }
-    else if (text === '100%') { animateCounter(el, 100, '%'); }
-    statObs.unobserve(el);
-  });
-}, {threshold: 0.5});
-document.querySelectorAll('.stat-n').forEach(el => statObs.observe(el));
-</script>
-
 
 <script>
 function trBrowserTz() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) { return ''; } }
@@ -668,7 +710,7 @@ document.getElementById('partnerForm').addEventListener('submit', async function
   } catch (x) {
     showErr('Δεν ήταν δυνατή η σύνδεση. Ελέγξτε το internet σας και δοκιμάστε ξανά.');
   }
-  btn.textContent = 'Δημιουργία λογαριασμού →';
+  btn.textContent = 'Δημιουργία λογαριασμού';
   btn.disabled = false;
 });
 </script>
@@ -753,6 +795,7 @@ btn.addEventListener('click', async () => {
   btn.disabled = false; label.textContent = orig;
 });
 </script>
+
 
 </body>
 </html>
