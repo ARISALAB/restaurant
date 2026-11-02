@@ -277,5 +277,6 @@ document.querySelectorAll('.reveal').forEach(function(el){o.observe(el)});})();
 document.querySelectorAll('.dt').forEach(function(b){b.addEventListener('click',function(){var c=st.indexOf(b.dataset.s);var n=st[(c+1)%3];b.dataset.s=n;b.className='dt'+(b.classList.contains('rd')?' rd':'')+' '+n;b.querySelector('small').textContent=lb[n];b.setAttribute('aria-label','Table '+b.querySelector('b').textContent+': '+lb[n]);});});})();
 
 </script>
+<script type="module" src="/nav-auth.js"></script>
 </body>
 </html>
