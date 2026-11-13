@@ -790,7 +790,7 @@
                                 <div class="shop-email">${who}${who && uids.length > 1 ? ' · ' : ''}${accounts}</div>
                                 <div class="shop-url">${shopUrl}</div>
                                 <div id="paid-${shopId}" style="font-size:12px;margin-top:4px;">${paidLabel(info)}</div>
-                                <div style="display:flex;gap:6px;flex-wrap:wrap;"><span id="g-${shopId}">${googleBadge(info)}</span>${termsBadge(info)}</div>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;">${sourceBadge(info)}<span id="g-${shopId}">${googleBadge(info)}</span>${termsBadge(info)}</div>
                             </div>
                             <div class="shop-actions">
                                 <button class="btn-icon goog" title="Στοιχεία Google Maps" onclick="openGoogle('${shopId}')">G</button>
@@ -1201,6 +1201,30 @@
 
         // ── Όροι Χρήσης ──
         const TERMS_VERSION = '2026-10-20';   // ίδια με netlify/functions/_shared/terms.js
+        // Από πού ήρθε το κατάστημα και πώς πληρώνει
+        function sourceBadge(info) {
+            const out = [];
+            const src = { google: 'Google', email: 'email', draft: 'pilot draft', wix: 'Wix' }[info.source] || info.source;
+            if (info.wixInstanceId || info.billingSource === 'wix') {
+                if (info.wixRemovedAt) {
+                    const d = new Date(info.wixRemovedAt).toLocaleDateString('el-GR');
+                    out.push(`<span class="g-badge warn" title="Το Wix δεν απαντά για την εγκατάσταση από ${d}">Wix: αφαιρέθηκε</span>`);
+                } else {
+                    const pkg = info.wixPackage ? ' · ' + gEsc(info.wixPackage) : ' · δωρεάν';
+                    const cls = info.billingStatus === 'cancelled' ? 'warn' : 'ok';
+                    out.push(`<span class="g-badge ${cls}">Wix${pkg}${info.billingStatus === 'cancelled' ? ' · ακυρωμένο' : ''}</span>`);
+                }
+            } else if (info.billingSource === 'lemon' || info.lemonSubscriptionId) {
+                out.push('<span class="g-badge ok">Lemon Squeezy</span>');
+            } else if (info.billingStatus === 'manual') {
+                out.push('<span class="g-badge none">Χειροκίνητη επέκταση</span>');
+            } else if (!info.paidUntil) {
+                out.push('<span class="g-badge none">Δωρεάν για πάντα</span>');
+            }
+            if (src) out.push(`<span class="g-badge none">Εγγραφή: ${gEsc(src)}</span>`);
+            return out.join('');
+        }
+
         function termsBadge(info) {
             const v = info.termsVersion;
             if (v && v >= TERMS_VERSION) {
