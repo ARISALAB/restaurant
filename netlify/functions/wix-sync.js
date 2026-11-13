@@ -3,7 +3,7 @@
 //
 // Ελέγχει:
 //   1. τις συνδεδεμένες εγκαταστάσεις (wix_sites/<instanceId> = { shop })
-//   2. τα καταστήματα που έχουν wixInstanceId αλλά δεν υπάρχουν πια στο wix_sites
+//   2. τα καταστήματα Wix (wixInstanceId ή billingSource 'wix') που δεν υπάρχουν πια στο wix_sites
 //      (ο ιδιοκτήτης αποσύνδεσε ή αφαίρεσε την εφαρμογή)
 //
 // Στέλνει email στον ιδιοκτήτη του TableReserve όταν ένα κατάστημα Wix αποσυνδέεται/αφαιρεί
@@ -61,10 +61,14 @@ async function handleShop(db, instanceId, shop, connected, stats) {
   const before = (await shopRef.get()).val() || {};
   const notified = before.wixNotified || {};
 
+  // Όταν ο ιδιοκτήτης αποσυνδέει την εφαρμογή, σβήνεται και το wixInstanceId:
+  // τότε δεν μπορούμε να ρωτήσουμε το Wix, μόνο να το σημειώσουμε.
   let res = null;
-  try { res = await syncWixBilling(db, instanceId, shop); }
-  catch (e) { console.warn('[wix-sync] sync', shop, e && e.message); }
-  res ? stats.ok++ : stats.fail++;
+  if (instanceId) {
+    try { res = await syncWixBilling(db, instanceId, shop); }
+    catch (e) { console.warn('[wix-sync] sync', shop, e && e.message); }
+    res ? stats.ok++ : stats.fail++;
+  }
 
   const after = (await shopRef.get()).val() || {};
   const events = [];
@@ -85,7 +89,11 @@ async function handleShop(db, instanceId, shop, connected, stats) {
     if (await notify(ev, shop, after, instanceId)) {
       stats.sent++;
       const upd = { [`wixNotified/${ev}`]: Date.now() };
-      if (ev === 'removed') upd.wixRemovedAt = Date.now();
+      if (ev === 'removed') {
+        upd.wixRemovedAt = Date.now();
+        // Δεν θα ανανεωθεί: μένει ενεργό μέχρι το paidUntil και μετά κλειδώνει μόνο του
+        if (!res && after.billingStatus !== 'cancelled') upd.billingStatus = 'cancelled';
+      }
       await shopRef.update(upd);
     }
   }
@@ -108,9 +116,10 @@ exports.handler = async () => {
 
   // 2. Καταστήματα Wix που δεν είναι πια συνδεδεμένα
   for (const [shop, d] of Object.entries(shops)) {
-    if (!d || !d.wixInstanceId || linked.has(shop)) continue;
+    if (!d || linked.has(shop)) continue;
+    if (!d.wixInstanceId && d.billingSource !== 'wix') continue;
     stats.disconnected++;
-    await handleShop(db, d.wixInstanceId, shop, false, stats);
+    await handleShop(db, d.wixInstanceId || null, shop, false, stats);
   }
 
   console.log('[wix-sync]', stats);
