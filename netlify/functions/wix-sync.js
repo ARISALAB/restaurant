@@ -1,7 +1,14 @@
 // Καθημερινός συγχρονισμός συνδρομών Wix -> TableReserve (paidUntil κ.λπ.)
 // Χρειάζεται για ανανεώσεις, ακυρώσεις και μηνιαία πλάνα, όταν ο ιδιοκτήτης δεν ανοίγει το dashboard.
-// Επιπλέον: στέλνει email στον ιδιοκτήτη του TableReserve όταν ένα κατάστημα Wix
-// ακυρώνει τη συνδρομή, γυρίζει σε δωρεάν ή αφαιρεί την εφαρμογή (μία φορά ανά γεγονός).
+//
+// Ελέγχει:
+//   1. τις συνδεδεμένες εγκαταστάσεις (wix_sites/<instanceId> = { shop })
+//   2. τα καταστήματα που έχουν wixInstanceId αλλά δεν υπάρχουν πια στο wix_sites
+//      (ο ιδιοκτήτης αποσύνδεσε ή αφαίρεσε την εφαρμογή)
+//
+// Στέλνει email στον ιδιοκτήτη του TableReserve όταν ένα κατάστημα Wix αποσυνδέεται/αφαιρεί
+// την εφαρμογή, ακυρώνει τη συνδρομή ή γυρίζει σε δωρεάν. Μία φορά ανά γεγονός:
+//   shop_details/<shop>/wixNotified/<event> = timestamp
 const { Resend } = require('resend');
 const { getDb } = require('./_shared/firebase');
 const { syncWixBilling } = require('./_shared/wix');
@@ -12,14 +19,14 @@ const OWNER_EMAIL = process.env.SIGNUP_NOTIFY_EMAIL || 'info@tablereserve.gr';
 const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const LABELS = {
+  removed: 'αποσύνδεσε ή αφαίρεσε την εφαρμογή TableReserve από το Wix site του',
   cancelled: 'ακύρωσε τη συνδρομή στο Wix (δεν θα ανανεωθεί)',
   downgraded: 'γύρισε στο δωρεάν πλάνο του Wix',
-  removed: 'πιθανότατα αφαίρεσε την εφαρμογή από το Wix site (το Wix δεν απαντά για αυτή την εγκατάσταση)',
 };
 const SUBJECTS = {
+  removed: 'αφαίρεσε την εφαρμογή',
   cancelled: 'ακύρωσε τη συνδρομή',
   downgraded: 'γύρισε σε δωρεάν',
-  removed: 'αφαίρεσε την εφαρμογή',
 };
 
 async function notify(event, shop, d, instanceId) {
@@ -34,8 +41,9 @@ async function notify(event, shop, d, instanceId) {
         <h2 style="margin:0 0 12px;">Αλλαγή σε κατάστημα Wix</h2>
         <p><b>${esc(name)}</b> ${esc(LABELS[event])}.</p>
         <p><b>ID:</b> ${esc(shop)}<br><b>Email:</b> ${esc(d.email || '-')}<br>
-        <b>Πακέτο:</b> ${esc(d.wixPackage || '-')}<br><b>Ενεργό στο TableReserve έως:</b> ${esc(until)}<br>
-        <b>Wix instance:</b> ${esc(instanceId)}</p>
+        <b>Πακέτο:</b> ${esc(d.wixPackage || '-')} (${esc(d.billingStatus || '-')})<br>
+        <b>Ενεργό στο TableReserve έως:</b> ${esc(until)}<br>
+        <b>Wix instance:</b> ${esc(instanceId || '-')}</p>
         <p style="color:#64748b;">Ο έλεγχος γίνεται μία φορά τη μέρα, οπότε η αλλαγή μπορεί να έγινε έως 24 ώρες νωρίτερα.</p>
       </div>`,
     });
@@ -47,48 +55,64 @@ async function notify(event, shop, d, instanceId) {
   }
 }
 
+// Συγχρονίζει ένα κατάστημα και αποφασίζει αν χρειάζεται ειδοποίηση
+async function handleShop(db, instanceId, shop, connected, stats) {
+  const shopRef = db.ref(`shop_details/${shop}`);
+  const before = (await shopRef.get()).val() || {};
+  const notified = before.wixNotified || {};
+
+  let res = null;
+  try { res = await syncWixBilling(db, instanceId, shop); }
+  catch (e) { console.warn('[wix-sync] sync', shop, e && e.message); }
+  res ? stats.ok++ : stats.fail++;
+
+  const after = (await shopRef.get()).val() || {};
+  const events = [];
+
+  if (!connected && !notified.removed) events.push('removed');
+  if (res) {
+    const wasPaid = before.billingSource === 'wix' && /active|trial/.test(before.billingStatus || '');
+    if (res.isFree && before.wixPackage && !notified.downgraded) events.push('downgraded');
+    else if (wasPaid && after.billingStatus === 'cancelled' && !notified.cancelled) events.push('cancelled');
+  }
+
+  // Συνδεδεμένο, πληρωμένο και όχι ακυρωμένο: μηδενίζουμε για μελλοντικές ειδοποιήσεις
+  if (connected && res && res.paid && after.billingStatus !== 'cancelled' && (before.wixNotified || before.wixRemovedAt)) {
+    await shopRef.update({ wixNotified: null, wixRemovedAt: null });
+  }
+
+  for (const ev of events) {
+    if (await notify(ev, shop, after, instanceId)) {
+      stats.sent++;
+      const upd = { [`wixNotified/${ev}`]: Date.now() };
+      if (ev === 'removed') upd.wixRemovedAt = Date.now();
+      await shopRef.update(upd);
+    }
+  }
+}
+
 exports.handler = async () => {
   if (!process.env.WIX_APP_SECRET) { console.warn('[wix-sync] WIX_APP_SECRET missing'); return { statusCode: 200, body: 'skipped' }; }
   const db = getDb();
   const sites = (await db.ref('wix_sites').get()).val() || {};
-  let ok = 0, fail = 0, sent = 0;
+  const shops = (await db.ref('shop_details').get()).val() || {};
+  const stats = { ok: 0, fail: 0, sent: 0, disconnected: 0 };
 
+  // 1. Συνδεδεμένες εγκαταστάσεις
+  const linked = new Set();
   for (const [instanceId, link] of Object.entries(sites)) {
     if (!link || !link.shop) continue;
-    const shop = link.shop;
-    const notified = link.notified || {};
-    const siteRef = db.ref(`wix_sites/${instanceId}`);
-
-    try {
-      const before = (await db.ref(`shop_details/${shop}`).get()).val() || {};
-      const res = await syncWixBilling(db, instanceId, shop);
-      const after = (await db.ref(`shop_details/${shop}`).get()).val() || {};
-
-      let event = null;
-      if (!res) {
-        fail++;
-        // Το Wix δεν δίνει token για εγκατάσταση που αφαιρέθηκε
-        if (!notified.removed) event = 'removed';
-      } else {
-        ok++;
-        const wasPaid = before.billingSource === 'wix' && /active|trial/.test(before.billingStatus || '');
-        if (res.isFree && before.wixPackage && !notified.downgraded) event = 'downgraded';
-        else if (wasPaid && after.billingStatus === 'cancelled' && !notified.cancelled) event = 'cancelled';
-        // Ξανά ενεργό και πληρωμένο: μηδενίζουμε τις σημαίες για μελλοντικές ειδοποιήσεις
-        if (res.paid && after.billingStatus !== 'cancelled' && Object.keys(notified).length) {
-          await siteRef.child('notified').remove();
-          await db.ref(`shop_details/${shop}/wixRemovedAt`).remove();
-        }
-      }
-
-      if (event && await notify(event, shop, { ...before, ...after }, instanceId)) {
-        sent++;
-        await siteRef.child(`notified/${event}`).set(Date.now());
-        if (event === 'removed') await db.ref(`shop_details/${shop}/wixRemovedAt`).set(Date.now());
-      }
-    } catch (e) { fail++; console.warn('[wix-sync]', instanceId, e && e.message); }
+    linked.add(link.shop);
+    await handleShop(db, instanceId, link.shop, true, stats);
   }
 
-  console.log('[wix-sync]', { ok, fail, sent });
-  return { statusCode: 200, body: JSON.stringify({ ok, fail, sent }) };
+  // 2. Καταστήματα Wix που δεν είναι πια συνδεδεμένα
+  for (const [shop, d] of Object.entries(shops)) {
+    if (!d || !d.wixInstanceId || linked.has(shop)) continue;
+    stats.disconnected++;
+    await handleShop(db, d.wixInstanceId, shop, false, stats);
+  }
+
+  console.log('[wix-sync]', stats);
+  return { statusCode: 200, body: JSON.stringify(stats) };
 };
