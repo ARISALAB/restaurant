@@ -4585,9 +4585,11 @@
                 data: { labels, datasets: [{ data, backgroundColor: type === 'line' ? 'rgba(37,99,235,.12)' : color, borderColor: color, borderWidth: type === 'line' ? 2 : 0, tension: .35, fill: type === 'line', borderRadius: type === 'bar' ? 6 : 0 }] },
                 options: {
                     responsive: true,
+                    layout: { padding: { top: 18 } },
                     plugins: { legend: { display: false } },
                     scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-                }
+                },
+                plugins: [repValueLabels]
             });
         }
 
@@ -4599,7 +4601,8 @@
             chartInstances[canvasId] = new Chart(ctx, {
                 type: 'doughnut',
                 data: { labels, datasets: [{ data, backgroundColor: labels.map((_, i) => palette[i % palette.length]) }] },
-                options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
+                options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } },
+                plugins: [repValueLabels]
             });
         }
 
