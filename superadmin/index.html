@@ -1176,6 +1176,7 @@
                             <button class="btn-icon copy" title="Αντιγραφή μηνύματος για DM" onclick="copyDraftMsg(window._drafts['${d.shopId}'])">💬</button>
                             <button class="btn-icon copy" title="Αντιγραφή link" onclick="copyUrl(window._drafts['${d.shopId}'].url)">🔗</button>
                             <button class="btn-icon copy" title="Νέο link και άλλες 30 ημέρες (το παλιό link σταματά, όποιος έχει μπει συνεχίζει)" onclick="renewDraft('${d.shopId}')">🔄</button>
+                            ${(d.entries || d.views || d.testBookings || d.selfEntries) ? `<button class="btn-icon copy" title="Μηδενισμός μετρητών (επισκέψεις, δοκιμαστικές κρατήσεις)" onclick="resetDraftStats('${d.shopId}')">🧹</button>` : ''}
                             <button class="btn-icon del" title="Διαγραφή προσχεδίου" onclick="deleteDraft('${d.shopId}')">🗑️</button>` : ''}
                         </div>
                     </div>`;
@@ -1190,6 +1191,15 @@
             const out = await drCall({ action: 'renew', shop: shopId }).catch(() => ({}));
             if (!out.ok) return showToast('Σφάλμα', 'error');
             showToast('🔄 Νέο link έτοιμο', 'success');
+            loadDrafts();
+        };
+
+        window.resetDraftStats = async (shopId) => {
+            const d = (window._drafts || {})[shopId];
+            if (!confirm(`Μηδενισμός μετρητών για «${d ? d.name : shopId}»;\nΣβήνονται οι επισκέψεις και οι δοκιμαστικές κρατήσεις που έχουν μετρηθεί. Το link δεν αλλάζει.`)) return;
+            const out = await drCall({ action: 'reset', shop: shopId }).catch(() => ({}));
+            if (!out.ok) return showToast('Σφάλμα', 'error');
+            showToast('🧹 Οι μετρητές μηδενίστηκαν', 'success');
             loadDrafts();
         };
 

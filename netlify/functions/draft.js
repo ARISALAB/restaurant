@@ -293,6 +293,19 @@ exports.handler = async (event) => {
     return json(200, { ok: true, url: adminUrl(shop, token, lang) });
   }
 
+  // ── Μηδενισμός μετρητών (π.χ. όταν τις επισκέψεις τις έκανε ο ίδιος ο superadmin) ──
+  if (action === 'reset') {
+    const shop = str(b.shop, 60);
+    if (!/^[A-Za-z0-9_-]{1,60}$/.test(shop)) return json(400, { error: 'bad_request' });
+    const status = (await db.ref(`shop_details/${shop}/status`).get()).val();
+    if (status !== 'draft') return json(409, { error: 'not_draft' });
+    await db.ref(`drafts/${shop}`).update({
+      views: 0, entries: 0, testBookings: 0, selfEntries: 0,
+      viewedAt: null, lastViewedAt: null, enteredAt: null, lastEnteredAt: null, lastSelfAt: null,
+    });
+    return json(200, { ok: true });
+  }
+
   // ── Διαγραφή προσχεδίου (ποτέ ενεργού καταστήματος) ──
   if (action === 'delete') {
     const shop = str(b.shop, 60);
