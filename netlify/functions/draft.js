@@ -115,12 +115,19 @@ exports.handler = async (event) => {
       return json(404, { error: expired ? 'expired' : 'invalid_link' });
     }
     const now = Date.now();
+    // Έλεγχος από τον ίδιο τον superadmin (σημάδι από τον browser του): ξεχωριστός μετρητής
+    const self = b.self === true;
     await db.ref().update({
       [`users_to_shops/${who.uid}`]: shop,
       [`drafts/${shop}/admins/${who.uid}`]: now,
-      [`drafts/${shop}/entries`]: admin.database.ServerValue.increment(1),
-      [`drafts/${shop}/lastEnteredAt`]: now,
-      ...(v.draft.enteredAt ? {} : { [`drafts/${shop}/enteredAt`]: now }),
+      ...(self ? {
+        [`drafts/${shop}/selfEntries`]: admin.database.ServerValue.increment(1),
+        [`drafts/${shop}/lastSelfAt`]: now,
+      } : {
+        [`drafts/${shop}/entries`]: admin.database.ServerValue.increment(1),
+        [`drafts/${shop}/lastEnteredAt`]: now,
+        ...(v.draft.enteredAt ? {} : { [`drafts/${shop}/enteredAt`]: now }),
+      }),
     });
     return json(200, { ok: true, shop, expiresAt: expiresOf(v.draft) });
   }
@@ -206,6 +213,7 @@ exports.handler = async (event) => {
         shopId: id, name: s.displayName || id, slug: s.slug || null, status: s.status || 'deleted',
         createdAt: d.createdAt || null, expiresAt: expiresOf(d) || null,
         entries: d.entries || 0, lastEnteredAt: d.lastEnteredAt || null, testBookings: d.testBookings || 0,
+        selfEntries: d.selfEntries || 0, lastSelfAt: d.lastSelfAt || null,
         views: d.views || 0, lastViewedAt: d.lastViewedAt || null,
         claimedAt: d.claimedAt || null, claimedBy: d.claimedBy || null,
         url: d.token && s.status === 'draft' ? adminUrl(id, d.token, s.lang) : null,

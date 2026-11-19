@@ -695,6 +695,8 @@
         // Auth state
         onAuthStateChanged(auth, (user) => {
             if (user && user.email === SUPER_ADMIN_EMAIL) {
+                // Αυτός ο browser είναι του superadmin: οι επισκέψεις του στα προσχέδια δεν μετρούν ως ιδιοκτήτη
+                try { localStorage.setItem('tr_sa', '1'); } catch (e) {}
                 document.getElementById('login-section').style.display = 'none';
                 document.getElementById('dashboard-section').style.display = 'block';
                 document.getElementById('btn-logout').style.display = 'block';
@@ -1142,6 +1144,7 @@
             if (d.expiresAt && d.expiresAt < Date.now()) out.push(`<span class="g-badge warn">⏳ Έληξε ${drDate(d.expiresAt)} · πάτα 🔄 για άλλες 30 ημέρες</span>`);
             if (d.entries > 0) out.push(`<span class="g-badge blue">👀 Μπήκε στο admin ${d.entries === 1 ? '1 φορά' : d.entries + ' φορές'} · τελευταία ${drDate(d.lastEnteredAt)}</span>`);
             else out.push(`<span class="g-badge none">Δεν έχει μπει ακόμα</span>`);
+            if (d.selfEntries > 0) out.push(`<span class="g-badge none">🔧 Έλεγχος από εσένα: ${d.selfEntries === 1 ? '1 φορά' : d.selfEntries + ' φορές'}</span>`);
             if (d.testBookings > 0) out.push(`<span class="g-badge ok">🧪 ${d.testBookings === 1 ? '1 δοκιμαστική κράτηση' : d.testBookings + ' δοκιμαστικές κρατήσεις'}</span>`);
             if (d.expiresAt && d.expiresAt >= Date.now()) out.push(`<span class="g-badge none">Λήγει ${new Date(d.expiresAt).toLocaleDateString('el-GR')}</span>`);
             return out.join(' ');

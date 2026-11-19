@@ -4077,7 +4077,7 @@
                 if (user && !user.isAnonymous) await signOut(auth);
                 if (!user || !user.isAnonymous) user = (await signInAnonymously(auth)).user;
                 const res = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${await user.getIdToken()}` },
-                    body: JSON.stringify({ action: 'enter', shop: TR_ENTRY.shop, token: TR_ENTRY.token }) });
+                    body: JSON.stringify({ action: 'enter', shop: TR_ENTRY.shop, token: TR_ENTRY.token, self: (() => { try { return localStorage.getItem('tr_sa') === '1'; } catch (e) { return false; } })() }) });
                 const out = await res.json().catch(() => ({}));
                 if (res.ok) {
                     const q = new URLSearchParams(location.search); q.delete('draft'); q.delete('t');

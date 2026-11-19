@@ -184,7 +184,7 @@ exports.handler = async (event) => {
     await assignTable(db, shop, bookingId, { date, time, guests });
 
     if (isTest) {
-      await db.ref(`drafts/${shop}/testBookings`).transaction(n => (n || 0) + 1).catch(() => {});
+      if (b.self !== true) await db.ref(`drafts/${shop}/testBookings`).transaction(n => (n || 0) + 1).catch(() => {});
       return json(200, { ok: true, bookingId, cancelToken, test: true });
     }
 

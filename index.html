@@ -2055,6 +2055,8 @@
             && !new URLSearchParams(location.search).has('real');
         // Προσχέδιο (πιλοτικό): ο ιδιοκτήτης βλέπει τη σελίδα του με το προσωπικό link (?claim=...) πριν την ενεργοποιήσει
         let TR_DRAFT = false;
+        // Ο browser του superadmin (σημάδι από το superadmin): οι δικές του επισκέψεις δεν μετρούν
+        const trIsSelf = () => { try { return localStorage.getItem('tr_sa') === '1'; } catch (e) { return false; } };
         const trClaimTok = urlParams.get('claim');
         // Μέσα στο admin του προσχεδίου (πλαίσιο κινητού) δεν δείχνουμε μπάρα: τη δείχνει το ίδιο το admin
         const trInAdmin = urlParams.get('inadmin') === '1';
@@ -2088,7 +2090,7 @@
             let ok = false;
             if (trClaimTok) {
                 try {
-                    const r = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', shop: shopID, token: trClaimTok }) });
+                    const r = await fetch(`${API}/draft`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', shop: shopID, token: trClaimTok, track: !trIsSelf() }) });
                     ok = r.ok;
                 } catch (e) {}
             }
@@ -2751,7 +2753,7 @@
                 };
                 if (TR_DRAFT) {
                     // Προσχέδιο: η κράτηση γράφεται ως «δοκιμή» και εμφανίζεται στο admin. Email δεν φεύγει, τα δείχνουμε.
-                    res = await fetch(`${API}/book`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, draftToken: trClaimTok }) });
+                    res = await fetch(`${API}/book`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...body, draftToken: trClaimTok, self: trIsSelf() }) });
                     const booked = await res.json().catch(() => ({}));
                     if (res.ok && booked.ok) {
                         const pv = await fetch(`${API}/demo-preview`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
